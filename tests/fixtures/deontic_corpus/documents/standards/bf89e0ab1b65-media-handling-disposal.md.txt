@@ -1,0 +1,128 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001223
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 4601ab22371b1d0f
+  provider: litellm
+  provider_class: third-party
+---
+
+# Media Handling and Disposal Standard
+
+**Organization:** Example Org
+**Owning Team:** IT Asset Management
+**Status:** Enforceable Standard
+**Cadence:** Continuous operation, with defined review events as stated below
+
+## 1. Purpose
+
+This Standard establishes mandatory requirements for the protection, marking, physical control, storage, and disposal of digital and non-digital media at Example Org. It addresses the purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance obligations associated with media protection, and it is maintained consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+
+## 2. Scope
+
+This Standard applies to all digital and non-digital media in the possession of Example Org or processed on its behalf, including magnetic tapes, external removable hard drives, flash/thumb drives, diskettes, compact disks, digital video disks, and paper/microfilm, and to all media containing personally identifiable information (PII) or electronic protected health information (ePHI). It applies at the organization, mission/business, and system levels and binds all personnel or roles that handle, store, transport, sanitize, or destroy media. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+
+## 3. Roles and Responsibilities
+
+- **IT Asset Management** owns this media handling and disposal process end to end. IT Asset Management is accountable for the development, documentation, and dissemination of the media protection policy and procedures defined in this Standard, for the execution of every step described herein, and for the review and audit of outcomes. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+- IT Asset Management shall be named as the responsible official function in the appropriate security and privacy documents of Example Org. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+- IT Asset Management shall coordinate with other organizational entities (including security, privacy, and compliance functions) as participants in individual steps of this process; such participation does not transfer ownership of the process or its handoffs. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+- Management commitment to this Standard shall be documented and disseminated to applicable personnel or roles at the organization, mission/business, and system levels. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+
+## 4. Media Protection Policy and Procedures
+
+### 4.1 Policy and Procedure Development
+
+- Example Org shall maintain a media protection policy and documented procedures that facilitate implementation of that policy and of the associated media protection controls. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+- The policy and procedures shall be disseminated to applicable personnel or roles at the organization, mission/business, and system levels. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+- IT Asset Management shall develop, document, and disseminate the policy and procedures and shall be designated and named as the managing official function in the appropriate security and privacy documents. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+
+### 4.2 Continuous Regulatory Monitoring
+
+- IT Asset Management shall actively and continuously monitor for changes to applicable privacy laws, regulations, and overarching policy affecting media protection, and shall ensure media protection policies and procedures support cybersecurity and privacy safeguards throughout the system life cycle. [ARC-AMPE MP-1 AE Mandatory]
+
+### 4.3 Review and Update
+
+- IT Asset Management shall review and update the media protection policy and procedures at least every one (1) year and following organization-defined events (such as assessment or audit findings, security or privacy incidents, and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines). [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]
+- IT Asset Management shall review the documentation periodically and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+### 4.4 Documentation Form, Retention, and Availability
+
+- The policies and procedures implemented to comply with the applicable requirements shall be maintained in written (which may be electronic) form and retained for 6 years from the date of their creation or the date they were last in effect, whichever is later. [HIPAA Security Rule 164.316(b)(1), 164.316(b)(2)(i)]
+- The required documentation shall be made available to those persons responsible for implementing the procedures to which it pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+## 5. Media Access Restrictions
+
+### 5.1 Access Control for Media
+
+- Access to all types of digital and non-digital media (including media containing PII) shall be restricted to organization-defined personnel or roles with a valid need to know. [NIST 800-53 MP-2 Low, Moderate, High | ARC-AMPE MP-2 AE Mandatory]
+- IT Asset Management shall conduct a risk assessment to determine what sensitive information, if any, may be stored on particular media types and who is authorized with a need to know that information. [ARC-AMPE MP-2 AE Mandatory]
+
+### 5.2 Media-Writing Capabilities
+
+- Use of media-writing capabilities shall be restricted by disabling CD/DVD writers and USB ports, allowing access only to authorized individuals with a valid need to know, in compliance with the latest published NIST SP 800-88. [ARC-AMPE MP-2 AE Mandatory]
+
+### 5.3 Workstation Physical Safeguards
+
+- Physical safeguards shall be implemented for all workstations that access electronic protected health information to restrict access to authorized users. [HIPAA Security Rule 164.310(c)]
+
+### 5.4 Workforce Access to ePHI
+
+- Policies and procedures shall be implemented ensuring all workforce members have appropriate access to electronic protected health information and preventing workforce members without such access from obtaining it. These shall include: [HIPAA Security Rule 164.308(a)(3)(i), 164.308(a)(3)(ii)(A), 164.308(a)(3)(ii)(B), 164.308(a)(3)(ii)(C)]
+  - procedures for authorization and/or supervision of workforce members working with ePHI;
+  - procedures to determine that workforce access is appropriate; and
+  - procedures for terminating access when employment or other arrangements end or as required by clearance determinations.
+
+### 5.5 Integrity of ePHI
+
+- Policies and procedures shall be implemented to protect electronic protected health information from improper alteration or destruction, and electronic mechanisms shall be implemented to corroborate that ePHI has not been altered or destroyed in an unauthorized manner. [HIPAA Security Rule 164.312(c)(1), 164.312(c)(2)]
+
+## 6. Media Marking
+
+### 6.1 General Marking Requirement
+
+- System media (including removable media) shall be marked indicating the distribution limitations, handling caveats, and applicable security markings (if any) of the information. [NIST 800-53 MP-3 Moderate, High | ARC-AMPE MP-3 AE Mandatory]
+
+### 6.2 Minimum Markings
+
+- At a minimum, the following markings shall be applied to media via labels or approved coding systems: [ARC-AMPE MP-3 AE Mandatory]
+  - creation date;
+  - information safeguarding markings (based on applicable record retention regulations); and
+  - organization-defined contact information.
+- Backup tapes must additionally be marked with the system name. [ARC-AMPE MP-3 AE Mandatory]
+
+### 6.3 PII and PHI Media
+
+- Media containing PII or PHI shall be marked — or the container for the media shall be marked if labeling the media is not practicable — appropriately and consistent with ACA record retention regulations. [ARC-AMPE MP-3 AE Mandatory]
+
+### 6.4 Marking Exemptions
+
+- Organization-defined types of media (or hardware components) may be exempted from marking if the media remain within organization-defined controlled areas or a secure environment. Any such exemption must be specified in writing by the Chief Information Officer or their designated representative. [NIST 800-53 MP-3 Moderate, High | ARC-AMPE MP-3 AE Mandatory]
+
+## 7. Physical Control and Secure Storage
+
+- All digital and non-digital media (magnetic tapes, external removable hard drives, flash/thumb drives, diskettes, compact disks, digital video disks, and paper/microfilm) shall be physically controlled and securely stored within organization-defined controlled areas. [NIST 800-53 MP-4 Moderate, High | ARC-AMPE MP-4 AE Mandatory]
+- IT Asset Management shall operate this physical control and storage process on a continuous basis and shall maintain the **Media Transport Log** as the record of media movement into, within, and out of controlled areas under this process. [NIST 800-53 MP-4 Moderate, High | ARC-AMPE MP-4 AE Mandatory]
+
+## 8. Protection Until Sanitization or Destruction
+
+- The media types defined in Section 2 shall be protected until the media are destroyed or sanitized using approved equipment, techniques, and procedures. [NIST 800-53 MP-4 Moderate, High | ARC-AMPE MP-4 AE Mandatory]
+- IT Asset Management shall retain the **Certificates of Destruction** produced for media destroyed or sanitized under this Standard as evidence of compliant disposal. [NIST 800-53 MP-4 Moderate, High | ARC-AMPE MP-4 AE Mandatory]
+
+## 9. Evidence and Records
+
+The following artifacts constitute the evidence of record for this process and shall be produced and retained by IT Asset Management:
+
+| Artifact                               | Associated Requirement                                   | Retention                                                                                                              |
+| -------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Certificates of destruction            | Media destruction and sanitization (Section 8)           | Per applicable record retention regulations [Retention Period]                                                         |
+| Media transport log                    | Physical control and secure storage of media (Section 7) | Per applicable record retention regulations [Retention Period]                                                         |
+| Media protection policy and procedures | Policy development and maintenance (Section 4)           | 6 years from creation or date last in effect, whichever is later [HIPAA Security Rule 164.316(b)(1), 164.316(b)(2)(i)] |
+
+## 10. Compliance
+
+Compliance with this Standard is mandatory for all personnel and roles within its scope. IT Asset Management is accountable for verifying compliance and for initiating the review and update actions described in Section 4.3 when assessment or audit findings, security or privacy incidents, or changes to applicable laws, executive orders, directives, regulations, policies, standards, or guidelines indicate that this Standard requires revision. [NIST 800-53 MP-1 Low, Moderate, High | ARC-AMPE MP-1 AE Mandatory]

@@ -1,0 +1,20 @@
+id: fedramp
+name: FedRAMP Consolidated Rules for 2026 (control tailoring)
+framework_id: fedramp
+licence: public-domain
+source: FedRAMP/rules consolidated rules dataset, via policyforge etl-fedramp
+version: 2026.09.13.02
+notes: 'A US federal program''s own published rules, so freely redistributable. Bundled with
+  this project and safe to commit to any repository.
+
+  Tailoring, not a baseline. Nothing in this catalog says which controls a Low, Moderate or
+  High system must implement. That selection was published as OSCAL profiles in GSA/fedramp-automation,
+  which no longer exists, and no official machine-readable replacement has appeared — so `baseline`
+  is left unset on every control here rather than guessed. What the catalog does carry is
+  FedRAMP''s own two additions to the 79 controls it speaks to: the organization-defined values
+  it has already decided, and the guidance it layers on top, joined onto the 800-53 text those
+  controls tailor.'
+source_ref: 58487bda77d76d9ce334304ec2e779ece7cc7d54
+source_url: https://raw.githubusercontent.com/FedRAMP/rules/58487bda77d76d9ce334304ec2e779ece7cc7d54/fedramp-consolidated-rules.json
+content_sha256: 56dcc1442b27b7fc4abfa5596e7a2bb0b3d4048e7827c38cd50b431d81c80215
+fetched_at: '2026-09-16'

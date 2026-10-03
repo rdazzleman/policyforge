@@ -1,0 +1,166 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002518
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 42406781a0e71b55
+  provider: litellm
+  provider_class: third-party
+---
+
+# Workforce Security Training Standard
+
+| Field                      | Value                                                   |
+| -------------------------- | ------------------------------------------------------- |
+| Organization               | Example Org                                             |
+| Owning Team                | Security Awareness                                      |
+| Cadence                    | Annual                                                  |
+| Primary Evidence Artifacts | Training completion report; Phishing simulation results |
+
+## 1. Purpose and Scope
+
+This Standard establishes the mandatory requirements for security and privacy awareness, literacy, and role-based training at Example Org, together with the associated personnel security requirements for position risk designation, screening, and workforce access authorization. It applies to all members of the Example Org workforce, including management, senior executives, employees, contractors, and other individuals working on behalf of the organization who access, use, manage, or develop organizational systems.
+
+The Security Awareness team is accountable for this process end to end, including delivery, tracking, content maintenance, reporting, and handoffs to other participating teams.
+
+## 2. Awareness and Training Policy and Procedures
+
+2.1. Security Awareness must develop, document, and disseminate to applicable personnel or roles an organization-level security and privacy awareness and training policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. The policy may be maintained at the organization, mission/business process, or system level. [NIST 800-53 AT-1 (Low/Moderate/High) | ARC-AMPE AT-1 (AE Mandatory)]
+
+2.2. Security Awareness must develop, document, and disseminate procedures to facilitate implementation of the awareness and training policy and the associated awareness and training controls. [NIST 800-53 AT-1 (Low/Moderate/High) | ARC-AMPE AT-1 (AE Mandatory)]
+
+2.3. Security Awareness must designate an official [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the awareness and training policy and procedures, and must name these officials in the appropriate security and privacy documents. [NIST 800-53 AT-1 (Low/Moderate/High) | ARC-AMPE AT-1 (AE Mandatory)]
+
+2.4. Security Awareness must review and update the awareness and training policy and the associated procedures at least every one (1) year and following organization-defined events, such as assessment or audit findings; security or privacy incidents; and changes to applicable laws (including privacy laws), executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 AT-1 (Low/Moderate/High) | ARC-AMPE AT-1 (AE Mandatory)]
+
+2.5. Security Awareness must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect awareness and training policies, and must ensure awareness and training policies and procedures support cybersecurity and privacy safeguards throughout the system's life cycle and the information on that system. [ARC-AMPE AT-1 (AE Mandatory)]
+
+## 3. Security and Privacy Roles in Position Descriptions
+
+3.1. Example Org must incorporate security and privacy roles and responsibilities into organizational position descriptions, including role-based training requirements, with position descriptions developed in consultation with the organization's security and privacy officers. [NIST 800-53 PS-9 (Low/Moderate/High) | ARC-AMPE PS-9 (AE Mandatory)]
+
+## 4. Security and Privacy Literacy Training
+
+4.1. Example Org must implement a security awareness and training program for all members of the workforce, including management. [HIPAA 164.308(a)(5)(i)]
+
+4.2. Security Awareness must provide security and privacy literacy training to all system users (including managers, senior executives, and contractors) as part of initial training for new users and at least every one (1) year thereafter. [NIST 800-53 AT-2 (Low/Moderate/High) | ARC-AMPE AT-2 (AE Mandatory)]
+
+4.3. Security Awareness must provide literacy training when required by system changes or following organization-defined events (e.g., assessment or audit findings; security or privacy incidents; changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines). [NIST 800-53 AT-2 (Low/Moderate/High) | ARC-AMPE AT-2 (AE Mandatory)]
+
+4.4. Security Awareness must develop and implement an information security and privacy education and awareness training program for all employees and individuals working on behalf of the organization who access, use, manage, or develop systems. The training must address an individual's responsibilities associated with sending sensitive information in email. Security Awareness must provide privacy training, before granting access to organizational systems and networks, to all employees and contractors who work on systems that collect, maintain, store, use, or disclose PII. [ARC-AMPE AT-2 (AE Mandatory)]
+
+4.5. Security Awareness must update literacy training and awareness content at least once every one (1) year and following organization-defined events. [NIST 800-53 AT-2 (Low/Moderate/High) | ARC-AMPE AT-2 (AE Mandatory)]
+
+4.6. Security Awareness must incorporate lessons learned from internal or external security incidents or breaches into literacy training and awareness techniques. [NIST 800-53 AT-2 (Low/Moderate/High) | ARC-AMPE AT-2 (AE Mandatory)]
+
+## 5. Awareness Techniques, Practical Exercises, and Threat-Specific Training
+
+5.1. Security Awareness must employ techniques to increase the security and privacy awareness of system users, including phishing email tests and other organization-defined awareness techniques (defined in the applicable security and privacy plan). Phishing email tests must be executed through the [Phishing Simulation Platform]. [NIST 800-53 AT-2 (Low/Moderate/High) | ARC-AMPE AT-2 (AE Mandatory)]
+
+5.2. Security Awareness must provide practical exercises in literacy training that simulate events and incidents. [NIST 800-53 AT-2(1)]
+
+5.3. Security Awareness must provide literacy training on recognizing and reporting potential indicators of insider threat, including how to communicate employee and management concerns regarding potential insider threat indicators through appropriate organizational channels in accordance with established organizational policies and procedures. [NIST 800-53 AT-2(2) (Low/Moderate/High) | ARC-AMPE AT-2(2) (AE Mandatory)]
+
+5.4. Security Awareness must provide literacy training on recognizing and reporting potential and actual instances of social engineering and social mining, including how to recognize and report, through appropriate organizational and defined channels (e.g., applicable security and privacy plans), potential attempts to trick an individual into revealing information or taking an action that can be used to breach, compromise, or otherwise adversely impact a system. [NIST 800-53 AT-2(3) (Moderate/High) | ARC-AMPE AT-2(3) (AE Mandatory)]
+
+5.5. Security Awareness must provide literacy training on recognizing suspicious communications and anomalous behavior in organizational systems using organization-defined indicators of malicious code, including how to recognize and report, through appropriate organizational and defined channels (e.g., applicable security and privacy plans), potentially suspicious email or web communications (e.g., unexpected emails, emails with strange or poor grammar, or emails from an unfamiliar sender appearing to be from a known sponsor or contractor) and anomalous behaviors in systems. [NIST 800-53 AT-2(4) | ARC-AMPE AT-2(4) (AE Mandatory)]
+
+5.6. Security Awareness must provide literacy training on the advanced persistent threat (APT), including techniques for recognizing suspicious emails, use of removable systems in non-secure settings, the potential targeting of individuals at home, and the various ways APTs can infiltrate the organization (e.g., through websites, emails, advertisement pop-ups, articles, and social engineering). [NIST 800-53 AT-2(5) | ARC-AMPE AT-2(5) (AE Mandatory)]
+
+5.7. Security Awareness must provide literacy training on the cyber threat environment and reflect current cyber threat information in system operations. [NIST 800-53 AT-2(6)]
+
+## 6. Role-Based Security and Privacy Training
+
+6.1. Security Awareness must provide role-based security and privacy training to personnel with significant information security and privacy roles and responsibilities before authorizing access to the system or information or performing assigned duties, and at least every one (1) year thereafter. [NIST 800-53 AT-3 (Low/Moderate/High) | ARC-AMPE AT-3 (AE Mandatory)]
+
+6.2. Security Awareness must provide role-based training when required by system changes, when an employee enters a new position that requires additional role-specific training, and following significant changes to the system or the system environment. [NIST 800-53 AT-3 (Low/Moderate/High) | ARC-AMPE AT-3 (AE Mandatory)]
+
+6.3. Security Awareness must disable, through the [Identity Provider], the user accounts of personnel with significant information security and privacy roles and responsibilities who have not completed the required role-based training within the mandated timeframes, until they have met their role-based training requirement. [ARC-AMPE AT-3 (AE Mandatory)]
+
+6.4. Security Awareness must update role-based training content at least every one (1) year and following organization-defined events or significant changes to the system or system environment. [NIST 800-53 AT-3 (Low/Moderate/High) | ARC-AMPE AT-3 (AE Mandatory)]
+
+6.5. Security Awareness must incorporate lessons learned from internal or external security incidents or breaches into role-based training. [NIST 800-53 AT-3 (Low/Moderate/High) | ARC-AMPE AT-3 (AE Mandatory)]
+
+6.6. Security Awareness must provide [Assignment: organization-defined personnel or roles] with initial and recurring [Assignment: organization-defined frequency] training in the employment and operation of environmental controls. [NIST 800-53 AT-3(1)]
+
+6.7. Security Awareness must provide [Assignment: organization-defined personnel or roles] with initial and recurring [Assignment: organization-defined frequency] training in the employment and operation of physical security controls. [NIST 800-53 AT-3(2)]
+
+6.8. Security Awareness must provide practical exercises in security and privacy training that reinforce training objectives. [NIST 800-53 AT-3(3)]
+
+6.9. Security Awareness must provide organizational personnel (including vendors, contractors, and employees) with initial training, and at least every one (1) year thereafter, in the employment and operation of personally identifiable information processing and transparency controls. [NIST 800-53 AT-3(5) | ARC-AMPE AT-3(5) (AE Mandatory)]
+
+6.10. Security Awareness must develop and implement a privacy education and awareness training program for all employees and individuals working on behalf of the organization involved in managing, using, and/or processing PII. The program must:
+
+- include responsibilities associated with sending PII in email;
+- ensure privacy communications and training are job-specific and commensurate with the employee's responsibilities;
+- complete initial training on privacy responsibilities before permitting access to organizational information and systems, with annual refresher training thereafter;
+- ensure additional or advanced training is commensurate with increased responsibilities or changes in duties;
+- include acceptable rules of behavior and the consequences of not following them in both initial and refresher training; and
+- ensure training addresses the rules for telework and other authorized remote access programs.
+
+[ARC-AMPE AT-3(5) (AE Mandatory)]
+
+## 7. HIPAA Security Awareness and Workforce Procedures
+
+7.1. Security Awareness must provide periodic security updates (security reminders) to workforce members. [HIPAA 164.308(a)(5)(ii)(A) (Addressable)]
+
+7.2. Example Org must implement procedures for guarding against, detecting, and reporting malicious software. [HIPAA 164.308(a)(5)(ii)(B) (Addressable)]
+
+7.3. Example Org must implement procedures for monitoring log-in attempts and reporting discrepancies. [HIPAA 164.308(a)(5)(ii)(C) (Addressable)]
+
+7.4. Example Org must implement procedures for creating, changing, and safeguarding passwords. [HIPAA 164.308(a)(5)(ii)(D) (Addressable)]
+
+7.5. Example Org must implement policies and procedures to ensure that all workforce members have appropriate access to electronic protected health information and to prevent workforce members without such access from obtaining it. [HIPAA 164.308(a)(3)(i)]
+
+7.6. Example Org must implement procedures for the authorization and/or supervision of workforce members who work with electronic protected health information or in locations where it might be accessed. [HIPAA 164.308(a)(3)(ii)(A) (Addressable)]
+
+7.7. Example Org must screen individuals prior to authorizing access to the system, and must implement procedures to determine that a workforce member's access to electronic protected health information is appropriate. [NIST 800-53 PS-3 (Low/Moderate/High) | ARC-AMPE PS-3 (AE Mandatory) | HIPAA 164.308(a)(3)(ii)(B) (Addressable)]
+
+7.8. Example Org must implement procedures for terminating access to electronic protected health information when employment or other arrangement with a workforce member ends, or as required by clearance determinations. [HIPAA 164.308(a)(3)(ii)(C) (Addressable)]
+
+## 8. Position Risk Designations and Personnel Screening
+
+8.1. Example Org must assign a risk designation to all organizational positions. [NIST 800-53 PS-2 (Low/Moderate/High) | ARC-AMPE PS-2 (AE Mandatory)]
+
+8.2. Example Org must establish screening criteria for individuals filling positions, including explicit information security role appointment requirements (e.g., training and security clearances), and must factor whether the workforce member will work with PII into the screening criteria. [NIST 800-53 PS-2 (Low/Moderate/High) | ARC-AMPE PS-2 (AE Mandatory)]
+
+8.3. Example Org must review and update position risk designations at least every one (1) year or whenever a position's duties are changed, revised, or realigned. [NIST 800-53 PS-2 (Low/Moderate/High) | ARC-AMPE PS-2 (AE Mandatory)]
+
+8.4. Example Org must ensure that all individuals with significant security responsibilities possess, at a minimum, a background investigation. [ARC-AMPE PS-2 (AE Mandatory)]
+
+8.5. Example Org must rescreen individuals in accordance with organization-defined conditions and frequency [Assignment: organization-defined rescreening conditions and frequency], in accordance with the organizational Personnel Security Policy and anytime an individual changes position, consistent with PS-2 for the new position. [NIST 800-53 PS-3 (Low/Moderate/High) | ARC-AMPE PS-3 (AE Mandatory)]
+
+8.6. Example Org must conduct background investigations in a manner commensurate with organizational Personnel Security policy and guidance prior to employment. For prospective and existing employees accessing ACA-sensitive information or PII, Example Org must meet personnel suitability standards based on a valid need-to-know (which cannot be assumed from position or title) and favorable background check results, with the background check including, at a minimum, contacting provided references and the local law enforcement agency or agencies. [ARC-AMPE PS-3 (AE Mandatory)]
+
+8.7. Example Org must not permit employees and contractors access to information systems until they have been vetted in accordance with organizational policy and have signed the appropriate access agreements. [ARC-AMPE PS-3 (AE Mandatory)]
+
+8.8. Example Org must verify that individuals accessing a system processing, storing, or transmitting classified information are cleared and indoctrinated to the highest classification level of the information to which they have access on the system. [NIST 800-53 PS-3(1)]
+
+8.9. Example Org must verify that individuals accessing a system processing, storing, or transmitting types of classified information requiring formal indoctrination are formally indoctrinated for all relevant types of information to which they have access on the system. [NIST 800-53 PS-3(2)]
+
+8.10. Example Org must ensure individuals accessing information requiring special protective measures have valid access authorizations demonstrated by assigned official government duties and satisfy [Assignment: organization-defined additional personnel screening criteria]. [NIST 800-53 PS-3(3)]
+
+8.11. Example Org must verify that individuals accessing a system processing, storing, or transmitting organization-defined information types meet [Assignment: organization-defined citizenship requirements]. [NIST 800-53 PS-3(4)]
+
+## 9. Training Documentation, Records, and Evidence
+
+9.1. Security Awareness must document and monitor information security and privacy training activities, including security and privacy awareness training and specific role-based security and privacy training. Training delivery and completion must be tracked in the [Learning Management System]. [NIST 800-53 AT-4 (Low/Moderate/High) | ARC-AMPE AT-4 (AE Mandatory)]
+
+9.2. Security Awareness must produce, at the conclusion of each annual training cycle, a Training completion report and Phishing simulation results as evidence of program execution. [NIST 800-53 AT-4 (Low/Moderate/High) | ARC-AMPE AT-4 (AE Mandatory)]
+
+9.3. Security Awareness must retain individual training records for [Assignment: organization-defined retention period], and for a minimum of five (5) years after completing a specific training course. [NIST 800-53 AT-4 (Low/Moderate/High) | ARC-AMPE AT-4 (AE Mandatory)]
+
+9.4. Example Org must maintain the policies and procedures implemented to comply with the HIPAA Security Rule in written (which may be electronic) form, and must maintain a written (which may be electronic) record of any action, activity, or assessment required to be documented. [HIPAA 164.316(b)(1)]
+
+9.5. Example Org must retain HIPAA-required documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA 164.316(b)(2)(i)]
+
+9.6. Example Org must make HIPAA documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii)]
+
+9.7. Example Org must review HIPAA documentation periodically and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii)]
+
+## 10. Accountability and Reporting
+
+The Security Awareness team is accountable for the outcomes of every requirement in this Standard, including the production and retention of the Training completion report and Phishing simulation results, the annual review and update of the awareness and training policy and procedures, and the coordination of handoffs with other participating teams (including personnel screening, system ownership, and access management functions) for requirements that those teams execute on Security Awareness's behalf.

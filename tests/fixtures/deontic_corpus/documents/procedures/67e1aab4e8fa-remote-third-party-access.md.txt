@@ -1,0 +1,223 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.092572
+  models:
+    - anthropic/claude-sonnet-5
+  prompt_shas:
+    - 8aa9e4a962527e0d
+  provider: litellm
+  provider_class: third-party
+---
+
+# Remote & Third-Party Access Procedure
+
+## Purpose
+
+This procedure gives Network Security the concrete, repeatable steps needed to authorize, configure, monitor, and terminate remote, wireless, mobile, and third-party/external-system access to Example Org systems, and to keep the resulting records current and auditable.
+
+## Scope
+
+This procedure applies to Network Security personnel and any other Example Org staff, contractors, or third parties who configure, approve, or use remote access, wireless access, mobile devices, or external systems to connect to or exchange data with Example Org systems.
+
+## Prerequisites
+
+- Approved access to the [VPN/Remote Access Gateway] administrative console
+- Approved access to the [Network Access Control System] used to manage authorized access control points
+- Approved access to the [Wireless Access Point Management Console]
+- Approved access to the [Mobile Device Management (MDM) Platform]
+- Approved access to the [Identity Provider] for authentication configuration and user/device authorization records
+- Approved access to the [Ticketing System] for tracking authorization requests, exceptions, and remediation
+- A current, maintained Third-party access register
+- A current record of VPN and remote-access configuration baselines
+- Written sign-off authority identified for the Authorizing Official (AO) or designated representative
+- Access to the applicable System Security and Privacy Plan for the system in scope
+- Access to [Legal Counsel] for review of binding agreements involving personally owned devices or PII handling
+- Access to the [Third-Party Risk Management System] or equivalent register for tracking external-party connection agreements
+
+## Procedure Steps
+
+### 1. Establish and Authorize Remote Access Types [NIST 800-53 AC-17 Low/Moderate/High | ARC-AMPE AC-17 AE Mandatory]
+
+1. Network Security enumerates every remote access method in use or proposed (e.g., VPN client, remote desktop gateway) and records it in the VPN and remote-access configuration documentation.
+1. For each method, Network Security documents usage restrictions, connection requirements, and implementation guidance in the applicable System Security and Privacy Plan.
+1. Network Security submits each remote access type to the AO or designated representative for authorization via the [Ticketing System] before any connections of that type are permitted.
+1. Network Security records the authorization decision and date in the VPN and remote-access configuration record.
+1. Network Security reviews this authorization list [Review Frequency] and updates it when new remote access types are proposed.
+
+### 2. Automated Monitoring and Control of Remote Access [NIST 800-53 AC-17(1) Moderate/High | ARC-AMPE AC-17(1) AE Mandatory]
+
+1. Network Security configures the [VPN/Remote Access Gateway] to log all remote connection attempts, successes, and failures automatically.
+1. Network Security configures automated alerting for anomalous remote access patterns (e.g., off-hours logins, impossible travel) within the [VPN/Remote Access Gateway] or connected [Security Information and Event Management (SIEM) System].
+1. Network Security reviews automated monitoring output on a quarterly basis and logs the review in the [Ticketing System].
+1. Network Security escalates any control failures found during review through the [Ticketing System] for remediation.
+
+### 3. Encrypt Remote Access Sessions [NIST 800-53 AC-17(2) Moderate/High | ARC-AMPE AC-17(2) AE Mandatory]
+
+1. Network Security configures the [VPN/Remote Access Gateway] to require cryptographic protection (encryption) for the confidentiality and integrity of all remote sessions.
+1. Network Security verifies the encryption protocol and cipher suite in use meet the applicable FIPS 140-compliant encryption standard and records this configuration in the VPN and remote-access configuration.
+1. Network Security disables any legacy or unencrypted remote access protocols identified during configuration review.
+1. Network Security re-verifies encryption settings whenever the [VPN/Remote Access Gateway] firmware or software is updated.
+
+### 4. Route Remote Access Through Managed Access Control Points [NIST 800-53 AC-17(3) Moderate/High | ARC-AMPE AC-17(3) AE Mandatory]
+
+1. Network Security identifies and documents all authorized network access control points (e.g., VPN concentrators, gateways) in the VPN and remote-access configuration.
+1. Network Security configures network routing and firewall rules so that all remote access traffic must pass through one of the documented access control points.
+1. Network Security blocks direct remote access paths that bypass these control points.
+1. Network Security reviews access control point configuration quarterly to confirm no unauthorized paths have been introduced.
+
+### 5. Authorize Privileged Remote Commands [NIST 800-53 AC-17(4) Moderate/High | ARC-AMPE AC-17(4) AE Mandatory]
+
+1. Network Security identifies which privileged commands and security-relevant information may be accessed remotely and documents the [Approved Remote Access Needs] in the applicable System Security and Privacy Plan.
+1. Before granting such access, Network Security requires the requestor to submit justification through the [Ticketing System], describing the compelling operational need.
+1. Network Security or the AO approves or denies the request and records the rationale in the System Security and Privacy Plan.
+1. Network Security configures the [VPN/Remote Access Gateway] or privileged access tooling to log privileged remote command execution in a format that provides assessable evidence (e.g., session recording, command logging).
+1. Network Security retains these logs alongside the VPN and remote-access configuration record.
+
+### 6. Protect Information About Remote Access Mechanisms [NIST 800-53 AC-17(6)]
+
+1. Network Security restricts access to remote access configuration files, connection strings, and topology diagrams to authorized Network Security personnel only, enforced through the [Identity Provider] role assignments.
+1. Network Security stores remote access mechanism documentation (VPN and remote-access configuration) in a system with access controls and audit logging.
+1. Network Security reviews access permissions to this documentation quarterly and removes access for personnel who no longer require it.
+
+### 7. Disconnect or Disable Remote Access [NIST 800-53 AC-17(9) | ARC-AMPE AC-17(9) AE Mandatory]
+
+1. Network Security configures the [VPN/Remote Access Gateway] with the administrative capability to disconnect or disable any remote access session or account on demand.
+1. Upon receipt of a disconnect order from an authorized official (via the [Ticketing System] or direct notification), Network Security disables or terminates the specified remote access within one (1) hour.
+1. For system-to-system interconnections, Network Security terminates or suspends the connection within one (1) hour of the order being issued.
+1. Network Security logs the disconnection action, the time of the order, and the time of completion in the [Ticketing System] and updates the VPN and remote-access configuration record accordingly.
+
+### 8. Authenticate Remote Commands [NIST 800-53 AC-17(10)]
+
+1. Network Security identifies the [Remote Commands Requiring Authentication] that require authentication prior to execution.
+1. Network Security implements the [Authentication Mechanism for Remote Commands] (e.g., signed command tokens, multi-factor challenge) on the systems that accept those commands.
+1. Network Security tests the authentication mechanism during configuration changes to confirm unauthenticated remote commands are rejected.
+1. Network Security documents the mechanism and covered commands in the VPN and remote-access configuration.
+
+### 9. Workstation Use Policies for ePHI Access [HIPAA Security Rule 164.310(b)]
+
+1. Network Security, in coordination with the applicable facilities/compliance function, documents the proper functions permitted on workstations or workstation classes that can access electronic protected health information (ePHI).
+1. Network Security documents the manner in which those functions must be performed (e.g., screen-lock timeout, prohibited peripherals).
+1. Network Security documents the required physical attributes of the surroundings for such workstations (e.g., screen positioning away from public view, physical access restrictions).
+1. Network Security distributes these workstation-use requirements to system owners and verifies implementation during quarterly access reviews.
+
+### 10. Establish and Authorize Wireless Access Types [NIST 800-53 AC-18 Low/Moderate/High | ARC-AMPE AC-18 AE Mandatory]
+
+1. Network Security enumerates each type of wireless access in use or proposed and documents configuration requirements, connection requirements, and implementation guidance in the applicable System Security and Privacy Plan.
+1. Network Security submits each wireless access type to the AO for authorization via the [Ticketing System] before deployment.
+1. Network Security records the authorization in the VPN and remote-access configuration (or equivalent wireless configuration record).
+1. Network Security reviews authorized wireless access types quarterly.
+
+### 11. Authenticate and Encrypt Wireless Access [NIST 800-53 AC-18(1) Moderate/High | ARC-AMPE AC-18(1) AE Mandatory]
+
+1. Network Security configures the [Wireless Access Point Management Console] to require authentication of both users and devices before granting wireless network access.
+1. Network Security configures wireless encryption using the latest published FIPS 140-compliant encryption standard.
+1. Network Security verifies encryption and authentication settings during configuration audits and records findings in the [Ticketing System].
+1. Network Security remediates any access point found using non-compliant authentication or encryption settings before returning it to service.
+
+### 12. Disable Unused Wireless Capabilities [NIST 800-53 AC-18(3) Moderate/High | ARC-AMPE AC-18(3) AE Mandatory]
+
+1. Network Security identifies system components with embedded wireless networking capability during procurement or provisioning intake.
+1. Network Security disables embedded wireless capability on any component not intended to use wireless prior to issuance or deployment.
+1. Network Security records the disablement action in the asset/configuration record.
+1. Network Security verifies wireless capability remains disabled during periodic configuration checks.
+
+### 13. Authorize Independent Wireless Configuration [NIST 800-53 AC-18(4) High]
+
+1. Network Security identifies users who require the ability to independently configure wireless networking capabilities.
+1. Network Security submits these users for explicit authorization via the [Ticketing System], approved by the AO or designated representative.
+1. Network Security grants the corresponding configuration privilege through the [Identity Provider] only after authorization is recorded.
+1. Network Security reviews the list of authorized users quarterly and revokes privileges no longer needed.
+
+### 14. Calibrate Wireless Signal Boundaries [NIST 800-53 AC-18(5) High]
+
+1. Network Security selects radio antennas and transmission power settings for each wireless access point to minimize signal propagation outside organization-controlled boundaries.
+1. Network Security tests signal strength at the perimeter of organization-controlled areas after installation or reconfiguration.
+1. Network Security adjusts antenna type or power calibration if signal is detected beyond the controlled boundary.
+1. Network Security documents the calibration settings in the wireless configuration record.
+
+### 15. Establish and Authorize Mobile Device Connections [NIST 800-53 AC-19 Low/Moderate/High | ARC-AMPE AC-19 AE Mandatory]
+
+1. Network Security documents configuration requirements, connection requirements, and implementation guidance for organization-controlled mobile devices, including use outside controlled areas, in the applicable System Security and Privacy Plan.
+1. Network Security submits mobile device connection types for AO authorization via the [Ticketing System] before allowing connections.
+1. Network Security enrolls authorized mobile devices in the [Mobile Device Management (MDM) Platform] and applies the documented configuration.
+1. Network Security records authorized mobile device types and configurations in the asset/configuration record.
+
+### 16. Restrict Unclassified Mobile Devices Near Classified Systems [NIST 800-53 AC-19(4)]
+
+1. Network Security identifies facilities containing systems that process, store, or transmit classified information.
+1. Network Security prohibits unclassified mobile devices in those facilities unless the AO specifically permits use.
+1. For permitted exceptions, Network Security configures the [Mobile Device Management (MDM) Platform] to prevent connection of unclassified mobile devices to classified systems, and requires AO written approval before connecting to unclassified systems.
+1. Network Security disables internal and external modems and wireless interfaces on permitted unclassified mobile devices via the [Mobile Device Management (MDM) Platform].
+1. Network Security coordinates with designated security officials to conduct random reviews/inspections of unclassified mobile devices and their stored information.
+1. If classified information is discovered on an unclassified device, Network Security follows the organization's incident handling policy and logs the event in the [Ticketing System].
+1. Network Security restricts connection of classified mobile devices to classified systems according to the organization-defined security policy governing those systems.
+
+### 17. Encrypt Mobile Device Information [NIST 800-53 AC-19(5) Moderate/High | ARC-AMPE AC-19(5) AE Mandatory]
+
+1. Network Security configures full-device encryption or container-based encryption on the [Mobile Devices Subject to Encryption Requirement] using the [Mobile Device Management (MDM) Platform], applying the latest published FIPS 140-compliant encryption standard.
+1. Network Security verifies that any mobile device storing Personally Identifiable Information (PII) has encryption enabled before allowing it to connect.
+1. Network Security records encryption status per device in the [Mobile Device Management (MDM) Platform] and reconciles it against the asset/configuration record quarterly.
+1. Network Security remediates any device found without required encryption before permitting further access.
+
+### 18. Establish Terms for External System Access [NIST 800-53 AC-20 Low/Moderate/High | FedRAMP AC-20 | ARC-AMPE AC-20 AE Mandatory]
+
+1. Network Security identifies external systems that authorized individuals may use to access Example Org systems or to process, store, or transmit organization-controlled information.
+1. Network Security establishes and documents the [Assignment: Organization-Defined Terms and Conditions] and/or the required controls to be implemented on each external system, consistent with the trust relationship established with the owning organization.
+1. Network Security records these terms in the Third-party access register.
+1. Network Security identifies and documents the [Prohibited External System Types] that are not permitted to connect under any circumstances.
+1. Network Security cross-references entries in the Third-party access register against related CA-3 interconnection agreements and SA-9 external-provider responsibility records to keep the three control areas (AC-20, CA-3, SA-9) consistent and non-duplicative.
+
+### 19. Verify External System Controls Before Access [NIST 800-53 AC-20(1) Moderate/High | ARC-AMPE AC-20(1) AE Mandatory]
+
+1. Before permitting use of an external system, Network Security verifies that the controls required by organizational security and privacy policies/plans are implemented on that external system, or
+1. Network Security retains an approved system connection or processing agreement with the entity hosting the external system.
+1. Network Security records the verification result or the retained agreement in the Third-party access register.
+1. Network Security re-verifies controls or agreement validity [Review Frequency] and updates the register accordingly.
+
+### 20. Restrict Portable Storage Device Use on External Systems [NIST 800-53 AC-20(2) Moderate/High | ARC-AMPE AC-20(2) AE Mandatory]
+
+1. Network Security documents the [Portable Storage Device Restrictions] for organization-controlled portable storage devices used on external systems in the applicable System Security and Privacy Plan.
+1. Network Security prohibits such use unless: the use is documented in the security/privacy plan; the AO or designated representative has authorized it in writing; any personally owned device to which the storage device is attached complies with organizational policy on personally owned systems; and appropriate safeguards commensurate with data sensitivity are applied.
+1. Network Security records each approved exception in the Third-party access register, including the written AO authorization.
+1. Network Security reviews approved exceptions quarterly to confirm continued compliance.
+
+### 21. Restrict Non-Organizationally Owned Systems [NIST 800-53 AC-20(3) | ARC-AMPE AC-20(3) AE Mandatory]
+
+1. Network Security documents the [Assignment: Organization-Defined Restrictions] applicable to non-organizationally owned systems or components used to process, store, or transmit organizational information.
+1. For contractor-owned devices, Network Security confirms the device is documented in the contract and applicable security/privacy plans and has written AO authorization before granting access.
+1. For personally owned devices, Network Security confirms compliance with organizational policy on personally owned systems, notes that such use is strongly discouraged, and applies appropriate safeguards for the sensitivity of the data.
+1. Network Security requires full-device or virtual container encryption on any non-organizationally owned system or component before granting access.
+1. Prior to granting access to PII on remote devices, Network Security obtains the device user's signed acknowledgment of a binding agreement covering their responsibility to safeguard accessible PII and their agreement to the organization's ability to manage that PII on the device, including confiscation in consultation with [Legal Counsel] if necessary.
+1. Network Security records each authorized device and its safeguards in the Third-party access register.
+
+### 22. Prohibit Network-Accessible Storage Devices in External Systems [NIST 800-53 AC-20(4)]
+
+1. Network Security identifies the [Network-Accessible Storage Device Types] prohibited from use in external systems.
+1. Network Security configures network access control points to block connections from the prohibited device types where technically feasible.
+1. Network Security documents the prohibition in the Third-party access register and communicates it to third parties as part of onboarding.
+1. Network Security investigates and remediates any detected violation through the [Ticketing System].
+
+### 23. Prohibit Portable Storage Devices on External Systems [NIST 800-53 AC-20(5)]
+
+1. Network Security determines whether organization-controlled portable storage devices are prohibited outright on external systems for the system in scope (as distinct from the restricted-use case in Step 20).
+1. Where prohibited, Network Security configures technical controls (e.g., device control policies) to block use of such devices on external systems.
+1. Network Security documents the prohibition in the Third-party access register.
+1. Network Security audits compliance with this prohibition quarterly.
+
+### 24. Control Publicly Accessible Content [NIST 800-53 AC-22 Low/Moderate/High | ARC-AMPE AC-22 AE Mandatory]
+
+1. Network Security, in coordination with the content-owning business unit, designates individuals authorized to post information to publicly accessible systems and records these designations in the [Ticketing System].
+1. Network Security ensures designated individuals are trained to recognize and exclude nonpublic information before posting.
+1. Network Security reviews proposed content prior to posting on the publicly accessible system to confirm no nonpublic information is included.
+1. Network Security reviews existing content on the publicly accessible system for nonpublic information no less often than every fourteen (14) days (bi-weekly).
+1. If nonpublic information is discovered, Network Security removes it immediately and logs the removal action, including discovery date and remediation date, in the [Ticketing System].
+
+## Roles & Responsibilities
+
+Network Security owns this procedure end to end: its personnel perform, configure, and verify each step above, and Network Security is accountable for the accuracy of the VPN and remote-access configuration and the Third-party access register. Exceptions, prohibited-use waivers, and privileged/remote-command approvals require sign-off from the Authorizing Official (AO) or designated representative before Network Security implements them.
+
+## Related Standard
+
+This procedure operationalizes the **Remote & Third-Party Access Standard**, which defines the full requirement text, rationale, and control objectives referenced above.

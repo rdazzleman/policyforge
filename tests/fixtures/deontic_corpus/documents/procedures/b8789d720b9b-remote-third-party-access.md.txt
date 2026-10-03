@@ -1,0 +1,226 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002355
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 20a6867322b5be9f
+  provider: litellm
+  provider_class: third-party
+---
+
+# Remote & Third-Party Access Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions for establishing, authorizing, securing, monitoring, and revoking remote access, wireless access, mobile device access, external system use, and third-party vendor access to Example Org systems. Executing it produces the evidence artifacts required by the Remote & Third-Party Access Standard: the VPN and remote-access configuration and the Third-party access register.
+
+## Scope
+
+Network Security performs this procedure end to end on all Example Org remote access methods, wireless networks, mobile devices, external system connections, and publicly accessible systems, with Business Owners, Authorizing Officials, system owners, and Privacy/Counsel participants as noted in individual steps. It applies to all users — employees, contractors, vendors, and teleworkers — connecting to Example Org systems from non-organizational locations or devices.
+
+## Prerequisites
+
+- Access to the [VPN Gateway] administration console and the [Network Access Control Point] firewall/policy management interface
+- Administrative access to the [Identity Provider] for account creation and recertification
+- Administrative access to the [Endpoint Management Platform], [Mobile Device Management (MDM) Platform], and [Wireless Controller]
+- Access to the [SIEM] and [Ticketing System] for logging, alerting, and authorization workflow
+- The current System Security and Privacy Plan (SSPP) for each in-scope system
+- The current VPN and remote-access configuration document and Third-party access register
+- Written authorization from the system Business Owner and, where required below, the Authorizing Official (AO)
+- The latest published NIST SP 800-46, FIPS 140-compliant encryption standards, and IEEE 802.11 WLAN standard references
+- A designated list of officials authorized to order disconnection of remote access or network connections
+
+## Procedure Steps
+
+### Document usage restrictions and connection requirements for each remote access type
+
+1. Inventory every type of remote access in use (e.g., VPN, vendor logon, wireless, teleworking, external system connections) and record each in the VPN and remote-access configuration document.
+1. For each type, document the usage restrictions, configuration and connection requirements, and implementation guidance, using the latest published NIST SP 800-46 guidance as the baseline for teleworking entries.
+1. Network Security reviews and re-approves the document quarterly and upon any change to a remote access method.
+
+### Authorize each remote access type prior to allowing connections
+
+1. Require a connection request for each new remote access type to be submitted through the [Ticketing System], describing the access method, users, and systems involved.
+1. Network Security reviews the request against the documented configuration and connection requirements.
+1. Obtain written authorization from the system Business Owner before enabling the connection.
+1. Record the authorization decision in the VPN and remote-access configuration document; do not enable the connection until authorization is complete.
+
+### Require callback with re-authentication when the MPLS service network cannot be used
+
+1. Where a connection cannot traverse the MPLS service network, configure the [VPN Gateway] to require callback to a pre-registered, authorized location before the session is established.
+1. Require the user to re-authenticate after the callback is completed; do not permit single-factor session continuation.
+1. Document each callback-enabled connection and its authorized locations in the VPN and remote-access configuration document.
+
+### Manage vendor logon accounts for application and turnkey systems
+
+1. For each application or turnkey system requiring vendor logon, assign the vendor a unique User ID and password through the [Identity Provider]; do not share default or shared credentials.
+1. Require vendor access to enter through the standard authentication process — no direct or backdoor entry paths.
+1. Configure the [SIEM] to log each vendor session; record the vendor, User ID, system, and authorization basis in the Third-party access register.
+1. Network Security recertifies every vendor User ID at least every one (1) year; disable any vendor User ID that is not affirmatively recertified.
+
+### Verify secure configuration of all devices requiring network access
+
+1. Before granting network access, verify via the [Endpoint Management Platform] that each device — government-furnished, contractor-furnished, or personal — has, at minimum: up-to-date system patches; current anti-virus software; a host-based intrusion detection system; automatic execution of code disabled; and the latest published FIPS 140-compliant encryption standards.
+1. Configure the [Network Access Control Point] to quarantine or deny connections from devices that fail any check.
+1. Re-verify device compliance quarterly and upon each new connection.
+
+### Maintain teleworking policies and procedures per NIST SP 800-46
+
+1. Maintain policies and procedures that follow the latest published NIST SP 800-46 guidelines and define: the forms of permitted remote access; the types of devices permissible for remote access; the types of access granted to remote users; and the handling of remote user account provisioning.
+1. Network Security reviews these policies quarterly and updates them when NIST SP 800-46 is revised.
+
+### Employ automated mechanisms to monitor and control remote access
+
+1. Configure the [VPN Gateway] and [SIEM] to automatically monitor all remote access methods for session activity, authentication failures, and policy violations.
+1. Configure automated controls to block or terminate sessions that violate the documented usage restrictions.
+1. Network Security reviews monitoring alerts and tuning quarterly.
+
+### Implement cryptographic protection for remote access sessions
+
+1. Configure the [VPN Gateway] to encrypt all remote access sessions using the latest published FIPS 140-compliant encryption standards, protecting both confidentiality and integrity.
+1. Disable legacy or non-compliant cipher suites on the [VPN Gateway].
+1. Verify the cryptographic configuration during the quarterly review of the VPN and remote-access configuration.
+
+### Route remote access through authorized network access control points
+
+1. Configure firewall policy so that all remote access enters only through the authorized, managed [Network Access Control Point].
+1. Block direct remote access paths that bypass the control point.
+1. Review firewall rules quarterly to confirm no unauthorized ingress paths exist.
+
+### Control privileged commands and security-relevant information via remote access
+
+1. Define, in the applicable System Security and Privacy Plan (SSPP), what constitutes a compelling operational need for executing privileged commands or accessing security-relevant information via remote access.
+1. Permit such execution only for the documented compelling operational needs and only in a format that provides assessable evidence — require session logging through the [SIEM] with command-level recording.
+1. Require each instance to be requested via the [Ticketing System] and approved by Network Security before execution.
+1. Document the rationale for permitting remote access to the system in the system's security plan.
+
+### Protect information about remote access mechanisms from unauthorized use and disclosure
+
+1. Store the VPN and remote-access configuration document and related mechanism details (addresses, ports, methods) in access-controlled [Document Repository] restricted to Network Security and personnel with a documented need to know.
+1. Do not disclose remote access mechanism details in tickets, email, or public channels; share only through the approved controlled channel.
+
+### Provide capability to disconnect or disable remote access within one (1) hour
+
+1. Configure and test a disconnection capability in the [VPN Gateway] that can disable remote access to the system within one (1) hour.
+1. Configure the capability to terminate or suspend network connections (system-to-system interconnections) within one (1) hour upon issuance of an order by an authorized official.
+1. Maintain the list of organization-defined officials authorized to issue such orders, and test the disconnect capability quarterly.
+
+### Authenticate remote commands
+
+1. Implement [Assignment: organization-defined mechanisms] to authenticate [Assignment: organization-defined remote commands] executed over remote access.
+1. Record the selected mechanisms and commands in the VPN and remote-access configuration document.
+
+### Define workstation use requirements for access to electronic protected health information
+
+1. Document, for each workstation or class of workstation that can access electronic protected health information: the proper functions to be performed; the manner in which those functions are to be performed; and the physical attributes of the surroundings of the workstation.
+1. Network Security reviews these workstation specifications quarterly and upon workspace or system changes.
+
+### Establish and authorize wireless access types
+
+1. For each type of wireless access, establish configuration requirements, connection requirements, and implementation guidance, recorded alongside the VPN and remote-access configuration.
+1. Require each wireless access type to be authorized through the [Ticketing System] and approved by Network Security prior to allowing connections.
+
+### Implement mandatory controls for approved wireless access
+
+If wireless access is explicitly approved, configure and verify each of the following via the [Wireless Controller] and \[Endpoint Management Platform\]:
+
+1. Disable wireless device SSID broadcasting.
+1. Enable encryption protection.
+1. Place access points in secure areas.
+1. Shut down access points when not in use (e.g., nights, weekends).
+1. Implement a stateful inspection firewall between the wireless network and the wired infrastructure.
+1. Utilize Media Access Control (MAC) address authentication.
+1. Utilize static IP addresses rather than DHCP.
+1. Utilize personal firewalls on all wireless clients.
+1. Disable file sharing on all wireless clients.
+1. Deploy intrusion detection agents on the wireless side of the firewall.
+1. Monitor and record wireless activity, with records reviewed on a quarterly basis as part of this procedure's cadence, consistent with the applicable security/privacy plans.
+1. Adhere to the latest published IEEE 802.11 WLAN standard.
+
+### Protect wireless access with authentication and FIPS 140-compliant encryption
+
+1. Configure the [Wireless Controller] to require authentication of both users and devices before granting wireless access.
+1. Encrypt all communications via the wireless access device using the latest published FIPS 140-compliant encryption standards.
+1. Verify both settings during the quarterly wireless review.
+
+### Disable embedded wireless capabilities not intended for use
+
+1. Prior to issuance and deployment, disable wireless networking capabilities embedded within system components that are not intended for use, via the [Endpoint Management Platform] baseline configuration.
+1. Verify the disabled state during device provisioning and the quarterly configuration review.
+
+### Explicitly authorize users who may independently configure wireless networking
+
+1. Identify, by name, the users authorized to independently configure wireless networking capabilities.
+1. Record the authorized list in the VPN and remote-access configuration document and enforce it via role-based permissions in the [Identity Provider].
+1. Network Security revalidates the list quarterly.
+
+### Select antennas and calibrate transmission power levels
+
+1. Select radio antennas and calibrate transmission power levels on wireless access points via the [Wireless Controller] to reduce the probability that signals can be received outside organization-controlled boundaries.
+1. Validate signal containment during the quarterly wireless review.
+
+### Establish mobile device requirements and authorize connections
+
+1. Establish configuration requirements, connection requirements, and implementation guidance for organization-controlled mobile devices, including requirements applicable when such devices are outside of controlled areas.
+1. Require the system Business Owner to authorize the use of mobile devices before any connection of a mobile device to organizational systems; record the authorization in the [Ticketing System].
+
+### Protect information on approved mobile devices
+
+1. Permit processing, accessing, and storing Personally Identifiable Information (PII) only on organization-owned mobile devices and with organization-owned software; prohibit PII on personal devices.
+1. Configure mobile devices via the [MDM Platform] to protect the storage and transmission of information on the device.
+1. Implement scanning of each device using a virus protection application deployed through the [MDM Platform].
+1. Employ full-device encryption or container-based encryption using the latest published FIPS 140-compliant encryption standards on all approved mobile devices, and encrypt information on all mobile devices that contain PII.
+1. Verify encryption and virus-protection status via the [MDM Platform] quarterly.
+
+### Control mobile devices in facilities with classified systems
+
+1. Prohibit the use of unclassified mobile devices in facilities containing systems that process, store, or transmit classified information unless specifically permitted by the authorizing official.
+1. For individuals so permitted: prohibit connection of unclassified mobile devices to classified systems; require authorizing official approval for connection of unclassified mobile devices to unclassified systems; and prohibit use of internal or external modems or wireless interfaces within the unclassified mobile devices.
+1. Subject unclassified mobile devices and their stored information to random reviews and inspections by [Assignment: organization-defined security officials]; if classified information is found, follow the incident handling policy.
+1. Restrict the connection of classified mobile devices to classified systems in accordance with [Assignment: organization-defined security policies].
+
+### Establish terms and conditions for external system use
+
+1. Establish organization-defined terms and conditions for use of external systems, and identify the organization-defined controls asserted to be implemented on external systems, consistent with the trust relationships established with the organizations owning, operating, and/or maintaining those systems.
+1. Ensure the terms and conditions allow authorized individuals to: access the system from external systems; and process, store, or transmit organization-controlled information using external systems — or prohibit the organization-defined prohibited types of external systems.
+1. Ensure the terms and conditions address, at a minimum: the types of applications that can be accessed from external information systems; the maximum FIPS 199 security category of information that can be processed, stored, and transmitted; how other users of the external information system will be prevented from accessing federal information; the use of VPN and stateful inspection firewall technologies; the use of and protection against the vulnerabilities of wireless technologies; the maintenance of adequate physical security controls; the use of virus and spyware protection software; and how often the security capabilities of installed software are to be updated.
+1. Differentiate the interrelated controls as follows: AC-20 governs system access to and from external systems; CA-3 requires documentation of an agreement between the respective system owners when data is exchanged between the CSO and an external system; and SA-9 captures the responsibilities of external system owners, typically in the agreement required by CA-3. Route agreement documentation accordingly.
+
+### Authorize external system use before access is permitted
+
+1. Permit authorized individuals to use an external system to access the system, or to process, store, or transmit organization-controlled information, only after: verification of the implementation of controls on the external system as specified in the organization's security and privacy policies and plans; or retention of an approved system connection or processing agreement with the organizational entity hosting the external system.
+1. Network Security verifies the control implementation or agreement before enabling access and re-verifies quarterly.
+
+### Restrict organization-controlled portable storage device use on external systems
+
+1. Restrict the use of organization-controlled portable storage devices by authorized individuals on external systems using organization-defined restrictions, and permit such use only when all of the following are satisfied: the use is documented within appropriate security/privacy plans; the use is explicitly authorized, in writing, by the Authorizing Official (AO) or designated representative; personally owned devices to which the devices are to be attached comply with organization policies and directives on use of personally owned systems and components; and security and privacy safeguards appropriate for the sensitivity of the data are employed.
+1. Record each written AO authorization in the [Ticketing System] and reference it in the applicable security/privacy plan.
+
+### Restrict use of non-organizationally owned systems and components
+
+1. Restrict the use of non-organizationally owned systems or system components to process, store, or transmit organization information unless all of the following are satisfied: contractor-owned device use is documented within the contract and appropriate security and privacy plans and explicitly authorized, in writing, by the AO or designated representative; personally owned device use complies with organizational policies and directives on use of personally owned systems and components; security and privacy safeguards appropriate for the sensitivity of the data are employed; and either full-device or virtual container encryption is implemented to reduce the vulnerability of sensitive information processed, stored, or transmitted by such systems or components.
+1. Strongly discourage the use of personally owned devices. Before providing access to PII on any remote device, require the device user to acknowledge through a binding agreement their responsibilities to safeguard the PII accessible from the device and their awareness of and agreement to the organization's capabilities to manage the organization's PII on the device, including confiscation, in consultation with the organization's counsel if necessary to remove the PII.
+1. Retain executed agreements with the user's access record in the [Identity Provider].
+
+### Prohibit storage device use on external systems
+
+1. Prohibit the use of [Assignment: organization-defined network-accessible storage devices] in external systems; enforce the prohibition via [Network Access Control Point] policy.
+1. Prohibit the use of organization-controlled portable storage devices by authorized individuals on external systems; enforce via endpoint control policy on the [Endpoint Management Platform].
+
+### Manage publicly accessible information
+
+1. Designate, by name, the individuals authorized to make information publicly accessible; record the designations in the [Ticketing System].
+1. Train the designated individuals to ensure that publicly accessible information does not contain nonpublic information.
+1. Review the proposed content of all information prior to posting onto the publicly accessible system to confirm that nonpublic information is not included; Network Security performs or approves this pre-posting review.
+1. Review the content on the publicly accessible system for nonpublic information bi-weekly (no less often than every fourteen [14] days) and remove such information if discovered; record each review and its findings in the [Ticketing System].
+
+## Roles & Responsibilities
+
+Network Security is accountable for this procedure end to end: it documents and authorizes access methods, operates the [VPN Gateway], [Wireless Controller], [MDM Platform], and [Endpoint Management Platform] controls, maintains the VPN and remote-access configuration and Third-party access register, and performs the quarterly and bi-weekly reviews. System Business Owners authorize mobile device and connection use, the Authorizing Official (or designated representative) provides written authorizations where required, and exceptions to any step in this procedure require Network Security review and AO approval before taking effect.
+
+## Related Standard
+
+This procedure operationalizes the **Remote & Third-Party Access Standard**, which contains the full requirement text, control rationale, and applicability determinations behind each step above.

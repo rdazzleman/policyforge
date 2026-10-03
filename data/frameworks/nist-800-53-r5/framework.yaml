@@ -1,0 +1,11 @@
+id: nist-800-53-r5
+name: NIST SP 800-53 Rev 5
+framework_id: nist-800-53
+licence: public-domain
+source: NIST OSCAL content repository, via policyforge etl-oscal
+notes: A US government work, so freely redistributable. Bundled with this project and safe
+  to commit to any repository.
+source_ref: v1.5.0
+source_url: https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
+content_sha256: 06ba18546f9cdf6646b3820adba055ceed21dcc4b8afb3c91b950b186b1af142
+fetched_at: '2026-09-16'

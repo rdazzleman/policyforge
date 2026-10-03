@@ -1,0 +1,605 @@
+# Configuration Management Standard
+
+## 1. Purpose and Scope
+
+This Configuration Management Standard establishes requirements for the development, implementation, and maintenance of configuration management controls for systems processing, storing, or transmitting information at Acme Health. This standard applies to all information systems and system components within the organization's operational environment.
+
+## 2. Configuration Management Policy and Procedures
+
+### 2.1 Policy Development and Documentation
+
+Acme Health shall develop, document, and disseminate to [Assignment: organization-defined personnel or roles] a [Selection (one or more): organization-level; mission/business process-level; system-level] configuration management policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 CM-1 | FedRAMP CM-1 | ARC-AMPE CM-1 AE Mandatory]
+
+Acme Health shall develop, document, and disseminate to [Assignment: organization-defined personnel or roles] an organization-level configuration management policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines. [ARC-AMPE CM-1 AE Mandatory]
+
+### 2.2 Procedures
+
+Acme Health shall develop, document, and disseminate to [Assignment: organization-defined personnel or roles] procedures to facilitate the implementation of the configuration management policy and the associated configuration management controls. [NIST 800-53 CM-1 | FedRAMP CM-1 | ARC-AMPE CM-1 AE Mandatory]
+
+### 2.3 Designated Official
+
+Acme Health shall designate an [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the configuration management policy and procedures. [NIST 800-53 CM-1 | FedRAMP CM-1 | ARC-AMPE CM-1 AE Mandatory]
+
+### 2.4 Policy Review and Update
+
+Acme Health shall review and update the configuration management policy [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 CM-1 | FedRAMP CM-1]
+
+Acme Health shall review and update the configuration management policy at least every one (1) year and following [Assignment: organization-defined events]. [ARC-AMPE CM-1 AE Mandatory]
+
+### 2.5 Procedures Review and Update
+
+Acme Health shall review and update the configuration management procedures [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 CM-1 | FedRAMP CM-1]
+
+Acme Health shall review and update the configuration management procedures at least every one (1) year and following [Assignment: organization-defined events]. [ARC-AMPE CM-1 AE Mandatory]
+
+### 2.6 FedRAMP Significant Change Notification
+
+Acme Health shall follow the Significant Change Notification rules. [FedRAMP CM-1]
+
+## 3. Documentation and Records Management
+
+### 3.1 Documentation Maintenance
+
+Acme Health shall maintain the policies and procedures implemented to comply with this subpart in written (which may be electronic) form, and maintain a written (which may be electronic) record of any action, activity, or assessment required by this subpart to be documented. [HIPAA Security Rule 164.316(b)(1)]
+
+### 3.2 Retention Period
+
+Acme Health shall retain documentation required by paragraph (b)(1) for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+
+### 3.3 Availability
+
+Acme Health shall make documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+### 3.4 Periodic Review
+
+Acme Health shall review documentation periodically, and update as needed, in response to environmental or operational changes affecting the security of the electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+## 4. Baseline Configuration
+
+### 4.1 Baseline Configuration Development
+
+Acme Health shall develop, document, and maintain under configuration control, a current baseline configuration of the system. [NIST 800-53 CM-2 Low, Moderate, High | ARC-AMPE CM-2 AE Mandatory]
+
+### 4.2 Baseline Configuration Review and Update
+
+Acme Health shall review and update the baseline configuration of the system [Assignment: organization-defined frequency]. [NIST 800-53 CM-2 Low, Moderate, High]
+
+Acme Health shall review and update the baseline configuration of the system at least every one (1) year. [ARC-AMPE CM-2 AE Mandatory]
+
+Acme Health shall review and update the baseline configuration of the system when required due to [Assignment: organization-defined circumstances]. [NIST 800-53 CM-2 Low, Moderate, High]
+
+Acme Health shall review and update the baseline configuration of the system when required due to major system changes/upgrades, critical security patches, and/or emergency changes. [ARC-AMPE CM-2 AE Mandatory]
+
+Acme Health shall review and update the baseline configuration of the system when system components are installed or upgraded. [NIST 800-53 CM-2 Low, Moderate, High | ARC-AMPE CM-2 AE Mandatory]
+
+### 4.3 Automated Baseline Maintenance
+
+Acme Health shall maintain the currency, completeness, accuracy, and availability of the baseline configuration of the system using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-2(2) Moderate, High]
+
+Acme Health shall maintain the currency, completeness, accuracy, and availability of the baseline configuration of the system using automated mechanisms. [ARC-AMPE CM-2(2) AE Mandatory]
+
+### 4.4 Baseline Configuration Retention
+
+Acme Health shall retain [Assignment: organization-defined number] of previous versions of baseline configurations of the system to support rollback. [NIST 800-53 CM-2(3) Moderate, High]
+
+Acme Health shall retain at least one (1) of the previous versions of baseline configurations of the system to support rollback. [ARC-AMPE CM-2(3) AE Mandatory]
+
+### 4.5 Development and Test Environments
+
+Acme Health shall maintain a baseline configuration for system development and test environments that is managed separately from the operational baseline configuration. [NIST 800-53 CM-2(6) | ARC-AMPE CM-2(6) AE Mandatory]
+
+### 4.6 Travel Configurations
+
+Acme Health shall issue [Assignment: organization-defined systems or system components] with [Assignment: organization-defined configurations] to individuals traveling to locations that the organization deems to be of significant risk, and apply the following controls to the systems or components when the individuals return from travel: [Assignment: organization-defined controls]. [NIST 800-53 CM-2(7) Moderate, High]
+
+Acme Health shall issue systems, system components, or devices to individuals traveling to locations that the organization deems to be of significant risk, and apply the following controls to the systems or components when the individuals return from travel: [Assignment: organization-defined security safeguards to systems, system components, or devices]. [ARC-AMPE CM-2(7) AE Mandatory]
+
+## 5. Configuration Change Control
+
+### 5.1 Configuration-Controlled Changes
+
+Acme Health shall determine and document the types of changes to the system that are configuration-controlled. [NIST 800-53 CM-3 Moderate, High | ARC-AMPE CM-3 AE Mandatory]
+
+### 5.2 Review and Approval
+
+Acme Health shall review proposed configuration-controlled changes to the system and approve or disapprove such changes with explicit consideration for security and privacy impact analyses. [NIST 800-53 CM-3 Moderate, High | ARC-AMPE CM-3 AE Mandatory]
+
+### 5.3 Change Documentation
+
+Acme Health shall document configuration change decisions associated with the system. [NIST 800-53 CM-3 Moderate, High | ARC-AMPE CM-3 AE Mandatory]
+
+### 5.4 Implementation of Changes
+
+Acme Health shall implement approved configuration-controlled changes to the system. [NIST 800-53 CM-3 Moderate, High | ARC-AMPE CM-3 AE Mandatory]
+
+### 5.5 Change Records Retention
+
+Acme Health shall retain records of configuration-controlled changes to the system for [Assignment: organization-defined time period]. [NIST 800-53 CM-3 Moderate, High]
+
+Acme Health shall retain records of configuration-controlled changes to the system for no less than one (1) year after the change. [ARC-AMPE CM-3 AE Mandatory]
+
+### 5.6 Monitoring and Review
+
+Acme Health shall monitor and review activities associated with configuration-controlled changes to the system. [NIST 800-53 CM-3 Moderate, High | ARC-AMPE CM-3 AE Mandatory]
+
+### 5.7 Configuration Change Control Board
+
+Acme Health shall coordinate and provide oversight for configuration change control activities through [Assignment: organization-defined configuration change control element] that convenes [Selection (one or more): [Assignment: organization-defined frequency]; when [Assignment: organization-defined configuration change conditions]]. [NIST 800-53 CM-3 Moderate, High]
+
+Acme Health shall coordinate and provide oversight for configuration change control activities through change request forms that must be approved by an organizational configuration change control board that convenes sufficiently frequently to accommodate proposed change requests, and requirements of other appropriate organization officials when configuration change control activities occur. [ARC-AMPE CM-3 AE Mandatory]
+
+### 5.8 Automated Change Control Tools
+
+Acme Health shall document proposed changes to the system using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-3(1) High]
+
+Acme Health shall notify [Assignment: organization-defined approval authorities] of proposed changes to the system and request change approval using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-3(1) High]
+
+Acme Health shall highlight proposed changes to the system that have not been approved or disapproved within [Assignment: organization-defined time period] using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-3(1) High]
+
+Acme Health shall prohibit changes to the system until designated approvals are received using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-3(1) High]
+
+Acme Health shall document all changes to the system using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-3(1) High]
+
+Acme Health shall notify [Assignment: organization-defined personnel] when approved changes to the system are completed using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-3(1) High]
+
+### 5.9 Testing and Validation
+
+Acme Health shall test, validate, and document changes to the system before finalizing the implementation of the changes. [NIST 800-53 CM-3(2) Moderate, High | ARC-AMPE CM-3(2) AE Mandatory]
+
+### 5.10 Automated Change Implementation
+
+Acme Health shall implement changes to the current system baseline and deploy the updated baseline across the installed base using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-3(3)]
+
+### 5.11 Security and Privacy Representatives
+
+Acme Health shall require [Assignment: organization-defined security and privacy representatives] to be members of the [Assignment: organization-defined configuration change control element]. [NIST 800-53 CM-3(4) Moderate, High]
+
+Acme Health shall require security and privacy representatives to be members of the organizational configuration change control board. [ARC-AMPE CM-3(4) AE Mandatory]
+
+### 5.12 Automated Security Response
+
+Acme Health shall implement the following security responses automatically if baseline configurations are changed in an unauthorized manner: [Assignment: organization-defined security responses]. [NIST 800-53 CM-3(5)]
+
+### 5.13 Cryptographic Mechanisms Configuration Management
+
+Acme Health shall ensure that cryptographic mechanisms used to provide the following controls are under configuration management: [Assignment: organization-defined controls]. [NIST 800-53 CM-3(6) High]
+
+### 5.14 Unauthorized Change Review
+
+Acme Health shall review changes to the system [Assignment: organization-defined frequency] or when [Assignment: organization-defined circumstances] to determine whether unauthorized changes have occurred. [NIST 800-53 CM-3(7)]
+
+### 5.15 Change Restriction
+
+Acme Health shall prevent or restrict changes to the configuration of the system under the following circumstances: [Assignment: organization-defined circumstances]. [NIST 800-53 CM-3(8)]
+
+## 6. Security Impact Analysis
+
+### 6.1 Impact Analysis for Changes
+
+Acme Health shall analyze changes to the system to determine potential security and privacy impacts prior to change implementation. [NIST 800-53 CM-4 Low, Moderate, High | ARC-AMPE CM-4 AE Mandatory]
+
+### 6.2 Separate Test Environment Analysis
+
+Acme Health shall analyze changes to the system in a separate test environment before implementation in an operational environment, looking for security and privacy impacts due to flaws, weaknesses, incompatibility, or intentional malice. [NIST 800-53 CM-4(1) High | ARC-AMPE CM-4(1) AE Mandatory]
+
+### 6.3 Verification of Security and Privacy Controls
+
+After system changes, Acme Health shall verify that the impacted controls are implemented correctly, operating as intended, and producing the desired outcome with regard to meeting the security and privacy requirements for the system. [NIST 800-53 CM-4(2) Moderate, High | ARC-AMPE CM-4(2) AE Mandatory]
+
+## 7. Access Restrictions for Change
+
+### 7.1 Physical and Logical Access Restrictions
+
+Acme Health shall define, document, approve, and enforce physical and logical access restrictions associated with changes to the system. [NIST 800-53 CM-5 Low, Moderate, High | ARC-AMPE CM-5 AE Mandatory]
+
+### 7.2 Automated Access Restrictions
+
+Acme Health shall enforce access restrictions using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-5(1) High]
+
+Acme Health shall enforce access restrictions using automated mechanisms to the fullest extent possible. [ARC-AMPE CM-5(1) AE Mandatory]
+
+Acme Health shall automatically generate audit records of the enforcement actions. [NIST 800-53 CM-5(1) High | ARC-AMPE CM-5(1) AE Mandatory]
+
+### 7.3 Dual Authorization
+
+Acme Health shall enforce dual authorization for implementing changes to [Assignment: organization-defined system components and system-level information]. [NIST 800-53 CM-5(4)]
+
+### 7.4 Privilege Limitation
+
+Acme Health shall limit privileges to change system components and system-related information within a production or operational environment. [NIST 800-53 CM-5(5) | ARC-AMPE CM-5(5) AE Mandatory]
+
+Acme Health shall review and reevaluate privileges [Assignment: organization-defined frequency]. [NIST 800-53 CM-5(5)]
+
+Acme Health shall review and reevaluate privileges at least quarterly. [ARC-AMPE CM-5(5) AE Mandatory]
+
+### 7.5 Software Library Restrictions
+
+Acme Health shall limit privileges to change software resident within software libraries. [NIST 800-53 CM-5(6)]
+
+## 8. Configuration Settings
+
+### 8.1 Configuration Settings Documentation
+
+Acme Health shall establish and document configuration settings for components employed within the system that reflect the most restrictive mode consistent with operational requirements using [Assignment: organization-defined common secure configurations]. [NIST 800-53 CM-6 Low, Moderate, High]
+
+Acme Health shall establish and document configuration settings for components employed within the system that reflect the most restrictive mode consistent with operational requirements using the most current security configuration guidelines listed in the Supplemental Control Requirements & Guidance. [ARC-AMPE CM-6 AE Mandatory]
+
+### 8.2 Configuration Settings Implementation
+
+Acme Health shall implement the configuration settings. [NIST 800-53 CM-6 Low, Moderate, High | ARC-AMPE CM-6 AE Mandatory]
+
+### 8.3 Deviation Documentation
+
+Acme Health shall identify, document, and approve any deviations from established configuration settings for [Assignment: organization-defined system components] based on [Assignment: organization-defined operational requirements]. [NIST 800-53 CM-6 Low, Moderate, High]
+
+Acme Health shall identify, document, and approve any deviations from established configuration settings for all configurable system components based on explicit operational requirements. [ARC-AMPE CM-6 AE Mandatory]
+
+### 8.4 Monitoring and Control
+
+Acme Health shall monitor and control changes to the configuration settings in accordance with organizational policies and procedures. [NIST 800-53 CM-6 Low, Moderate, High | ARC-AMPE CM-6 AE Mandatory]
+
+### 8.5 Automated Configuration Management
+
+Acme Health shall manage, apply, and verify configuration settings for [Assignment: organization-defined system components] using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-6(1) High]
+
+Acme Health shall manage, apply, and verify configuration settings for Information Technology products and [Assignment: organization-defined system components] using automated mechanisms. [ARC-AMPE CM-6(1) AE Mandatory]
+
+### 8.6 Response to Unauthorized Changes
+
+Acme Health shall take the following actions in response to unauthorized changes to [Assignment: organization-defined configuration settings]: [Assignment: organization-defined actions]. [NIST 800-53 CM-6(2) High]
+
+## 9. Least Functionality
+
+### 9.1 Essential Capabilities
+
+Acme Health shall configure the system to provide only [Assignment: organization-defined mission-essential capabilities]. [NIST 800-53 CM-7 Low, Moderate, High]
+
+Acme Health shall configure the system to provide only essential capabilities. [ARC-AMPE CM-7 AE Mandatory]
+
+### 9.2 Prohibited or Restricted Functions
+
+Acme Health shall prohibit or restrict the use of the following functions, ports, protocols, software, and/or services: [Assignment: organization-defined prohibited or restricted functions, system ports, protocols, software, and/or services]. [NIST 800-53 CM-7 Low, Moderate, High]
+
+Acme Health shall prohibit or restrict the use of the following functions, ports, protocols, software, and/or services: high-risk system services, functions, ports, network protocols, and capabilities across network boundaries that are not explicitly required for system or application functionality or are identified to be unnecessary and/or nonsecure. [ARC-AMPE CM-7 AE Mandatory]
+
+### 9.3 Periodic Review
+
+Acme Health shall review the system [Assignment: organization-defined frequency] to identify unnecessary and/or nonsecure functions, ports, protocols, software, and services. [NIST 800-53 CM-7(1) Moderate, High]
+
+Acme Health shall review the system upon encountering a significant risk, as incidents occur, major system/software updates, or at least every one (1) year, to identify unnecessary and/or nonsecure functions, ports, protocols, software, and services. [ARC-AMPE CM-7(1) AE Mandatory]
+
+### 9.4 Disable or Remove Unnecessary Functions
+
+Acme Health shall disable or remove [Assignment: organization-defined functions, ports, protocols, software, and services within the system deemed to be unnecessary and/or nonsecure]. [NIST 800-53 CM-7(1) Moderate, High]
+
+Acme Health shall disable or remove functions, ports, protocols, software, and services within the system deemed to be unnecessary and/or nonsecure. [ARC-AMPE CM-7(1) AE Mandatory]
+
+### 9.5 Program Execution Prevention
+
+Acme Health shall prevent program execution in accordance with [Selection (one or more): [Assignment: organization-defined policies, rules of behavior, and/or access agreements regarding software program usage and restrictions]; rules authorizing the terms and conditions of software program usage]. [NIST 800-53 CM-7(2) Moderate, High]
+
+Acme Health shall prevent program execution in accordance with [Assignment: organization-defined policies, rules of behavior, and rules authorizing the terms and conditions of software program usage]. [ARC-AMPE CM-7(2) AE Mandatory]
+
+### 9.6 Registration Requirements
+
+Acme Health shall ensure compliance with [Assignment: organization-defined registration requirements]. [NIST 800-53 CM-7(3)]
+
+### 9.7 Unauthorized Software Programs
+
+Acme Health shall identify [Assignment: organization-defined software programs]. [NIST 800-53 CM-7(4)]
+
+Acme Health shall employ an allow-all, deny-by-exception policy to prohibit the execution of unauthorized software programs on the system. [NIST 800-53 CM-7(4)]
+
+Acme Health shall review and update the list of unauthorized software programs [Assignment: organization-defined frequency]. [NIST 800-53 CM-7(4)]
+
+### 9.8 Authorized Software Programs
+
+Acme Health shall identify [Assignment: organization-defined software programs]. [NIST 800-53 CM-7(5) Moderate, High]
+
+Acme Health shall identify software programs authorized to execute on the system. [ARC-AMPE CM-7(5) AE Mandatory]
+
+Acme Health shall employ a deny-all, permit-by-exception policy to allow the execution of authorized software programs on the system. [NIST 800-53 CM-7(5) Moderate, High | ARC-AMPE CM-7(5) AE Mandatory]
+
+Acme Health shall review and update the list of authorized software programs [Assignment: organization-defined frequency]. [NIST 800-53 CM-7(5) Moderate, High]
+
+Acme Health shall review and update the list of authorized software programs at least quarterly or when there is a change. [ARC-AMPE CM-7(5) AE Mandatory]
+
+### 9.9 User-Installed Software Execution Environment
+
+Acme Health shall require that the following user-installed software execute in a confined physical or virtual machine environment with limited privileges: [Assignment: organization-defined user-installed software]. [NIST 800-53 CM-7(6)]
+
+### 9.10 Binary or Machine Executable Code
+
+Acme Health shall allow the use of binary or machine executable code obtained from sources with limited or no warranty and/or without the provision of source code only in a confined physical or virtual machine environment and with the explicit approval of the organization when such code satisfies a compelling mission or operational requirement. [NIST 800-53 CM-7(7)]
+
+Acme Health shall prohibit the use of binary or machine-executable code from sources with limited or no warranty or without the provision of source code, and allow exceptions only for compelling mission or operational requirements and with the approval of the authorizing official. [NIST 800-53 CM-7(8)]
+
+### 9.11 Authorized Hardware Components
+
+Acme Health shall identify [Assignment: organization-defined hardware components]. [NIST 800-53 CM-7(9)]
+
+Acme Health shall identify hardware components authorized for system use. [ARC-AMPE CM-7(9) AE Mandatory]
+
+Acme Health shall prohibit the use or connection of unauthorized hardware components. [NIST 800-53 CM-7(9) | ARC-AMPE CM-7(9) AE Mandatory]
+
+Acme Health shall review and update the list of authorized hardware components [Assignment: organization-defined frequency]. [NIST 800-53 CM-7(9)]
+
+Acme Health shall review and update the list of authorized hardware components at least every one (1) year or when there is a change. [ARC-AMPE CM-7(9) AE Mandatory]
+
+## 10. System Component Inventory
+
+### 10.1 Inventory Development and Maintenance
+
+Acme Health shall develop and document an inventory of system components that accurately reflects the system, includes all components within the system, does not include duplicate accounting of components or components assigned to any other system, is at the level of granularity deemed necessary for tracking and reporting, and includes the following information to achieve system component accountability: [Assignment: organization-defined information]. [NIST 800-53 CM-8 Low, Moderate, High | FedRAMP CM-8]
+
+Acme Health shall develop and document an inventory of system components that accurately reflects the system, includes all components within the system, does not include duplicate accounting of components or components assigned to any other system, is at the level of granularity deemed necessary for tracking and reporting, and includes the following information to achieve proper system component accountability: each component's unique identifier and/or serial number; type of information system component; manufacturer/model information; operating system type and version/service pack level; presence of virtual machines; application software version/license information; physical location; logical location; media access control (MAC) address; system/component owner; operational status; and information system/component administrators. [ARC-AMPE CM-8 AE Mandatory]
+
+### 10.2 Inventory Review and Update
+
+Acme Health shall review and update the system component inventory [Assignment: organization-defined frequency]. [NIST 800-53 CM-8 Low, Moderate, High | FedRAMP CM-8]
+
+Acme Health shall review and update the system component inventory at least every six (6) months. [ARC-AMPE CM-8 AE Mandatory]
+
+### 10.3 FedRAMP Monitoring and Reporting
+
+Acme Health shall follow the FedRAMP Continuous Collaborative Monitoring, Significant Change Notification, Vulnerability Detection and Response, and Vulnerability Evaluation and Reporting rules. [FedRAMP CM-8]
+
+### 10.4 Inventory Updates for Component Changes
+
+Acme Health shall update the inventory of system components as part of component installations, removals, and system updates. [NIST 800-53 CM-8(1) Moderate, High | ARC-AMPE CM-8(1) AE Mandatory]
+
+### 10.5 Automated Inventory Maintenance
+
+Acme Health shall maintain the currency, completeness, accuracy, and availability of the inventory of system components using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-8(2) High]
+
+### 10.6 Unauthorized Component Detection
+
+Acme Health shall detect the presence of unauthorized hardware, software, and firmware components within the system using [Assignment: organization-defined automated mechanisms] [Assignment: organization-defined frequency]. [NIST 800-53 CM-8(3) Moderate, High]
+
+Acme Health shall detect the presence of unauthorized hardware, software, and firmware components within the system using automated mechanisms continuously, using automated mechanisms with a maximum five (5) minute delay in detection. [ARC-AMPE CM-8(3) AE Mandatory]
+
+Acme Health shall take the following actions when unauthorized components are detected: [Selection (one or more): disable network access by unauthorized components; isolate unauthorized components; notify [Assignment: organization-defined personnel or roles]]. [NIST 800-53 CM-8(3) Moderate, High]
+
+Acme Health shall take the following actions when unauthorized components and/or provisioned configurations are detected: disable network access by such components; isolate the component; and notify responsible personnel or role. [ARC-AMPE CM-8(3) AE Mandatory]
+
+### 10.7 Accountability Information
+
+Acme Health shall include in the system component inventory information, a means for identifying by [Selection (one or more): name; position; role], individuals responsible and accountable for administering those components. [NIST 800-53 CM-8(4) High]
+
+### 10.8 Assessed Configurations
+
+Acme Health shall include assessed component configurations and any approved deviations to current deployed configurations in the system component inventory. [NIST 800-53 CM-8(6)]
+
+### 10.9 Centralized Repository
+
+Acme Health shall provide a centralized repository for the inventory of system components. [NIST 800-53 CM-8(7)]
+
+### 10.10 Automated Location Tracking
+
+Acme Health shall support the tracking of system components by geographic location using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-8(8)]
+
+### 10.11 Component Assignment
+
+Acme Health shall assign system components to a system. [NIST 800-53 CM-8(9)]
+
+Acme Health shall receive an acknowledgement from [Assignment: organization-defined personnel or roles] of this assignment. [NIST 800-53 CM-8(9)]
+
+## 11. Device and Media Controls
+
+### 11.1 Receipt and Removal
+
+Acme Health shall implement policies and procedures that govern the receipt and removal of hardware and electronic media that contain electronic protected health information into and out of a facility, and the movement of these items within the facility. [HIPAA Security Rule 164.310(d)(1)]
+
+### 11.2 Disposition
+
+Acme Health shall implement policies and procedures to address the final disposition of electronic protected health information, and/or the hardware or electronic media on which it is stored. [HIPAA Security Rule 164.310(d)(2)(i)]
+
+### 11.3 Media Re-use
+
+Acme Health shall implement procedures for removal of electronic protected health information from electronic media before the media are made available for re-use. [HIPAA Security Rule 164.310(d)(2)(ii)]
+
+### 11.4 Accountability Records
+
+Acme Health shall maintain a record of the movements of hardware and electronic media and any person responsible therefore. [HIPAA Security Rule 164.310(d)(2)(iii)]
+
+### 11.5 Data Backup and Storage
+
+Acme Health shall create a retrievable, exact copy of electronic protected health information, when needed, before movement of equipment. [HIPAA Security Rule 164.310(d)(2)(iv)]
+
+## 12. Configuration Management Plan
+
+### 12.1 Plan Development and Implementation
+
+Acme Health shall develop, document, and implement a configuration management plan for the system that addresses roles, responsibilities, and configuration management processes and procedures. [NIST 800-53 CM-9 Moderate, High | ARC-AMPE CM-9 AE Mandatory]
+
+### 12.2 Configuration Item Process
+
+Acme Health shall establish a process for identifying configuration items throughout the system development life cycle and for managing the configuration of the configuration items. [NIST 800-53 CM-9 Moderate, High | ARC-AMPE CM-9 AE Mandatory]
+
+### 12.3 Configuration Item Definition
+
+Acme Health shall define the configuration items for the system and place the configuration items under configuration management. [NIST 800-53 CM-9 Moderate, High | ARC-AMPE CM-9 AE Mandatory]
+
+### 12.4 Plan Review and Approval
+
+Acme Health shall review and approve the configuration management plan by [Assignment: organization-defined personnel or roles]. [NIST 800-53 CM-9 Moderate, High]
+
+Acme Health shall review and approve the configuration management plan by [Assignment: organization-defined personnel or roles (e.g., Business Owner and System Owner)]. [ARC-AMPE CM-9 AE Mandatory]
+
+### 12.5 Plan Protection
+
+Acme Health shall protect the configuration management plan from unauthorized disclosure and modification. [NIST 800-53 CM-9 Moderate, High | ARC-AMPE CM-9 AE Mandatory]
+
+### 12.6 Independent Configuration Management Process Development
+
+Acme Health shall assign responsibility for developing the configuration management process to organizational personnel that are not directly involved in system development. [NIST 800-53 CM-9(1)]
+
+## 13. Software Usage Restrictions
+
+### 13.1 Compliance with License Agreements
+
+Acme Health shall use software and associated documentation in accordance with contract agreements and copyright laws. [NIST 800-53 CM-10 Low, Moderate, High | ARC-AMPE CM-10 AE Mandatory]
+
+### 13.2 License Tracking
+
+Acme Health shall track the use of software and associated documentation protected by quantity licenses to control copying and distribution. [NIST 800-53 CM-10 Low, Moderate, High | ARC-AMPE CM-10 AE Mandatory]
+
+### 13.3 Peer-to-Peer File Sharing
+
+Acme Health shall control and document the use of peer-to-peer file sharing technology to ensure that this capability is not used for the unauthorized distribution, display, performance, or reproduction of copyrighted work. [NIST 800-53 CM-10 Low, Moderate, High | ARC-AMPE CM-10 AE Mandatory]
+
+### 13.4 Open Source Software
+
+Acme Health shall establish the following restrictions on the use of open-source software: [Assignment: organization-defined restrictions]. [NIST 800-53 CM-10(1)]
+
+## 14. User-Installed Software
+
+### 14.1 Installation Policies
+
+Acme Health shall establish [Assignment: organization-defined policies] governing the installation of software by users. [NIST 800-53 CM-11 Low, Moderate, High | FedRAMP CM-11]
+
+Acme Health shall establish [Assignment: organization-defined policies] governing the installation of software by users. [ARC-AMPE CM-11 AE Mandatory]
+
+### 14.2 Policy Enforcement
+
+Acme Health shall enforce software installation policies through the following methods: [Assignment: organization-defined methods]. [NIST 800-53 CM-11 Low, Moderate, High]
+
+Acme Health shall enforce software installation policies through the [Assignment: organization-defined applicable System Security and Privacy Plan (SSPP)]. [ARC-AMPE CM-11 AE Mandatory]
+
+### 14.3 Policy Compliance Monitoring
+
+Acme Health shall monitor policy compliance [Assignment: organization-defined frequency]. [NIST 800-53 CM-11 Low, Moderate, High]
+
+Acme Health shall monitor policy compliance Continuously (via CM-7(5)). [FedRAMP CM-11]
+
+Acme Health shall monitor policy compliance continuously. [ARC-AMPE CM-11 AE Mandatory]
+
+### 14.4 Privileged Status Requirement
+
+Acme Health shall allow user installation of software only with explicit privileged status. [NIST 800-53 CM-11(2)]
+
+### 14.5 Automated Enforcement and Monitoring
+
+Acme Health shall enforce and monitor compliance with software installation policies using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CM-11(3)]
+
+## 15. Information Location
+
+### 15.1 Location Documentation
+
+Acme Health shall identify and document the location of [Assignment: organization-defined information] and the specific system components on which the information is processed and stored. [NIST 800-53 CM-12 Moderate, High | FedRAMP CM-12 | ARC-AMPE CM-12 AE Mandatory]
+
+### 15.2 User Access Documentation
+
+Acme Health shall identify and document the users who have access to the system and system components where the information is processed and stored. [NIST 800-53 CM-12 Moderate, High | FedRAMP CM-12 | ARC-AMPE CM-12 AE Mandatory]
+
+### 15.3 Location Change Documentation
+
+Acme Health shall document changes to the location (i.e., system or system components) where the information is processed and stored. [NIST 800-53 CM-12 Moderate, High | FedRAMP CM-12 | ARC-AMPE CM-12 AE Mandatory]
+
+### 15.4 FedRAMP Minimum Assessment Scope
+
+Acme Health shall follow the FedRAMP Minimum Assessment Scope rules. [FedRAMP CM-12]
+
+### 15.5 Automated Information Location
+
+Acme Health shall use automated tools to identify [Assignment: organization-defined information by information type] on [Assignment: organization-defined system components] to ensure controls are in place to protect organizational information and individual privacy. [NIST 800-53 CM-12(1) Moderate, High | FedRAMP CM-12(1)]
+
+Acme Health shall use automated tools to identify [Assignment: organization-defined information by information type] on [Assignment: organization-defined system components] to ensure controls are in place to protect organizational information and individual privacy. [ARC-AMPE CM-12(1) AE Mandatory]
+
+## 16. Software and Information Integrity
+
+### 16.1 Integrity Verification Tools
+
+Acme Health shall employ integrity verification tools to detect unauthorized changes to the following software, firmware, and information: [Assignment: organization-defined software, firmware, and information]. [NIST 800-53 SI-7 Moderate, High | ARC-AMPE SI-7 AE Mandatory]
+
+### 16.2 Actions Upon Detection of Unauthorized Changes
+
+Acme Health shall take the following actions when unauthorized changes to the software, firmware, and information are detected: [Assignment: organization-defined actions]. [NIST 800-53 SI-7 Moderate, High]
+
+Acme Health shall take the following actions when unauthorized changes to the software, firmware, and information are detected: include such [Assignment: organization-defined actions as parity checks, cyclical redundancy checks, and cryptographic hashes]. [ARC-AMPE SI-7 AE Mandatory]
+
+### 16.3 Integrity Checks at Transitional States
+
+Acme Health shall perform an integrity check of [Assignment: organization-defined software, firmware, and information] [Selection (one or more): at startup; at [Assignment: organization-defined transitional states or security-relevant events]; [Assignment: organization-defined frequency]]. [NIST 800-53 SI-7(1) Moderate, High]
+
+Acme Health shall perform an integrity check of [Assignment: organization-defined software, firmware, and information] at startup, at [Assignment: organization-defined transitional states or security-relevant events], and [Assignment: organization-defined frequency]. [ARC-AMPE SI-7(1) AE Mandatory]
+
+### 16.4 Automated Notifications
+
+Acme Health shall employ automated tools that provide notification to [Assignment: organization-defined personnel or roles] upon discovering discrepancies during integrity verification. [NIST 800-53 SI-7(2) High]
+
+### 16.5 Centrally Managed Integrity Tools
+
+Acme Health shall employ centrally managed integrity verification tools. [NIST 800-53 SI-7(3)]
+
+### 16.6 Automated Response to Integrity Violations
+
+Acme Health shall automatically [Selection (one or more): shut down the system; restart the system; implement [Assignment: organization-defined controls]] when integrity violations are discovered. [NIST 800-53 SI-7(5) High]
+
+### 16.7 Cryptographic Protection
+
+Acme Health shall implement cryptographic mechanisms to detect unauthorized changes to software, firmware, and information. [NIST 800-53 SI-7(6)]
+
+### 16.8 Integration with Incident Response
+
+Acme Health shall incorporate the detection of the following unauthorized changes into the organizational incident response capability: [Assignment: organization-defined changes]. [NIST 800-53 SI-7(7) Moderate, High]
+
+Acme Health shall incorporate the detection of the following unauthorized changes into the organizational incident response capability: [Assignment: organization-defined security-relevant changes to the system to include unauthorized changes to established organizational configuration settings and the unauthorized elevation of system privileges]. [ARC-AMPE SI-7(7) AE Mandatory]
+
+### 16.9 Auditing Capability for Integrity Violations
+
+Acme Health shall, upon detection of a potential integrity violation, provide the capability to audit the event and initiate the following actions: [Selection (one or more): generate an audit record; alert current user; alert [Assignment: organization-defined personnel or roles]; [Assignment: organization-defined other actions]]. [NIST 800-53 SI-7(8)]
+
+### 16.10 Boot Process Integrity
+
+Acme Health shall verify the integrity of the boot process of the following system components: [Assignment: organization-defined system components]. [NIST 800-53 SI-7(9)]
+
+### 16.11 Boot Firmware Protection
+
+Acme Health shall implement the following mechanisms to protect the integrity of boot firmware in [Assignment: organization-defined system components]: [Assignment: organization-defined mechanisms]. [NIST 800-53 SI-7(10)]
+
+### 16.12 User-Installed Software Verification
+
+Acme Health shall require that the integrity of the following user-installed software be verified prior to execution: [Assignment: organization-defined user-installed software]. [NIST 800-53 SI-7(12)]
+
+### 16.13 Code Authentication
+
+Acme Health shall implement cryptographic mechanisms to authenticate the following software or firmware components prior to installation: [Assignment: organization-defined software or firmware components]. [NIST 800-53 SI-7(15) High]
+
+### 16.14 Time Limit on Process Execution
+
+Acme Health shall prohibit processes from executing without supervision for more than [Assignment: organization-defined time period]. [NIST 800-53 SI-7(16)]
+
+### 16.15 Runtime Application Self-Protection
+
+Acme Health shall implement [Assignment: organization-defined controls] for application self-protection at runtime. [NIST 800-53 SI-7(17)]
+
+## 17. Data Integrity and Transmission Security
+
+### 17.1 Protection from Improper Alteration or Destruction
+
+Acme Health shall implement policies and procedures to protect electronic protected health information from improper alteration or destruction. [HIPAA Security Rule 164.312(c)(1)]
+
+### 17.2 Electronic Mechanism for Data Integrity
+
+Acme Health shall implement electronic mechanisms to corroborate that electronic protected health information has not been altered or destroyed in an unauthorized manner. [HIPAA Security Rule 164.312(c)(2)]
+
+### 17.3 Transmission Security Measures
+
+Acme Health shall implement technical security measures to guard against unauthorized access to electronic protected health information that is being transmitted over an electronic communications network. [HIPAA Security Rule 164.312(e)(1)]
+
+### 17.4 Transmission Integrity Controls
+
+Acme Health shall implement security measures to ensure that electronically transmitted electronic protected health information is not improperly modified without detection until disposed of. [HIPAA Security Rule 164.312(e)(2)(i)]
+
+### 17.5 Encryption Mechanism
+
+Acme Health shall implement a mechanism to encrypt electronic protected health information whenever deemed appropriate. [HIPAA Security Rule 164.312(e)(2)(ii)]
+
+---
+
+**Document Control:**
+- **Version:** 1.0
+- **Effective Date:** [Assignment: organization-defined date]
+- **Review Frequency:** At least annually and following [Assignment: organization-defined events]
+- **Approving Authority:** [Assignment: organization-defined official]

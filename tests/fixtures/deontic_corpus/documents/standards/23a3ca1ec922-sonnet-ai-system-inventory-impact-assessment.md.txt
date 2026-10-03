@@ -1,0 +1,115 @@
+# Acme Health AI System Inventory & Impact Assessment Standard
+
+## 1. Purpose
+
+This Standard establishes Acme Health's requirements for inventorying artificial intelligence (AI) systems and assessing their intended purposes, context, benefits, costs, and risks prior to and throughout deployment. It ensures that AI systems used across Acme Health's healthcare operations are understood, documented, and evaluated for their potential impact on patients, staff, and other affected parties before they are relied upon in production.
+
+## 2. Scope
+
+This Standard applies to all AI systems developed, procured, or operated by Acme Health, across the full AI lifecycle from design through decommissioning.
+
+## 3. Roles and Responsibilities
+
+The **AI Risk / Product** team is accountable for this process end to end. AI Risk / Product owns the establishment of system context, the identification and documentation of impacts, the maintenance of the AI system inventory, and the handoffs to other teams (including legal, procurement, engineering, and clinical stakeholders) that participate in individual steps of this process. Other teams may perform specific steps as participants, but AI Risk / Product is responsible for the outcome of the process as a whole.
+
+## 4. Requirements
+
+### 4.1 System Context and Purpose
+
+AI Risk / Product must ensure that the intended purposes, potentially beneficial uses, context-specific laws, norms and expectations, and prospective deployment settings of each AI system are understood and documented, including the specific set or types of users and their expectations, and the assumptions and related limitations about AI system purposes, uses, and risks across the development or product AI lifecycle. [NIST AI RMF Map 1 | NIST AI RMF Map 1.1]
+
+### 4.2 Impact Identification
+
+AI Risk / Product must identify and document potential positive and negative impacts of each AI system's uses on individuals, communities, organizations, society, and the planet, including the likelihood and magnitude of each identified impact (both potentially beneficial and harmful) based on expected use, past uses of AI systems in similar contexts, public incident reports, feedback from those external to the team that developed or deployed the AI system, or other data. [NIST AI RMF Map 1.1 | NIST AI RMF Map 5 | NIST AI RMF Map 5.1]
+
+AI Risk / Product must document related test, evaluation, verification, and validation (TEVV) and system metrics as part of establishing each system's context. [NIST AI RMF Map 1.1]
+
+### 4.3 Interdisciplinary Participation
+
+AI Risk / Product must ensure that interdisciplinary AI actors, competencies, skills, and capacities for establishing context reflect demographic diversity and broad domain and user experience expertise; their participation must be documented, and opportunities for interdisciplinary collaboration must be prioritized. [NIST AI RMF Map 1.2]
+
+### 4.4 Organizational Mission and Business Value
+
+AI Risk / Product must ensure that Acme Health's mission and relevant goals for AI technology are understood and documented. [NIST AI RMF Map 1.3]
+
+AI Risk / Product must ensure that the business value or context of business use is clearly defined or — in the case of assessing existing AI systems — re-evaluated. [NIST AI RMF Map 1.4]
+
+### 4.5 Risk Tolerance
+
+AI Risk / Product must determine and document organizational risk tolerances for AI systems. [NIST AI RMF Map 1.5]
+
+### 4.6 System Requirements and Design
+
+AI Risk / Product must ensure that system requirements (e.g., "the system shall respect the privacy of its users") are elicited from and understood by relevant AI actors, and that design decisions take socio-technical implications into account to address AI risks. [NIST AI RMF Map 1.6]
+
+### 4.7 System Categorization
+
+AI Risk / Product must categorize each AI system and define the specific tasks and methods used to implement the tasks that the AI system will support (e.g., classifiers, generative models, recommenders). [NIST AI RMF Map 2 | NIST AI RMF Map 2.1]
+
+### 4.8 Knowledge Limits and Human Oversight Information
+
+AI Risk / Product must document information about the AI system's knowledge limits and how system output may be utilized and overseen by humans, providing sufficient information to assist relevant AI actors when making decisions and taking subsequent actions. [NIST AI RMF Map 2.2]
+
+### 4.9 Scientific Integrity and TEVV Considerations
+
+AI Risk / Product must identify and document scientific integrity and TEVV considerations, including those related to experimental design, data collection and selection (e.g., availability, representativeness, suitability), system trustworthiness, and construct validation. [NIST AI RMF Map 2.3]
+
+### 4.10 Capabilities, Benchmarks, and Benefits/Costs
+
+AI Risk / Product must ensure that AI capabilities, targeted usage, goals, and expected benefits and costs are understood in comparison with appropriate benchmarks. [NIST AI RMF Map 3]
+
+AI Risk / Product must examine and document potential benefits of intended AI system functionality and performance. [NIST AI RMF Map 3.1]
+
+AI Risk / Product must examine and document potential costs, including non-monetary costs, resulting from expected or realized AI errors or system functionality and trustworthiness, as connected to organizational risk tolerance. [NIST AI RMF Map 3.2]
+
+### 4.11 Application Scope
+
+AI Risk / Product must specify and document the targeted application scope for each AI system based on the system's capability, established context, and AI system categorization. [NIST AI RMF Map 3.3]
+
+### 4.12 Operator and Practitioner Proficiency
+
+AI Risk / Product must define, assess, and document processes for operator and practitioner proficiency with AI system performance and trustworthiness, and relevant technical standards and certifications. [NIST AI RMF Map 3.4]
+
+### 4.13 Human Oversight
+
+AI Risk / Product must define, assess, and document processes for human oversight in accordance with organizational policies from the govern function. [NIST AI RMF Map 3.5]
+
+### 4.14 Stakeholder Engagement
+
+AI Risk / Product must ensure that practices and personnel for supporting regular engagement with relevant AI actors and integrating feedback about positive, negative, and unanticipated impacts are in place and documented. [NIST AI RMF Map 5.2]
+
+## 5. NIST AI RMF Playbook Suggested Actions
+
+The following statements summarize NIST's voluntary Playbook suggestions relevant to this Standard's subcategories. These are suggestions, not requirements of Acme Health, unless separately adopted as such elsewhere in this document.
+
+NIST suggests, among its 13 actions for Map 1.1, maintaining awareness of applicable legal and technical standards, examining the trustworthiness of AI system design against non-AI alternatives, determining end-user and organizational requirements, delineating the expected and acceptable context of use, identifying human-AI interaction roles, and planning for risks related to human-AI configurations and documenting human oversight requirements and responsibilities. [NIST AI RMF Playbook Map 1.1 Action 1 | NIST AI RMF Playbook Map 1.1 Action 2 | NIST AI RMF Playbook Map 1.1 Action 8 | NIST AI RMF Playbook Map 1.1 Action 9 | NIST AI RMF Playbook Map 1.1 Action 12 | NIST AI RMF Playbook Map 1.1 Action 13]
+
+NIST suggests, among its 2 actions for Map 1.2, establishing interdisciplinary teams with demographic diversity, broad domain expertise, and lived experience with documented team composition, and creating and empowering interdisciplinary expert teams to engage disciplines outside AI practice such as law, sociology, psychology, anthropology, public policy, and systems engineering. [NIST AI RMF Playbook Map 1.2 Action 1 | NIST AI RMF Playbook Map 1.2 Action 2]
+
+NIST suggests, among its 5 actions for Map 1.3, building transparent practices into AI system development, reviewing documented system purpose from a socio-technical perspective, determining possible misalignment between societal values and organizational principles, flagging latent incentives that may contribute to negative impacts, and evaluating AI system purpose against potential risks, societal values, and organizational principles. [NIST AI RMF Playbook Map 1.3 Action 1 | NIST AI RMF Playbook Map 1.3 Action 2 | NIST AI RMF Playbook Map 1.3 Action 3 | NIST AI RMF Playbook Map 1.3 Action 4 | NIST AI RMF Playbook Map 1.3 Action 5]
+
+NIST suggests, among its 3 actions for Map 1.4, documenting business value or context of business use, reconciling documented concerns about the system's purpose against organizational values and AI principles, and reconsidering system design, implementation strategy, or deployment where potential impacts do not reflect institutional values. [NIST AI RMF Playbook Map 1.4 Action 1 | NIST AI RMF Playbook Map 1.4 Action 2 | NIST AI RMF Playbook Map 1.4 Action 3]
+
+NIST suggests, among its 6 actions for Map 1.5, using existing regulations and guidelines to inform risk criteria and tolerance, establishing risk tolerance levels and allocating oversight resources accordingly, identifying the maximum allowable risk tolerance above which a system will not be deployed or must be decommissioned, and reviewing off-label uses of AI systems in high-risk settings with documented decisions and limitations. [NIST AI RMF Playbook Map 1.5 Action 1 | NIST AI RMF Playbook Map 1.5 Action 2 | NIST AI RMF Playbook Map 1.5 Action 4 | NIST AI RMF Playbook Map 1.5 Action 6]
+
+NIST suggests, among its 8 actions for Map 1.6, proactively incorporating trustworthy characteristics into system requirements, establishing mechanisms for regular communication and feedback between AI actors and stakeholders on design and deployment decisions, developing standardized practices to assess impacts across the AI lifecycle in collaboration with interdisciplinary experts and impacted communities, and conducting user research to understand impacted individuals, groups, and communities and the role of systemic and historical biases. [NIST AI RMF Playbook Map 1.6 Action 1 | NIST AI RMF Playbook Map 1.6 Action 2 | NIST AI RMF Playbook Map 1.6 Action 3 | NIST AI RMF Playbook Map 1.6 Action 8]
+
+NIST suggests, among its 1 action for Map 2.1, defining and documenting the AI system's existing and potential learning task(s) along with known assumptions and limitations. [NIST AI RMF Playbook Map 2.1 Action 1]
+
+NIST suggests, among its 6 actions for Map 2.2, documenting settings, environments, and conditions outside the AI system's intended use, planning and testing human-AI configurations under close to real-world conditions with documented results, documenting dependencies on upstream data and other AI systems, and documenting connections to external networks, financial markets, or critical infrastructure with potential for negative externalities. [NIST AI RMF Playbook Map 2.2 Action 1 | NIST AI RMF Playbook Map 2.2 Action 3 | NIST AI RMF Playbook Map 2.2 Action 5 | NIST AI RMF Playbook Map 2.2 Action 6]
+
+NIST suggests, among its 16 actions for Map 2.3, identifying and documenting valid experimental design and statistical techniques for testing socio-technical AI systems, developing and applying TEVV protocols across models, subcomponents, deployment, and operation, documenting assumptions and techniques used in data selection, curation, and preparation including identification of constructs and proxy targets, and establishing and documenting practices to check for capabilities in excess of those planned, such as emergent properties, and to revisit prior risk management steps accordingly. [NIST AI RMF Playbook Map 2.3 Action 1 | NIST AI RMF Playbook Map 2.3 Action 2 | NIST AI RMF Playbook Map 2.3 Action 8 | NIST AI RMF Playbook Map 2.3 Action 13]
+
+NIST suggests, among its 6 actions for Map 3.1, using participatory approaches with system end users to understand and document potential benefits, efficacy, and interpretability of AI task output, maintaining awareness and documentation of internal and external stakeholders, considering performance against human baseline metrics or other standard benchmarks, and incorporating feedback from end users and potentially impacted individuals and communities about perceived system benefits. [NIST AI RMF Playbook Map 3.1 Action 1 | NIST AI RMF Playbook Map 3.1 Action 2 | NIST AI RMF Playbook Map 3.1 Action 5 | NIST AI RMF Playbook Map 3.1 Action 6]
+
+NIST suggests, among its 2 actions for Map 3.2, performing context analysis to map potential negative impacts arising from not integrating trustworthiness characteristics, examining who, what, when, and how harm could arise, and identifying and implementing procedures for regularly evaluating the qualitative and quantitative costs of internal and external AI system failures to inform go/no-go deployment decisions. [NIST AI RMF Playbook Map 3.2 Action 1 | NIST AI RMF Playbook Map 3.2 Action 2]
+
+NIST suggests, among its 2 actions for Map 3.3, considering narrowing contexts for system deployment based on factors such as affected populations, retraining intervals, geographic regions, and likelihood of misuse, and engaging AI actors from legal and procurement functions when specifying target application scope. [NIST AI RMF Playbook Map 3.3 Action 1 | NIST AI RMF Playbook Map 3.3 Action 2]
+
+NIST suggests, among its 10 actions for Map 3.4, identifying and declaring AI system features and capabilities that may affect downstream AI actors' decision-making, identifying skills and proficiency requirements for operators and practitioners and developing operational documentation of known risks and mitigation criteria, defining and developing training materials and certification procedures for operating AI systems within defined contexts of use, and including operators, practitioners, and end users in prototyping and testing activities under conditions similar to deployment. [NIST AI RMF Playbook Map 3.4 Action 1 | NIST AI RMF Playbook Map 3.4 Action 2 | NIST AI RMF Playbook Map 3.4 Action 3 | NIST AI RMF Playbook Map 3.4 Action 4 | NIST AI RMF Playbook Map 3.4 Action 5]
+
+NIST suggests, among its 6 actions for Map 3.5, identifying and documenting AI system features and capabilities that require human oversight, establishing oversight practices in accordance with governance policies, developing training materials on system performance, context of use, known limitations, and negative impacts, and evaluating oversight practices for validity and reliability with retesting when practices undergo extensive updates. [NIST AI RMF Playbook Map 3.5 Action 1 | NIST AI RMF Playbook Map 3.5 Action 2 | NIST AI RMF Playbook Map 3.5 Action 3 | NIST AI RMF Playbook Map 3.5 Action 5]
+
+NIST suggests, among its 4 actions for Map 5.1, establishing assessment scales for measuring AI systems' impact applied uniformly across the organization's AI portfolio, applying TEVV regularly at key stages of the AI lifecycle, identifying and documenting the likelihood and magnitude of system benefits and negative impacts relative to trustworthiness characteristics, and establishing processes for red teaming to connect system limitations to AI lifecycle stages and downstream impacts. [NIST AI RMF Playbook Map 5.1 Action 1 | NIST AI RMF Playbook Map 5.1 Action 2 | NIST AI RMF Playbook Map 5.1 Action 3 | NIST AI RMF Playbook Map 5.1 Action 4]
+
+NIST suggests, among its 7 actions for Map 5.2, establishing and documenting stakeholder engagement processes at the earliest stages of system formulation, identifying approaches to engage and incorporate input from end users and other key stakeholders for continuous monitoring of emergent risks, identifying an independent team to assess AI system benefits, impacts, and their likelihood and magnitude, and developing TEVV procedures that incorporate socio-technical elements with regular review and refinement. [NIST AI RMF Playbook Map 5.2 Action 1 | NIST AI RMF Playbook Map 5.2 Action 3 | NIST AI RMF Playbook Map 5.2 Action 5 | NIST AI RMF Playbook Map 5.2 Action 7]

@@ -1,0 +1,196 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.004928
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 04582cf91a7eabf7
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Information Security Standard: Change & Configuration Management
+
+| Field                       | Value                                                                                                                |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Document type               | Information Security Standard                                                                                        |
+| Owning team                 | Platform Engineering                                                                                                 |
+| Process cadence             | Continuous                                                                                                           |
+| Required evidence artifacts | Change tickets with approvals; Baseline configuration and drift report                                               |
+| Applies to                  | All Example Org systems, system components, and personnel who initiate, approve, implement, or audit changes to them |
+
+## 1. Purpose and Scope
+
+This Standard establishes Example Org's requirements for configuration management, baseline configuration control, configuration change control, system component inventory management, software use restrictions, and integrity verification. It applies to all systems and system components owned or operated by Example Org. Platform Engineering is accountable for this process end to end, including all handoffs between participants.
+
+## 2. Roles and Responsibilities
+
+- Platform Engineering owns and is accountable for the configuration management process described in this Standard, including baseline maintenance, change control, drift detection, and evidence production.
+- Platform Engineering shall develop, document, and disseminate the configuration management policy and the procedures that facilitate implementation of the policy and associated controls to organization-defined personnel or roles. The policy shall address purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and shall be consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. The policy shall be maintained at the organization level. [NIST 800-53 CM-1 Low/Moderate/High | FedRAMP CM-1 | ARC-AMPE CM-1 AE Mandatory]
+- Platform Engineering shall designate an organization-defined official (or officials) to manage the development, documentation, and dissemination of the configuration management policy and procedures. [NIST 800-53 CM-1 | FedRAMP CM-1 | ARC-AMPE CM-1 AE Mandatory]
+- Platform Engineering shall review and update the configuration management policy and procedures at an organization-defined frequency and following organization-defined events. [NIST 800-53 CM-1 | FedRAMP CM-1] Review shall occur at least every one (1) year and following organization-defined events, including assessment or audit findings; security or privacy incidents; and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [ARC-AMPE CM-1 AE Mandatory]
+- Platform Engineering shall follow the FedRAMP Significant Change Notification rules. [FedRAMP CM-1]
+- Platform Engineering shall maintain the policies and procedures implemented to comply with these requirements in written (which may be electronic) form, and shall maintain a written (which may be electronic) record of any action, activity, or assessment required to be documented. [HIPAA 164.316(b)(1)]
+- Required documentation shall be retained for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA 164.316(b)(2)(i)]
+- Documentation shall be made available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii)]
+- Documentation shall be reviewed periodically and updated as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii)]
+
+## 3. Baseline Configuration
+
+- Platform Engineering shall develop, document, and maintain under configuration control a current baseline configuration of the system. The approved baseline configuration and the associated drift report constitute required evidence under this Standard. [NIST 800-53 CM-2 Low/Moderate/High | ARC-AMPE CM-2 AE Mandatory]
+- Platform Engineering shall review and update the baseline configuration at an organization-defined frequency and when required due to organization-defined circumstances, and when system components are installed or upgraded. [NIST 800-53 CM-2 | ARC-AMPE CM-2 AE Mandatory] Review shall occur at least every one (1) year, and the triggering circumstances are defined as major system changes/upgrades, critical security patches, and/or emergency changes. [ARC-AMPE CM-2 AE Mandatory]
+- Platform Engineering shall maintain the currency, completeness, accuracy, and availability of the baseline configuration using organization-defined automated mechanisms. Access controls shall be configured so the automation has the needed access; the automated mechanisms shall be run to gather hardware and software configurations as part of the Continuous Monitoring Program; and hardware/software asset management systems and centralized configuration management software are acceptable examples of such mechanisms. The drift report produced by these mechanisms is required evidence under this Standard. [NIST 800-53 CM-2(2) Moderate, High | ARC-AMPE CM-2(2) AE Mandatory]
+- Platform Engineering shall retain previous versions of baseline configurations of the system to support rollback. At least one (1) previous version shall be retained — specifically, the most recent older generation of the baseline — to support situations such as emergency rollback. Additional versions may be retained based on organizational risk tolerance. [NIST 800-53 CM-2(3) Moderate, High | ARC-AMPE CM-2(3) AE Mandatory]
+- Platform Engineering shall maintain a baseline configuration for system development and test environments that is managed separately from the operational baseline configuration. Separate environments shall be provided for development and testing to minimize risk to operational systems. [NIST 800-53 CM-2(6) | ARC-AMPE CM-2(6) AE Mandatory]
+- Platform Engineering shall issue organization-defined systems or system components with organization-defined configurations to individuals traveling to locations the organization deems to be of significant risk, and shall apply organization-defined controls to those systems or components when the individuals return. Applicable security safeguards include detailed inspection for physical tampering, purging, or reimaging of the hard disk drive/removable media. Issued systems and components shall have stringent configurations, such as the latest published FIPS 140-compliant encryption standards. [NIST 800-53 CM-2(7) Moderate, High | ARC-AMPE CM-2(7) AE Mandatory]
+
+## 4. Configuration Change Control
+
+Platform Engineering operates the configuration change control process on a continuous basis. All approved changes shall be recorded in change tickets with approvals in the [Ticketing System]; these change tickets with approvals constitute required evidence under this Standard.
+
+### 4.1 Change Control Requirements
+
+- Platform Engineering shall determine and document the types of changes to the system that are configuration-controlled. [NIST 800-53 CM-3 Moderate, High | ARC-AMPE CM-3 AE Mandatory]
+- Platform Engineering shall review proposed configuration-controlled changes and approve or disapprove them with explicit consideration for security and privacy impact analyses. [NIST 800-53 CM-3 | ARC-AMPE CM-3 AE Mandatory]
+- Platform Engineering shall document configuration change decisions associated with the system. [NIST 800-53 CM-3 | ARC-AMPE CM-3 AE Mandatory]
+- Platform Engineering shall implement approved configuration-controlled changes to the system. [NIST 800-53 CM-3 | ARC-AMPE CM-3 AE Mandatory]
+- Platform Engineering shall retain records of configuration-controlled changes for an organization-defined time period; records shall be retained for no less than one (1) year after the change. [NIST 800-53 CM-3 | ARC-AMPE CM-3 AE Mandatory]
+- Platform Engineering shall monitor and review activities associated with configuration-controlled changes to the system. [NIST 800-53 CM-3 | ARC-AMPE CM-3 AE Mandatory]
+- Platform Engineering shall coordinate and provide oversight for configuration change control activities through an organization-defined configuration change control element that convenes at an organization-defined frequency or when organization-defined configuration change conditions occur. Change request forms shall be approved by an organizational configuration change control board that convenes sufficiently frequently to accommodate proposed change requests, and the requirements of other appropriate organization officials shall be fulfilled. [NIST 800-53 CM-3 | ARC-AMPE CM-3 AE Mandatory]
+- Platform Engineering shall establish a means of communicating significant changes to or developments in the information system or environment of operations that may affect business agreements/contracts with CMS and business partners and services to the business owner and associated service consumers. The means of communication shall be approved and accepted by the system owner. Platform Engineering shall follow CMS change reporting procedures using the CMS change notification form for the specific entity type. [ARC-AMPE CM-3 AE Mandatory]
+
+### 4.2 Change Control Enhancements
+
+- Platform Engineering shall document proposed changes to the system; notify organization-defined approval authorities of proposed changes and request approval; highlight proposed changes not approved or disapproved within an organization-defined time period ([Approval Response Deadline]); prohibit changes until designated approvals are received; document all changes to the system; and notify organization-defined personnel when approved changes are completed. [NIST 800-53 CM-3(1) High]
+- Platform Engineering shall test, validate, and document changes to the system before finalizing the implementation of the changes. [NIST 800-53 CM-3(2) Moderate, High | ARC-AMPE CM-3(2) AE Mandatory]
+- Platform Engineering shall implement changes to the current system baseline and deploy the updated baseline across the installed base using organization-defined automated mechanisms. [NIST 800-53 CM-3(3)]
+- Platform Engineering shall require organization-defined security and privacy representatives to be members of the configuration change control element/board. These representatives may include Information System Security Officers, Chief Information Security Officers, and/or the Senior Official for Privacy. [NIST 800-53 CM-3(4) Moderate, High | ARC-AMPE CM-3(4) AE Mandatory]
+- Platform Engineering shall implement organization-defined security responses automatically if baseline configurations are changed in an unauthorized manner. [NIST 800-53 CM-3(5)]
+- Platform Engineering shall ensure that cryptographic mechanisms used to provide organization-defined controls are under configuration management. [NIST 800-53 CM-3(6) High]
+- Platform Engineering shall review changes to the system at an organization-defined frequency or when organization-defined circumstances occur to determine whether unauthorized changes have occurred. [NIST 800-53 CM-3(7)]
+- Platform Engineering shall prevent or restrict changes to the configuration of the system under organization-defined circumstances ([Circumstances Restricting Configuration Changes]). [NIST 800-53 CM-3(8)]
+
+## 5. Security Impact Analysis
+
+- Platform Engineering shall analyze changes to the system to determine potential security and privacy impacts prior to change implementation. Platform Engineering shall review and update the Security Impact Analysis (SIA) and/or Privacy Impact Assessment (PIA), record identified changes in a Change Notification (CN) form and SIA, and refer to entity-type CMS CN procedures and submit the entity-type CMS CN form and SIA to CMS for evaluation if appropriate. [NIST 800-53 CM-4 Low/Moderate/High | ARC-AMPE CM-4 AE Mandatory]
+- Platform Engineering shall analyze changes to the system in a separate test environment before implementation in an operational environment, looking for security and privacy impacts due to flaws, weaknesses, incompatibility, or intentional malice. [NIST 800-53 CM-4(1) High | ARC-AMPE CM-4(1) AE Mandatory]
+- After system changes, Platform Engineering shall verify that the impacted controls are implemented correctly, operating as intended, and producing the desired outcome with regard to meeting security and privacy requirements. Any system (including development and test) containing or processing sensitive information (e.g., PII) shall verify security functions per this control. Security functions shall be continuously monitored and evaluated to ensure they operate as intended and changes do not adversely affect system performance. Actions shall be taken to verify that the provisioned security function implementation meets security function requirements and is an approved system configuration. The SIA and/or PIA shall be reviewed and/or updated if necessary when a system change is made. [NIST 800-53 CM-4(2) Moderate, High | ARC-AMPE CM-4(2) AE Mandatory]
+
+## 6. Access Restrictions for Change
+
+- Platform Engineering shall define, document, approve, and enforce physical and logical access restrictions associated with changes to the system. Only qualified individuals — those with appropriate technical skills and expertise within their job responsibilities — and authorized individuals, as determined and documented by the organization, are permitted access to systems for purposes of initiating changes. [NIST 800-53 CM-5 Low/Moderate/High | ARC-AMPE CM-5 AE Mandatory]
+- Platform Engineering shall enforce access restrictions using organization-defined automated mechanisms to the fullest extent possible, and shall automatically generate audit records of the enforcement actions. [NIST 800-53 CM-5(1) High | ARC-AMPE CM-5(1) AE Mandatory]
+- Platform Engineering shall enforce dual authorization for implementing changes to organization-defined system components and system-level information. [NIST 800-53 CM-5(4)]
+- Platform Engineering shall limit privileges to change system components and system-related information within a production or operational environment, and shall review and reevaluate those privileges at an organization-defined frequency; review and reevaluation shall occur at least quarterly. [NIST 800-53 CM-5(5) | ARC-AMPE CM-5(5) AE Mandatory]
+- Platform Engineering shall limit privileges to change software resident within software libraries. [NIST 800-53 CM-5(6)]
+
+## 7. Configuration Settings
+
+- Platform Engineering shall establish and document configuration settings for components employed within the system that reflect the most restrictive mode consistent with operational requirements, using organization-defined common secure configurations. The most current security configuration guidelines shall be used per the following hierarchy: USGCB; NIST National Checklist Program Tier IV, then Tiers III, II, and I in descending order; DISA STIGs. If formal government-authorized checklists do not exist, commercially accepted practices (e.g., SANS), independent testing results, or vendor/industry group checklists (e.g., CIS) may be used. Checklists shall be SCAP validated or SCAP Compatible if validated checklists are unavailable. Deployed configurations shall be supported for security updates. [NIST 800-53 CM-6 Low/Moderate/High | ARC-AMPE CM-6 AE Mandatory]
+- Platform Engineering shall implement the established configuration settings. [NIST 800-53 CM-6 | ARC-AMPE CM-6 AE Mandatory]
+- Platform Engineering shall identify, document, and approve any deviations from established configuration settings for all configurable system components based on explicit operational requirements. [NIST 800-53 CM-6 | ARC-AMPE CM-6 AE Mandatory]
+- Platform Engineering shall monitor and control changes to the configuration settings in accordance with organizational policies and procedures. [NIST 800-53 CM-6 | ARC-AMPE CM-6 AE Mandatory]
+- Platform Engineering shall manage, apply, and verify configuration settings for Information Technology products and organization-defined system components using automated mechanisms. [NIST 800-53 CM-6(1) High | ARC-AMPE CM-6(1) AE Mandatory]
+- Platform Engineering shall take organization-defined actions in response to unauthorized changes to organization-defined configuration settings. [NIST 800-53 CM-6(2) High]
+
+## 8. Least Functionality
+
+- Platform Engineering shall configure the system to provide only essential capabilities as defined by the organization. [NIST 800-53 CM-7 Low/Moderate/High | ARC-AMPE CM-7 AE Mandatory]
+- Platform Engineering shall prohibit or restrict the use of organization-defined prohibited or restricted functions, system ports, protocols, software, and/or services. This includes high-risk system services, functions, ports, network protocols, and capabilities across network boundaries that are not explicitly required for system or application functionality or are identified as unnecessary and/or nonsecure. Platform Engineering shall maintain and document a list of specifically needed system services, ports, and network protocols in the applicable security/privacy plan, with all others disabled. CIS guidelines (Level 1) shall be used to establish the prohibited/restricted list, or the organization's own list if USGCB is not available. Configuration review information sources include systems, appliances, devices, services, and applications (including databases). [NIST 800-53 CM-7 | ARC-AMPE CM-7 AE Mandatory]
+- Platform Engineering shall review the system at an organization-defined frequency to identify unnecessary and/or nonsecure functions, ports, protocols, software, and services, and shall disable or remove those deemed unnecessary and/or nonsecure. Review shall occur upon encountering a significant risk, as incidents occur, upon major system/software updates, or at least every one (1) year; the one-year minimum permits a more frequent organizational standard. [NIST 800-53 CM-7(1) Moderate, High | ARC-AMPE CM-7(1) AE Mandatory]
+- Platform Engineering shall prevent program execution in accordance with organization-defined policies, rules of behavior, and/or access agreements regarding software program usage and restrictions, and/or rules authorizing the terms and conditions of software program usage. Example policies include requirements that software be legally licensed, provisioned in approved configurations, and used only by users authorized for software program use. [NIST 800-53 CM-7(2) Moderate, High | ARC-AMPE CM-7(2) AE Mandatory]
+- Platform Engineering shall ensure compliance with organization-defined registration requirements. [NIST 800-53 CM-7(3)]
+- Platform Engineering shall identify organization-defined software programs, employ an allow-all, deny-by-exception policy to prohibit the execution of unauthorized software programs on the system, and review and update the list of unauthorized software programs at an organization-defined frequency ([Unauthorized Software Review Frequency]). [NIST 800-53 CM-7(4)]
+- Platform Engineering shall identify software programs authorized to execute on the system, employ a deny-all, permit-by-exception policy to allow their execution, and review and update the list of authorized software programs at an organization-defined frequency. Review shall occur at least quarterly or when there is a change. Automated updates from a trusted source or authorized software whitelisting information sources (systems, appliances, devices, services, and applications including databases) are permitted, and authorized software may be limited to specific versions or to a specific source. [NIST 800-53 CM-7(5) Moderate, High | ARC-AMPE CM-7(5) AE Mandatory]
+- Platform Engineering shall require that organization-defined user-installed software execute in a confined physical or virtual machine environment with limited privileges. [NIST 800-53 CM-7(6)]
+- Platform Engineering shall restrict code obtained from sources with limited or no warranty and/or without the provision of source code to execution in protected environments. [NIST 800-53 CM-7(7)]
+- Platform Engineering shall prohibit the use of binary or machine-executable code from sources with limited or no warranty or without the provision of source code, allowing exceptions only for compelling mission or operational requirements and with the approval of the authorizing official. [NIST 800-53 CM-7(8)]
+- Platform Engineering shall identify hardware components authorized for system use, prohibit the use or connection of unauthorized hardware components, and review and update the list of authorized hardware components at an organization-defined frequency. Review shall occur at least every one (1) year or when there is a change, and authorized hardware components shall be defined and documented in the System Security and Privacy Plan (SSPP). [NIST 800-53 CM-7(9) | ARC-AMPE CM-7(9) AE Mandatory]
+
+## 9. System Component Inventory
+
+- Platform Engineering shall develop and document an inventory of system components that accurately reflects the system; includes all components within the system; does not include duplicate accounting of components or components assigned to any other system; is at the level of granularity deemed necessary for tracking and reporting; and includes organization-defined accountability information. The accountability information comprises, for each component: unique identifier and/or serial number; component type (e.g., server, desktop, application); manufacturer/model information; operating system type and version/service pack level; presence of virtual machines; application software version/license information; physical location (e.g., building/room number); logical location (e.g., IP address, position within the information system); MAC address; system/component owner; operational status; and information system/component administrators. [NIST 800-53 CM-8 Low/Moderate/High | FedRAMP CM-8 | ARC-AMPE CM-8 AE Mandatory]
+- Platform Engineering shall review and update the system component inventory at an organization-defined frequency; review and update shall occur at least every six (6) months, coordinated with the organization-defined continuous monitoring capability. [NIST 800-53 CM-8 | FedRAMP CM-8 | ARC-AMPE CM-8 AE Mandatory]
+- Platform Engineering shall follow the FedRAMP Continuous Collaborative Monitoring, Significant Change Notification, Vulnerability Detection and Response, and Vulnerability Evaluation and Reporting rules. [FedRAMP CM-8]
+- Platform Engineering shall update the inventory of system components as part of component installations, removals, and system updates. [NIST 800-53 CM-8(1) Moderate, High | ARC-AMPE CM-8(1) AE Mandatory]
+- Platform Engineering shall maintain the currency, completeness, accuracy, and availability of the inventory of system components using organization-defined automated mechanisms. [NIST 800-53 CM-8(2) High]
+- Platform Engineering shall detect the presence of unauthorized hardware, software, and firmware components within the system using organization-defined automated mechanisms at an organization-defined frequency, and shall take organization-defined actions when unauthorized components are detected. Detection shall be continuous with a maximum five (5) minute delay. Actions shall include disabling network access by such components, isolating the component, and notifying responsible personnel or roles (including for unauthorized provisioned configurations). [NIST 800-53 CM-8(3) Moderate, High | ARC-AMPE CM-8(3) AE Mandatory]
+- Platform Engineering shall include in the system component inventory a means for identifying, by name, position, or role, the individuals responsible and accountable for administering those components. [NIST 800-53 CM-8(4) High]
+- Platform Engineering shall include assessed component configurations and any approved deviations to current deployed configurations in the system component inventory. [NIST 800-53 CM-8(6)]
+- Platform Engineering shall provide a centralized repository for the inventory of system components. [NIST 800-53 CM-8(7)]
+- Platform Engineering shall support the tracking of system components by geographic location using organization-defined automated mechanisms. [NIST 800-53 CM-8(8)]
+- Platform Engineering shall assign system components to a system and receive an acknowledgement from organization-defined personnel or roles of this assignment. [NIST 800-53 CM-8(9)]
+
+## 10. Hardware and Electronic Media Movement and Disposal
+
+- Platform Engineering shall implement policies and procedures that govern the receipt and removal of hardware and electronic media containing electronic protected health information into and out of a facility, and the movement of these items within the facility. [HIPAA 164.310(d)(1)]
+- Platform Engineering shall implement policies and procedures to address the final disposition of electronic protected health information, and/or the hardware or electronic media on which it is stored. [HIPAA 164.310(d)(2)(i)]
+- Platform Engineering shall implement procedures for removal of electronic protected health information from electronic media before the media are made available for re-use. [HIPAA 164.310(d)(2)(ii)]
+- Platform Engineering shall maintain a record of the movements of hardware and electronic media and any person responsible therefor. [HIPAA 164.310(d)(2)(iii) Addressable]
+- Platform Engineering shall create a retrievable, exact copy of electronic protected health information, when needed, before movement of equipment. [HIPAA 164.310(d)(2)(iv) Addressable]
+
+## 11. Configuration Management Plan
+
+- Platform Engineering shall develop, document, and implement a configuration management plan for the system that: addresses roles, responsibilities, and configuration management processes and procedures; establishes a process for identifying configuration items throughout the system development life cycle and for managing their configuration; defines the configuration items for the system and places them under configuration management; is reviewed and approved by organization-defined personnel or roles (e.g., Business Owner and System Owner, defined in the organization's SSPP); and protects the configuration management plan from unauthorized disclosure and modification. [NIST 800-53 CM-9 Moderate, High | ARC-AMPE CM-9 AE Mandatory]
+- Responsibility for developing the configuration management process shall be assigned to organizational personnel not directly involved in system development. [NIST 800-53 CM-9(1)]
+
+## 12. Software Usage Rights and Restrictions
+
+- Platform Engineering shall use software and associated documentation in accordance with contract agreements and copyright laws. [NIST 800-53 CM-10 Low/Moderate/High | ARC-AMPE CM-10 AE Mandatory]
+- Platform Engineering shall track the use of software and associated documentation protected by quantity licenses to control copying and distribution. [NIST 800-53 CM-10 | ARC-AMPE CM-10 AE Mandatory]
+- Platform Engineering shall control and document the use of peer-to-peer file sharing technology to ensure this capability is not used for the unauthorized distribution, display, performance, or reproduction of copyrighted work. [NIST 800-53 CM-10 | ARC-AMPE CM-10 AE Mandatory]
+- Platform Engineering shall establish organization-defined restrictions on the use of open-source software. [NIST 800-53 CM-10(1)]
+
+## 13. User-Installed Software
+
+- Platform Engineering shall establish organization-defined policies governing the installation of software by users. [NIST 800-53 CM-11 Low/Moderate/High | FedRAMP CM-11 | ARC-AMPE CM-11 AE Mandatory]
+- Platform Engineering shall enforce software installation policies through organization-defined methods; enforcement shall be through the organization-defined applicable System Security and Privacy Plan (SSPP). [NIST 800-53 CM-11 | FedRAMP CM-11 | ARC-AMPE CM-11 AE Mandatory]
+- Platform Engineering shall monitor software installation policy compliance continuously, per the FedRAMP-defined parameter via CM-7(5); continuous monitoring via CM-7(5) likewise applies. [FedRAMP CM-11 | ARC-AMPE CM-11 AE Mandatory]
+- Platform Engineering shall monitor software installation policy compliance at an organization-defined frequency. [NIST 800-53 CM-11]
+- User installation of software is allowed only with explicit privileged status. [NIST 800-53 CM-11(2)]
+- Platform Engineering shall enforce and monitor compliance with software installation policies using organization-defined automated mechanisms. [NIST 800-53 CM-11(3)]
+
+## 14. Information Location
+
+- Platform Engineering shall identify and document the location of organization-defined information and the specific system components on which the information is processed and stored. Platform Engineering shall additionally identify and document information flows of that information to other components where it may be processed and/or stored (e.g., backups). [NIST 800-53 CM-12 Moderate, High | FedRAMP CM-12 | ARC-AMPE CM-12 AE Mandatory]
+- Platform Engineering shall identify and document the users who have access to the system and system components where the information is processed and stored. [NIST 800-53 CM-12 | FedRAMP CM-12 | ARC-AMPE CM-12 AE Mandatory]
+- Platform Engineering shall document changes to the location (i.e., system or system components) where the information is processed and stored. [NIST 800-53 CM-12 | FedRAMP CM-12 | ARC-AMPE CM-12 AE Mandatory]
+- Platform Engineering shall follow the FedRAMP Minimum Assessment Scope rules. [FedRAMP CM-12 | FedRAMP CM-12(1)]
+- Platform Engineering shall use automated tools to identify organization-defined information by information type on organization-defined system components to ensure controls are in place to protect organizational information and individual privacy. [NIST 800-53 CM-12(1) Moderate, High | ARC-AMPE CM-12(1) AE Mandatory]
+
+## 15. Integrity Verification
+
+### 15.1 Integrity Monitoring and Verification
+
+- Platform Engineering shall employ integrity verification tools to detect unauthorized changes to organization-defined software, firmware, and information, and shall take organization-defined actions when unauthorized changes are detected. Specified actions include parity checks, cyclical redundancy checks, and cryptographic hashes. [NIST 800-53 SI-7 Moderate, High | ARC-AMPE SI-7 AE Mandatory]
+- Platform Engineering shall perform an integrity check of organization-defined software, firmware, and information at startup, at organization-defined transitional states or security-relevant events, and/or at an organization-defined frequency. Integrity checks shall occur at startup, at transitional states or security-relevant events, and at least monthly. [NIST 800-53 SI-7(1) Moderate, High | ARC-AMPE SI-7(1) AE Mandatory]
+- Platform Engineering shall employ automated tools that provide notification to organization-defined personnel or roles upon discovering discrepancies during integrity verification. [NIST 800-53 SI-7(2) High]
+- Platform Engineering shall employ centrally managed integrity verification tools. [NIST 800-53 SI-7(3)]
+- Platform Engineering shall automatically shut down the system, restart the system, and/or implement organization-defined controls when integrity violations are discovered. [NIST 800-53 SI-7(5) High]
+- Platform Engineering shall implement cryptographic mechanisms to detect unauthorized changes to software, firmware, and information. [NIST 800-53 SI-7(6)]
+- Platform Engineering shall incorporate the detection of organization-defined unauthorized changes into the organizational incident response capability. Organization-defined security-relevant changes to the system include unauthorized changes to established organizational configuration settings and the unauthorized elevation of system privileges. [NIST 800-53 SI-7(7) Moderate, High | ARC-AMPE SI-7(7) AE Mandatory]
+- Upon detection of a potential integrity violation, Platform Engineering shall provide the capability to audit the event and initiate selected actions such as generating an audit record, alerting the current user, alerting organization-defined personnel or roles, and/or other organization-defined actions. [NIST 800-53 SI-7(8)]
+- Platform Engineering shall verify the integrity of the boot process of organization-defined system components. [NIST 800-53 SI-7(9)]
+- Platform Engineering shall implement organization-defined mechanisms to protect the integrity of boot firmware in organization-defined system components. [NIST 800-53 SI-7(10)]
+- Platform Engineering shall require that the integrity of organization-defined user-installed software be verified prior to execution. [NIST 800-53 SI-7(12)]
+- Platform Engineering shall implement cryptographic mechanisms to authenticate organization-defined software or firmware components prior to installation. [NIST 800-53 SI-7(15) High]
+- Platform Engineering shall prohibit processes from executing without supervision for more than an organization-defined time period ([Maximum Unsupervised Process Duration]). [NIST 800-53 SI-7(16)]
+- Platform Engineering shall implement organization-defined controls for application self-protection at runtime. [NIST 800-53 SI-7(17)]
+
+### 15.2 Electronic Protected Health Information Integrity and Transmission Security
+
+- Platform Engineering shall implement policies and procedures to protect electronic protected health information from improper alteration or destruction. [HIPAA 164.312(c)(1)]
+- Platform Engineering shall implement electronic mechanisms to corroborate that electronic protected health information has not been altered or destroyed in an unauthorized manner. [HIPAA 164.312(c)(2) Addressable]
+- Platform Engineering shall implement technical security measures to guard against unauthorized access to electronic protected health information being transmitted over an electronic communications network. [HIPAA 164.312(e)(1)]
+- Platform Engineering shall implement security measures to ensure that electronically transmitted electronic protected health information is not improperly modified without detection until disposed of. [HIPAA 164.312(e)(2)(i) Addressable]
+- Platform Engineering shall implement a mechanism to encrypt electronic protected health information whenever deemed appropriate. [HIPAA 164.312(e)(2)(ii) Addressable]
+
+## 16. Evidence and Records
+
+The following artifacts constitute the evidence of compliance with this Standard and shall be produced and retained by Platform Engineering in accordance with the retention requirements stated in this document:
+
+- Change tickets with approvals, recorded in the [Ticketing System] for every configuration-controlled change (Section 4).
+- Baseline configuration and drift report, maintained by Platform Engineering under configuration control (Section 3).
+- Configuration management plan (Section 11), System Security and Privacy Plan entries (Sections 7, 8, 13), system component inventory (Section 9), and all other documentation records identified in this Standard, retained per the documentation retention requirement in Section 2.

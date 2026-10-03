@@ -1,0 +1,164 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002334
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 9358394fc0aa88af
+  provider: litellm
+  provider_class: third-party
+---
+
+# Encryption & Key Management Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions Platform Security follows to establish, operate, and govern cryptographic keys, encryption at rest and in transit, certificate management, and electronic protected health information (ePHI) safeguards in accordance with the Encryption & Key Management Standard.
+
+## Scope
+
+Platform Security performs this procedure on all Example Org systems and media that employ cryptography, store or transmit sensitive information, or handle ePHI, including keys held or encrypted by external service providers on Example Org's behalf.
+
+## Prerequisites
+
+- Administrative access to the organization's [Key Management Service / Hardware Security Module] and all in-scope system consoles.
+- Access to the organization's [Ticketing System] for change tracking and remediation records.
+- A current inventory of all systems employing cryptography, encryption endpoints, and certificate trust stores.
+- An approved list of organization-defined cryptographic uses and required cryptography types per use.
+- An approved certificate policy or a designated [Approved Certificate Service Provider], and where applicable, access to [PKI Provider] or prepositioned keying material channels.
+- Identified external service providers that encrypt Example Org information on Example Org's behalf, with current contract and key custody documentation.
+- Agreed values for all bracketed decisions in this document ([Key Recovery Deadline], [Session Inactivity Timeout], [Trust Store Review Frequency], etc.).
+- Coordination contacts in [System Owner] teams, the [Privacy Officer / HIPAA Compliance function], and [Human Resources / Identity Management] for ePHI access rights.
+
+## Procedure Steps
+
+### Establish and manage cryptographic keys per organization key management requirements [NIST 800-53 SC-12 Low, Moderate, High | ARC-AMPE SC-12 AE Mandatory]
+
+1. Platform Security maintains a complete key inventory in the Key inventory and rotation log, recording for every key: unique identifier, owning system, algorithm, key length, custodian, purpose, generation and expiry dates, and storage location.
+1. For each key, document and enforce the full lifecycle controls: key generation, distribution, storage, access, and destruction, consistent with applicable laws, directives, regulations, policies, standards, and guidelines.
+1. Restrict access to each key to the minimum set of identities and services required, enforced through the [Key Management Service / Hardware Security Module] access policy; review access grants against the key inventory annually.
+1. Destroy keys at end of life using the destruction method approved in the Standard, and record the destruction event, method, and operator in the Key inventory and rotation log.
+1. Platform Security reviews the Key inventory and rotation log annually and reconciles it against live systems to confirm no unmanaged keys exist.
+
+### Use CMVP-validated encryption products and cite current key management references [ARC-AMPE SC-12 AE Mandatory]
+
+1. Before approving any cryptographic product or module for use, Platform Security verifies the product appears on the Cryptographic Module Validation Program (CMVP) validated modules list as compliant with the latest published FIPS 140 standards; record the validation certificate number in the Key inventory and rotation log entry for any keys the product manages.
+1. Reject and replace any cryptographic product that cannot demonstrate current CMVP validation; open a remediation ticket in the [Ticketing System] with an assigned [Remediation Deadline].
+1. Reference NIST SP 800-56A, SP 800-56B, SP 800-56C, and NIST SP 800-57 as the governing key management requirements when defining key establishment, key derivation, and key lifecycle parameters, and cite the applicable reference in each key management configuration record.
+
+### Maintain availability of information when users lose cryptographic keys [NIST 800-53 SC-12(1) High]
+
+1. Platform Security implements a key recovery capability in the [Key Management Service / Hardware Security Module], such as escrowed key copies or key backup under dual control, for every key protecting user-accessible information.
+1. Document the recovery workflow: the user or [Service Desk] reports the lost key, Platform Security verifies the requester's identity, and an authorized Platform Security member releases the recovered key or reissues credentials.
+1. Test the key recovery workflow annually and record the test result in the Key inventory and rotation log.
+1. Define and document the [Key Recovery Deadline] — the maximum time within which recovered keys or replacement access must be provided after a verified loss report.
+
+### Produce, control, and distribute symmetric cryptographic keys using validated technology and processes [NIST 800-53 SC-12(2)]
+
+1. Generate all symmetric keys within the NIST FIPS-validated or NSA-approved [Key Management Service / Hardware Security Module]; never generate symmetric keys on general-purpose endpoints or in unvalidated software.
+1. Distribute symmetric keys only through protected channels established by the key management technology (e.g., key wrapping under a transport key); record each distribution event — key ID, recipient system, date, and channel — in the Key inventory and rotation log.
+1. Control symmetric key material under split knowledge and dual control where a single individual would otherwise have full access to a key or its components.
+
+### Produce, control, and distribute asymmetric cryptographic keys using approved technology and processes [NIST 800-53 SC-12(3)]
+
+1. Generate asymmetric key pairs using NSA-approved key management technology and processes, prepositioned keying material, DoD-approved or DoD-issued Medium Assurance PKI certificates, or DoD-approved or DoD-issued Medium Hardware Assurance PKI certificates with hardware security tokens protecting the user's private key — or, where the organization has defined its own requirements, certificates issued per those organization-defined requirements.
+1. Where hardware security tokens are the selected mechanism, issue tokens only after identity verification, record the token serial number and assignee, and require the private key to remain non-exportable from the token.
+1. Record each asymmetric key issuance — key ID, subject, certificate authority or issuance mechanism, assurance level, and date — in the Key inventory and rotation log.
+
+### Maintain physical control of cryptographic keys held by external service providers [NIST 800-53 SC-12(6)]
+
+1. Platform Security maintains a register of every external service provider that encrypts Example Org information on Example Org's behalf, identifying for each provider: who holds the keys, the key custody model (provider-held, customer-held, or hybrid), and the physical or logical controls protecting the key store.
+1. Where the contract permits, require a customer-held or hybrid key model (e.g., customer-managed keys via the [Key Management Service / Hardware Security Module]) so Example Org retains physical control of its keys; document any exception and its approval in the register.
+1. Review the provider key custody register annually against current contracts and confirm each provider's key protection controls remain in place; update the register and open tickets in the [Ticketing System] for any gaps, each with an assigned [Remediation Deadline].
+
+### Determine organization-defined cryptographic uses and implement required cryptography for each [NIST 800-53 SC-13 Low, Moderate, High | FedRAMP SC-13]
+
+1. Platform Security maintains the approved list of cryptographic uses (e.g., data at rest, data in transit, digital signatures, authentication) and, for each use, the type of cryptography required, in accordance with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Map every cryptographic implementation in the environment to one of the approved uses; where a new cryptographic use is proposed, Platform Security evaluates and approves it before deployment and updates the list.
+1. Verify during the annual review that each deployed implementation matches the cryptography type required for its use; log the verification result with the Encryption-at-rest and in-transit configuration evidence.
+
+### Implement FIPS 140-compliant cryptography for each use and follow FedRAMP module use rules [ARC-AMPE SC-13 AE Mandatory | FedRAMP SC-13]
+
+1. For each specified cryptographic use, implement at minimum the latest published FIPS 140-compliant cryptography, consistent with applicable federal laws, Executive Orders, directives, policies, regulations, and standards.
+1. Confirm any FIPS 140-2 module in active use has a documented retirement plan, noting that FIPS 140-2 modules may remain active until September 21, 2026; schedule replacement transitions in the [Ticketing System] ahead of that date.
+1. Apply the FedRAMP Cryptographic Module Use rules to every module selection and configuration decision; document the applicable rule and how the configuration satisfies it in the Encryption-at-rest and in-transit configuration record.
+1. Record each module's validation status and configuration in the Encryption-at-rest and in-transit configuration evidence.
+
+### Encrypt all sensitive information wherever it resides [ARC-AMPE SC-13 AE Mandatory]
+
+1. Identify all data containing sensitive information — including Personally Identifiable Information and proprietary, financial, and legal information — wherever it resides in the system, using [Data Classification / Discovery Tooling] outputs and [System Owner] attestations.
+1. Configure encryption for every identified data store using the latest published FIPS 140-compliant encryption standards; capture the resulting settings in the Encryption-at-rest and in-transit configuration evidence.
+1. Extend coverage to all locations where sensitive data resides — databases, file stores, backups, endpoints, and removable media — and verify no identified data store remains unencrypted; open a ticket in the [Ticketing System] with an assigned [Remediation Deadline] for any gap.
+
+### Issue public key certificates under an approved certificate policy or approved provider [NIST 800-53 SC-17 Moderate, High | ARC-AMPE SC-17 AE Mandatory]
+
+1. Issue public key certificates only under the organization-defined certificate policy, or obtain them from the [Approved Certificate Service Provider]; confirm the policy or provider is approved by Platform Security before any issuance.
+1. Record every certificate issued or obtained — subject, issuer, validity period, key usage, and purpose — in the Key inventory and rotation log.
+1. Track certificate expiry dates and renew or replace certificates before expiry; where an expiration value is not defined, apply the [Certificate Renewal Lead Time] agreed by Platform Security.
+
+### Restrict trust stores to approved trust anchors [NIST 800-53 SC-12 Moderate, High, SC-17 Moderate, High | ARC-AMPE SC-17 AE Mandatory]
+
+1. Platform Security defines and publishes the approved set of trust anchors, covering both certificates with visibility external to organizational systems and certificates related to internal system operations.
+1. Configure the trust stores and certificate stores on all managed systems to contain only approved trust anchors; remove any anchor not on the approved list.
+1. Review trust stores across managed systems annually against the approved anchor list, record the review results with the Encryption-at-rest and in-transit configuration evidence, and open tickets in the [Ticketing System] with an assigned [Remediation Deadline] for any unapproved anchors found.
+
+### Protect the confidentiality and integrity of information at rest [NIST 800-53 SC-28 Moderate, High | ARC-AMPE SC-28 AE Mandatory]
+
+1. Identify the organization-defined information at rest requiring protection; under ARC-AMPE, apply protection to all information at rest.
+1. Implement cryptographic mechanisms enforcing both confidentiality and integrity for information at rest (ARC-AMPE requires both; NIST permits selection of one or more), and record the mechanism and scope in the Encryption-at-rest and in-transit configuration evidence.
+
+### Encrypt information at rest on designated components and media [NIST 800-53 SC-28(1) Moderate, High | ARC-AMPE SC-28(1) AE Mandatory]
+
+1. Implement cryptographic mechanisms that prevent unauthorized disclosure and modification of the designated information at rest on the designated system components or media.
+1. Use the latest published FIPS 140-compliant encryption standards for these mechanisms, covering — at minimum but not exclusively — Personally Identifiable Information (PII) and proprietary, financial, and legal information, in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards.
+1. Verify the configuration of encryption on each in-scope component annually and refresh the Encryption-at-rest and in-transit configuration evidence with the verified settings.
+
+### Remove designated information from online storage and store it offline [NIST 800-53 SC-28(2)]
+
+1. Identify the organization-defined information designated for offline storage and the online storage locations where it currently resides.
+1. Remove the designated information from online storage and transfer it to offline media; store the media in a secure physical location with access controlled and logged by Platform Security.
+1. Record each offline transfer — data set, source system, media identifier, storage location, and operator — in the Key inventory and rotation log or the associated [Ticketing System] record.
+
+### Provide protected storage for cryptographic keys [NIST 800-53 SC-28(3)]
+
+1. Store all cryptographic keys in the [Key Management Service / Hardware Security Module] hardware-protected key store, or apply the organization-defined safeguards where a hardware store is not available.
+1. Verify that no key material exists in plaintext outside the protected key store; where transient plaintext use is unavoidable (e.g., in-memory operations), confirm it is never written to disk or logs.
+1. Include key store protection status in the annual key inventory reconciliation against the Key inventory and rotation log.
+
+### Guard ePHI transmitted over electronic communications networks and detect improper modification [HIPAA Security Rule 164.312(e)(1) | HIPAA Security Rule 164.312(e)(2)(i) Addressable]
+
+1. Implement technical security measures — encryption in transit using approved FIPS 140-compliant cryptography — guarding against unauthorized access to ePHI transmitted over electronic communications networks; record the in-transit settings in the Encryption-at-rest and in-transit configuration evidence.
+1. Implement security measures that detect improper modification of ePHI in transit (e.g., authenticated encryption or integrity verification) so improperly modified ePHI is detected until disposal; document the integrity mechanism selected for each transmission path.
+1. Verify annually that every transmission path carrying ePHI is covered by both the access-guarding and integrity measures, and refresh the in-transit configuration evidence.
+
+### Provide a mechanism to encrypt and decrypt ePHI when appropriate [HIPAA Security Rule 164.312(e)(2)(ii) Addressable | HIPAA Security Rule 164.312(a)(2)(iv) Addressable]
+
+1. Deploy a mechanism to encrypt and decrypt ePHI wherever Platform Security determines encryption is appropriate; document the determination for each ePHI system, including the decision rationale where encryption is applied and any addressable determination not to apply it.
+1. Record the deployed encrypt/decrypt mechanism and its scope in the Encryption-at-rest and in-transit configuration evidence.
+
+### Restrict ePHI system access to persons and programs with granted access rights [HIPAA Security Rule 164.312(a)(1) | HIPAA Security Rule 164.312(a)(2)(i) Required]
+
+1. Implement technical policies and procedures on every electronic information system maintaining ePHI so that access is allowed only to persons or software programs granted access rights as specified in § 164.308(a)(4); enforce this through the [Identity Provider] and system-level access controls.
+1. Assign a unique name and/or number for identifying and tracking user identity on each ePHI system; verify that no shared or anonymous accounts can access ePHI.
+1. Coordinate with [Human Resources / Identity Management] to confirm access rights reflect current grants under § 164.308(a)(4), and review annually.
+
+### Establish procedures for obtaining ePHI during an emergency [HIPAA Security Rule 164.312(a)(2)(ii) Required]
+
+1. Establish, in coordination with the [Privacy Officer / HIPAA Compliance function], procedures for obtaining necessary ePHI during an emergency, specifying who may invoke emergency access, what ePHI may be obtained, and how access is logged and reviewed afterward.
+1. Implement the emergency access capability (e.g., break-glass accounts with elevated logging) on each ePHI system and test it annually.
+1. Record each emergency access invocation and its post-event review in the [Ticketing System].
+
+### Terminate electronic sessions after inactivity [HIPAA Security Rule 164.312(a)(2)(iii) Addressable]
+
+1. Implement electronic procedures on each ePHI system that terminate an electronic session after a predetermined time of inactivity; set the timeout to the value agreed as [Session Inactivity Timeout].
+1. Verify the session termination configuration on each ePHI system annually and record the verified settings with the Encryption-at-rest and in-transit configuration evidence or the associated system configuration records.
+
+## Roles & Responsibilities
+
+Platform Security is accountable for this procedure end to end, including key lifecycle management, encryption configuration verification, certificate and trust store governance, and evidence production. [System Owners], the [Identity Provider] administrators, [Human Resources / Identity Management], and the [Privacy Officer / HIPAA Compliance function] participate in individual steps as participants; Platform Security reviews and approves any exception, and exceptions are recorded in the [Ticketing System].
+
+## Related Standard
+
+Encryption & Key Management Standard

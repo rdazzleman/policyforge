@@ -1,0 +1,47 @@
+# Secrets / local config
+.env
+.env.*
+config/config.yaml
+# Extra local provider configs, e.g. config.vertex.yaml for a second model
+# you test against via POLICYFORGE_CONFIG. Same reason as above: these name
+# your GCP project and your org, and only the *.example.yaml files are shared.
+config/config.*.yaml
+!config/config.example.yaml
+# Topic registry — names your internal teams (see config/topics.example.yaml)
+config/topics.yaml
+# Crosswalk overlays — your organization's mapping decisions, and from a licensed
+# catalog its quote digests (see `policyforge crosswalk`)
+config/crosswalks/
+
+# Licensed / BYOC content — never redistribute this
+local_content/*
+!local_content/.gitkeep
+
+# Generated output (policies/standards/procedures drafted for a specific org)
+output/
+
+# Build artifact: derived entirely from the committed controls.json files by
+# `policyforge map`, so committing it would only invite drift against them.
+data/frameworks/crosswalk.json
+data/frameworks/crosswalk.overlays.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+# semgrep's own environment (see CONTRIBUTING.md), kept apart from .venv
+.tools/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+.pytest_cache/

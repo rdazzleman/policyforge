@@ -1,0 +1,365 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002953
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - d4a2b366c162e1b5
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Incident Response Operational Procedure
+
+## Purpose
+
+Executing this procedure enables Security Operations to detect, respond to, document, and report security and privacy incidents in a consistent, repeatable manner, and to maintain the policy, plan, training, and testing artifacts that sustain Example Org's incident response capability. It produces and retains incident tickets with timelines and tabletop exercise reports as evidence of an operating capability.
+
+## Scope
+
+This procedure is performed by Security Operations, with participation from the ISSO, Privacy Office, Legal Counsel, Human Resources, Public Relations/Communications, System Owners, and designated external partners, across all Example Org systems that process organizational or regulated data. It governs the full incident lifecycle: preparation, detection and analysis, containment, eradication, recovery, reporting, and post-incident improvement.
+
+## Prerequisites
+
+- Access to the [Incident Ticketing System] with permissions to open, update, and close incident tickets.
+- Access to the [SIEM] and [Security Monitoring Platform] for log review, correlation, and alerting.
+- Access to the [Document Management System] where the incident response policy, plan, and procedures are published.
+- Access to the [Training Platform] for assigning and recording incident response training.
+- Access to [Forensic Toolkit] and secured evidence storage with write-protection capability.
+- A designated Incident Response Official named in the appropriate security and privacy documents.
+- Current contact information for the ISSO, Privacy Office, Legal Counsel, Human Resources, CMS, and external partners.
+- The current Example Org Information Security Standard: Incident Response, Incident Handling and Breach Notification Standard and Procedures, and Privacy Incident and Breach Response Plan.
+- Approval from the Business Owner for the current incident response plan.
+
+## Procedure Steps
+
+### Develop, Document, and Disseminate the Incident Response Policy and Procedures [NIST 800-53 IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1]
+
+1. Security Operations drafts or updates the organization-level incident response policy, ensuring it addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that it is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Security Operations drafts or updates the supporting incident response procedures that facilitate implementation of the policy and the associated incident response controls.
+1. Security Operations submits the draft policy and procedures to the designated Incident Response Official for review.
+1. Upon approval, Security Operations publishes the policy and procedures in the [Document Management System] and disseminates them to all organization-defined personnel or roles with incident response responsibilities.
+1. Security Operations records the dissemination (distribution list, date, version) in the [Document Management System].
+
+### Designate the Incident Response Official [NIST 800-53 IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1]
+
+1. Security Operations identifies the official responsible for managing the development, documentation, and dissemination of the incident response policy and procedures.
+1. Security Operations confirms the official(s) responsible for managing incident response for systems are named in the appropriate security and privacy documents.
+1. Security Operations updates the naming records in the [Document Management System] whenever the designation changes.
+
+### Review and Update the Incident Response Policy and Procedures [NIST 800-53 IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1]
+
+1. Security Operations schedules a review of the incident response policy and procedures at least every one (1) year.
+1. Following any assessment or audit finding, security or privacy incident, or change to applicable laws, executive orders, directives, regulations, policies, standards, or guidelines, Security Operations initiates an out-of-cycle review of the affected policy or procedure content.
+1. Security Operations documents the review outcome, applies updates, and re-disseminates changed documents per the dissemination step above.
+
+### Monitor Privacy Law and Policy Changes Affecting Incident Response [ARC-AMPE IR-1]
+
+1. Security Operations actively monitors for changes to applicable privacy laws, regulations, and overarching policy that affect incident response policies, on a continuous basis.
+1. At least every one (1) year, Security Operations reviews the incident response policies and procedures to confirm they remain effective and support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle.
+1. Security Operations incorporates guidance from the Privacy Office for handling incidents involving Personally Identifiable Information (PII) into the procedures.
+1. Security Operations records the monitoring and review outcomes in the [Document Management System].
+
+### Implement Policies and Procedures to Prevent, Detect, Contain, and Correct Security Violations [HIPAA Security Rule 164.308(a)(6)(i) | HIPAA Security Rule 164.308(a)(1)(i)]
+
+1. Security Operations maintains and applies the implemented policies and procedures that address security incidents and prevent, detect, contain, and correct security violations.
+1. Security Operations verifies, during each incident and each periodic procedure review, that the executed actions map to these policies and procedures.
+
+### Identify, Respond to, Mitigate, and Document Security Incidents [HIPAA Security Rule 164.308(a)(6)(ii)]
+
+1. Security Operations identifies suspected or known security incidents through monitoring and reported alerts.
+1. Security Operations responds to each identified incident and mitigates, to the extent practicable, the harmful effects of incidents known to the organization.
+1. Security Operations documents each security incident and its outcome in an incident ticket with timelines in the [Incident Ticketing System].
+
+### Maintain Written Incident Response Documentation with 6-Year Retention [HIPAA Security Rule 164.316(b)(1) | HIPAA Security Rule 164.316(b)(2)(i) | HIPAA Security Rule 164.316(b)(2)(ii) | HIPAA Security Rule 164.316(b)(2)(iii)]
+
+1. Security Operations maintains the incident response policies and procedures in written (electronic permitted) form in the [Document Management System].
+1. Security Operations retains this documentation for 6 years from the date of creation or the date it was last in effect, whichever is later.
+1. Security Operations makes the documentation available to persons responsible for implementing the procedures.
+1. Security Operations reviews the documentation periodically and updates it as needed in response to environmental or operational changes affecting the security of electronic protected health information.
+
+### Regularly Review Records of Information System Activity [HIPAA Security Rule 164.308(a)(1)(ii)(D)]
+
+1. Security Operations regularly reviews records of information system activity, including audit logs, access reports, and security incident tracking reports, using the [SIEM] and [Security Monitoring Platform].
+1. Security Operations records the review outcome and any resulting actions in the [Incident Ticketing System].
+
+### Follow FedRAMP Incident Evaluation and Communication Rules [FedRAMP IR-1 | FedRAMP IR-2 | FedRAMP IR-3 | FedRAMP IR-4 | FedRAMP IR-5 | FedRAMP IR-6 | FedRAMP IR-7 | FedRAMP IR-8]
+
+1. Security Operations applies the FedRAMP Incident Evaluation and Communication rules when implementing each incident response control in this procedure.
+1. Security Operations verifies, at each control review, that evaluation and communication practices conform to the FedRAMP rules.
+
+### Deliver Initial Incident Response Training [NIST 800-53 IR-2 | FedRAMP IR-2 | ARC-AMPE IR-2]
+
+1. Security Operations assigns incident response training, consistent with the individual's assigned roles and responsibilities, through the [Training Platform].
+1. Security Operations ensures each individual completes the training within one (1) month of assuming an incident response role or responsibility or acquiring system access.
+1. Security Operations verifies completion in the [Training Platform] before the one (1) month deadline and escalates non-completion to the individual's manager.
+
+### Deliver Refresher Incident Response Training [NIST 800-53 IR-2 | FedRAMP IR-2 | ARC-AMPE IR-2]
+
+1. Security Operations schedules refresher training through the [Training Platform] within one (1) year of the individual's prior training.
+1. When system changes require it, Security Operations delivers additional incident response training to affected personnel.
+1. Security Operations tracks completion status in the [Training Platform] and escalates overdue training.
+
+### Review and Update Incident Response Training Content [NIST 800-53 IR-2 | FedRAMP IR-2 | ARC-AMPE IR-2]
+
+1. Security Operations reviews and updates incident response training content every one (1) year.
+1. Following defined events or incidents, Security Operations reviews the training content and updates it to reflect lessons learned.
+1. Security Operations records the content review and version history in the [Training Platform].
+
+### Maintain Training Records and Include Privacy Education [ARC-AMPE IR-2]
+
+1. Security Operations formally maintains and records, in the [Training Platform], the personnel participating in incident response training.
+1. Security Operations ensures the training includes privacy education and awareness associated with sending sensitive information (e.g., confidential, proprietary, financial, or PII).
+1. Security Operations ensures the training teaches personnel how to recognize when sensitive information such as PII is involved, so they can coordinate with the designated privacy official.
+
+### Incorporate Simulated Events into Training [NIST 800-53 IR-2(1) High | FedRAMP IR-2(1)]
+
+1. Security Operations incorporates simulated events into incident response training to facilitate the required response by personnel in crisis situations.
+1. Security Operations conducts the simulations in the [Training Platform] or [Training Environment] and records participation.
+
+### Provide an Automated Incident Response Training Environment [NIST 800-53 IR-2(2) High | FedRAMP IR-2(2)]
+
+1. Security Operations provides an incident response training environment using the organization-defined automated mechanism ([Training Environment]).
+1. Security Operations verifies the environment is available to trainees and reflects current procedures before each training cycle.
+
+### Train Personnel on Breach Identification and Reporting [NIST 800-53 IR-2(3) | ARC-AMPE IR-2(3)]
+
+1. Security Operations delivers training on how to identify and respond to a breach, including the organization's process for reporting a breach.
+1. Security Operations ensures the breach reporting process taught complies with CMS' policy and plan for preparing for and responding to a breach of PII, applying the training frequency specified in AT-02.
+
+### Test the Incident Response Capability [NIST 800-53 IR-3 Moderate, High | FedRAMP IR-3 | ARC-AMPE IR-3]
+
+1. Security Operations tests the effectiveness of the incident response capability for the system at least every one (1) year, using appropriate organization-defined tests (checklists, walk-throughs, discussion-based or tabletop exercises, simulations, or comprehensive exercises).
+1. Security Operations may use the organization's documented response to an actual incident as part of the test; any response capabilities not exercised during the previous actual incident response must be additionally exercised or simulated as part of the test.
+1. Security Operations documents the test results, including the tabletop exercise report, and retains it as evidence.
+
+### Test Using Automated Mechanisms [NIST 800-53 IR-3(1)]
+
+1. Security Operations tests the incident response capability using the organization-defined automated mechanisms ([Security Testing Platform]).
+1. Security Operations records the automated test outputs with the test documentation.
+
+### Coordinate Testing with Related Plans [NIST 800-53 IR-3(2) Moderate, High | FedRAMP IR-3(2) | ARC-AMPE IR-3(2)]
+
+1. Security Operations coordinates incident response testing with the organizational elements responsible for related plans, including business continuity plans, disaster recovery plans, continuity of operations plans, contingency plans, crisis communications plans, critical infrastructure plans, and occupant emergency plans.
+1. Security Operations invites representatives of those elements to relevant tests and records their participation in the test documentation.
+
+### Measure Effectiveness and Continuously Improve [NIST 800-53 IR-3(3)]
+
+1. Security Operations determines the effectiveness of incident response processes using measures and metrics that are accurate, consistent, and in a reproducible format.
+1. Security Operations uses the metrics to drive continuous improvement of the incident response processes and records the metrics with each test cycle.
+
+### Execute Incident Handling Across the Full Lifecycle [NIST 800-53 IR-4 | FedRAMP IR-4 | ARC-AMPE IR-4]
+
+1. Security Operations implements the incident handling capability consistent with the incident response plan, executing in order: preparation; detection and analysis; containment; eradication; and recovery.
+1. Security Operations opens an incident ticket with timelines in the [Incident Ticketing System] at detection and updates it through each lifecycle phase.
+1. Security Operations ensures the rigor, intensity, scope, and results of incident handling activities are comparable and predictable across the organization by applying the same documented handling steps to every incident.
+
+### Coordinate Incident Handling with Contingency Planning [NIST 800-53 IR-4 | FedRAMP IR-4 | ARC-AMPE IR-4]
+
+1. Security Operations coordinates incident handling activities with contingency planning activities, notifying the contingency planning owners when an incident may trigger contingency actions.
+1. Security Operations records the coordination in the incident ticket.
+
+### Incorporate Lessons Learned [NIST 800-53 IR-4 | FedRAMP IR-4 | ARC-AMPE IR-4]
+
+1. After each incident, Security Operations conducts a lessons-learned review of the ongoing incident handling activities.
+1. Security Operations incorporates the lessons learned into the incident response procedures, training, and testing, and implements the resulting changes.
+1. Security Operations records the changes and their implementation in the [Document Management System] and [Training Platform].
+
+### Document Incidents per the Incident Handling and Breach Notification Standard [ARC-AMPE IR-4]
+
+1. Security Operations documents relevant information related to security and privacy incidents in accordance with the current Example Org Incident Handling and Breach Notification Standard and Procedures, inclusive of CMS reporting requirements and timelines.
+1. Security Operations retains the documentation as incident tickets with timelines in the [Incident Ticketing System].
+
+### Preserve Evidence and Maintain Chain of Custody [ARC-AMPE IR-4]
+
+1. Security Operations preserves evidence through technical means, including secured storage and "write" protection of evidence media.
+1. Security Operations uses sound forensics processes and utilities ([Forensic Toolkit]) that support legal requirements.
+1. Security Operations determines and follows a chain of custody for forensic evidence, recording each transfer of custody in the incident ticket.
+
+### Identify the Exploited Vulnerability and Reduce Exposure [ARC-AMPE IR-4]
+
+1. Security Operations identifies the vulnerability exploited during the security and privacy incident.
+1. Security Operations implements safeguards to reduce risk and vulnerability exploit exposure, including isolating or disconnecting affected systems.
+1. Security Operations records the vulnerability, safeguards applied, and residual risk in the incident ticket.
+
+### Coordinate with the ISSO and Operate the Security Operations Center [ARC-AMPE IR-4]
+
+1. Security Operations coordinates incident response activities, including forensic malware analysis, with the Information System Security Officer (ISSO).
+1. The security operations center performs actions to reduce the risk that an information security and/or privacy incident will occur and to respond appropriately to each incident or breach.
+1. The security operations center maintains primary responsibility for incident detection, including internal security monitoring and analysis of network traffic and logs.
+1. Security Operations maintains contact information for individuals within the organization and CMS who have incident handling responsibilities in the system Incident Response Plan, updating it whenever contacts change.
+
+### Support Incident Handling with Automated Mechanisms [NIST 800-53 IR-4(1) Moderate, High | FedRAMP IR-4(1)]
+
+1. Security Operations supports the incident handling process using the organization-defined automated mechanisms ([SIEM], [Incident Ticketing System]).
+1. Security Operations verifies the automated mechanisms are operational before and during each incident.
+
+### Include Dynamic Reconfiguration in the Incident Response Capability [NIST 800-53 IR-4(2) | FedRAMP IR-4(2)]
+
+1. Security Operations includes the organization-defined types of dynamic reconfiguration for the organization-defined system components as part of the incident response capability.
+1. Security Operations exercises the reconfiguration actions during containment as incident conditions require and records the actions taken in the incident ticket.
+
+### Classify Incidents and Act to Continue Missions and Business Functions [NIST 800-53 IR-4(3) | ARC-AMPE IR-4(3)]
+
+1. Security Operations identifies the class of each incident based on attack vector (e.g., attack via external media, the web, improper system use, loss of equipment).
+1. Security Operations takes actions in response to the incident class to ensure continuation of organizational missions and business functions, selecting from: graceful degradation; information system shutdown; fall back to manual mode or alternative technology whereby the system operates differently; employing deceptive measures; alternate information flows; or operating in a mode reserved solely for when systems are under attack.
+1. Security Operations aligns incident response actions with business continuity processes so business continuity planners are made aware of incidents and their impacts.
+1. Security Operations applies the written guidelines for prioritizing incidents and applying appropriate responses, and records the classification and chosen response in the incident ticket.
+
+### Correlate Incident Information Organization-Wide [NIST 800-53 IR-4(4) High | FedRAMP IR-4(4)]
+
+1. Security Operations correlates incident information and individual incident responses in the [SIEM] to achieve an organization-wide perspective on incident awareness and response.
+1. Security Operations reviews correlated data during each incident to identify related activity across systems.
+
+### Implement Automatic System Disablement on Security Violations [NIST 800-53 IR-4(5)]
+
+1. Security Operations implements and maintains the configurable capability to automatically disable the system if the organization-defined security violations are detected.
+1. Security Operations defines and reviews the violation triggers in the [Security Monitoring Platform] and verifies the disablement capability functions during testing.
+
+### Handle Insider Threat Incidents with Legal and HR Coordination [NIST 800-53 IR-4(6) | FedRAMP IR-4(6) | ARC-AMPE IR-4(6)]
+
+1. Security Operations implements the incident handling capability for incidents involving insider threats.
+1. Security Operations coordinates closely with the organization's legal and human resources offices throughout the handling of each insider threat incident.
+1. Security Operations records the coordination and legal/HR guidance in the incident ticket.
+
+### Coordinate Insider Threat Handling with Organizational Entities [NIST 800-53 IR-4(7)]
+
+1. Security Operations coordinates the incident handling capability for insider threats with the organization-defined organizational entities.
+1. Security Operations documents each entity's involvement in the incident ticket.
+
+### Correlate and Share Incident Information with External Organizations [NIST 800-53 IR-4(8)]
+
+1. Security Operations coordinates with the organization-defined external organizations to correlate and share the organization-defined incident information.
+1. Security Operations records the shared information and the cross-organization perspective gained in the incident ticket.
+
+### Employ Dynamic Response Capabilities [NIST 800-53 IR-4(9)]
+
+1. Security Operations employs the organization-defined dynamic response capabilities to respond to incidents as conditions evolve.
+1. Security Operations records each dynamic response action taken in the incident ticket.
+
+### Coordinate Supply Chain Incident Handling [NIST 800-53 IR-4(10)]
+
+1. Security Operations coordinates incident handling activities involving supply chain events with the other organizations involved in the supply chain.
+1. Security Operations documents the coordination and each party's actions in the incident ticket.
+
+### Maintain a Deployable Integrated Incident Response Team [NIST 800-53 IR-4(11) High | FedRAMP IR-4(11)]
+
+1. Security Operations establishes and maintains an integrated incident response team that can be deployed to any location identified by the organization within the organization-defined time period.
+1. Security Operations verifies team roster, availability, and deployment readiness and records the verification with the team's maintenance records.
+
+### Analyze Malicious Code, Residual Artifacts, and Anomalous Behavior [NIST 800-53 IR-4(12) | NIST 800-53 IR-4(13)]
+
+1. Security Operations analyzes malicious code and/or other residual artifacts remaining in the system after the incident, using [Forensic Toolkit].
+1. Security Operations analyzes anomalous or suspected adversarial behavior in or related to the organization-defined environments or resources.
+1. Security Operations records the analysis findings in the incident ticket.
+
+### Establish and Maintain the Security Operations Center [NIST 800-53 IR-4(14)]
+
+1. Security Operations establishes and maintains the security operations center as the persistent monitoring and response function for the organization.
+1. Security Operations verifies SOC staffing, tooling ([SIEM], [Security Monitoring Platform]), and coverage and records the verification.
+
+### Manage Public Relations and Reputation Repair [NIST 800-53 IR-4(15)]
+
+1. Security Operations coordinates with Public Relations/Communications to manage public relations associated with an incident.
+1. Security Operations supports the employment of measures to repair the reputation of the organization and records the communications actions in the incident ticket.
+
+### Track and Document Incidents [NIST 800-53 IR-5 | FedRAMP IR-5 | ARC-AMPE IR-5]
+
+1. Security Operations tracks and documents every incident, maintaining records about each incident, its status, and other pertinent information necessary for forensics as well as evaluating incident details, trends, and handling.
+1. Security Operations maintains these records as incident tickets with timelines in the [Incident Ticketing System] and keeps each ticket's status current until closure.
+
+### Track and Analyze Incidents Using Automated Mechanisms [NIST 800-53 IR-5(1) High | FedRAMP IR-5(1)]
+
+1. Security Operations tracks incidents and collects and analyzes incident information using the organization-defined automated mechanisms ([SIEM], [Incident Ticketing System]).
+1. Security Operations reviews the collected incident information for trends and records the analysis.
+
+### Require Personnel to Report Suspected Incidents [NIST 800-53 IR-6 | FedRAMP IR-6 | ARC-AMPE IR-6]
+
+1. Security Operations requires personnel to report suspected incidents to the organizational incident response capability within the timeframe established in the current Example Org Incident Handling Procedure.
+1. Security Operations publishes the reporting channel ([Incident Reporting Channel]) to all personnel and confirms the requirement during incident response training.
+
+### Report Incident Information to Authorities and CMS [NIST 800-53 IR-6 | FedRAMP IR-6 | ARC-AMPE IR-6]
+
+1. Security Operations reports incident information to the organization-defined authorities.
+1. Security Operations reports suspected incident information to CMS within the timeframe established in the Example Org Incident Handling Procedure and applicable current legally binding agreements (e.g., Computer Matching Agreement, Information Exchange Agreement, Data Usage Agreement, Business Agreement, or Interconnection Security Agreement).
+1. Security Operations records each report, its recipient, and its timestamp in the incident ticket.
+
+### State AE Reporting to CMS Within One Hour [ARC-AMPE IR-6]
+
+1. State Administering Entities report potential or confirmed security incidents within one (1) hour of discovery by completing the CMS ACA Security and Privacy Incident Response Template.
+1. The State AE notifies the CMS IT Service Desk via email to cms_it_service_desk@cms.hhs.gov or by calling 1-800-562-1963.
+1. CMS and State AE personnel work together for the duration of the incident, and CMS personnel notify any affected federal agencies.
+1. Security Operations verifies the report was completed and records the notification timestamp in the incident ticket.
+
+### Report Incidents Using Automated Mechanisms [NIST 800-53 IR-6(1) Moderate, High | FedRAMP IR-6(1) | ARC-AMPE IR-6(1)]
+
+1. Security Operations reports incidents using the organization-defined automated mechanisms, including email, posting on web sites, and automated incident response tools and programs.
+1. Security Operations confirms each automated report was delivered and records the confirmation in the incident ticket.
+
+### Report Associated Vulnerabilities [NIST 800-53 IR-6(2)]
+
+1. Security Operations reports system vulnerabilities associated with reported incidents to the organization-defined personnel or roles.
+1. Security Operations records the vulnerability report and recipients in the incident ticket.
+
+### Provide Incident Information to Supply Chain Partners [NIST 800-53 IR-6(3) Moderate, High | FedRAMP IR-6(3)]
+
+1. Security Operations provides incident information to the provider of the product or service and other organizations involved in the supply chain or supply chain governance for systems or system components related to the incident.
+1. Security Operations records the information shared and with whom in the incident ticket.
+
+### Require Business Associate and Plan Sponsor Incident Reporting [HIPAA Security Rule 164.314(a)(2)(i) | HIPAA Security Rule 164.314(a)(2)(iii) | HIPAA Security Rule 164.314(b)(1) | HIPAA Security Rule 164.314(b)(2)]
+
+1. Security Operations confirms, via contract or other arrangement, that business associates (and subcontractors) are required to report to the covered entity any security incident of which they become aware, including breaches of unsecured protected health information as required by § 164.410.
+1. Security Operations confirms the plan sponsor of a group health plan is required to report to the group health plan any security incident of which it becomes aware, in addition to implementing reasonable and appropriate administrative, physical, and technical safeguards for electronic protected health information.
+1. Security Operations logs each business associate or plan sponsor report in the [Incident Ticketing System] and handles it through the standard incident lifecycle.
+
+### Provide an Incident Response Support Resource [NIST 800-53 IR-7 | FedRAMP IR-7 | ARC-AMPE IR-7]
+
+1. Security Operations provides an incident response support resource, integral to the organizational incident response capability, that offers advice and assistance to users of the system for the handling and reporting of incidents.
+1. The support resource may include help desks, assistance groups, the automated [Incident Ticketing System] to open and track incident response tickets, and access to forensics services or consumer redress services when required.
+1. For PII-related incidents, Security Operations engages the forensic, technical, policy, and legal expertise of Information Assurance Officers/Managers, Privacy Officers, Legal Counsel, and external or internal IT help desks.
+
+### Maximize Availability of Incident Response Information and Support [NIST 800-53 IR-7(1) Moderate, High | FedRAMP IR-7(1) | ARC-AMPE IR-7(1)]
+
+1. Security Operations increases the availability of incident response information and support using the organization-defined automated mechanisms to the maximum extent possible.
+1. Security Operations publishes self-service incident reporting and guidance through the [Incident Reporting Channel] and verifies its availability.
+
+### Establish Relationships with External System Protection Providers [NIST 800-53 IR-7(2) | ARC-AMPE IR-7(2)]
+
+1. Security Operations establishes a direct, cooperative relationship between the organization's incident response capability and external providers of system protection capability.
+1. Security Operations identifies organizational incident response team members to those external providers and updates the identification when team membership changes.
+
+### Develop, Approve, and Distribute the Incident Response Plan [NIST 800-53 IR-8 | FedRAMP IR-8 | ARC-AMPE IR-8]
+
+1. Security Operations develops the incident response plan providing a roadmap for implementing the incident response capability, describing the structure and organization of the capability, the high-level approach for how the capability fits into the overall organization, and the unique requirements of the organization relating to mission, size, structure, and functions.
+1. Security Operations ensures the plan defines reportable incidents, provides metrics for measuring the incident response capability, defines the resources and management support needed to maintain and mature the capability, and addresses the sharing of incident information.
+1. Security Operations ensures the plan explicitly designates responsibility for incident response to the applicable ISSO, approved by the Business Owner.
+1. Security Operations submits the plan for review and approval by the applicable ISSO and approval by the Business Owner at least every one (1) year.
+1. Security Operations distributes copies of the plan to incident response personnel, including all personnel with a role or responsibility for implementing the plan (such as the CISO, CIO, ISSO, Senior Privacy Official, Incident Management/Response Team, PII Breach Response Team, Operations Centers personnel, appropriate legal officials, and public relations or communications officials).
+1. Security Operations records distribution in the [Document Management System].
+
+### Update and Protect the Incident Response Plan [NIST 800-53 IR-8 | FedRAMP IR-8 | ARC-AMPE IR-8]
+
+1. Security Operations updates the plan to address system and organizational changes or problems encountered during plan implementation, execution, or testing, at a minimum every one (1) year or when incident response event(s) demonstrate a change/update is needed to improve the plan.
+1. Security Operations communicates plan changes to all personnel with a role or responsibility for implementing the plan.
+1. Security Operations protects the plan from unauthorized disclosure and modification using access controls in the [Document Management System].
+
+### Develop and Implement the Privacy Incident and Breach Response Plan [ARC-AMPE IR-8]
+
+1. Security Operations, with the Privacy Office, develops and implements the Privacy Incident and Breach Response Plan.
+1. Security Operations maintains the plan in the [Document Management System] and exercises it alongside the incident response plan.
+
+### Include PII Breach Elements in the Incident Response Plan [NIST 800-53 IR-8(1) | ARC-AMPE IR-8(1)]
+
+1. Security Operations ensures that, for breaches involving PII, the incident response plan includes a process to determine if notice to individuals or other organizations, including oversight organizations, is needed.
+1. Security Operations ensures the plan includes an assessment process to determine the extent of the harm, embarrassment, inconvenience, or unfairness to affected individuals and mechanisms to mitigate such harms.
+1. Security Operations ensures the plan identifies applicable privacy requirements and records the assessment outcomes in the incident ticket.
+
+## Roles & Responsibilities
+
+Security Operations owns this procedure end to end and performs the detection, handling, documentation, reporting, training, and testing steps on a continuous basis, coordinating with the ISSO, Privacy Office, Legal Counsel, Human Resources, Public Relations/Communications, System Owners, business associates, plan sponsors, CMS, and supply chain partners as participants in individual steps. Exceptions to any step in this procedure require review and approval by the designated Incident Response Official and the applicable ISSO, with Business Owner approval required for incident response plan exceptions.
+
+## Related Standard
+
+Example Org Information Security Standard: Incident Response

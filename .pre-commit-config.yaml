@@ -1,0 +1,73 @@
+repos:
+  # Python lint + format. Ruff replaces the flake8/isort/black stack with a
+  # single tool, and its config (rule selection, line length, per-file
+  # ignores) lives in pyproject.toml so the hook, CI and `scripts/check.py`
+  # all enforce exactly the same thing rather than drifting apart.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.5
+    hooks:
+      - id: ruff-check
+        args: ["--fix"]
+      - id: ruff-format
+
+  # Secrets scanning — catches API keys, tokens, and credentials before they
+  # ever reach a commit. This is the most important hook in this file: it's
+  # what stops your Anthropic key or an employer config value from leaking
+  # into a public repo history.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+
+  # Dependency vulnerability scanning. Audits the active environment
+  # (pip-audit's -r flag expects requirements.txt syntax, not pyproject.toml,
+  # so we don't pass it one).
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.7.3
+    hooks:
+      - id: pip-audit
+
+  # Static security analysis for this repo's own Python code.
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.0
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
+
+  # Broader SAST — catches patterns bandit's Python-specific ruleset
+  # doesn't, e.g. GitHub Actions supply-chain hygiene (mutable action tags).
+  - repo: https://github.com/semgrep/semgrep
+    rev: v1.177.0
+    hooks:
+      - id: semgrep
+        args:
+          [
+            "scan",
+            "--config=p/python",
+            "--config=p/security-audit",
+            "--config=p/owasp-top-ten",
+            "--error",
+          ]
+
+  # Markdown quality — enforces "Markdown is the primary deliverable" (see
+  # README's "Output format priority"). Checks both repo docs and anything
+  # committed under output/ during development. mdformat-frontmatter is
+  # required so YAML frontmatter (e.g. .claude/skills/*/SKILL.md) is left
+  # alone instead of being reformatted into a heading — without it, mdformat
+  # silently destroys any frontmatter block it touches.
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.19
+    hooks:
+      - id: mdformat
+        additional_dependencies: ["mdformat-gfm", "mdformat-frontmatter"]
+
+  # Basic hygiene.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=2000"]
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace

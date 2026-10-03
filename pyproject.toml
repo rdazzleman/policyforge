@@ -1,0 +1,222 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "policyforge"
+version = "1.7.0"
+description = "Cross-mapped compliance policy/standard/procedure generation from NIST 800-53, FedRAMP, ARC-AMPE, the HIPAA Security Rule, and (BYOC) HITRUST/GovRAMP."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+dependencies = [
+    "anthropic>=0.40",
+    "click>=8.1",
+    "pyyaml>=6.0",
+    "python-frontmatter>=1.1",
+    "mdformat>=0.7",
+    "mdformat-gfm>=0.3",
+    "mdformat-frontmatter>=2.0",
+    "markdown-it-py>=3.0",
+    "mdit-py-plugins>=0.4",
+    "requests>=2.32.4",
+    "markdownify>=0.13",
+    # Writes the .xlsx System Security Plan workbook (ssp/workbook.py). xlsx is
+    # the open ISO/IEC 29500 format, so this needs no Excel licence and the
+    # output opens natively in LibreOffice Calc.
+    "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+# No semgrep here. It pins its own dependencies exactly (click, jsonschema,
+# mcp, opentelemetry-*, pywin32 ...), and as a dev extra those pins became
+# this project's pins: every Dependabot bump of one of them could never
+# install. It runs from its own lock instead, requirements/semgrep/, in its
+# own environment — see CONTRIBUTING.md.
+dev = [
+    "pytest>=8.0",
+    "bandit[toml]>=1.8",
+    "pip-audit>=2.7",
+    "pre-commit>=4.0",
+    "ruff>=0.9",
+]
+bedrock = [
+    "boto3>=1.34",
+]
+# Serves the read-only analyses as MCP tools (`policyforge mcp`). An extra
+# rather than a base dependency: most people use the CLI, and this is only
+# needed to let another agent call the same functions.
+#
+# Declared explicitly: it once reached the dev environment only as a
+# transitive dependency of semgrep, a dev tool, and building against that
+# would give a feature that works for anyone who installed the dev extras and
+# fails for everyone else. The CI lock includes this extra by name.
+#
+# Below 2: mcp 2.0 removed the `Server.list_tools` / `call_tool` decorators
+# `serve()` is built on, and the server dies on startup. Lift this with the
+# port, which `test_the_server_answers_a_client_over_stdio` will prove.
+mcp = [
+    "mcp>=1.29,<2",
+]
+vertex = [
+    "anthropic[vertex]>=0.40",
+]
+# One dependency that reaches most vendors, for comparing models across
+# them. Heavier than the others on purpose — it pulls openai, boto3 and
+# tokenizers — which is why it is an extra and not a core dependency.
+litellm = [
+    "litellm>=1.40",
+    # LiteLLM reaches for tenacity on its retry path but does not declare
+    # it, and the failure is provider-specific: Anthropic and DeepSeek
+    # calls worked for hours before a Cohere model raised "tenacity import
+    # failed" on 47 of 114 calls. Worse, that message matches none of the
+    # substrings evals/runner.py treats as infrastructure, so a missing
+    # package was graded as the model getting 17 cases wrong.
+    "tenacity>=8.0",
+]
+
+[project.scripts]
+policyforge = "policyforge.cli:cli"
+
+# Listed rather than discovered: `policyforge._bundled.frameworks` and
+# `.config` are mapped from outside src/ (below), and discovery only searches
+# src/. tests/test_scaffold.py fails if a package under src/ is missing here.
+[tool.setuptools]
+packages = [
+    "policyforge",
+    "policyforge._bundled",
+    "policyforge._bundled.config",
+    "policyforge._bundled.frameworks",
+    "policyforge.cli",
+    "policyforge.content",
+    "policyforge.crosswalk",
+    "policyforge.edit",
+    "policyforge.embed",
+    "policyforge.entail",
+    "policyforge.export",
+    "policyforge.frameworks",
+    "policyforge.generate",
+    "policyforge.history",
+    "policyforge.ingest",
+    "policyforge.llm",
+    "policyforge.mapping",
+    "policyforge.mcp",
+    "policyforge.org",
+    "policyforge.parameters",
+    "policyforge.rerank",
+    "policyforge.ssp",
+    "policyforge.synthesis",
+    "policyforge.topics",
+    "policyforge.zardoz",
+]
+
+# The catalogs and example configs `policyforge init` lays out, mapped from
+# where they already live so there is one copy. See policyforge/scaffold.py.
+[tool.setuptools.package-dir]
+"" = "src"
+"policyforge._bundled.frameworks" = "data/frameworks"
+"policyforge._bundled.config" = "config"
+
+# Catalogs named one by one, never globbed: a glob would ship a licensed
+# export someone had put in their own checkout's data/frameworks/. Only the
+# README of a bring-your-own catalog ships. tests/test_scaffold.py checks
+# this list against each catalog's `licence:`.
+[tool.setuptools.package-data]
+"policyforge._bundled.frameworks" = [
+    "arc-ampe/README.md",
+    "arc-ampe/controls.json",
+    "arc-ampe/framework.yaml",
+    "cfr-170-315-onc-certification/README.md",
+    "cfr-170-315-onc-certification/controls.json",
+    "cfr-170-315-onc-certification/framework.yaml",
+    "cfr-171-information-blocking/README.md",
+    "cfr-171-information-blocking/controls.json",
+    "cfr-171-information-blocking/framework.yaml",
+    "cfr-42-part-2-sud-records/README.md",
+    "cfr-42-part-2-sud-records/controls.json",
+    "cfr-42-part-2-sud-records/framework.yaml",
+    "fedramp/README.md",
+    "fedramp/controls.json",
+    "fedramp/framework.yaml",
+    "hipaa-breach-notification-rule/README.md",
+    "hipaa-breach-notification-rule/controls.json",
+    "hipaa-breach-notification-rule/framework.yaml",
+    "hipaa-privacy-rule/README.md",
+    "hipaa-privacy-rule/controls.json",
+    "hipaa-privacy-rule/framework.yaml",
+    "hipaa-security-rule/README.md",
+    "hipaa-security-rule/controls.json",
+    "hipaa-security-rule/framework.yaml",
+    "nist-800-171-r3/README.md",
+    "nist-800-171-r3/controls.json",
+    "nist-800-171-r3/framework.yaml",
+    "nist-800-53-r5/README.md",
+    "nist-800-53-r5/controls.json",
+    "nist-800-53-r5/framework.yaml",
+    "nist-ai-rmf/README.md",
+    "nist-ai-rmf/controls.json",
+    "nist-ai-rmf/framework.yaml",
+    "nist-ai-rmf-playbook/README.md",
+    "nist-ai-rmf-playbook/controls.json",
+    "nist-ai-rmf-playbook/framework.yaml",
+    "nist-csf-2-0/README.md",
+    "nist-csf-2-0/controls.json",
+    "nist-csf-2-0/framework.yaml",
+    "govramp/README.md",
+    "hitrust-ai/README.md",
+    "hitrust-csf/README.md",
+    "soc2-tsc/README.md",
+]
+"policyforge._bundled.config" = ["config.example.yaml", "topics.example.yaml"]
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
+
+[tool.pytest.ini_options]
+# The repo root on sys.path, so tests can import `evals/` — the graded eval
+# harness, which lives outside src/ because it is a dev tool rather than
+# part of the shipped package. Without this, `python -m pytest` works (it
+# puts the CWD on the path) and the bare `pytest` console script does not,
+# which is the kind of difference that passes locally and fails in CI.
+pythonpath = ["."]
+
+[tool.ruff]
+# 100 rather than the 88 default: it matches the width this codebase was
+# already written to, so adopting a formatter reflows comments and docstrings
+# instead of rewriting almost every line of otherwise-fine code.
+line-length = 100
+target-version = "py310"
+extend-exclude = [".venv", "output", "local_content", "data"]
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "E402",  # module import not at top of file (not implied by "E")
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes — unused imports/variables, undefined names
+    "I",     # isort — import ordering
+    "UP",    # pyupgrade — don't leave older syntax behind as the floor rises
+    "B",     # flake8-bugbear — likely bugs, not just style
+    "BLE",   # blind `except Exception` must be deliberate and justified
+    "C4",    # flake8-comprehensions
+    "SIM",   # flake8-simplify
+    "RUF",   # ruff's own rules
+]
+ignore = [
+    # "a[:n] + [x]" -> "[*a[:n], x]". Purely stylistic, no readability gain,
+    # and its one occurrence is inside hipaa_loader.py's citation-hierarchy
+    # state machine — code that was debugged carefully and shouldn't be
+    # churned for a cosmetic rule.
+    "RUF005",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# RUF012: test doubles are deliberately minimal stand-ins for third-party
+#   response objects; a mutable class attribute on a throwaway fake is fine.
+# BLE001: a test that asserts on "whatever error this raises" is catching
+#   broadly on purpose — that's the assertion, not an oversight.
+"tests/*" = ["RUF012", "BLE001"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["policyforge"]

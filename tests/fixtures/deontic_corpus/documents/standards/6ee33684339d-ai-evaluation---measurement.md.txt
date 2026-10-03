@@ -1,0 +1,156 @@
+# Artificial Intelligence Risk Measurement and Monitoring Standard
+
+## 1. Purpose
+
+This Standard establishes requirements for measuring, monitoring, and documenting risks associated with Acme Health's artificial intelligence (AI) systems throughout their lifecycle. This Standard ensures that AI systems deployed by Acme Health are evaluated for trustworthiness, safety, security, fairness, and other characteristics critical to healthcare operations and patient safety.
+
+## 2. Scope
+
+This Standard applies to all AI systems developed, deployed, or operated by Acme Health, including:
+
+- AI models used in clinical decision support
+- AI systems processing protected health information
+- AI applications supporting administrative or operational functions
+- Third-party AI systems integrated into Acme Health operations
+
+This Standard applies to all personnel involved in the development, deployment, evaluation, or management of AI systems.
+
+## 3. Measurement Approach Selection and Assessment
+
+### 3.1 Risk Measurement Selection
+
+Acme Health must select approaches and metrics for measuring AI risks for implementation, starting with the most significant AI risks. Risks or trustworthiness characteristics that will not or cannot be measured must be documented. [NIST AI RMF Measure 1.1]
+
+### 3.2 Regular Assessment and Updates
+
+The appropriateness of AI metrics and effectiveness of existing controls must be regularly assessed and updated, including reports of errors and potential impacts on affected communities. [NIST AI RMF Measure 1.2]
+
+### 3.3 Independent Assessment
+
+Internal experts who did not serve as front-line developers for the system and/or independent assessors must be involved in regular assessments and updates. Domain experts, users, AI actors external to the team that developed or deployed the AI system, and affected communities must be consulted in support of assessments as necessary per organizational risk tolerance. [NIST AI RMF Measure 1.3]
+
+## 4. Testing, Evaluation, Verification and Validation
+
+### 4.1 TEVV Documentation
+
+Test sets, metrics, and details about the tools used during TEVV must be documented. [NIST AI RMF Measure 2.1]
+
+### 4.2 Human Subject Evaluations
+
+Evaluations involving human subjects must meet applicable requirements (including human subject protection) and must be representative of the relevant population. [NIST AI RMF Measure 2.2]
+
+### 4.3 Performance and Assurance Criteria
+
+AI system performance or assurance criteria must be measured qualitatively or quantitatively and demonstrated for conditions similar to deployment setting(s). These measures must be documented. [NIST AI RMF Measure 2.3]
+
+### 4.4 Production Monitoring
+
+The functionality and behavior of the AI system and its components must be monitored when in production. [NIST AI RMF Measure 2.4]
+
+### 4.5 Validity, Reliability, and Generalizability
+
+The AI system to be deployed must be demonstrated to be valid and reliable. Limitations of the generalizability beyond the conditions under which the technology was developed must be documented. [NIST AI RMF Measure 2.5]
+
+### 4.6 Safety Evaluation
+
+The AI system must be evaluated regularly for safety risks, demonstrated to be safe with residual negative risk not exceeding the risk tolerance, and able to fail safely, particularly if made to operate beyond its knowledge limits. Safety metrics must reflect system reliability and robustness, real-time monitoring, and response times for AI system failures. [NIST AI RMF Measure 2.6]
+
+### 4.7 Security and Resilience
+
+AI system security and resilience must be evaluated and documented. [NIST AI RMF Measure 2.7]
+
+### 4.8 Transparency and Accountability Risks
+
+Risks associated with transparency and accountability must be examined and documented. [NIST AI RMF Measure 2.8]
+
+### 4.9 Model Explanation and Output Interpretation
+
+The AI model must be explained, validated, and documented. AI system output must be interpreted within its context to inform responsible use and governance. [NIST AI RMF Measure 2.9]
+
+### 4.10 Privacy Risk
+
+Privacy risk of the AI system must be examined and documented. [NIST AI RMF Measure 2.10]
+
+### 4.11 Fairness and Bias
+
+Fairness and bias must be evaluated and results must be documented. [NIST AI RMF Measure 2.11]
+
+### 4.12 Environmental Impact
+
+Environmental impact and sustainability of AI model training and management activities must be assessed and documented. [NIST AI RMF Measure 2.12]
+
+### 4.13 TEVV Effectiveness Evaluation
+
+Effectiveness of the employed TEVV metrics and processes in the measure function must be evaluated and documented. [NIST AI RMF Measure 2.13]
+
+## 5. Risk Identification and Tracking
+
+### 5.1 Ongoing Risk Identification
+
+Approaches, personnel, and documentation must be in place to regularly identify and track existing, unanticipated, and emergent AI risks based on factors such as intended and actual performance in deployed contexts. [NIST AI RMF Measure 3.1]
+
+### 5.2 Risk Tracking for Difficult-to-Measure Settings
+
+Risk tracking approaches must be considered for settings where AI risks are difficult to assess using currently available measurement techniques or where metrics are not yet available. [NIST AI RMF Measure 3.2]
+
+### 5.3 Feedback and Appeal Processes
+
+Feedback processes for end users and impacted communities to report problems and appeal system outcomes must be established and integrated into AI system evaluation metrics. [NIST AI RMF Measure 3.3]
+
+## 6. Deployment Context Measurement
+
+### 6.1 Context-Connected Measurement Approaches
+
+Measurement approaches for identifying AI risks must be connected to deployment context(s) and informed through consultation with domain experts and other end users. These approaches must be documented. [NIST AI RMF Measure 4.1]
+
+### 6.2 Trustworthiness in Deployment
+
+Measurement results regarding AI system trustworthiness in deployment context(s) and across the AI lifecycle must be informed by input from domain experts and relevant AI actors to validate whether the system is performing consistently as intended. Results must be documented. [NIST AI RMF Measure 4.2]
+
+### 6.3 Performance Change Identification
+
+Measurable performance improvements or declines based on consultations with relevant AI actors, including affected communities, and field data about context-relevant risks and trustworthiness characteristics must be identified and documented. [NIST AI RMF Measure 4.3]
+
+## 7. Roles and Responsibilities
+
+### 7.1 AI System Owners
+
+AI system owners must ensure that all measurement, monitoring, and documentation requirements in this Standard are implemented for AI systems under their responsibility.
+
+### 7.2 Information Security
+
+The Information Security function must verify compliance with this Standard through [Review Frequency] audits and assessments.
+
+### 7.3 Clinical and Domain Experts
+
+Clinical and domain experts must participate in the evaluation, validation, and ongoing assessment of AI systems within their areas of expertise as required by this Standard.
+
+### 7.4 Affected Communities
+
+Acme Health must establish processes to engage affected communities, end users, and patients in providing feedback on AI system performance and impacts as required by this Standard.
+
+## 8. Documentation Requirements
+
+All documentation required by this Standard must be:
+
+- Maintained in [Document Management System]
+- Accessible to authorized personnel responsible for AI system governance, audit, and compliance
+- Retained for [Retention Period]
+- Updated when changes occur to AI systems, measurement approaches, or risk assessments
+
+## 9. Compliance and Enforcement
+
+Failure to comply with this Standard may result in:
+
+- Suspension of AI system deployment or operation
+- Disciplinary action in accordance with Acme Health policies
+- Regulatory or legal consequences where applicable
+
+## 10. Review and Maintenance
+
+This Standard must be reviewed [Review Frequency] and updated as necessary to reflect changes in:
+
+- Regulatory requirements
+- AI technology and measurement capabilities
+- Organizational risk tolerance
+- Lessons learned from AI system incidents or performance issues

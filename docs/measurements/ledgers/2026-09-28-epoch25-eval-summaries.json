@@ -1,0 +1,62 @@
+{
+  "deepseek": {
+    "answer_paraphrase": "answer_paraphrase: 25/25 cases always pass (75/75 runs, 100%)",
+    "answering": "answering: 26/27 cases always pass (80/81 runs, 99%)",
+    "chaining": "chaining: 9/11 cases always pass (30/33 runs, 91%)",
+    "conversation": "conversation: 7/7 cases always pass (21/21 runs, 100%)",
+    "crosswalk": "crosswalk: 9/9 cases always pass (27/27 runs, 100%)",
+    "edit_apply": "edit_apply: 3/4 cases always pass (10/12 runs, 83%)",
+    "edit_plan": "edit_plan: 3/5 cases always pass (11/15 runs, 73%)",
+    "expansion": "expansion: 3/3 cases always pass (9/9 runs, 100%)",
+    "generation": "generation: 5/7 cases always pass (19/21 runs, 90%)",
+    "paraphrase": "paraphrase: 66/66 cases always pass (198/198 runs, 100%)",
+    "resolution": "resolution: 7/7 cases always pass (21/21 runs, 100%)",
+    "routing": "routing: 17/18 cases always pass (53/54 runs, 98%)",
+    "synthesis": "synthesis: 2/3 cases always pass (8/9 runs, 89%)"
+  },
+  "glm": {
+    "answer_paraphrase": "answer_paraphrase: 20/25 cases always pass (65/75 runs, 87%)",
+    "answering": "answering: 24/27 cases always pass (75/81 runs, 93%)",
+    "chaining": "chaining: 10/11 cases always pass (32/33 runs, 97%)",
+    "conversation": "conversation: 2/7 cases always pass (8/21 runs, 38%)",
+    "crosswalk": "crosswalk: 6/9 cases always pass (21/27 runs, 78%)",
+    "edit_apply": "edit_apply: 4/4 cases always pass (12/12 runs, 100%)",
+    "edit_plan": "edit_plan: 5/5 cases always pass (15/15 runs, 100%)",
+    "expansion": "expansion: 3/3 cases always pass (9/9 runs, 100%)",
+    "generation": "generation: 7/7 cases always pass (21/21 runs, 100%)",
+    "paraphrase": "paraphrase: 59/66 cases always pass (186/198 runs, 94%)",
+    "resolution": "resolution: 7/7 cases always pass (21/21 runs, 100%)",
+    "routing": "routing: 18/18 cases always pass (54/54 runs, 100%)",
+    "synthesis": "synthesis: 3/3 cases always pass (9/9 runs, 100%)"
+  },
+  "opus": {
+    "answer_paraphrase": "answer_paraphrase: 24/25 cases always pass (24/25 runs, 96%)",
+    "answering": "answering: 25/27 cases always pass (25/27 runs, 93%)",
+    "chaining": "chaining: 11/11 cases always pass (11/11 runs, 100%)",
+    "conversation": "conversation: 7/7 cases always pass (7/7 runs, 100%)",
+    "crosswalk": "crosswalk: 9/9 cases always pass (9/9 runs, 100%)",
+    "edit_apply": "edit_apply: 4/4 cases always pass (4/4 runs, 100%)",
+    "edit_plan": "edit_plan: 3/5 cases always pass (3/5 runs, 60%)",
+    "expansion": "expansion: 3/3 cases always pass (3/3 runs, 100%)",
+    "generation": "generation: 7/7 cases always pass (7/7 runs, 100%)",
+    "paraphrase": "paraphrase: 66/66 cases always pass (66/66 runs, 100%)",
+    "resolution": "resolution: 7/7 cases always pass (7/7 runs, 100%)",
+    "routing": "routing: 18/18 cases always pass (18/18 runs, 100%)",
+    "synthesis": "synthesis: 2/3 cases always pass (2/3 runs, 67%)"
+  },
+  "sonnet": {
+    "answer_paraphrase": "answer_paraphrase: 25/25 cases always pass (25/25 runs, 100%)",
+    "answering": "answering: 26/27 cases always pass (26/27 runs, 96%)",
+    "chaining": "chaining: 11/11 cases always pass (11/11 runs, 100%)",
+    "conversation": "conversation: 6/7 cases always pass (6/7 runs, 86%)",
+    "crosswalk": "crosswalk: 9/9 cases always pass (9/9 runs, 100%)",
+    "edit_apply": "edit_apply: 4/4 cases always pass (4/4 runs, 100%)",
+    "edit_plan": "edit_plan: 5/5 cases always pass (5/5 runs, 100%)",
+    "expansion": "expansion: 3/3 cases always pass (3/3 runs, 100%)",
+    "generation": "generation: 7/7 cases always pass (7/7 runs, 100%)",
+    "paraphrase": "paraphrase: 64/66 cases always pass (64/66 runs, 97%)",
+    "resolution": "resolution: 7/7 cases always pass (7/7 runs, 100%)",
+    "routing": "routing: 18/18 cases always pass (18/18 runs, 100%)",
+    "synthesis": "synthesis: 3/3 cases always pass (3/3 runs, 100%)"
+  }
+}

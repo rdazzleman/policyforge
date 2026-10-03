@@ -1,0 +1,164 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002006
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 537e590d1c1b44b9
+  provider: litellm
+  provider_class: third-party
+---
+
+# Business Associate & Vendor Risk Procedure
+
+## Purpose
+
+Executing this procedure establishes, maintains, and governs the agreements, assessments, and oversight needed to safely share information with business associates, vendors, and external service providers, and to manage the supply chain risks they introduce. It ensures that no information exchange occurs without approved agreements, that third-party safeguards meet organizational and regulatory requirements, and that the resulting evidence is retained and reviewable.
+
+## Scope
+
+This procedure is performed by the Third-Party Risk team on all external organizations — business associates, subcontractors, external system service providers, and supply chain partners — that create, receive, maintain, or transmit Example Org information, including electronic protected health information (ePHI) and Personally Identifiable Information (PII). It covers the full vendor lifecycle: pre-engagement approval, agreement execution, ongoing monitoring, and termination or suspension of exchanges.
+
+## Prerequisites
+
+- Access to the [Contract Repository] where executed agreements and vendor records are stored
+- Access to the [Vendor Management System] used to track vendor inventory, review status, and risk ratings
+- Access to the [Ticketing System] for logging vendor onboarding, review, and remediation tasks
+- A current inventory of all interconnections, business associates, subcontractors, and external service providers
+- Designated Authorizing Official and senior cybersecurity and privacy officials empowered to approve or suspend interconnections
+- Engagement of legal counsel, the senior privacy officer, and contracting officers for agreement review
+- An approved supply chain risk management (SCRM) policy and SCRM plan, and a designated SCRM official
+- A chartered SCRM team with the required role coverage
+
+## Procedure Steps
+
+### Establish and approve information exchange agreements before any sharing [NIST 800-53 CA-3 | ARC-AMPE CA-3]
+
+1. Before any information is shared with an external system or organization, the Third-Party Risk team identifies the appropriate agreement type for the exchange — interconnection security agreement, information exchange security agreement, memorandum of understanding or agreement, service level agreement, user agreement, non-disclosure agreement, or another organization-defined exchange agreement type.
+1. The Third-Party Risk team drafts the agreement and documents, as part of it: the interface characteristics of each system, the security and privacy requirements and controls applicable to each system, the responsibilities of each party, and the impact level of the information communicated.
+1. Where the exchange involves PII, the Third-Party Risk team ensures the agreement (memorandum of understanding, memorandum of agreement, letter of intent, computer matching agreement, information exchange agreement, or similar) specifically describes the PII covered and enumerates the purposes for which the PII may be used, for both internal and external parties.
+1. The Third-Party Risk team routes the draft agreement to legal counsel, the senior privacy officer, and contracting officers for review, then obtains approval from the Authorizing Official or designated senior leadership.
+1. The Third-Party Risk team stores the executed agreement in the [Contract Repository] and records its execution in the [Vendor Management System]. No information sharing proceeds until the applicable agreement is approved and in place.
+1. When a proposed subsequent sharing of PII is not compatible with the purpose for which it was collected, the Third-Party Risk team blocks the sharing until additional notice is provided to the individual, their consent is obtained, and the relevant documents are updated or published.
+
+### Review and update information exchange agreements annually and after significant change [ARC-AMPE CA-3]
+
+1. On an annual cycle, the Third-Party Risk team reviews each information exchange agreement in the [Contract Repository] for continued validity, accuracy of interface characteristics, and continued adequacy of security and privacy requirements.
+1. In addition to the annual review, the Third-Party Risk team triggers an out-of-cycle review whenever a significant change occurs to the system, to either organization, or to the nature of the electronic information sharing that could impact the agreement's validity or security posture.
+1. The Third-Party Risk team updates each agreement as needed, re-obtains approvals, and records the review date and outcome in the [Vendor Management System] as part of the vendor security review records.
+
+### Suspend or terminate high-risk interconnections [ARC-AMPE CA-3]
+
+1. When an interconnection is judged to present an unacceptable level of risk, the Authorizing Official or other senior leadership — informed by senior cybersecurity or privacy officials — orders the immediate termination and/or suspension of that interconnection.
+1. The Third-Party Risk team executes the ordered termination or suspension, notifies the connected party, documents the action and its rationale in the [Ticketing System], and updates the interconnection inventory.
+
+### Verify transfer authorizations before accepting interconnection data [NIST 800-53 CA-3(6) High]
+
+1. Before accepting data transferred between interconnecting systems, the receiving system owner — coordinated by the Third-Party Risk team — verifies that the individuals or systems performing the transfer hold the requisite authorizations (write permissions or privileges) in the [Identity Provider] or applicable access control mechanism.
+1. If the requisite authorizations cannot be verified, the receiving system owner rejects the transfer and escalates to the Third-Party Risk team, who records the event in the [Ticketing System].
+
+### Identify and control transitive (downstream) information exchanges [NIST 800-53 CA-3(7)]
+
+1. The Third-Party Risk team identifies transitive (downstream) information exchanges by tracing, through the systems identified in the interconnection inventory, where each connected system forwards or re-shares Example Org information with other systems.
+1. The Third-Party Risk team records each identified downstream exchange in the [Vendor Management System], including the downstream system, the data involved, and the responsible upstream party.
+1. The Third-Party Risk team verifies or validates the controls on each identified downstream system. Where controls cannot be verified or validated, the Third-Party Risk team takes measures to ensure the transitive exchange ceases — up to and including directing the upstream party to stop forwarding data — and documents the action in the [Ticketing System].
+
+### Authorize and manage access to electronic protected health information [HIPAA Security Rule 164.308(a)(4)(i) | HIPAA Security Rule 164.308(a)(4)(ii)(A) Required | HIPAA Security Rule 164.308(a)(4)(ii)(B) Addressable | HIPAA Security Rule 164.308(a)(4)(ii)(C) Addressable]
+
+1. The Third-Party Risk team, with the security team, implements and maintains policies and procedures for authorizing access to ePHI consistent with the applicable requirements of subpart E of 45 CFR Parts 160–164.
+1. If a health care clearinghouse is part of a larger organization, the Third-Party Risk team implements policies and procedures that protect the clearinghouse's ePHI from unauthorized access by the larger organization.
+1. The Third-Party Risk team implements procedures for granting, establishing, documenting, reviewing, and modifying a user's right of access to ePHI — including access via a workstation, transaction, program, process, or other mechanism — based on the access authorization policies, and records access grants and reviews in the [Identity Provider] and [Vendor Management System].
+
+### Obtain and document satisfactory assurances from business associates [HIPAA Security Rule 164.308(b)(1) | HIPAA Security Rule 164.308(b)(3) Required | HIPAA Security Rule 164.314(a)(2)(ii)]
+
+1. Before permitting a business associate (or a business associate's subcontractor) to create, receive, maintain, or transmit ePHI on Example Org's behalf, the Third-Party Risk team obtains satisfactory assurances, in accordance with § 164.314(a), that the business associate will appropriately safeguard the information.
+1. The Third-Party Risk team documents the satisfactory assurances through a written contract or other arrangement meeting the requirements of § 164.314(a); where an "other arrangement" is used, the Third-Party Risk team confirms it meets the requirements of § 164.504(e)(3).
+1. The Third-Party Risk team stores the executed business associate agreement in the [Contract Repository] and logs it in the [Vendor Management System] as an executed business associate agreement.
+
+### Flow down required provisions in business associate contracts [HIPAA Security Rule 164.314(a)(2)(i) Required | HIPAA Security Rule 164.314(a)(2)(iii) Required | HIPAA Security Rule 164.314(b)(1) | HIPAA Security Rule 164.314(b)(2) Required]
+
+1. The Third-Party Risk team, with legal counsel, ensures every business associate contract provides that the business associate will: comply with the applicable requirements of the Security Rule subpart; ensure that any subcontractors creating, receiving, maintaining, or transmitting ePHI on its behalf agree to comply by entering into a compliant contract or other arrangement; and report to Example Org any security incident of which it becomes aware, including breaches of unsecured protected health information as required by § 164.410.
+1. The Third-Party Risk team applies the same business associate contract requirements to contracts or other arrangements between a business associate and its subcontractors as apply between Example Org and its business associates, and verifies flow-down during vendor security reviews.
+1. Except where limited disclosures apply under § 164.504(f)(1)(ii)/(iii) or § 164.508, the Third-Party Risk team ensures a group health plan's plan documents are amended to require the plan sponsor to: implement administrative, physical, and technical safeguards reasonably and appropriately protecting the ePHI it handles on the plan's behalf; support the adequate separation required by § 164.504(f)(2)(iii) with reasonable and appropriate security measures; ensure any agent to whom it provides this information agrees to implement reasonable and appropriate security measures; and report any security incident of which it becomes aware to the group health plan.
+
+### Impose security and privacy requirements on external system service providers [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+1. The Third-Party Risk team requires providers of external system services to comply with organizational security and privacy requirements and to employ the [Assignment: organization-defined controls], and records this in the service contract or agreement.
+1. The Third-Party Risk team defines and documents organizational oversight and user roles and responsibilities with regard to external system services, and includes security and privacy roles and responsibilities in the service contract or agreement.
+1. The Third-Party Risk team employs [Assignment: organization-defined] processes, methods, and techniques to monitor control compliance by external service providers on an ongoing basis, and retains the results as vendor security review records.
+1. The Third-Party Risk team includes language in service contracts or agreements requiring the provider to be subject to U.S. Federal laws and regulations protecting PII and to adhere to Example Org's security and privacy policies and standards consistent with 45 CFR § 155.260(b), and consults legal counsel, the senior privacy officer, and contracting officers about applicable laws, directives, policies, or regulations that may impact implementation.
+
+### Assess risk and obtain approval before acquiring or outsourcing information security services [NIST 800-53 SA-9(1) | ARC-AMPE SA-9(1) AE Mandatory]
+
+1. Before any acquisition or outsourcing of information security services, the Third-Party Risk team conducts an organizational assessment of risk and records the assessment outcome in the [Ticketing System].
+1. The Third-Party Risk team verifies that the acquisition or outsourcing of dedicated information security services is approved by [Assignment: organization-defined personnel or roles] before the engagement proceeds, and retains the approval with the vendor security review records.
+
+### Require providers to identify required functions, ports, protocols, and services [NIST 800-53 SA-9(2) Moderate, High | FedRAMP SA-9 | ARC-AMPE SA-9(2) AE Mandatory]
+
+1. The Third-Party Risk team requires providers of [Assignment: organization-defined external system services] to identify the functions, ports, protocols, and other services required for the use of those services, and records the provider's response in the vendor security review records.
+1. For FedRAMP-scope engagements, the Third-Party Risk team applies this requirement to all external systems where federal customer data is processed or stored.
+
+### Establish and verify trust relationships with external service providers [NIST 800-53 SA-9(3) | NIST 800-53 SA-9(4)]
+
+1. The Third-Party Risk team establishes, documents, and maintains trust relationships with external service providers based on [Assignment: organization-defined security and privacy requirements, properties, factors, or conditions defining acceptable trust relationships], recorded in the [Vendor Management System].
+1. The Third-Party Risk team takes [Assignment: organization-defined actions] to verify that the interests of [Assignment: organization-defined external service providers] are consistent with and reflect organizational interests, and documents the verification results.
+
+### Restrict and verify the geographic location of processing, data, and services [NIST 800-53 SA-9(5) | FedRAMP SA-9 | ARC-AMPE SA-9(5) AE Mandatory | NIST 800-53 SA-9(8) | ARC-AMPE SA-9(8) AE Mandatory]
+
+1. The Third-Party Risk team restricts the location of [Selection (one or more): information processing; information or data; system services] to [Assignment: organization-defined locations] based on [Assignment: organization-defined requirements], and records the restriction in each service contract or agreement.
+1. For FedRAMP Certification Classes C and D, the Third-Party Risk team restricts the location of information processing, information or data, and system services as defined; for Certification Class D, the team restricts all federal customer data to the U.S., U.S. Territories, or geographic locations where there is U.S. jurisdiction.
+1. The Third-Party Risk team verifies in no case are the safeguards afforded to sensitive information less than those mandated by state regulation, federal law, Executive Order, or other authoritative direction.
+1. The Third-Party Risk team ensures the system's PII is processed and stored within the continental U.S., Hawaii, or U.S. Territories. Where support, development, or IT services are to be off-shored, the Third-Party Risk team weighs that risk, documents the risk decision, and notifies CMS at least sixty (60) days prior to committing to outsourcing information system services outside the U.S. (e.g., by contract award or services purchase).
+1. The Third-Party Risk team restricts the geographic location of information processing and data storage to facilities located within the legal jurisdictional boundary of the United States.
+1. For organizations processing Federal Tax Information (FTI), the Third-Party Risk team adheres to IRS Publication 1075 and notifies CMS at least sixty (60) days prior to transmitting data into an external information service environment, per the Change Notification guidance.
+
+### Maintain exclusive key control and integrity checking for externally stored information [NIST 800-53 SA-9(6) | NIST 800-53 SA-9(7)]
+
+1. The Third-Party Risk team, with the security team, maintains exclusive control of cryptographic keys for encrypted material stored or transmitted through an external system, and verifies the key management arrangement is reflected in the service agreement.
+1. The Third-Party Risk team provides for, and periodically exercises, the capability to check the integrity of information while it resides in the external system, and records the results in the vendor security review records.
+
+### Develop, disseminate, and maintain the supply chain risk management policy [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+1. The designated SCRM official develops, documents, and disseminates to [Assignment: organization-defined personnel or roles] a supply chain risk management policy — at the [Selection (one or more): organization-level; mission/business process-level; system-level] — addressing purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines, along with procedures to facilitate implementation of the policy and associated SCRM controls.
+1. The designated SCRM official manages the development, documentation, and dissemination of the SCRM policy and procedures, and is named in the appropriate security and privacy documents.
+1. The SCRM official reviews and updates the SCRM policy and procedures at least every one (1) year, and following organization-defined events (e.g., assessment or audit findings; security or privacy incidents; changes to applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines), and records each review in the [Document Repository].
+
+### Retain HIPAA compliance documentation for six years [HIPAA Security Rule 164.316(b)(1) | HIPAA Security Rule 164.316(b)(2)(i) Required | HIPAA Security Rule 164.316(b)(2)(ii) Required | HIPAA Security Rule 164.316(b)(2)(iii) Required]
+
+1. The Third-Party Risk team maintains, in written (which may be electronic) form in the [Document Repository], the policies and procedures implemented to comply with the HIPAA Security Rule and any documented action, activity, or assessment.
+1. The Third-Party Risk team retains these records for 6 years from the date of creation or the date when last in effect, whichever is later.
+1. The Third-Party Risk team makes the records available to the persons responsible for implementing the procedures, and reviews them periodically and updates them as needed in response to environmental or operational changes affecting the security of ePHI.
+
+### Develop, review, and protect the supply chain risk management plan [NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+1. The SCRM official develops and documents a plan for managing supply chain risks associated with the research and development, design, manufacturing, acquisition, delivery, integration, operations and maintenance, and disposal of [Assignment: organization-defined systems, system components, or system services], addressing: management, implementation, and monitoring of SCRM controls; supply chain risk tolerance; acceptable risk mitigation strategies or controls; a process for consistently evaluating and monitoring supply chain risk; approaches for implementing and communicating the plan; description and justification of mitigation measures; and associated roles and responsibilities.
+1. The SCRM official reviews and updates the SCRM plan at least every one (1) year, or as required, to address threat, organizational, or environmental changes, and records each review in the [Document Repository].
+1. The SCRM official protects the SCRM plan from unauthorized disclosure and modification by storing it with access controls in the [Document Repository] and restricting edit rights to the SCRM team.
+
+### Charter and staff the supply chain risk management team [NIST 800-53 SR-2(1) | ARC-AMPE SR-2(1) AE Mandatory]
+
+1. The SCRM official establishes a supply chain risk management team consisting of [Assignment: organization-defined personnel, roles and responsibilities] to lead and support [Assignment: organization-defined] SCRM activities.
+1. The SCRM official ensures the team includes personnel with diverse roles — risk executive, information technology, contracting, information security, privacy, mission or business, legal, supply chain and logistics, acquisition, business continuity, and other relevant functions — collectively knowledgeable in acquisition processes, legal practices, vulnerabilities, threats, attack vectors, and system technical aspects and dependencies.
+1. The SCRM team refers to current NIST SCRM publications (e.g., NIST SP 800-161, NISTIR 8276) when carrying out its activities, and the charter is recorded in the [Document Repository].
+
+### Assess supplier and supply chain risks on an annual cycle [NIST 800-53 SR-6 | NIST 800-53 SR-6(1)]
+
+1. Annually, the Third-Party Risk team assesses and reviews the supply chain-related risks associated with suppliers or contractors and the system, system component, or system service they provide, considering: the supplier's security and SCRM processes; foreign ownership, control or influence (FOCI); and the supplier's ability to assess subordinate second-tier and third-tier suppliers and contractors.
+1. The Third-Party Risk team conducts these reviews itself or engages an independent third party, and retains the results as vendor security review records in the [Vendor Management System].
+1. The Third-Party Risk team employs [Selection (one or more): organizational analysis; independent third-party analysis; organizational testing; independent third-party testing] of [Assignment: organization-defined] supply chain elements, processes, and actors associated with the system, system component, or system service, and records the method and findings.
+
+### Establish supply chain compromise notification agreements and procedures [NIST 800-53 SR-8 | FedRAMP SR-8]
+
+1. The Third-Party Risk team establishes agreements and procedures with entities involved in the supply chain for the system, system component, or system service covering \[Selection (one or more): notification of supply chain compromises; [Assignment: organization-defined results of assessments or audits]\].
+1. For FedRAMP-scope engagements, the Third-Party Risk team ensures the supply chain notification agreements and procedures follow the FedRAMP Incident Evaluation and Communication rules.
+1. The Third-Party Risk team stores the executed notification agreements in the [Contract Repository] and exercises the notification procedures as part of the annual vendor security review.
+
+## Roles & Responsibilities
+
+The Third-Party Risk team is accountable for this process end to end: it initiates agreements, conducts vendor security reviews, maintains the vendor inventory and evidence, and coordinates all handoffs with legal counsel, contracting officers, the senior privacy officer, system owners, and the SCRM team. The Authorizing Official or other senior leadership — informed by senior cybersecurity or privacy officials — approves agreements and interconnections and is the only authority who may order immediate termination or suspension of an interconnection; exceptions to any step of this procedure require that same official's documented approval.
+
+## Related Standard
+
+This procedure operationalizes the **Business Associate & Vendor Risk Standard**, which contains the full requirement text, control mappings, and the rationale behind each step above.

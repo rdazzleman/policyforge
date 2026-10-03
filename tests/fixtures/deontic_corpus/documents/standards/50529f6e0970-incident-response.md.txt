@@ -1,0 +1,260 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.004863
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 0203a6c27e9e06a8
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Information Security Standard: Incident Response
+
+| Field              | Value                                                      |
+| ------------------ | ---------------------------------------------------------- |
+| Owning Team        | Security Operations                                        |
+| Cadence            | Continuous                                                 |
+| Evidence Artifacts | Incident tickets with timelines; Tabletop exercise report  |
+| Applies To         | All Example Org personnel, systems, and business processes |
+
+## 1. Purpose and Scope
+
+This Standard establishes the mandatory requirements for Example Org's incident response capability. It addresses the prevention, detection, containment, and correction of security violations, and the identification of and response to suspected or known security incidents. [NIST 800-53 IR-1 | FedRAMP IR-1 | HIPAA Security Rule 164.308(a)(6)(i) | HIPAA Security Rule 164.308(a)(1)(i)]
+
+Security Operations is accountable for this process end to end, including all handoffs between teams described in this Standard. Other teams named in this Standard participate in individual steps but do not own the process.
+
+Example Org must follow the FedRAMP Incident Evaluation and Communication rules in implementing the incident response controls defined in this Standard. [FedRAMP IR-1 | FedRAMP IR-2 | FedRAMP IR-3 | FedRAMP IR-4 | FedRAMP IR-5 | FedRAMP IR-6 | FedRAMP IR-7 | FedRAMP IR-8]
+
+## 2. Governance: Incident Response Policy and Procedures
+
+### 2.1 Policy and Procedures
+
+Security Operations must develop, document, and disseminate to [Assignment: organization-defined personnel or roles] an incident response policy, at the organization level, that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1]
+
+Security Operations must develop, document, and disseminate procedures to facilitate implementation of the incident response policy and the associated incident response controls. [NIST 800-53 IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1]
+
+These policies and procedures must be maintained in written (which may be electronic) form, must be made available to persons responsible for implementing the procedures, and must be reviewed periodically and updated as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA Security Rule 164.316(b)(1) | HIPAA Security Rule 164.316(b)(2)(ii) | HIPAA Security Rule 164.316(b)(2)(iii)]
+
+### 2.2 Designated Officials
+
+Example Org must designate an official to manage the development, documentation, and dissemination of the incident response policy and procedures. Example Org must designate officials responsible for managing incident response for systems and name them in the appropriate security and privacy documents. [NIST 800-53 IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1]
+
+### 2.3 Review and Update
+
+Security Operations must review and update the incident response policy and the incident response procedures at least every one (1) year and following [Assignment: organization-defined events], which must include assessment or audit findings; security or privacy incidents; and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1]
+
+Security Operations must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect incident response policies, and must review at least every one (1) year to ensure incident response policies and procedures remain effective. Security Operations must ensure incident response policy and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle, and must incorporate guidance from the privacy office for handling incidents involving Personally Identifiable Information (PII). [ARC-AMPE IR-1]
+
+### 2.4 Documentation Retention
+
+Security Operations must retain the documentation implemented for security incident response for six (6) years from the date of creation or the date it was last in effect, whichever is later. [HIPAA Security Rule 164.316(b)(1) | HIPAA Security Rule 164.316(b)(2)(i)]
+
+## 3. Roles and Responsibilities
+
+- **Security Operations** owns the incident response process end to end, including policy and procedure maintenance, incident handling, tracking, testing, training coordination, and reporting. The security operations center is responsible for actions to reduce the risk that an information security and/or privacy incident will occur and to respond appropriately to each incident or breach, and maintains primary responsibility for incident detection, including internal security monitoring and analysis of network traffic and logs. [ARC-AMPE IR-4]
+- **Information System Security Officer (ISSO)** participates in incident response coordination, including forensic malware analysis, and reviews and approves the incident response plan as defined in Section 10. [ARC-AMPE IR-4 | NIST 800-53 IR-8 | FedRAMP IR-8 | ARC-AMPE IR-8]
+- **Legal and Human Resources offices** participate in the handling of incidents involving insider threats as defined in Section 5. [NIST 800-53 IR-4(6) | FedRAMP IR-4(6) | ARC-AMPE IR-4(6)]
+- **Privacy office** provides guidance for handling incidents involving PII and participates in privacy incident and breach response as defined in Sections 10 and 11. [ARC-AMPE IR-1 | ARC-AMPE IR-8]
+- **Business Owner** approves the incident response plan as defined in Section 10. [NIST 800-53 IR-8 | FedRAMP IR-8 | ARC-AMPE IR-8]
+- **All personnel** must report suspected incidents as defined in Section 8. [NIST 800-53 IR-6 | FedRAMP IR-6 | ARC-AMPE IR-6]
+
+## 4. Incident Response Training
+
+### 4.1 Training Delivery and Frequency
+
+Security Operations must provide incident response training to system users consistent with assigned roles and responsibilities within one (1) month of assuming an incident response role or responsibility or acquiring system access. [NIST 800-53 IR-2 | FedRAMP IR-2 | ARC-AMPE IR-2]
+
+Security Operations must provide incident response training when required by system changes, and again within one (1) year of prior training. [NIST 800-53 IR-2 | FedRAMP IR-2 | ARC-AMPE IR-2]
+
+Security Operations must review and update incident response training content every one (1) year and following [Assignment: organization-defined events/incidents]. [NIST 800-53 IR-2 | FedRAMP IR-2 | ARC-AMPE IR-2]
+
+### 4.2 Training Content and Records
+
+Security Operations must formally maintain and record personnel participating in incident response training. Training must include privacy education and awareness associated with sending sensitive information (e.g., confidential, proprietary, financial, or PII), and should include how to recognize when sensitive information such as PII is involved so personnel can coordinate with the designated (e.g., privacy) official. [ARC-AMPE IR-2]
+
+Security Operations must incorporate simulated events into incident response training to facilitate the required response by personnel in crisis situations. [NIST 800-53 IR-2(1) High | FedRAMP IR-2(1)]
+
+Security Operations must provide an incident response training environment using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 IR-2(2) High | FedRAMP IR-2(2)]
+
+Security Operations must provide incident response training on how to identify and respond to a breach, including the organization's process for reporting a breach. That breach reporting process must comply with CMS' policy and plan for preparing for and responding to a breach of PII (see AT-02 for training frequency). [NIST 800-53 IR-2(3) | ARC-AMPE IR-2(3)]
+
+## 5. Incident Handling Capability
+
+### 5.1 Core Handling Process
+
+Security Operations must implement an incident handling capability for incidents that is consistent with the incident response plan and includes preparation, detection and analysis, containment, eradication, and recovery. [NIST 800-53 IR-4 | FedRAMP IR-4 | ARC-AMPE IR-4]
+
+Security Operations must coordinate incident handling activities with contingency planning activities. [NIST 800-53 IR-4 | FedRAMP IR-4 | ARC-AMPE IR-4]
+
+Security Operations must incorporate lessons learned from ongoing incident handling activities into incident response procedures, training, and testing, and must implement the resulting changes accordingly. [NIST 800-53 IR-4 | FedRAMP IR-4 | ARC-AMPE IR-4]
+
+Security Operations must ensure the rigor, intensity, scope, and results of incident handling activities are comparable and predictable across the organization. [NIST 800-53 IR-4 | FedRAMP IR-4 | ARC-AMPE IR-4]
+
+Security Operations must document relevant information related to security and privacy incidents in accordance with the current organization Incident Handling and Breach Notification Standard and Procedures, inclusive of CMS reporting requirements and timelines. [ARC-AMPE IR-4]
+
+### 5.2 Evidence, Forensics, and Vulnerability Response
+
+Security Operations must preserve evidence through technical means, including secured storage and "write" protection of evidence media; must use sound forensics processes and utilities that support legal requirements; and must determine and follow a chain of custody for forensic evidence. [ARC-AMPE IR-4]
+
+Security Operations must identify the vulnerability exploited during a security and privacy incident and implement safeguards to reduce risk and vulnerability exploit exposure, including isolating or disconnecting systems. [ARC-AMPE IR-4]
+
+Security Operations must coordinate incident response activities, including forensic malware analysis, with the Information System Security Officer (ISSO). [ARC-AMPE IR-4]
+
+Security Operations must maintain contact information for individuals within the organization and CMS who have incident handling responsibilities in the system Incident Response Plan. [ARC-AMPE IR-4]
+
+### 5.3 Automated Support and Dynamic Capabilities
+
+Security Operations must support the incident handling process using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 IR-4(1) Moderate, High | FedRAMP IR-4(1)]
+
+Security Operations must include [Assignment: organization-defined types of dynamic reconfiguration] for [Assignment: organization-defined system components] as part of the incident response capability. [NIST 800-53 IR-4(2) | FedRAMP IR-4(2)]
+
+Security Operations must employ [Assignment: organization-defined dynamic response capabilities] to respond to incidents. [NIST 800-53 IR-4(9)]
+
+Security Operations must implement a configurable capability to automatically disable the system if [Assignment: organization-defined security violations] are detected. [NIST 800-53 IR-4(5)]
+
+### 5.4 Incident Classes and Mission Continuation
+
+Security Operations must identify classes of incidents and take actions in response to those incidents to ensure continuation of organizational missions and business functions, including graceful degradation; information system shutdown; fall back to manual mode/alternative technology whereby the system operates differently; employing deceptive measures; alternate information flows; or operating in a mode reserved solely for when systems are under attack. Classes of incidents must be based on attack vector (e.g., attack via external media, the web, improper system use, loss of equipment). Incident response policies and procedures must be aligned with business continuity processes so business continuity planners are made aware of incidents and their impacts, and Security Operations must create written guidelines for prioritizing incidents and applying appropriate responses. [NIST 800-53 IR-4(3) | ARC-AMPE IR-4(3)]
+
+### 5.5 Correlation and Coordination
+
+Security Operations must correlate incident information and individual incident responses to achieve an organization-wide perspective on incident awareness and response. [NIST 800-53 IR-4(4) High | FedRAMP IR-4(4)]
+
+Security Operations must implement an incident handling capability for incidents involving insider threats, ensuring close coordination with the organization's legal and human resources offices. [NIST 800-53 IR-4(6) | FedRAMP IR-4(6) | ARC-AMPE IR-4(6)]
+
+Security Operations must coordinate the incident handling capability for insider threats with [Assignment: organization-defined organizational entities]. [NIST 800-53 IR-4(7)]
+
+Security Operations must coordinate with [Assignment: organization-defined external organizations] to correlate and share [Assignment: organization-defined incident information] to achieve a cross-organization perspective on incident awareness and more effective incident responses. [NIST 800-53 IR-4(8)]
+
+Security Operations must coordinate incident handling activities involving supply chain events with other organizations involved in the supply chain. [NIST 800-53 IR-4(10)]
+
+### 5.6 Incident Response Team and Technical Analysis
+
+Security Operations must establish and maintain an integrated incident response team that can be deployed to any location identified by the organization within [Assignment: organization-defined time period]. [NIST 800-53 IR-4(11) High | FedRAMP IR-4(11)]
+
+Security Operations must analyze malicious code and/or other residual artifacts remaining in the system after the incident. [NIST 800-53 IR-4(12)]
+
+Security Operations must analyze anomalous or suspected adversarial behavior in or related to [Assignment: organization-defined environments or resources]. [NIST 800-53 IR-4(13)]
+
+Security Operations must establish and maintain a security operations center. [NIST 800-53 IR-4(14)]
+
+Security Operations must manage public relations associated with an incident and employ measures to repair the reputation of the organization. [NIST 800-53 IR-4(15)]
+
+## 6. Continuous Monitoring and System Activity Review
+
+Security Operations must implement procedures to regularly review records of information system activity, such as audit logs, access reports, and security incident tracking reports. This review runs on a continuous basis as part of the incident detection responsibility defined in Section 5. [HIPAA Security Rule 164.308(a)(1)(ii)(D) | ARC-AMPE IR-4]
+
+## 7. Testing and Exercise of the Incident Response Capability
+
+### 7.1 Testing Requirements
+
+Security Operations must test the effectiveness of the incident response capability for the system within every one (1) year using [Assignment: organization-defined tests] to determine incident response effectiveness, and must document the results. [NIST 800-53 IR-3 Moderate, High | FedRAMP IR-3 | ARC-AMPE IR-3]
+
+The organization's documented response to an actual incident may be used as part of an incident response capability test. Any response capabilities not exercised during the previous actual incident response must be additionally exercised (or simulated) as part of the test. [Assignment: organization-defined tests] may include checklists, walk-throughs, discussion-based or tabletop exercises, simulations, and comprehensive exercises. [ARC-AMPE IR-3]
+
+Security Operations must test the incident response capability using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 IR-3(1)]
+
+Security Operations must coordinate incident response testing with organizational elements responsible for related plans, including business continuity plans, disaster recovery plans, continuity of operations plans, contingency plans, crisis communications plans, critical infrastructure plans, and occupant emergency plans. [NIST 800-53 IR-3(2) Moderate, High | FedRAMP IR-3(2) | ARC-AMPE IR-3(2)]
+
+### 7.2 Measurement and Improvement
+
+Security Operations must determine the effectiveness of incident response processes, continuously improve them, and provide incident response measures and metrics that are accurate, consistent, and in a reproducible format. [NIST 800-53 IR-3(3)]
+
+### 7.3 Exercise Evidence
+
+Tabletop exercises conducted under this section must produce a Tabletop exercise report, which Security Operations must retain as evidence of capability testing. [ARC-AMPE IR-3]
+
+## 8. Incident Tracking and Documentation
+
+Security Operations must track and document incidents, including maintaining records about each incident, its status, and other pertinent information necessary for forensics as well as evaluating incident details, trends, and handling. [NIST 800-53 IR-5 | FedRAMP IR-5 | ARC-AMPE IR-5]
+
+Security Operations must track incidents and collect and analyze incident information using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 IR-5(1) High | FedRAMP IR-5(1)]
+
+Each incident must be recorded as an incident ticket in the [Ticketing System], and incident tickets must include timelines. Incident tickets with timelines are the evidence of record for incident tracking under this section. [NIST 800-53 IR-5 | FedRAMP IR-5 | ARC-AMPE IR-5]
+
+Security Operations must identify and respond to suspected or known security incidents; must mitigate, to the extent practicable, the harmful effects of security incidents known to the covered entity or business associate; and must document security incidents and their outcomes. [HIPAA Security Rule 164.308(a)(6)(ii)]
+
+## 9. Incident Reporting
+
+### 9.1 Internal Reporting
+
+Security Operations must require personnel to report suspected incidents to the organizational incident response capability within the timeframe established in the current organization Incident Handling Procedure. [NIST 800-53 IR-6 | FedRAMP IR-6 | ARC-AMPE IR-6]
+
+Security Operations must report incident information to [Assignment: organization-defined authorities]. Suspected incident information must be reported to CMS within the timeframe established in the organization Incident Handling Procedure and applicable current legally binding agreements (e.g., Computer Matching Agreement, Information Exchange Agreement, Data Usage Agreement, Business Agreement, or Interconnection Security Agreement). [NIST 800-53 IR-6 | FedRAMP IR-6 | ARC-AMPE IR-6]
+
+State Administering Entities (AEs) must report potential or confirmed security incidents within one (1) hour of discovery by completing the CMS ACA Security and Privacy Incident Response Template and notifying the CMS IT Service Desk via email to cms_it_service_desk@cms.hhs.gov or by calling 1-800-562-1963, with CMS and State AE personnel working together for the duration of the incident and CMS personnel notifying any affected federal agencies. [ARC-AMPE IR-6]
+
+### 9.2 Reporting Mechanisms and Recipients
+
+Security Operations must report incidents using [Assignment: organization-defined automated mechanisms] (including email, posting on web sites, and automated incident response tools and programs). [NIST 800-53 IR-6(1) Moderate, High | FedRAMP IR-6(1) | ARC-AMPE IR-6(1)]
+
+Security Operations must report system vulnerabilities associated with reported incidents to [Assignment: organization-defined personnel or roles]. [NIST 800-53 IR-6(2)]
+
+Security Operations must provide incident information to the provider of the product or service and other organizations involved in the supply chain or supply chain governance for systems or system components related to the incident. [NIST 800-53 IR-6(3) Moderate, High | FedRAMP IR-6(3)]
+
+### 9.3 Business Associate and Plan Sponsor Reporting
+
+Example Org must require business associates (and subcontractors, via contract or other arrangement) to report to the covered entity any security incident of which they become aware, including breaches of unsecured protected health information as required by § 164.410. [HIPAA Security Rule 164.314(a)(2)(i) | HIPAA Security Rule 164.314(a)(2)(iii)]
+
+Example Org must require the plan sponsor of a group health plan to report to the group health plan any security incident of which it becomes aware, in addition to implementing reasonable and appropriate administrative, physical, and technical safeguards for electronic protected health information. [HIPAA Security Rule 164.314(b)(1) | HIPAA Security Rule 164.314(b)(2)]
+
+## 10. Incident Response Support Resources
+
+Security Operations must provide an incident response support resource, integral to the organizational incident response capability, that offers advice and assistance to users of the system for the handling and reporting of incidents. Such resources may include help desks, assistance groups, automated ticketing systems to open and track incident response tickets (implemented via the [Ticketing System]), and access to forensics services or consumer redress services when required. For PII-related incidents, such resources may include the forensic, technical, policy, and legal expertise of Information Assurance Officers/Managers, Privacy Officers, Legal Counsel, and external or internal IT help desks. [NIST 800-53 IR-7 | FedRAMP IR-7 | ARC-AMPE IR-7]
+
+Security Operations must increase the availability of incident response information and support using [Assignment: organization-defined automated mechanisms] to the maximum extent possible. [NIST 800-53 IR-7(1) Moderate, High | FedRAMP IR-7(1) | ARC-AMPE IR-7(1)]
+
+Security Operations must establish a direct, cooperative relationship between the organization's incident response capability and external providers of system protection capability, and must identify organizational incident response team members to those external providers. [NIST 800-53 IR-7(2) | ARC-AMPE IR-7(2)]
+
+## 11. Incident Response Plan
+
+### 11.1 Plan Development and Content
+
+Security Operations must develop an incident response plan that:
+
+- provides a roadmap for implementing the incident response capability;
+- describes the structure and organization of the capability;
+- provides a high-level approach for how the capability fits into the overall organization;
+- meets the unique requirements of the organization relating to mission, size, structure, and functions;
+- defines reportable incidents;
+- provides metrics for measuring the incident response capability;
+- defines the resources and management support needed to maintain and mature the capability;
+- addresses the sharing of incident information;
+- is reviewed and approved by the applicable Information System Security Officer (ISSO) and approved by the Business Owner at least every one (1) year; and
+- explicitly designates responsibility for incident response to the applicable ISSO, approved by the Business Owner.
+
+[NIST 800-53 IR-8 | FedRAMP IR-8 | ARC-AMPE IR-8]
+
+### 11.2 Plan Distribution, Update, and Protection
+
+Security Operations must distribute copies of the incident response plan to incident response personnel, including all personnel with a role or responsibility for implementing the plan (such as the CISO, CIO, ISSO, Senior Privacy Official, Incident Management/Response Team, PII Breach Response Team, Operations Centers personnel, appropriate legal officials, and public relations or communications officials). [NIST 800-53 IR-8 | FedRAMP IR-8 | ARC-AMPE IR-8]
+
+Security Operations must update the incident response plan to address system and organizational changes or problems encountered during plan implementation, execution, or testing, at a minimum every one (1) year or when incident response event(s) demonstrate a change/update is needed to improve the plan. Security Operations must communicate plan changes to all personnel with a role or responsibility for implementing the plan, and must protect the plan from unauthorized disclosure and modification. [NIST 800-53 IR-8 | FedRAMP IR-8 | ARC-AMPE IR-8]
+
+### 11.3 Privacy Incident and Breach Response Plan
+
+Security Operations must develop and implement a Privacy Incident and Breach Response Plan. [ARC-AMPE IR-8]
+
+For breaches involving PII, the incident response plan must include:
+
+- a process to determine if notice to individuals or other organizations, including oversight organizations, is needed;
+- an assessment process to determine the extent of the harm, embarrassment, inconvenience, or unfairness to affected individuals and mechanisms to mitigate such harms; and
+- identification of applicable privacy requirements.
+
+[NIST 800-53 IR-8(1) | ARC-AMPE IR-8(1)]
+
+## 12. Evidence and Records
+
+The following artifacts are the evidence of record for this Standard and must be produced and retained by Security Operations:
+
+- **Incident tickets with timelines**, maintained in the [Ticketing System] for every tracked incident, including records about each incident, its status, and other pertinent information necessary for forensics as well as evaluating incident details, trends, and handling. [NIST 800-53 IR-5 | FedRAMP IR-5 | ARC-AMPE IR-5]
+- **Tabletop exercise report**, documenting the results of incident response capability testing conducted under Section 7. [NIST 800-53 IR-3 Moderate, High | FedRAMP IR-3 | ARC-AMPE IR-3]
+
+Incident response policy and procedure documentation must be retained for six (6) years from the date of creation or the date it was last in effect, whichever is later, per Section 2.4. [HIPAA Security Rule 164.316(b)(1) | HIPAA Security Rule 164.316(b)(2)(i)]
+
+## 13. Compliance and Enforcement
+
+Compliance with this Standard is mandatory for all personnel and systems within scope. Security Operations is accountable for the outcome of this process end to end and must be able to demonstrate compliance through the evidence artifacts defined in Section 12. Violations of this Standard must be addressed through the incident handling and corrective requirements of Sections 5 and 8. [NIST 800-53 IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1 | HIPAA Security Rule 164.308(a)(6)(i)]

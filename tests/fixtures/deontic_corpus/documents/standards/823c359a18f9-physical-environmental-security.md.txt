@@ -1,0 +1,269 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.003748
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - e7d2346f42cbddb6
+  provider: litellm
+  provider_class: third-party
+---
+
+# Physical & Environmental Security Standard
+
+## 1. Purpose
+
+This Standard establishes the requirements for protecting Example Org's facilities, physical infrastructure, systems, and information assets from unauthorized physical access, tampering, theft, and environmental hazards. It is issued under the authority of Example Org's information security program and is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines.
+
+## 2. Scope
+
+This Standard applies to all facilities in which Example Org electronic information systems reside, all personnel and visitors granted physical access to those facilities, all workstations that access electronic protected health information, and all system components, media, and output devices located within or moving through those facilities.
+
+## 3. Roles and Responsibilities
+
+The **Facilities / Physical Security team** owns this Standard and the processes it defines end to end, including execution, review, evidence production, and coordination with other participating teams.
+
+The Facilities / Physical Security team shall coordinate with the organizational incident response capability, the privacy office and/or the senior official for privacy, and authorized maintenance personnel as specified in the individual requirements below.
+
+## 4. Policy and Procedure Governance
+
+4.1 The Facilities / Physical Security team shall develop, document, and disseminate to applicable personnel or roles an organization-level physical and environmental protection policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines. The policy may be developed at the mission/business process level or system level. [NIST PE-1 | ARC PE-1 AE Mandatory]
+
+4.2 The Facilities / Physical Security team shall develop, document, and disseminate procedures to facilitate the implementation of the physical and environmental protection policy and the associated physical and environmental protection controls. [NIST PE-1 | ARC PE-1 AE Mandatory]
+
+4.3 An organization-defined official shall be designated to manage the development, documentation, and dissemination of the physical and environmental protection policy and procedures. Under ARC, this official must be documented in the organization's System Security and Privacy Policy. [NIST PE-1 | ARC PE-1 AE Mandatory]
+
+4.4 The Facilities / Physical Security team shall review and update the current physical and environmental protection policy and procedures at least every one (1) year and following organization-defined events (e.g., assessment or audit findings, security or privacy incidents, and changes to applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines). [NIST PE-1 | ARC PE-1 AE Mandatory]
+
+4.5 The Facilities / Physical Security team shall actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect physical and environmental protection policies, and review at least annually to ensure the policies and procedures remain effective. [ARC PE-1 AE Mandatory]
+
+4.6 The physical and environmental protection policy and associated controls must support privacy to the greatest extent feasible throughout the system's life cycle, and limit unnecessary or inappropriate access to Personally Identifiable Information (PII). [ARC PE-1 AE Mandatory]
+
+4.7 The Facilities / Physical Security team shall implement policies and procedures to limit physical access to electronic information systems and the facilities in which they are housed, while ensuring properly authorized access is allowed. [HIPAA 164.310(a)(1)]
+
+4.8 The Facilities / Physical Security team shall implement policies and procedures to safeguard the facility and the equipment therein from unauthorized physical access, tampering, and theft. [HIPAA 164.310(a)(2)(ii) Addressable]
+
+4.9 The Facilities / Physical Security team shall implement policies and procedures to document repairs and modifications to the physical components of a facility that are related to security (e.g., hardware, walls, doors, and locks). [HIPAA 164.310(a)(2)(iv) Addressable]
+
+## 5. Facility Access Authorization
+
+5.1 The Facilities / Physical Security team shall develop, approve, and maintain a list of individuals with authorized access to the facility where the system resides. [NIST PE-2 | ARC PE-2 AE Mandatory]
+
+5.2 The Facilities / Physical Security team shall issue authorization credentials for facility access. [NIST PE-2 | ARC PE-2 AE Mandatory]
+
+5.3 The Facilities / Physical Security team shall review the access list detailing authorized facility access by individuals at least every six (6) months. [ARC PE-2 AE Mandatory | NIST PE-2]
+
+5.4 The Facilities / Physical Security team shall remove individuals from the facility access list when access is no longer required. [NIST PE-2 | ARC PE-2 AE Mandatory]
+
+5.5 Physical access to the facility where the system resides shall be authorized based on position or role. [NIST PE-2(1) | ARC PE-2 AE Mandatory]
+
+5.6 Two forms of identification from [Assignment: organization-defined list of acceptable forms of identification] shall be required for visitor access to the facility where the system resides. [NIST PE-2(2)]
+
+5.7 Unescorted access to the facility where the system resides shall be restricted to personnel with security clearances, formal access authorizations, a need for access to all information contained within the system, or [Assignment: organization-defined physical access authorizations]. [NIST PE-2(3)]
+
+## 6. Physical Access Controls
+
+6.1 The Facilities / Physical Security team shall enforce physical access authorizations at entry and exit points to the facility where the system resides by verifying individual access authorizations before granting access and controlling ingress and egress using [Assignment: organization-defined physical access control systems or devices] and/or guards. [NIST PE-3 | ARC PE-3 AE Mandatory]
+
+6.2 The Facilities / Physical Security team shall maintain physical access audit logs for entry or exit points. [NIST PE-3 | ARC PE-3 AE Mandatory]
+
+6.3 Access to areas within the facility designated as publicly accessible shall be controlled by implementing [Assignment: organization-defined physical access controls or security safeguards]. [NIST PE-3 | ARC PE-3 AE Mandatory]
+
+6.4 Visitors shall be escorted and visitor activity controlled in [Assignment: organization-defined circumstances]. [NIST PE-3 | ARC PE-3 AE Mandatory]
+
+6.5 The Facilities / Physical Security team shall secure keys, combinations, and other physical access devices. [NIST PE-3 | ARC PE-3 AE Mandatory]
+
+6.6 The Facilities / Physical Security team shall inventory [Assignment: organization-defined physical access devices] every ninety (90) days. [ARC PE-3 AE Mandatory | NIST PE-3]
+
+6.7 Combinations and keys shall be changed at least every one (1) year or earlier as required by a security-relevant event, and/or when keys are lost, combinations are compromised, or when individuals possessing the keys or combinations are transferred or terminated. [ARC PE-3 AE Mandatory | NIST PE-3]
+
+6.8 Access to the data center/facility shall be controlled using door and window locks, security personnel, or physical authentication devices (e.g., biometrics and smart card/PIN combination). [ARC PE-3 AE Mandatory]
+
+6.9 Servers shall be stored and operated in physically secure environments and access granted to explicitly authorized personnel only; access to grounds/facilities shall be restricted to authorized persons only. [ARC PE-3 AE Mandatory]
+
+6.10 The Facilities / Physical Security team shall create a restricted area, security room, or locked room to control access to areas containing PII, and require two barriers to access PII under normal security (secured perimeter/locked container, locked perimeter/secured interior, or locked perimeter/security container); protected information must be containerized in areas where other than authorized employees may have access after hours. [ARC PE-3 AE Mandatory]
+
+6.11 Physical access authorizations to the system, in addition to the facility physical access controls, shall be enforced at [Assignment: organization-defined physical spaces]. [NIST PE-3(1) High]
+
+6.12 Security checks shall be performed at [Assignment: organization-defined frequency] at the physical perimeter of the facility or system for exfiltration of information or removal of system components. [NIST PE-3(2)]
+
+6.13 Guards shall be employed to control [Assignment: organization-defined physical access points] to the facility where the system resides 24 hours per day, 7 days per week. [NIST PE-3(3)]
+
+6.14 Lockable physical casings shall be used to protect [Assignment: organization-defined system components] from unauthorized physical access. [NIST PE-3(4)]
+
+6.15 [Assignment: organization-defined anti-tamper technologies] shall be employed to detect and/or prevent physical tampering or alteration of [Assignment: organization-defined hardware components] within the system. [NIST PE-3(5)]
+
+6.16 Access shall be limited using physical barriers. [NIST PE-3(7)]
+
+6.17 Access control vestibules shall be employed at [Assignment: organization-defined locations]. [NIST PE-3(8)]
+
+6.18 The Facilities / Physical Security team shall establish (and implement as needed) procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan in the event of an emergency. [HIPAA 164.310(a)(2)(i) Addressable]
+
+## 7. Workstation Security
+
+7.1 The Facilities / Physical Security team shall implement physical safeguards for all workstations that access electronic protected health information to restrict access to authorized users. [HIPAA 164.310(c)]
+
+7.2 The Facilities / Physical Security team shall implement policies and procedures that specify the proper functions to be performed, the manner in which those functions are to be performed, and the physical attributes of the surroundings of a specific workstation or class of workstation that can access electronic protected health information. [HIPAA 164.310(b)]
+
+## 8. Transmission Lines and Output Devices
+
+8.1 Physical access to [Assignment: organization-defined system distribution and transmission lines] within organizational facilities shall be controlled using [Assignment: organization-defined security controls or safeguards]. [NIST PE-4 Moderate/High | ARC PE-4 AE Mandatory]
+
+8.2 The Facilities / Physical Security team shall disable any physical ports (e.g., wiring closets and patch panels) not in use. [ARC PE-4 AE Mandatory]
+
+8.3 Physical access to output from [Assignment: organization-defined output devices] shall be controlled to prevent unauthorized individuals from obtaining the output. [NIST PE-5 Moderate/High | ARC PE-5 AE Mandatory]
+
+8.4 Individual identity shall be linked to receipt of output from output devices. [NIST PE-5(2)]
+
+## 9. Physical Access Monitoring
+
+9.1 The Facilities / Physical Security team shall monitor physical access to the facility where the system resides to detect and respond to physical security incidents. [NIST PE-6 | ARC PE-6 AE Mandatory]
+
+9.2 The Facilities / Physical Security team shall review physical access logs at least monthly (every thirty [30] days) and upon occurrence of organization-defined events or potential indications of events. [ARC PE-6 AE Mandatory | NIST PE-6]
+
+9.3 The Facilities / Physical Security team shall coordinate results of reviews and investigations with the organizational incident response capability. [NIST PE-6 | ARC PE-6 AE Mandatory]
+
+9.4 Physical access to the facility where the system resides shall be monitored using physical intrusion alarms and surveillance equipment. [NIST PE-6(1) Moderate/High | ARC PE-6(1) AE Mandatory]
+
+9.5 [Assignment: organization-defined classes or types of intrusions] shall be recognized and [Assignment: organization-defined response actions] initiated using [Assignment: organization-defined automated mechanisms]. [NIST PE-6(2)]
+
+9.6 Video surveillance shall be employed of [Assignment: organization-defined operational areas], video recordings reviewed at [Assignment: organization-defined frequency], and recordings retained for [Assignment: organization-defined time period]. [NIST PE-6(3)]
+
+9.7 Physical access to the system, in addition to facility physical access monitoring, shall be monitored at [Assignment: organization-defined physical spaces]. [NIST PE-6(4) High]
+
+## 10. Visitor Access
+
+10.1 The Facilities / Physical Security team shall maintain visitor access records to the facility where the system resides for at least one (1) year. [ARC PE-8 AE Mandatory | NIST PE-8]
+
+10.2 The Facilities / Physical Security team shall review visitor access records at least monthly (every thirty [30] days). [ARC PE-8 AE Mandatory | NIST PE-8]
+
+10.3 Anomalies in visitor access records shall be reported to [Assignment: organization-defined personnel or roles]. [NIST PE-8 | ARC PE-8 AE Mandatory]
+
+10.4 At a minimum, visitor access records must include the name and organization of the person visiting, the visitor's signature, form of identification, date of access, time of entry and departure, purpose of visit, and the name and organization of the person visited. [ARC PE-8 AE Mandatory]
+
+10.5 The policy for collection and retention of visitor access records shall be reviewed by the privacy office and/or the senior official for privacy. [ARC PE-8 AE Mandatory]
+
+10.6 Visitor access records shall be maintained and reviewed using [Assignment: organization-defined automated mechanisms]. [NIST PE-8(1) High]
+
+10.7 Personally identifiable information contained in visitor access records shall be limited to the elements identified in the privacy risk assessment. [NIST PE-8(3)]
+
+## 11. Power Equipment and Emergency Power-Off
+
+11.1 Power equipment and power cabling for the system shall be protected from damage and destruction. [NIST PE-9 Moderate/High | ARC PE-9 AE Mandatory]
+
+11.2 Only authorized maintenance personnel shall be permitted to access infrastructure assets, including power generators; heating, ventilation, and air conditioning (HVAC) systems; cabling; and wiring closets. [ARC PE-9 AE Mandatory]
+
+11.3 Redundant power cabling paths that are physically separated by [Assignment: organization-defined distance] shall be employed. [NIST PE-9(1)]
+
+11.4 Automatic voltage controls shall be employed for [Assignment: organization-defined critical system components]. [NIST PE-9(2)]
+
+11.5 The capability of shutting off power to [Assignment: organization-defined system or individual system components] in emergency situations shall be provided. [NIST PE-10 Moderate/High | ARC PE-10 AE Mandatory]
+
+11.6 Emergency shutoff switches or devices shall be placed in [Assignment: organization-defined location] by system or system component to facilitate access for authorized personnel. [NIST PE-10 Moderate/High | ARC PE-10 AE Mandatory]
+
+11.7 The emergency power shutoff capability shall be protected from unauthorized activation. [NIST PE-10 Moderate/High | ARC PE-10 AE Mandatory]
+
+11.8 A main power switch or emergency cut-off switch shall be implemented and maintained, prominently marked and protected by a cover, for data centers, servers, and mainframe rooms. [ARC PE-10 AE Mandatory]
+
+## 12. Power Supply Continuity
+
+12.1 An uninterruptible power supply shall be provided to facilitate an orderly shutdown of the system and/or transition of the system to long-term alternate power in the event of a primary power source loss. [NIST PE-11 Moderate/High | ARC PE-11 AE Mandatory]
+
+12.2 Emergency power equipment shall be tested on a schedule that complies with manufacturer recommendations and local, state, and federal requirements, and no less often than every three (3) years. [ARC PE-11 AE Mandatory]
+
+12.3 An alternate power supply for the system, activated manually or automatically, that can maintain minimally required operational capability in the event of an extended loss of the primary power source shall be provided. [NIST PE-11(1) High]
+
+12.4 An alternate power supply shall be provided that is self-contained, not reliant on external power generation, and capable of maintaining minimally required or full operational capability in the event of an extended loss of the primary power source. [NIST PE-11(2)]
+
+## 13. Emergency Lighting
+
+13.1 Automatic emergency lighting for the system shall be employed and maintained that activates in the event of a power outage or disruption and that covers emergency exits and evacuation routes within the facility. [NIST PE-12 | ARC PE-12 AE Mandatory]
+
+13.2 Emergency lighting equipment shall be tested on a schedule that complies with manufacturer recommendations and local, state, and federal requirements, and no less often than every three (3) years. [ARC PE-12 AE Mandatory]
+
+13.3 Emergency lighting shall be provided for all areas within the facility supporting essential mission and business functions. [NIST PE-12(1)]
+
+## 14. Fire Protection
+
+14.1 Fire detection and suppression systems that are supported by an independent energy source shall be employed and maintained. [NIST PE-13 | ARC PE-13 AE Mandatory]
+
+14.2 Fire protection equipment shall be tested on a schedule that complies with manufacturer recommendations and local, state, and federal requirements, and no less often than every three (3) years. [ARC PE-13 AE Mandatory]
+
+14.3 Fire detection systems shall be employed that activate automatically and notify [Assignment: organization-defined personnel or roles] and [Assignment: defined emergency responders] in the event of a fire. [NIST PE-13(1) Moderate/High | ARC PE-13(1) AE Mandatory]
+
+14.4 Fire suppression systems shall be employed that activate automatically and notify [Assignment: organization-defined personnel or roles] and [Assignment: organization-defined emergency responders], and an automatic fire suppression capability shall be employed when the facility is not staffed on a continuous basis. [NIST PE-13(2) High]
+
+14.5 The facility shall undergo fire protection inspections by authorized and qualified inspectors at [Assignment: organization-defined frequency], and identified deficiencies shall be resolved within [Assignment: organization-defined time period]. [NIST PE-13(4)]
+
+## 15. Environmental Controls
+
+15.1 Temperature, humidity, and pressure levels within the facility where the system resides shall be maintained at acceptable levels — under ARC, at acceptable vendor-specified levels consistent with the ASHRAE document *Thermal Guidelines for Data Processing Environments* (NIST 800-53 also permits radiation or other organization-defined environmental controls). [NIST PE-14 | ARC PE-14 AE Mandatory]
+
+15.2 Environmental control levels shall be monitored at [Assignment: organization-defined frequency]. The Facilities / Physical Security team shall retain the resulting Data centre environmental monitoring records as evidence of compliance with this requirement. [NIST PE-14 | ARC PE-14 AE Mandatory]
+
+15.3 When environmental control alerts occur, the alert level shall be evaluated and the prescribed guidelines for that level followed, component management alerted of possible loss of service and/or media, and damage reported, remedial action provided, and the contingency plan implemented if necessary. [ARC PE-14 AE Mandatory]
+
+15.4 [Assignment: organization-defined automatic environmental controls] shall be employed in the facility to prevent fluctuations potentially harmful to the system. [NIST PE-14(1)]
+
+15.5 Environmental control monitoring shall be employed that provides an alarm or notification of changes potentially harmful to personnel or equipment to [Assignment: organization-defined personnel or roles]. [NIST PE-14(2)]
+
+## 16. Water Damage Protection
+
+16.1 The system shall be protected from damage resulting from water leakage by providing master shutoff or isolation valves that are accessible, working properly, and known to key personnel. [NIST PE-15 | ARC PE-15 AE Mandatory]
+
+16.2 Water damage protection equipment shall be tested on a schedule that complies with manufacturer recommendations and local, state, and federal requirements, and no less often than every three (3) years. [ARC PE-15 AE Mandatory]
+
+16.3 The presence of water near the system shall be detected and [Assignment: organization-defined personnel or roles] alerted using [Assignment: organization-defined automated mechanisms]. [NIST PE-15(1) High]
+
+## 17. Equipment and Media Control
+
+17.1 All system components entering and exiting the facility shall be authorized and controlled. [NIST PE-16 | ARC PE-16 AE Mandatory]
+
+17.2 Records of the system components shall be maintained. [NIST PE-16 | ARC PE-16 AE Mandatory]
+
+17.3 The Facilities / Physical Security team shall implement policies and procedures that govern the receipt and removal of hardware and electronic media containing electronic protected health information into and out of a facility, and the movement of these items within the facility. [HIPAA 164.310(d)(1)]
+
+17.4 The Facilities / Physical Security team shall implement policies and procedures to address the final disposition of electronic protected health information, and/or the hardware or electronic media on which it is stored. [HIPAA 164.310(d)(2)(i) Required]
+
+17.5 Procedures shall be implemented for removal of electronic protected health information from electronic media before the media are made available for re-use. [HIPAA 164.310(d)(2)(ii) Required]
+
+17.6 A record shall be maintained of the movements of hardware and electronic media and any person responsible therefor. [HIPAA 164.310(d)(2)(iii) Addressable]
+
+17.7 A retrievable, exact copy of electronic protected health information shall be created, when needed, before movement of equipment. [HIPAA 164.310(d)(2)(iv) Addressable]
+
+## 18. Alternate Work Sites
+
+18.1 The Facilities / Physical Security team shall determine and document the alternate work sites allowed for use by employees. [NIST PE-17 Moderate/High | ARC PE-17 AE Mandatory]
+
+18.2 [Assignment: organization-defined controls] shall be employed at alternate work sites; under ARC, these controls should be defined in the appropriate System Security and Privacy Plan (SSPP). [NIST PE-17 Moderate/High | ARC PE-17 AE Mandatory]
+
+18.3 The effectiveness of controls at alternate work sites shall be assessed. [NIST PE-17 Moderate/High | ARC PE-17 AE Mandatory]
+
+18.4 A means shall be provided for employees to communicate with information security and privacy personnel in case of incidents. [NIST PE-17 Moderate/High | ARC PE-17 AE Mandatory]
+
+## 19. Component Placement
+
+19.1 System components shall be positioned within the facility to minimize potential damage from [Assignment: organization-defined physical and environmental hazards] and to minimize the opportunity for unauthorized access. [NIST PE-18 High]
+
+## 20. Documentation, Retention, and Availability
+
+20.1 The Facilities / Physical Security team shall maintain the policies, procedures, and any required documented actions, activities, or assessments under this Standard in written (which may be electronic) form. [HIPAA 164.316(b)(1)]
+
+20.2 Required documentation shall be retained for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA 164.316(b)(2)(i) Required]
+
+20.3 Documentation shall be made available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii) Required]
+
+20.4 Documentation shall be reviewed periodically and updated as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii) Required]
+
+## 21. Assurance and Evidence
+
+The Facilities / Physical Security team shall execute the assurance and evidence cycle for this Standard quarterly. At minimum, each cycle shall produce and retain the following evidence artifacts:
+
+| Evidence Artifact                            | Related Requirement                                                           |
+| -------------------------------------------- | ----------------------------------------------------------------------------- |
+| Badge access review                          | Sections 5 and 6 (facility access authorization and physical access controls) |
+| Data centre environmental monitoring records | Section 15 (environmental controls)                                           |
+
+The Facilities / Physical Security team is accountable for the completeness of these artifacts and for their retention in accordance with Section 20.

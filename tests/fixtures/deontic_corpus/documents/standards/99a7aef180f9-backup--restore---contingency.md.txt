@@ -1,0 +1,361 @@
+# Acme Health Contingency Planning Standard
+
+## 1. Purpose
+
+This standard establishes mandatory requirements for contingency planning at Acme Health to ensure the organization can respond to, recover from, and reconstitute operations following disruptions, compromises, or failures affecting systems containing electronic protected health information and other critical information systems.
+
+## 2. Scope
+
+This standard applies to all Acme Health information systems, including systems containing electronic protected health information (ePHI), and to all personnel, contractors, and third parties responsible for contingency planning, implementation, testing, and execution.
+
+## 3. Policy and Procedures
+
+### 3.1 Policy Development and Management
+
+Acme Health shall:
+
+- Develop, document, and disseminate to [Assignment: organization-defined personnel or roles] a [Selection (one or more): organization-level; mission/business process-level; system-level] contingency planning policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 CP-1 Low, Moderate, High | ARC-AMPE CP-1 AE Mandatory]
+
+- Develop and disseminate procedures to facilitate implementation of the contingency planning policy and associated controls. [NIST 800-53 CP-1 Low, Moderate, High | ARC-AMPE CP-1 AE Mandatory]
+
+- Designate an [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the contingency planning policy and procedures. [NIST 800-53 CP-1 Low, Moderate, High | ARC-AMPE CP-1 AE Mandatory]
+
+- Establish policies and procedures for responding to an emergency or other occurrence (for example, fire, vandalism, system failure, and natural disaster) that damages systems that contain electronic protected health information. [HIPAA Security Rule 164.308(a)(7)(i)]
+
+### 3.2 Policy and Procedure Review and Updates
+
+Acme Health shall:
+
+- Review and update the contingency planning policy [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]; at least every one (1) year for ARC-AMPE. [NIST 800-53 CP-1 Low, Moderate, High | ARC-AMPE CP-1 AE Mandatory]
+
+- Review and update the contingency planning procedures [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]; at least every one (1) year for ARC-AMPE. [NIST 800-53 CP-1 Low, Moderate, High | ARC-AMPE CP-1 AE Mandatory]
+
+- Review contingency planning documentation periodically, and update as needed, in response to environmental or operational changes affecting the security of the electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+### 3.3 Documentation and Records Management
+
+Acme Health shall:
+
+- Maintain contingency planning policies and procedures in written (which may be electronic) form. [HIPAA Security Rule 164.316(b)(1)]
+
+- Maintain a written (which may be electronic) record of actions, activities, or assessments required by contingency planning requirements. [HIPAA Security Rule 164.316(b)(1)]
+
+- Retain contingency planning documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+
+- Make contingency planning documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+## 4. Contingency Plan Development
+
+### 4.1 Contingency Plan Requirements
+
+Acme Health shall:
+
+- Develop a contingency plan for the system that identifies essential mission and business functions and associated contingency requirements. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Provide recovery objectives, restoration priorities, and metrics in the contingency plan. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Address contingency roles, responsibilities, assigned individuals with contact information in the contingency plan. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Address maintaining essential mission and business functions despite a system disruption, compromise, or failure in the contingency plan. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Address eventual, full system restoration without deterioration of the controls originally planned and implemented in the contingency plan. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Address the sharing of contingency information in the contingency plan. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Include in the contingency plan for systems containing Protected Health Information (PHI) / Personally Identifiable Information (PII): a data backup plan, disaster recovery plan, emergency mode operation plan, and emergency access procedures. [ARC-AMPE CP-2 AE Mandatory]
+
+### 4.2 Contingency Plan Approval and Distribution
+
+Acme Health shall:
+
+- Have the contingency plan reviewed and approved by [Assignment: organization-defined personnel or roles]. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Distribute copies of the contingency plan to [Assignment: organization-defined key contingency personnel (identified by name and/or by role) and organizational elements]. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Protect the contingency plan from unauthorized disclosure and modification. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+### 4.3 Contingency Plan Coordination
+
+Acme Health shall:
+
+- Coordinate contingency planning activities with incident handling activities. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Coordinate contingency plan development with organizational elements responsible for related plans. [NIST 800-53 CP-2(1) Moderate, High | ARC-AMPE CP-2(1) AE Mandatory]
+
+- Coordinate the contingency plan with related plans including Business Continuity Plans, Disaster Recovery Plans, Continuity of Operations Plans, Crisis Communications Plans, Critical Infrastructure Plans, Cyber Incident Response Plans, Insider Threat Implementation Plan, and Occupant Emergency Plans. [ARC-AMPE CP-2(1) AE Mandatory]
+
+- Coordinate the contingency plan with the contingency plans of external service providers to ensure that contingency requirements can be satisfied. [NIST 800-53 CP-2(7)]
+
+### 4.4 Contingency Plan Review and Updates
+
+Acme Health shall:
+
+- Review the contingency plan for the system [Assignment: organization-defined frequency]; at least every one (1) year for ARC-AMPE. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Update the contingency plan to address changes to the organization, system, or environment of operation and problems encountered during contingency plan implementation, execution, or testing. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Communicate contingency plan changes to [Assignment: organization-defined key contingency personnel (identified by name and/or by role) and organizational elements]. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+- Incorporate lessons learned from contingency plan testing, training, or actual contingency activities into contingency testing and training. [NIST 800-53 CP-2 Low, Moderate, High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+### 4.5 Capacity Planning
+
+Acme Health shall:
+
+- Conduct capacity planning so that necessary capacity for information processing, telecommunications, and environmental support exists during contingency operations. [NIST 800-53 CP-2(2) High]
+
+### 4.6 Resumption and Continuance Planning
+
+Acme Health shall:
+
+- Plan for the resumption of [Selection: all; essential] mission and business functions within [Assignment: organization-defined time period] of contingency plan activation. [NIST 800-53 CP-2(3) Moderate, High]
+
+- Plan for the resumption of essential mission and business functions within the time period defined in service provider and organization Service Level Agreements of contingency plan activation. [FedRAMP CP-2(3)]
+
+- Plan for the resumption of essential mission and business functions within the Business Owner-approved Maximum Tolerable Downtime (MTD) of contingency plan activation. [ARC-AMPE CP-2(3) AE Mandatory]
+
+- Plan for the continuance of [Selection: all; essential] mission and business functions with minimal or no loss of operational continuity and sustain that continuity until full system restoration at primary processing and/or storage sites. [NIST 800-53 CP-2(5) High]
+
+- Plan for the transfer of [Selection: all; essential] mission and business functions to alternate processing and/or storage sites with minimal or no loss of operational continuity and sustain that continuity through system restoration to primary processing and/or storage sites. [NIST 800-53 CP-2(6)]
+
+### 4.7 Critical Asset Identification
+
+Acme Health shall:
+
+- Identify critical system assets supporting [Selection: all; essential] mission and business functions. [NIST 800-53 CP-2(8) Moderate, High | ARC-AMPE CP-2(8) AE Mandatory]
+
+- Perform an inventory of critical information system assets (such as hardware, software, firmware, information, data, applications, communications, and people) and maintain an active inventory in the Information System Contingency Plan. [ARC-AMPE CP-2(8) AE Mandatory]
+
+- Assess the relative criticality of specific applications and data in support of other contingency plan components. [HIPAA Security Rule 164.308(a)(7)(ii)(E)]
+
+## 5. Contingency Training
+
+Acme Health shall:
+
+- Provide contingency training to system users consistent with assigned roles and responsibilities within [Assignment: organization-defined time period] of assuming a contingency role or responsibility; within thirty (30) days for ARC-AMPE. [NIST 800-53 CP-3 Low, Moderate, High | ARC-AMPE CP-3 AE Mandatory]
+
+- Provide contingency training when required by system changes. [NIST 800-53 CP-3 Low, Moderate, High | ARC-AMPE CP-3 AE Mandatory]
+
+- Provide contingency training [Assignment: organization-defined frequency] thereafter; every one (1) year for ARC-AMPE. [NIST 800-53 CP-3 Low, Moderate, High | ARC-AMPE CP-3 AE Mandatory]
+
+- Review and update contingency training content [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]; at least every one (1) year for ARC-AMPE. [NIST 800-53 CP-3 Low, Moderate, High | ARC-AMPE CP-3 AE Mandatory]
+
+- Incorporate simulated events into contingency training to facilitate effective response by personnel in crisis situations. [NIST 800-53 CP-3(1) High]
+
+- Employ mechanisms used in operations to provide a more thorough and realistic contingency training environment. [NIST 800-53 CP-3(2)]
+
+## 6. Contingency Plan Testing
+
+### 6.1 Testing Requirements
+
+Acme Health shall:
+
+- Test the contingency plan for the system [Assignment: organization-defined frequency] using [Assignment: organization-defined tests] to determine the effectiveness of the plan and the readiness to execute the plan; at least within every one (1) year using the latest published NIST SP 800-34, NIST SP 800-84, and any organization-defined functional tests or exercises for ARC-AMPE. [NIST 800-53 CP-4 Low, Moderate, High | ARC-AMPE CP-4 AE Mandatory]
+
+- Review the contingency plan test results. [NIST 800-53 CP-4 Low, Moderate, High | ARC-AMPE CP-4 AE Mandatory]
+
+- Initiate corrective actions, if needed, following contingency plan testing. [NIST 800-53 CP-4 Low, Moderate, High | ARC-AMPE CP-4 AE Mandatory]
+
+- Produce an after-action report following contingency plan testing to improve existing processes, procedures, and policies. [ARC-AMPE CP-4 AE Mandatory]
+
+- Make contingency plan test results available to the Business Owner. [ARC-AMPE CP-4 AE Mandatory]
+
+- Ensure contingency plan tests and exercises include an evaluation of the capability to meet privacy requirements in a contingency scenario as well as corrective measures to address any privacy risks identified. [ARC-AMPE CP-4 AE Mandatory]
+
+- Implement procedures for periodic testing and revision of contingency plans. [HIPAA Security Rule 164.308(a)(7)(ii)(D)]
+
+### 6.2 Testing Coordination and Methods
+
+Acme Health shall:
+
+- Coordinate contingency plan testing with organizational elements responsible for related plans. [NIST 800-53 CP-4(1) Moderate, High | ARC-AMPE CP-4(1) AE Mandatory]
+
+- Test the contingency plan at the alternate processing site to familiarize contingency personnel with the facility and available resources and to evaluate the capabilities of the alternate processing site to support contingency operations. [NIST 800-53 CP-4(2) High]
+
+- Test the contingency plan using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 CP-4(3)]
+
+- Include a full recovery and reconstitution of the system to a known state as part of contingency plan testing. [NIST 800-53 CP-4(4)]
+
+- Employ [Assignment: organization-defined mechanisms] to [Assignment: organization-defined system or system component] to disrupt and adversely affect the system or system component as part of contingency plan testing. [NIST 800-53 CP-4(5)]
+
+## 7. Alternate Storage Site
+
+Acme Health shall:
+
+- Establish an alternate storage site, including necessary agreements to permit the storage and retrieval of system backup information. [NIST 800-53 CP-6 Moderate, High | ARC-AMPE CP-6 AE Mandatory]
+
+- Ensure that the alternate storage site provides controls equivalent to that of the primary site. [NIST 800-53 CP-6 Moderate, High | ARC-AMPE CP-6 AE Mandatory]
+
+- Identify an alternate storage site that is sufficiently separated from the primary storage site to reduce susceptibility to the same threats. [NIST 800-53 CP-6(1) Moderate, High | ARC-AMPE CP-6(1) AE Mandatory]
+
+- Configure the alternate storage site to facilitate recovery operations in accordance with recovery time and recovery point objectives. [NIST 800-53 CP-6(2) High]
+
+- Identify potential accessibility problems to the alternate storage site in the event of an area-wide disruption or disaster and outline explicit mitigation actions. [NIST 800-53 CP-6(3) Moderate, High | ARC-AMPE CP-6(3) AE Mandatory]
+
+- Document mitigation actions for accessibility problems to the alternate storage site in the Information System Contingency Plan. [ARC-AMPE CP-6(3) AE Mandatory]
+
+## 8. Alternate Processing Site
+
+### 8.1 Alternate Processing Site Establishment
+
+Acme Health shall:
+
+- Establish an alternate processing site, including necessary agreements to permit the transfer and resumption of [Assignment: organization-defined system operations] for essential mission and business functions within [Assignment: organization-defined time period] when the primary processing capabilities are unavailable. [NIST 800-53 CP-7 Moderate, High | FedRAMP CP-7 | ARC-AMPE CP-7 AE Mandatory]
+
+- Make available at the alternate processing site the equipment and supplies required to transfer and resume operations or put contracts in place to support delivery to the site within the organization-defined time period for transfer and resumption. [NIST 800-53 CP-7 Moderate, High | FedRAMP CP-7 | ARC-AMPE CP-7 AE Mandatory]
+
+- Provide controls at the alternate processing site that are equivalent to those at the primary site. [NIST 800-53 CP-7 Moderate, High | FedRAMP CP-7 | ARC-AMPE CP-7 AE Mandatory]
+
+### 8.2 Alternate Processing Site Location and Accessibility
+
+Acme Health shall:
+
+- Identify an alternate processing site that is sufficiently separated from the primary processing site to reduce susceptibility to the same threats. [NIST 800-53 CP-7(1) Moderate, High | FedRAMP CP-7(1) | ARC-AMPE CP-7(1) AE Mandatory]
+
+- Identify potential accessibility problems to alternate processing sites in the event of an area-wide disruption or disaster and outline explicit mitigation actions. [NIST 800-53 CP-7(2) Moderate, High | ARC-AMPE CP-7(2) AE Mandatory]
+
+- Document mitigation actions for accessibility problems to the alternate processing site in the Information System Contingency Plan. [ARC-AMPE CP-7(2) AE Mandatory]
+
+### 8.3 Alternate Processing Site Agreements and Preparation
+
+Acme Health shall:
+
+- Develop alternate processing site agreements that contain priority-of-service provisions in accordance with availability requirements (including recovery time objectives). [NIST 800-53 CP-7(3) Moderate, High | ARC-AMPE CP-7(3) AE Mandatory]
+
+- Prepare the alternate processing site so that the site can serve as the operational site supporting essential mission and business functions. [NIST 800-53 CP-7(4) High]
+
+- Plan and prepare for circumstances that preclude returning to the primary processing site. [NIST 800-53 CP-7(6)]
+
+### 8.4 Privacy Controls at Alternate Processing Site
+
+Acme Health shall:
+
+- When an alternate processing site is used, implement administrative, physical and technical controls to protect Personally Identifiable Information (PII) in accordance with the privacy risks identified. [ARC-AMPE CP-7 AE Mandatory]
+
+## 9. Telecommunications Services
+
+### 9.1 Alternate Telecommunications Services
+
+Acme Health shall:
+
+- Establish alternate telecommunications services, including necessary agreements to permit the resumption of [Assignment: organization-defined system operations] for essential mission and business functions within [Assignment: organization-defined time period] when the primary telecommunications capabilities are unavailable at either the primary or alternate processing or storage sites. [NIST 800-53 CP-8 Moderate, High | ARC-AMPE CP-8 AE Mandatory]
+
+### 9.2 Telecommunications Service Priority and Redundancy
+
+Acme Health shall:
+
+- Develop primary and alternate telecommunications service agreements that contain priority-of-service provisions in accordance with availability requirements (including recovery time objectives). [NIST 800-53 CP-8(1) Moderate, High | ARC-AMPE CP-8(1) AE Mandatory]
+
+- Request Telecommunications Service Priority for all telecommunications services used for national security emergency preparedness if the primary and/or alternate telecommunications services are provided by a common carrier. [NIST 800-53 CP-8(1) Moderate, High | ARC-AMPE CP-8(1) AE Mandatory]
+
+- Obtain alternate telecommunications services to reduce the likelihood of sharing a single point of failure with primary telecommunications services. [NIST 800-53 CP-8(2) Moderate, High | ARC-AMPE CP-8(2) AE Mandatory]
+
+- Document the remediation/mitigation strategy for telecommunications single points of failure in the Information System Contingency Plan. [ARC-AMPE CP-8(2) AE Mandatory]
+
+- Obtain alternate telecommunications services from providers that are separated from primary service providers to reduce susceptibility to the same threats. [NIST 800-53 CP-8(3) High]
+
+### 9.3 Telecommunications Provider Contingency Plans
+
+Acme Health shall:
+
+- Require primary and alternate telecommunications service providers to have contingency plans. [NIST 800-53 CP-8(4) High]
+
+- Review provider contingency plans to ensure that the plans meet organizational contingency requirements. [NIST 800-53 CP-8(4) High]
+
+- Obtain evidence of contingency testing and training by providers [Assignment: organization-defined frequency]. [NIST 800-53 CP-8(4) High]
+
+### 9.4 Telecommunications Services Testing
+
+Acme Health shall:
+
+- Test alternate telecommunication services [Assignment: organization-defined frequency]. [NIST 800-53 CP-8(5)]
+
+## 10. System Backup
+
+### 10.1 Backup Requirements
+
+Acme Health shall:
+
+- Conduct backups of user-level information contained in [Assignment: organization-defined system components] [Assignment: organization-defined frequency]; consistent with daily incremental backups and weekly full backups for ARC-AMPE. [NIST 800-53 CP-9 Low, Moderate, High | ARC-AMPE CP-9 AE Mandatory]
+
+- Conduct backups of system-level information contained in the system [Assignment: organization-defined frequency]; consistent with daily incremental backups and weekly full backups for ARC-AMPE. [NIST 800-53 CP-9 Low, Moderate, High | ARC-AMPE CP-9 AE Mandatory]
+
+- Conduct backups of system documentation, including security- and privacy-related documentation [Assignment: organization-defined frequency]; consistent with daily incremental backups and weekly full backups for ARC-AMPE. [NIST 800-53 CP-9 Low, Moderate, High | ARC-AMPE CP-9 AE Mandatory]
+
+- Maintain three (3) generations of backups, at least one (1) of which is available online (a full backup and all related incremental backups). [ARC-AMPE CP-9 AE Mandatory]
+
+- Establish and implement procedures to create and maintain retrievable exact copies of electronic protected health information. [HIPAA Security Rule 164.308(a)(7)(ii)(A)]
+
+- Create a retrievable, exact copy of electronic protected health information, when needed, before movement of equipment. [HIPAA Security Rule 164.310(d)(2)(iv)]
+
+### 10.2 Backup Protection and Integrity
+
+Acme Health shall:
+
+- Protect the confidentiality, integrity, and availability of backup information. [NIST 800-53 CP-9 Low, Moderate, High | ARC-AMPE CP-9 AE Mandatory]
+
+- Implement cryptographic mechanisms to prevent unauthorized disclosure and modification of [Assignment: organization-defined backup information]; all backup files for ARC-AMPE. [NIST 800-53 CP-9(8) Moderate, High | ARC-AMPE CP-9(8) AE Mandatory]
+
+- Implement electronic mechanisms to corroborate that electronic protected health information has not been altered or destroyed in an unauthorized manner. [HIPAA Security Rule 164.312(c)(2)]
+
+### 10.3 Backup Testing and Verification
+
+Acme Health shall:
+
+- Test backup information [Assignment: organization-defined frequency] to verify media reliability and information integrity; at least every six (6) months for ARC-AMPE. [NIST 800-53 CP-9(1) Moderate, High | ARC-AMPE CP-9(1) AE Mandatory]
+
+- Use a sample of backup information in the restoration of selected system functions as part of contingency plan testing. [NIST 800-53 CP-9(2) High]
+
+### 10.4 Backup Storage and Transfer
+
+Acme Health shall:
+
+- Store backup copies of [Assignment: organization-defined critical system software and other security-related information] in a separate facility or in a fire rated container that is not collocated with the operational system. [NIST 800-53 CP-9(3) High]
+
+- Transfer system backup information to the alternate storage site [Assignment: organization-defined time period and transfer rate consistent with the recovery time and recovery point objectives]. [NIST 800-53 CP-9(5) High]
+
+- Conduct system backup by maintaining a redundant secondary system that is not collocated with the primary system and that can be activated without loss of information or disruption to operations. [NIST 800-53 CP-9(6)]
+
+### 10.5 Backup Deletion Controls
+
+Acme Health shall:
+
+- Enforce dual authorization for the deletion or destruction of [Assignment: organization-defined backup information]. [NIST 800-53 CP-9(7)]
+
+## 11. System Recovery and Reconstitution
+
+### 11.1 Recovery and Reconstitution Requirements
+
+Acme Health shall:
+
+- Provide for the recovery and reconstitution of the system to a known state within [Assignment: organization-defined time period consistent with recovery time and recovery point objectives] after a disruption, compromise, or failure. [NIST 800-53 CP-10 Low, Moderate, High | FedRAMP CP-10 | ARC-AMPE CP-10 AE Mandatory]
+
+- Establish (and implement as needed) procedures to restore any loss of data. [HIPAA Security Rule 164.308(a)(7)(ii)(B)]
+
+### 11.2 Transaction Recovery
+
+Acme Health shall:
+
+- Implement transaction recovery for systems that are transaction-based. [NIST 800-53 CP-10(2) Moderate, High | ARC-AMPE CP-10(2) AE Mandatory]
+
+### 11.3 Component Restoration
+
+Acme Health shall:
+
+- Provide the capability to restore system components within [Assignment: organization-defined restoration time periods] from configuration-controlled and integrity-protected information representing a known, operational state for the components; within time period consistent with the restoration time-periods defined in the service provider and organization Service Level Agreements for FedRAMP. [NIST 800-53 CP-10(4) High | FedRAMP CP-10(4)]
+
+### 11.4 Protection of Recovery Components
+
+Acme Health shall:
+
+- Protect system components used for recovery and reconstitution. [NIST 800-53 CP-10(6)]
+
+## 12. Emergency Mode Operations and Access
+
+Acme Health shall:
+
+- Establish (and implement as needed) procedures to enable continuation of critical business processes for protection of the security of electronic protected health information while operating in emergency mode. [HIPAA Security Rule 164.308(a)(7)(ii)(C)]
+
+- Establish (and implement as needed) procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan in the event of an emergency. [HIPAA Security Rule 164.310(a)(2)(i)]
+
+- Establish (and implement as needed) procedures for obtaining necessary electronic protected health information during an emergency. [HIPAA Security Rule 164.312(a)(2)(ii)]

@@ -1,0 +1,548 @@
+<DIV8 N="170.315" TYPE="SECTION" hierarchy_metadata="{&quot;path&quot;:&quot;/on/_SUBSTITUTE_DATE_/title-45/section-170.315&quot;,&quot;citation&quot;:&quot;45 CFR 170.315&quot;}">
+<HEAD>§ 170.315 ONC certification criteria for Health IT.</HEAD>
+<P>The Secretary adopts the following certification criteria for health IT. Health IT must be able to electronically perform the following capabilities in accordance with applicable standards and implementation specifications adopted in this part. For all criteria in this section, a health IT developer with a Health IT Module certified to any revised certification criterion, as defined in § 170.102, shall update the Health IT Module and shall provide such update to their customers in accordance with the dates identified for each revised certification criterion and for each applicable standard in 45 CFR part 170 subpart B.</P>
+<P>(a) <I>Clinical</I>—(1)<I> Computerized provider order entry—medications.</I> (i) Enable a user to record, change, and access medication orders.</P>
+<P>(ii) <I>Optional.</I> Include a “reason for order” field.</P>
+<P>(2) <I>Computerized provider order entry—laboratory.</I> (i) Enable a user to record, change, and access laboratory orders.</P>
+<P>(ii) <I>Optional.</I> Include a “reason for order” field.</P>
+<P>(3) <I>Computerized provider order entry—diagnostic imaging.</I> (i) Enable a user to record, change, and access diagnostic imaging orders.</P>
+<P>(ii) <I>Optional.</I> Include a “reason for order” field.</P>
+<P>(4) <I>Drug-drug, drug-allergy interaction checks for CPOE</I>—(i)<I> Interventions.</I> Before a medication order is completed and acted upon during computerized provider order entry (CPOE), interventions must automatically indicate to a user drug-drug and drug-allergy contraindications based on a patient's medication list and medication allergy list.</P>
+<P>(ii)<I> Adjustments.</I> (A) Enable the severity level of interventions provided for drug-drug interaction checks to be adjusted.</P>
+<P>(B) Limit the ability to adjust severity levels in at least one of these two ways:</P>
+<P>(<I>1</I>) To a specific set of identified users.</P>
+<P>(<I>2</I>) As a system administrative function.</P>
+<P>(5) <I>Patient demographics and observations.</I> (i) Enable a user to record, change, and access patient demographic and observations data including race, ethnicity, preferred language, sex, sex parameter for clinical use, sexual orientation, gender identity, name to use, pronouns, and date of birth.</P>
+<P>(A) <I>Race and ethnicity.</I> (<I>1</I>) Enable each one of a patient's races to be recorded in accordance with, at a minimum, the standard specified in § 170.207(f)(3) and whether a patient declines to specify race.</P>
+<P>(<I>2</I>) Enable each one of a patient's ethnicities to be recorded in accordance with, at a minimum, the standard specified in § 170.207(f)(3) and whether a patient declines to specify ethnicity.</P>
+<P>(<I>3</I>) Aggregate each one of the patient's races and ethnicities recorded in accordance with paragraphs (a)(5)(i)(A)(<I>1</I>) and (<I>2</I>) of this section to the categories in the standard specified in § 170.207(f)(1).</P>
+<P>(B) <I>Preferred language.</I> Enable preferred language to be recorded in accordance with the standard specified in § 170.207(g)(2) and whether a patient declines to specify a preferred language.</P>
+<P>(C) <I>Sex.</I> Enable sex to be recorded in accordance with the standard specified in § 170.207(n)(1) for the period up to and including December 31, 2025; or § 170.207(n)(2).</P>
+<P>(D) <I>Sexual orientation.</I> Enable sexual orientation to be recorded in accordance with, at a minimum, the version of the standard specified in § 170.207(o)(1) for the period up to and including December 31, 2025; or § 170.207(o)(3), as well as whether a patient declines to specify sexual orientation.</P>
+<P>(E) <I>Gender identity.</I> Enable gender identity to be recorded in accordance with, at a minimum, the version of the standard specified in § 170.207(o)(2) for the period up to and including December 31, 2025; or § 170.207(o)(3), as well as whether a patient declines to specify gender identity.</P>
+<P>(F) <I>Sex Parameter for Clinical Use.</I> Enable at least one sex parameter for clinical use to be recorded in accordance with, at a minimum, the version of the standard specified in § 170.207(n)(3). Conformance with this paragraph is required by January 1, 2026.</P>
+<P>(G) <I>Name to Use.</I> Enable at least one preferred name to use to be recorded. Conformance with this paragraph is required by January 1, 2026.</P>
+<P>(H) <I>Pronouns.</I> Enable at least one pronoun to be recorded in accordance with, at a minimum, the version of the standard specified in § 170.207(o)(4). Conformance with this paragraph is required by January 1, 2026.</P>
+<P>(ii)<I> Inpatient setting only.</I> Enable a user to record, change, and access the preliminary cause of death and date of death in the event of mortality.</P>
+<P>(6)-(8) [Reserved]</P>
+<P>(9) <I>Clinical decision support (CDS)</I>—(i) <I>CDS intervention interaction.</I> Interventions provided to a user must occur when a user is interacting with technology.</P>
+<P>(ii) <I>CDS configuration.</I> (A) Enable interventions and reference resources specified in paragraphs (a)(9)(iii) and (iv) of this section to be configured by a limited set of identified users (<I>e.g.</I>, system administrator) based on a user's role.</P>
+<P>(B) Enable interventions:</P>
+<P>(<I>1</I>) Based on the following data:</P>
+<P>(<I>i</I>) Problem list;</P>
+<P>(<I>ii</I>) Medication list;</P>
+<P>(<I>iii</I>) Allergy and intolerance list;</P>
+<P>(<I>iv</I>) At least one demographic specified in paragraph (a)(5)(i) of this section;</P>
+<P>(<I>v</I>) Laboratory tests; and</P>
+<P>(<I>vi</I>) Vital signs.</P>
+<P>(<I>2</I>) When a patient's medications, allergies and intolerance, and problems are incorporated from a transition of care/referral summary received and pursuant to paragraph (b)(2)(iii)(D) of this section.</P>
+<P>(iii) <I>Evidence-based decision support interventions.</I> Enable a limited set of identified users to select (<I>i.e.</I>, activate) electronic CDS interventions (in addition to drug-drug and drug-allergy contraindication checking) based on each one and at least one combination of the data referenced in paragraphs (a)(9)(ii)(B)(<I>1</I>)(<I>i</I>) through (<I>vi</I>) of this section.</P>
+<P>(iv)<I> Linked referential CDS.</I> (A) Identify for a user diagnostic and therapeutic reference information in accordance at least one of the following standards and implementation specifications:</P>
+<P>(<I>1</I>) The standard and implementation specifications specified in § 170.204(b)(3).</P>
+<P>(<I>2</I>) The standard and implementation specifications specified in § 170.204(b)(4).</P>
+<P>(B) For paragraph (a)(9)(iv)(A) of this section, technology must be able to identify for a user diagnostic or therapeutic reference information based on each one and at least one combination of the data referenced in paragraphs (a)(9)(ii)(B)(<I>1</I>)(<I>i</I>), (<I>ii</I>), and (<I>iv</I>) of this section.</P>
+<P>(v) <I>Source attributes.</I> Enable a user to review the attributes as indicated for all CDS resources:</P>
+<P>(A) For evidence-based decision support interventions under paragraph (a)(9)(iii) of this section:</P>
+<P>(<I>1</I>) Bibliographic citation of the intervention (clinical research/guideline);</P>
+<P>(<I>2</I>) Developer of the intervention (translation from clinical research/guideline);</P>
+<P>(<I>3</I>) Funding source of the intervention development technical implementation; and</P>
+<P>(<I>4</I>) Release and, if applicable, revision date(s) of the intervention or reference source.</P>
+<P>(B) For linked referential CDS in paragraph (a)(9)(iv) of this section and drug-drug, drug-allergy interaction checks in paragraph (a)(4) of this section, the developer of the intervention, and where clinically indicated, the bibliographic citation of the intervention (clinical research/guideline).</P>
+<P>(vi) <I>Expiration of criterion.</I> The adoption of this criterion for purposes of the ONC Health IT Certification Program expires on January 1, 2025.</P>
+<P>(10)-(11) [Reserved]</P>
+<P>(12) <I>Family health history.</I> Enable a user to record, change, and access a patient's family health history in accordance with the familial concepts or expressions included in, at a minimum, the version of the standard in § 170.207(a)(1).</P>
+<P>(13) [Reserved]</P>
+<P>(14) <I>Implantable device list.</I> (i) Record Unique Device Identifiers associated with a patient's Implantable Devices.</P>
+<P>(ii) Parse the following identifiers from a Unique Device Identifier:</P>
+<P>(A) Device Identifier; and</P>
+<P>(B) The following identifiers that compose the Production Identifier:</P>
+<P>(<I>1</I>) The lot or batch within which a device was manufactured;</P>
+<P>(<I>2</I>) The serial number of a specific device;</P>
+<P>(<I>3</I>) The expiration date of a specific device;</P>
+<P>(<I>4</I>) The date a specific device was manufactured; and</P>
+<P>(<I>5</I>) For an HCT/P regulated as a device, the distinct identification code required by 21 CFR 1271.290(c).</P>
+<P>(iii) Obtain and associate with each Unique Device Identifier:</P>
+<P>(A) A description of the implantable device referenced by at least one of the following:</P>
+<P>(<I>1</I>) The “GMDN PT Name” attribute associated with the Device Identifier in the Global Unique Device Identification Database.</P>
+<P>(<I>2</I>) The “SNOMED CT® Description” mapped to the attribute referenced in in paragraph (a)(14)(iii)(A)(<I>1</I>) of this section.</P>
+<P>(B) The following Global Unique Device Identification Database attributes:</P>
+<P>(<I>1</I>) “Brand Name”;</P>
+<P>(<I>2</I>) “Version or Model”;</P>
+<P>(<I>3</I>) “Company Name”;</P>
+<P>(<I>4</I>) “What MRI safety information does the labeling contain?”; and</P>
+<P>(<I>5</I>) “Device required to be labeled as containing natural rubber latex or dry natural rubber (21 CFR 801.437).”</P>
+<P>(iv) Display to a user an implantable device list consisting of:</P>
+<P>(A) The active Unique Device Identifiers recorded for the patient;</P>
+<P>(B) For each active Unique Device Identifier recorded for a patient, the description of the implantable device specified by paragraph (a)(14)(iii)(A) of this section; and</P>
+<P>(C) A method to access all Unique Device Identifiers recorded for a patient.</P>
+<P>(v) For each Unique Device Identifier recorded for a patient, enable a user to access:</P>
+<P>(A) The Unique Device Identifier;</P>
+<P>(B) The description of the implantable device specified by paragraph (a)(14)(iii)(A) of this section;</P>
+<P>(C) The identifiers associated with the Unique Device Identifier, as specified by paragraph (a)(14)(ii) of this section; and</P>
+<P>(D) The attributes associated with the Unique Device Identifier, as specified by paragraph (a)(14)(iii)(B) of this section.</P>
+<P>(vi) Enable a user to change the status of a Unique Device Identifier recorded for a patient.</P>
+<P>(15) <I>Social, psychological, and behavioral data.</I> Enable a user to record, change, and access the following patient social, psychological, and behavioral data:</P>
+<P>(i) <I>Financial resource strain.</I> Enable financial resource strain to be recorded in accordance with the standard specified in § 170.207(p)(1) and whether a patient declines to specify financial resource strain.</P>
+<P>(ii) <I>Education.</I> Enable education to be recorded in accordance with the standard specified in § 170.207(p)(2) and whether a patient declines to specify education.</P>
+<P>(iii) <I>Stress.</I> Enable stress to be recorded in accordance with the standard specified in § 170.207(p)(3) and whether a patient declines to specify stress.</P>
+<P>(iv) <I>Depression.</I> Enable depression to be recorded in accordance with the standard specified in § 170.207(p)(4) and whether a patient declines to specify depression.</P>
+<P>(v) <I>Physical activity.</I> Enable physical activity to be recorded in accordance with the standard specified in § 170.207(p)(5) and whether a patient declines to specify physical activity.</P>
+<P>(vi) <I>Alcohol use.</I> Enable alcohol use to be recorded in accordance with the standard specified in § 170.207(p)(6) and whether a patient declines to specify alcohol use.</P>
+<P>(vii) <I>Social connection and isolation.</I> Enable social connection and isolation to be recorded in accordance the standard specified in § 170.207(p)(7) and whether a patient declines to specify social connection and isolation.</P>
+<P>(viii) <I>Exposure to violence (intimate partner violence).</I> Enable exposure to violence (intimate partner violence) to be recorded in accordance with the standard specified in § 170.207(p)(8) and whether a patient declines to specify exposure to violence (intimate partner violence).</P>
+<P>(b) <I>Care coordination</I>—(1) <I>Transitions of care</I>—(i) <I>Send and receive via edge protocol.</I> (A) Send transition of care/referral summaries through a method that conforms to the standard specified in § 170.202(d) and that leads to such summaries being processed by a service that has implemented the standard specified in § 170.202(a)(2); and</P>
+<P>(B) Receive transition of care/referral summaries through a method that conforms to the standard specified in § 170.202(d) from a service that has implemented the standard specified in § 170.202(a)(2).</P>
+<P>(C) <I>XDM processing.</I> Receive and make available the contents of a XDM package formatted in accordance with the standard adopted in § 170.205(p)(1) when the technology is also being certified using an SMTP-based edge protocol.</P>
+<P>(ii) <I>Validate and display</I>—(A) <I>Validate C-CDA conformance—system performance.</I> Demonstrate the ability to detect valid and invalid transition of care/referral summaries received and formatted in accordance with the standards specified in § 170.205(a)(3), (4), and (5) for the Continuity of Care Document, Referral Note, and (inpatient setting only) Discharge Summary document templates. This includes the ability to:</P>
+<P>(<I>1</I>) Parse each of the document types.</P>
+<P>(<I>2</I>) Detect errors in corresponding “document-templates,” “section-templates,” and “entry-templates,” including invalid vocabulary standards and codes not specified in the standards adopted in § 170.205(a)(3), (4), and (5).</P>
+<P>(<I>3</I>) Identify valid document-templates and process the data elements required in the corresponding section-templates and entry-templates from the standards adopted in § 170.205(a)(3), (4), and (5).</P>
+<P>(<I>4</I>) Correctly interpret empty sections and null combinations.</P>
+<P>(<I>5</I>) Record errors encountered and allow a user through at least one of the following ways to:</P>
+<P>(<I>i</I>) Be notified of the errors produced.</P>
+<P>(<I>ii</I>) Review the errors produced.</P>
+<P>(B) <I>Display.</I> Display in human readable format the data included in transition of care/referral summaries received and formatted according to the standards specified in § 170.205(a)(3), (4), and (5).</P>
+<P>(C) <I>Display section views.</I> Allow for the individual display of each section (and the accompanying document header information) that is included in a transition of care/referral summary received and formatted in accordance with the standards adopted in § 170.205(a)(3), (4), and (5) in a manner that enables the user to:</P>
+<P>(<I>1</I>) Directly display only the data within a particular section;</P>
+<P>(<I>2</I>) Set a preference for the display order of specific sections; and</P>
+<P>(<I>3</I>) Set the initial quantity of sections to be displayed.</P>
+<P>(iii) <I>Create.</I> Enable a user to create a transition of care/referral summary formatted in accordance with the standard specified in § 170.205(a)(3), (4), and (5) using the Continuity of Care Document, Referral Note, and (inpatient setting only) Discharge Summary document templates that includes, at a minimum:</P>
+<P>(A)(<I>1</I>) The data classes expressed in the standards in § 170.213 and in accordance with § 170.205(a)(4), (5), and paragraphs (b)(1)(iii)(A)(<I>3</I>)(<I>i</I>) through (<I>iii</I>) of this section for the time period up to and including December 31, 2025, or</P>
+<P>(<I>2</I>) The data classes expressed in the standards in § 170.213 and in accordance with § 170.205(a)(4), (6), and paragraphs (b)(1)(iii)(A)(<I>3</I>)(<I>i</I>) through (<I>iii</I>) of this section, and</P>
+<P>(<I>3</I>) The following data classes:</P>
+<P>(<I>i</I>) <I>Assessment and plan of treatment.</I> In accordance with the “Assessment and Plan Section (V2)” of the standard specified in § 170.205(a)(4); or in accordance with the “Assessment Section (V2)” and “Plan of Treatment Section (V2)” of the standard specified in § 170.205(a)(4).</P>
+<P>(<I>ii</I>) <I>Goals.</I> In accordance with the “Goals Section” of the standard specified in § 170.205(a)(4).</P>
+<P>(<I>iii</I>) <I>Health concerns.</I> In accordance with the “Health Concerns Section” of the standard specified in § 170.205(a)(4).</P>
+<P>(<I>iv</I>) <I>Unique device identifier(s) for a patient's implantable device(s).</I> In accordance with the “Product Instance” in the “Procedure Activity Procedure Section” of the standard specified in § 170.205(a)(4).</P>
+<P>(B) <I>Encounter diagnoses.</I> Formatted according to at least one of the following standards:</P>
+<P>(<I>1</I>) The standard specified in § 170.207(i).</P>
+<P>(<I>2</I>) At a minimum, the version of the standard specified in § 170.207(a)(1).</P>
+<P>(C) Cognitive status.</P>
+<P>(D) Functional status.</P>
+<P>(E) <I>Ambulatory setting only.</I> The reason for referral; and referring or transitioning provider's name and office contact information.</P>
+<P>(F) <I>Inpatient setting only.</I> Discharge instructions.</P>
+<P>(G) <I>Patient matching data.</I> First name, last name, previous name, middle name (including middle initial), suffix, date of birth, current address, phone number, and sex. The following constraints apply:</P>
+<P>(<I>1</I>) <I>Date of birth constraint.</I> (<I>i</I>) The year, month and day of birth must be present for a date of birth. The technology must include a null value when the date of birth is unknown.</P>
+<P>(<I>ii</I>) <I>Optional.</I> When the hour, minute, and second are associated with a date of birth the technology must demonstrate that the correct time zone offset is included.</P>
+<P>(<I>2</I>) <I>Phone number constraint.</I> Represent phone number (home, business, cell) in accordance with the standards adopted in § 170.207(q)(1). All phone numbers must be included when multiple phone numbers are present.</P>
+<P>(<I>3</I>) <I>Sex Constraint:</I> Represent sex with the standard adopted in § 170.207(n)(1) up to and including December 31, 2025; or with the standard adopted in § 170.207(n)(2).</P>
+<P>(2) <I>Clinical information reconciliation and incorporation</I>—(i) <I>General requirements.</I> Paragraphs (b)(2)(ii) and (iii) of this section must be completed based on the receipt of a transition of care/referral summary formatted in accordance with the standards adopted in § 170.205(a)(3) through (5) using the Continuity of Care Document, Referral Note, and (inpatient setting only) Discharge Summary document templates, for time period up to and including December 31, 2025; or in accordance with the standards adopted in § 170.205(a)(3), (4), (6).</P>
+<P>(ii) <I>Correct patient.</I> Upon receipt of a transition of care/referral summary formatted according to the standards adopted § 170.205(a)(3) through (5) for the period up to and including December 31, 2025; or according to the standards adopted § 170.205(a)(3), (4), and (6), technology must be able to demonstrate that the transition of care/referral summary received can be properly matched to the correct patient.</P>
+<P>(iii) <I>Reconciliation.</I> Enable a user to reconcile the data that represent a patient's active medication list, allergies and intolerance list, and problem list as follows. For each list type:</P>
+<P>(A) Simultaneously display (<I>i.e.,</I> in a single view) the data from at least two sources in a manner that allows a user to view the data and their attributes, which must include, at a minimum, the source and last modification date.</P>
+<P>(B) Enable a user to create a single reconciled list of each of the following: Medications; Allergies and Intolerances; and problems.</P>
+<P>(C) Enable a user to review and validate the accuracy of a final set of data.</P>
+<P>(D) Upon a user's confirmation, automatically update the list, and incorporate the following data expressed according to the specified standards:</P>
+<P>(<I>1</I>) <I>Medications.</I> At a minimum, the version of the standard specified in § 170.213;</P>
+<P>(<I>2</I>) <I>Allergies and intolerance.</I> At a minimum, the version of the standard specified in § 170.213; and</P>
+<P>(<I>3</I>) <I>Problems.</I> At a minimum, the version of the standard specified in § 170.213.</P>
+<P>(iv) <I>System verification.</I> Based on the data reconciled and incorporated, the technology must be able to create a file formatted according to the standard specified in § 170.205(a)(4) using the Continuity of Care Document template and the standard specified in § 170.205(a)(5) on and after December 31, 2022.</P>
+<P>(iv) <I>System verification.</I> Based on the data reconciled and incorporated, the technology must be able to create a file formatted according to the standard specified in § 170.205(a)(4) using the Continuity of Care Document template and the standard specified in paragraph (a)(5) of this section for the time period up to and including December 31, 2025; or according to the standard specified in § 170.205(a)(4) using the Continuity of Care Document template and the standard specified in paragraph (a)(6) of this section.</P>
+<P>(3) <I>Electronic prescribing.</I> (i) [Reserved]</P>
+<P>(ii) For technology certified subsequent to June 30, 2020:</P>
+<P>(A)(<I>1</I>) For the time period up to and including December 31, 2027, enable a user to perform the prescription-related electronic transactions specified in paragraph (b)(3)(ii)(A)(<I>3</I>) of this section in accordance with the standards specified in § 170.205(b)(1) or (2).</P>
+<P>(<I>i</I>) At a minimum, at least one of the versions of the standard adopted in § 170.207(d)(1).</P>
+<P>(<I>ii</I>) The standard in § 170.207(d)(2) if using the standard in § 170.205(b)(2).</P>
+<P>(<I>2</I>) On and after January 1, 2028, enable a user to perform the prescription-related electronic transactions specified in paragraph (b)(3)(ii)(A)(<I>3</I>) of this section in accordance with the standard specified in § 170.205(b)(2).</P>
+<P>(<I>i</I>) At a minimum, at least one of the versions of the standard adopted in § 170.207(d)(1).</P>
+<P>(<I>ii</I>) The standard in § 170.207(d)(2).</P>
+<P>(<I>3</I>) The prescription-related electronic transactions are as follows:</P>
+<P>(<I>i</I>) New prescriptions (NewRx).</P>
+<P>(<I>ii</I>) Request and respond to change prescriptions (RxChangeRequest, RxChangeResponse).</P>
+<P>(<I>iii</I>) Request and respond to cancel prescriptions (CancelRx, CancelRxResponse).</P>
+<P>(<I>iv</I>) Request and respond to renew prescriptions (RxRenewalRequest, RxRenewalResponse).</P>
+<P>(<I>v</I>) Receive fill status notifications (RxFill).</P>
+<P>(<I>vi</I>) Request and receive medication history (RxHistoryRequest, RxHistoryResponse).</P>
+<P>(<I>vii</I>) Relay acceptance of a transaction back to the sender (Status).</P>
+<P>(<I>viii</I>) Respond that there was a problem with the transaction (Error).</P>
+<P>(<I>ix</I>) Respond that a transaction requesting a return receipt has been received (Verify).</P>
+<P>(<I>x</I>) Electronic prior authorization transactions (PAInitiationRequest, PAInitiationResponse, PARequest, PAResponse, PAAppealRequest, PAAppealResponse, PACancelRequest, PACancelResponse, and PANotification). These transactions are required if using the standard in § 170.205(b)(2).</P>
+<P>(B) Enable a user to exchange race and ethnicity information when performing the following prescription-related electronic transactions, if using the standard in § 170.205(b)(2):</P>
+<P>(<I>1</I>) Receive fill status notifications (RxFill).</P>
+<P>(<I>2</I>) Request and respond to change prescriptions (RxChangeRequest, RxChangeResponse).</P>
+<P>(<I>3</I>) Request to cancel prescriptions (CancelRx).</P>
+<P>(<I>4</I>) Request and respond to renew prescriptions (RxRenewalRequest, RxRenewalResponse).</P>
+<P>(C) For the following prescription-related transactions, the technology must be able to receive and transmit the diagnosis or diagnoses that are the reason for prescription:</P>
+<P>(<I>1</I>) Required transactions:</P>
+<P>(<I>i</I>) New prescriptions (NewRx).</P>
+<P>(<I>ii</I>) Request and respond to change prescriptions (RxChangeRequest, RxChangeResponse).</P>
+<P>(<I>iii</I>) Cancel prescriptions (CancelRx).</P>
+<P>(<I>iv</I>) Request and respond to renew prescriptions (RxRenewalRequest, RxRenewalResponse).</P>
+<P>(<I>v</I>) Receive fill status notifications (RxFill).</P>
+<P>(<I>vi</I>) [Reserved]</P>
+<P>(<I>vii</I>) Electronic prior authorization transactions (PAInitiationRequest, PAInitiationResponse, PARequest, PAResponse, PAAppealRequest, PAAppealResponse and PACancelRequest, PACancelResponse, PANotification). These transactions are required if using the standard in § 170.205(b)(2).</P>
+<P>(<I>2</I>) [Reserved]</P>
+<P>(D) [Reserved]</P>
+<P>(E) Limit a user's ability to prescribe all oral liquid medications in only metric standard units of mL (that is, not cc).</P>
+<P>(F) Always insert leading zeroes before the decimal point for amounts less than one and must not allow trailing zeroes after a decimal point when a user prescribes medications.</P>
+<P>(4) <I>Real-time prescription benefit</I>—(i) <I>Send and receive information.</I> Enable a user to perform the following transactions using the XML format in accordance with at least one of the versions of the standards adopted in § 170.205(c); at a minimum, a standard adopted in § 170.207(d)(1); and the standard in § 170.207(d)(2), as follows:</P>
+<P>(A) Request patient-specific prescription benefit information, estimated cost information, and alternative products, in accordance with the RTPBRequest transaction.</P>
+<P>(B) Receive patient-specific prescription benefit information, estimated cost information, and alternative products in response to a request, in accordance with the RTPBResponse transaction.</P>
+<P>(ii) <I>Display.</I> Display to a user in human readable format patient-specific prescription benefit information, estimated cost information, and alternative products, in accordance with at least one of the versions of the standard adopted in § 170.205(c).</P>
+<P>(5)-(6) [Reserved]</P>
+<P>(7) <I>Security tags—summary of care—send.</I> Enable a user to create a summary record formatted in accordance with the standard adopted in § 170.205(a)(4) that is tagged as restricted and subject to restrictions on re-disclosure according to the standard adopted in § 170.205(o)(1) at the document, section, and entry (data element) level.</P>
+<P>(8) <I>Security tags—summary of care—receive.</I> (i) Enable a user to receive a summary record that is formatted in accordance with the standard adopted in § 170.205(a)(4) that is tagged as restricted and subject to restrictions on re-disclosure according to the standard adopted in § 170.205(o)(1) at the document, section, and entry (data element) level; and</P>
+<P>(ii) Preserve privacy markings to ensure fidelity to the tagging based on consent and with respect to sharing and re-disclosure restrictions.</P>
+<P>(9) <I>Care plan.</I> Enable a user to record, change, access, create, and receive care plan information in accordance with:</P>
+<P>(i) The Care Plan document template, including the Health Status Evaluations and Outcomes Section and Interventions Section (V2), in the standard specified in § 170.205(a)(4); and</P>
+<P>(ii) The standard in § 170.205(a)(5) for the time period up to and including December 31, 2025; or § 170.205(a)(6).</P>
+<P>(10) <I>Electronic Health Information export</I>—(i) <I>Single patient electronic health information export.</I> (A) Enable a user to timely create an export file(s) with all of a single patient's electronic health information that can be stored at the time of certification by the product, of which the Health IT Module is a part.</P>
+<P>(B) A user must be able to execute this capability at any time the user chooses and without subsequent developer assistance to operate.</P>
+<P>(C) Limit the ability of users who can create export file(s) in at least one of these two ways:</P>
+<P>(<I>1</I>) To a specific set of identified users</P>
+<P>(<I>2</I>) As a system administrative function.</P>
+<P>(D) The export file(s) created must be electronic and in a computable format.</P>
+<P>(E) The publicly accessible hyperlink of the export's format must be included with the exported file(s).</P>
+<P>(ii) <I>Patient population electronic health information export.</I> Create an export of all the electronic health information that can be stored at the time of certification by the product, of which the Health IT Module is a part.</P>
+<P>(A) The export created must be electronic and in a computable format.</P>
+<P>(B) The publicly accessible hyperlink of the export's format must be included with the exported file(s).</P>
+<P>(iii) <I>Documentation.</I> The export format(s) used to support paragraphs (b)(10)(i) and (ii) of this section must be kept up-to-date.</P>
+<P>(11) Decision support interventions—</P>
+<P>(i) <I>Decision support intervention interaction.</I> Interventions provided to a user must occur when a user is interacting with technology.</P>
+<P>(ii) <I>Decision support configuration.</I> (A) Enable interventions specified in paragraphs (b)(11)(iii) of this section to be configured by a limited set of identified users based on a user's role.</P>
+<P>(B) Enable interventions when a patient's medications, allergies and intolerance, and problems are incorporated from a transition of care or referral summary received and pursuant to paragraph (b)(2)(iii)(D) of this section.</P>
+<P>(C) Enable a user to provide electronic feedback data for evidence-based decision support interventions selected via the capability provided in paragraph (b)(11)(iii)(A) of this section and make available such feedback data to a limited set of identified users for export, in a computable format, including at a minimum the intervention, action taken, user feedback provided (if applicable), user, date, and location.</P>
+<P>(iii) <I>Decision support intervention selection.</I> Enable a limited set of identified users to select (<I>i.e.,</I> activate) electronic decision support interventions (in addition to drug-drug and drug-allergy contraindication checking) that are:</P>
+<P>(A) Evidence-based decision support interventions and use any data based on the following data expressed in the standards in § 170.213:</P>
+<P>(<I>1</I>) Problems;</P>
+<P>(<I>2</I>) Medications;</P>
+<P>(<I>3</I>) Allergies and Intolerances;</P>
+<P>(<I>4</I>) At least one demographic specified in paragraph (a)(5)(i) of this section;</P>
+<P>(<I>5</I>) Laboratory;</P>
+<P>(<I>6</I>) Vital Signs;</P>
+<P>(<I>7</I>) Unique Device Identifier(s) for a Patient's Implantable Device(s); and</P>
+<P>(<I>8</I>) Procedures.</P>
+<P>(B) Predictive Decision Support Interventions and use any data expressed in the standards in § 170.213.</P>
+<P>(iv) <I>Source attributes.</I> Source attributes listed in paragraphs (b)(11)(iv)(A) and (B) of this section must be supported.</P>
+<P>(A) For evidence-based decision support interventions:</P>
+<P>(<I>1</I>) Bibliographic citation of the intervention (clinical research or guideline);</P>
+<P>(<I>2</I>) Developer of the intervention (translation from clinical research or guideline);</P>
+<P>(<I>3</I>) Funding source of the technical implementation for the intervention(s) development;</P>
+<P>(<I>4</I>) Release and, if applicable, revision dates of the intervention or reference source;</P>
+<P>(<I>5</I>) Use of race as expressed in the standards in § 170.213;</P>
+<P>(<I>6</I>) Use of ethnicity as expressed in the standards in § 170.213;</P>
+<P>(<I>7</I>) Use of language as expressed in the standards in § 170.213;</P>
+<P>(<I>8</I>) Use of sexual orientation as expressed in the standards in § 170.213;</P>
+<P>(<I>9</I>) Use of gender identity as expressed in the standards in § 170.213;</P>
+<P>(<I>10</I>) Use of sex as expressed in the standards in § 170.213;</P>
+<P>(<I>11</I>) Use of date of birth as expressed in the standards in § 170.213;</P>
+<P>(<I>12</I>) Use of social determinants of health data as expressed in the standards in § 170.213; and</P>
+<P>(<I>13</I>) Use of health status assessments data as expressed in the standards in § 170.213.</P>
+<P>(B) For Predictive Decision Support Interventions:</P>
+<P>(<I>1</I>) Details and output of the intervention, including:</P>
+<P>(<I>i</I>) Name and contact information for the intervention developer;</P>
+<P>(<I>ii</I>) Funding source of the technical implementation for the intervention(s) development;</P>
+<P>(<I>iii</I>) Description of value that the intervention produces as an output; and</P>
+<P>(<I>iv</I>) Whether the intervention output is a prediction, classification, recommendation, evaluation, analysis, or other type of output.</P>
+<P>(<I>2</I>) Purpose of the intervention, including:</P>
+<P>(<I>i</I>) Intended use of the intervention;</P>
+<P>(<I>ii</I>) Intended patient population(s) for the intervention's use;</P>
+<P>(<I>iii</I>) Intended user(s); and</P>
+<P>(<I>iv</I>) Intended decision-making role for which the intervention was designed to be used/for (<I>e.g.,</I> informs, augments, replaces clinical management).</P>
+<P>(<I>3</I>) Cautioned out-of-scope use of the intervention, including:</P>
+<P>(<I>i</I>) Description of tasks, situations, or populations where a user is cautioned against applying the intervention; and</P>
+<P>(<I>ii</I>) Known risks, inappropriate settings, inappropriate uses, or known limitations.</P>
+<P>(<I>4</I>) Intervention development details and input features, including at a minimum:</P>
+<P>(<I>i</I>) Exclusion and inclusion criteria that influenced the training data set;</P>
+<P>(<I>ii</I>) Use of variables in paragraphs (b)(11)(iv)(A)(<I>5</I>) through (<I>13</I>) of this section as input features;</P>
+<P>(<I>iii</I>) Description of demographic representativeness according to variables in paragraphs (b)(11)(iv)(A)(<I>5</I>) through (<I>13</I>) of this section including, at a minimum, those used as input features in the intervention;</P>
+<P>(<I>iv</I>) Description of relevance of training data to intended deployed setting; and</P>
+<P>(<I>5</I>) Process used to ensure fairness in development of the intervention, including:</P>
+<P>(<I>i</I>) Description of the approach the intervention developer has taken to ensure that the intervention's output is fair; and</P>
+<P>(<I>ii</I>) Description of approaches to manage, reduce, or eliminate bias.</P>
+<P>(<I>6</I>) External validation process, including:</P>
+<P>(<I>i</I>) Description of the data source, clinical setting, or environment where an intervention's validity and fairness has been assessed, other than the source of training and testing data</P>
+<P>(<I>ii</I>) Party that conducted the external testing;</P>
+<P>(<I>iii</I>) Description of demographic representativeness of external data according to variables in paragraph (b)(11)(iv)(A)(<I>5</I>)-(<I>13</I>) including, at a minimum, those used as input features in the intervention; and</P>
+<P>(<I>iv</I>) Description of external validation process.</P>
+<P>(<I>7</I>) Quantitative measures of performance, including:</P>
+<P>(<I>i</I>) Validity of intervention in test data derived from the same source as the initial training data;</P>
+<P>(<I>ii</I>) Fairness of intervention in test data derived from the same source as the initial training data;</P>
+<P>(<I>iii</I>) Validity of intervention in data external to or from a different source than the initial training data;</P>
+<P>(<I>iv</I>) Fairness of intervention in data external to or from a different source than the initial training data;</P>
+<P>(<I>v</I>) References to evaluation of use of the intervention on outcomes, including, bibliographic citations or hyperlinks to evaluations of how well the intervention reduced morbidity, mortality, length of stay, or other outcomes;</P>
+<P>(<I>8</I>) Ongoing maintenance of intervention implementation and use, including:</P>
+<P>(<I>i</I>) Description of process and frequency by which the intervention's validity is monitored over time;</P>
+<P>(<I>ii</I>) Validity of intervention in local data;</P>
+<P>(<I>iii</I>) Description of the process and frequency by which the intervention's fairness is monitored over time;</P>
+<P>(<I>iv</I>) Fairness of intervention in local data; and</P>
+<P>(<I>9</I>) Update and continued validation or fairness assessment schedule, including:</P>
+<P>(<I>i</I>) Description of process and frequency by which the intervention is updated; and</P>
+<P>(<I>ii</I>) Description of frequency by which the intervention's performance is corrected when risks related to validity and fairness are identified.</P>
+<P>(v) <I>Source attribute access and modification</I>—(A) <I>Access.</I> (<I>1</I>) For evidence-based decision support interventions and Predictive Decision Support Interventions supplied by the health IT developer as part of its Health IT Module, the Health IT Module must enable a limited set of identified users to access complete and up-to-date plain language descriptions of source attribute information specified in paragraphs (b)(11)(iv)(A) and (B) of this section.</P>
+<P>(<I>2</I>) For Predictive Decision Support Interventions supplied by the health IT developer as part of its Health IT Module, the Health IT Module must indicate when information is not available for review for source attributes in paragraphs (b)(11)(iv)(B)(<I>6</I>); (b)(11)(iv)(B)(<I>7</I>)(<I>iii</I>), (<I>iv</I>), and (<I>v</I>); (b)(11)(iv)(B)(<I>8</I>)(<I>ii</I>) and (<I>iv</I>); and (b)(11)(iv)(B)(<I>9</I>) of this section.</P>
+<P>(B) <I>Modify.</I> (<I>1</I>) For evidence-based decision support interventions and Predictive Decision Support Interventions, the Health IT Module must enable a limited set of identified users to record, change, and access source attributes in paragraphs (b)(11)(iv)(A) and (B) of this section.</P>
+<P>(<I>2</I>) For Predictive Decision Support Interventions, the Health IT Module must enable a limited set of identified users to record, change, and access additional source attributes not specified in paragraph (b)(11)(iv)(B) of this section.</P>
+<P>(vi) <I>Intervention risk management.</I> Intervention risk management practices must be applied for each Predictive Decision Support Intervention supplied by the health IT developer as part of its Health IT Module.</P>
+<P>(A) <I>Risk analysis.</I> The Predictive Decision Support Intervention(s) must be subject to analysis of potential risks and adverse impacts associated with the following characteristics: validity, reliability, robustness, fairness, intelligibility, safety, security, and privacy.</P>
+<P>(B) <I>Risk mitigation.</I> The Predictive Decision Support Intervention (s) must be subject to practices to mitigate risks, identified in accordance with paragraph (b)(11)(vi)(A) of this section; and</P>
+<P>(C) <I>Governance.</I> The Predictive Decision Support Intervention(s) must be subject to policies and implemented controls for governance, including how data are acquired, managed, and used.</P>
+<P>(c) <I>Clinical quality measures</I>—(1) <I>Clinical quality measures—record and export</I>—(i) <I>Record.</I> For each and every CQM for which the technology is presented for certification, the technology must be able to record all of the data that would be necessary to calculate each CQM. Data required for CQM exclusions or exceptions must be codified entries, which may include specific terms as defined by each CQM, or may include codified expressions of “patient reason,” “system reason,” or “medical reason.”</P>
+<P>(ii) <I>Export.</I> A user must be able to export a data file at any time the user chooses and without subsequent developer assistance to operate:</P>
+<P>(A) Formatted in accordance with the standard specified in § 170.205(h)(2);</P>
+<P>(B) Ranging from one to multiple patients; and</P>
+<P>(C) That includes all of the data captured for each and every CQM to which technology was certified under paragraph (c)(1)(i) of this section.</P>
+<P>(2) <I>Clinical quality measures—import and calculate</I>—(i) <I>Import.</I> Enable a user to import a data file in accordance with the standard specified in § 170.205(h)(2) for one or multiple patients and use such data to perform the capability specified in paragraph (c)(2)(ii) of this section. A user must be able to execute this capability at any time the user chooses and without subsequent developer assistance to operate.</P>
+<P>(ii) Calculate each and every clinical quality measure for which it is presented for certification.</P>
+<P>(3) <I>Clinical quality measures—report.</I> Enable a user to electronically create a data file for transmission of clinical quality measurement data:</P>
+<P>(i) In accordance with the applicable implementation specifications specified by the CMS implementation guides for Quality Reporting Document Architecture (QRDA), category I, for inpatient measures in § 170.205(h)(3) and CMS implementation guide for QRDA, category III for ambulatory measures in § 170.205 (k)(3); or</P>
+<P>(ii) In accordance with the standards specified in § 170.205(h)(2) and § 170.205(k)(1) and (2) for the period before December 31, 2022.</P>
+<P>(4) <I>Clinical quality measures—filter.</I> (i) Record the data listed in paragraph (c)(4)(iii) of this section in accordance with the identified standards, where specified.</P>
+<P>(ii) Filter CQM results at the patient and aggregate levels by each one and any combination of the data listed in paragraph (c)(4)(iii) of this section and be able to:</P>
+<P>(A) Create a data file of the filtered data in accordance with the standards adopted in § 170.205(h)(2) and § 170.205(k)(1) and (2); and</P>
+<P>(B) Display the filtered data results in human readable format.</P>
+<P>(iii) <I>Data.</I></P>
+<P>(A) Taxpayer Identification Number.</P>
+<P>(B) National Provider Identifier.</P>
+<P>(C) Provider type in accordance with, at a minimum, the standard specified in § 170.207(r)(2).</P>
+<P>(D) Practice site address.</P>
+<P>(E) Patient insurance in accordance with the standard specified in § 170.207(s)(2).</P>
+<P>(F) Patient age.</P>
+<P>(G) Patient sex in accordance with the version of the standard specified in § 170.207(n)(2).</P>
+<P>(H) Patient race and ethnicity in accordance with, at a minimum, the version of the standard specified in § 170.207(f)(3).</P>
+<P>(I) Patient problem list data in accordance with, at a minimum, the version of the standard specified in § 170.207(a)(1).</P>
+<P>(d) <I>Privacy and security</I>—(1) <I>Authentication, access control, and authorization.</I> (i) Verify against a unique identifier(s) (<I>e.g.</I>, username or number) that a user seeking access to electronic health information is the one claimed; and</P>
+<P>(ii) Establish the type of access to electronic health information a user is permitted based on the unique identifier(s) provided in paragraph (d)(1)(i) of this section, and the actions the user is permitted to perform with the technology.</P>
+<P>(2) <I>Auditable events and tamper-resistance</I>—(i)<I> Record actions.</I> Technology must be able to:</P>
+<P>(A) Record actions related to electronic health information in accordance with the standard specified in § 170.210(e)(1);</P>
+<P>(B) Record the audit log status (enabled or disabled) in accordance with the standard specified in § 170.210(e)(2) unless it cannot be disabled by any user; and</P>
+<P>(C) Record the encryption status (enabled or disabled) of electronic health information locally stored on end-user devices by technology in accordance with the standard specified in § 170.210(e)(3) unless the technology prevents electronic health information from being locally stored on end-user devices (see paragraph (d)(7) of this section).</P>
+<P>(ii)<I> Default setting.</I> Technology must be set by default to perform the capabilities specified in paragraph (d)(2)(i)(A) of this section and, where applicable, paragraphs (d)(2)(i)(B) and (d)(2)(i)(C) of this section.</P>
+<P>(iii) <I>When disabling the audit log is permitted.</I> For each capability specified in paragraphs (d)(2)(i)(A) through (C) of this section that technology permits to be disabled, the ability to do so must be restricted to a limited set of users.</P>
+<P>(iv)<I> Audit log protection.</I> Actions and statuses recorded in accordance with paragraph (d)(2)(i) of this section must not be capable of being changed, overwritten, or deleted by the technology.</P>
+<P>(v) <I>Detection.</I> Technology must be able to detect whether the audit log has been altered.</P>
+<P>(3) <I>Audit report(s).</I> Enable a user to create an audit report for a specific time period and to sort entries in the audit log according to each of the data specified in the standards in § 170.210(e).</P>
+<P>(4) <I>Amendments.</I> Enable a user to select the record affected by a patient's request for amendment and perform the capabilities specified in paragraph (d)(4)(i) or (ii) of this section.</P>
+<P>(i) <I>Accepted amendment.</I> For an accepted amendment, append the amendment to the affected record or include a link that indicates the amendment's location.</P>
+<P>(ii) <I>Denied amendment.</I> For a denied amendment, at a minimum, append the request and denial of the request in at least one of the following ways:</P>
+<P>(A) To the affected record.</P>
+<P>(B) Include a link that indicates this information's location.</P>
+<P>(5) <I>Automatic access time-out.</I> (i) Automatically stop user access to health information after a predetermined period of inactivity.</P>
+<P>(ii) Require user authentication in order to resume or regain the access that was stopped.</P>
+<P>(6) <I>Emergency access.</I> Permit an identified set of users to access electronic health information during an emergency.</P>
+<P>(7) <I>End-user device encryption.</I> The requirements specified in one of the following paragraphs (that is, paragraphs (d)(7)(i) and (d)(7)(ii) of this section) must be met to satisfy this certification criterion.</P>
+<P>(i) Technology that is designed to locally store electronic health information on end-user devices must encrypt the electronic health information stored on such devices after use of the technology on those devices stops.</P>
+<P>(A) Electronic health information that is stored must be encrypted in accordance with the standard specified in § 170.210(a)(2).</P>
+<P>(B) <I>Default setting.</I> Technology must be set by default to perform this capability and, unless this configuration cannot be disabled by any user, the ability to change the configuration must be restricted to a limited set of identified users.</P>
+<P>(ii) Technology is designed to prevent electronic health information from being locally stored on end-user devices after use of the technology on those devices stops.</P>
+<P>(8) <I>Integrity.</I> (i) Create a message digest in accordance with the standard specified in § 170.210(c)(2).</P>
+<P>(ii) Verify in accordance with the standard specified in § 170.210(c)(2) upon receipt of electronically exchanged health information that such information has not been altered.</P>
+<P>(9) <I>Trusted connection.</I> Establish a trusted connection using one of the following methods:</P>
+<P>(i) <I>Message-level.</I> Encrypt and integrity protect message contents in accordance with the standards specified in § 170.210(a)(2) and (c)(2).</P>
+<P>(ii) <I>Transport-level.</I> Use a trusted connection in accordance with the standards specified in § 170.210(a)(2) and (c)(2).</P>
+<P>(10) <I>Auditing actions on health information.</I> (i) By default, be set to record actions related to electronic health information in accordance with the standard specified in § 170.210(e)(1).</P>
+<P>(ii) If technology permits auditing to be disabled, the ability to do so must be restricted to a limited set of users.</P>
+<P>(iii) Actions recorded related to electronic health information must not be capable of being changed, overwritten, or deleted by the technology.</P>
+<P>(iv) Technology must be able to detect whether the audit log has been altered.</P>
+<P>(11) <I>Accounting of disclosures.</I> Record disclosures made for treatment, payment, and health care operations in accordance with the standard specified in § 170.210(d).</P>
+<P>(12) <I>Encrypt authentication credentials.</I> Health IT developers must make one of the following attestations and may provide the specified accompanying information, where applicable:</P>
+<P>(i) Yes—the Health IT Module encrypts stored authentication credentials in accordance with standards adopted in § 170.210(a)(2).</P>
+<P>(ii) No—the Health IT Module does not encrypt stored authentication credentials. When attesting “no,” the health IT developer may explain why the Health IT Module does not support encrypting stored authentication credentials.</P>
+<P>(13) <I>Multi-factor authentication.</I> Health IT developers must make one of the following attestations and, as applicable, provide the specified accompanying information:</P>
+<P>(i) Yes—the Health IT Module supports the authentication, through multiple elements, of the user's identity with the use of industry-recognized standards. When attesting “yes,” the health IT developer must describe the use cases supported.</P>
+<P>(ii) No—the Health IT Module does not support authentication, through multiple elements, of the user's identity with the use of industry-recognized standards. When attesting “no,” the health IT developer may explain why the Health IT Module does not support authentication, through multiple elements, of the user's identity with the use of industry-recognized standards.</P>
+<P>(e) <I>Patient engagement</I>—(1) <I>View, download, and transmit to 3rd party.</I> (i) Patients (and their authorized representatives) must be able to use internet-based technology to view, download, and transmit their health information to a 3rd party in the manner specified below. Such access must be consistent and in accordance with the standard adopted in § 170.204(a)(1) and may alternatively be demonstrated in accordance with the standard specified in § 170.204(a)(2).</P>
+<P>(A) <I>View.</I> Patients (and their authorized representatives) must be able to use health IT to view, at a minimum, the following data:</P>
+<P>(<I>1</I>) The data classes expressed in the standards in § 170.213 (which should be in their English (<I>i.e.,</I> non-coded) representation if they associate with a vocabulary/code set), and in accordance with § 170.205(a)(4) and (a)(5), and paragraphs (e)(1)(i)(A)(<I>3</I>)(<I>i</I>) through (<I>iii</I>) of this section for the time period up to and including December 31, 2025, or</P>
+<P>(<I>2</I>) The data classes expressed in the standards in § 170.213 (which should be in their English (<I>i.e.,</I> non-coded) representation if they associate with a vocabulary/code set), and in accordance with § 170.205(a)(4) and (a)(6), and paragraphs (e)(1)(i)(A)(<I>3</I>)(<I>i</I>) through (<I>iii</I>) of this section.</P>
+<P>(<I>3</I>) The following data classes:</P>
+<P>(<I>i</I>) <I>Assessment and plan of treatment.</I> In accordance with the “Assessment and Plan Section (V2)” of the standard specified in § 170.205(a)(4); or in accordance with the “Assessment Section (V2)” and “Plan of Treatment Section (V2)” of the standard specified in § 170.205(a)(4).</P>
+<P>(<I>ii</I>) <I>Goals.</I> In accordance with the “Goals Section” of the standard specified in § 170.205(a)(4).</P>
+<P>(<I>iii</I>) <I>Health concerns.</I> In accordance with the “Health Concerns Section” of the standard specified in § 170.205(a)(4).</P>
+<P>(<I>iv</I>) <I>Unique device identifier(s) for a patient's implantable device(s).</I> In accordance with the “Product Instance” in the “Procedure Activity Procedure Section” of the standards specified in § 170.205(a)(4).</P>
+<P>(<I>4</I>) Ambulatory setting only. Provider's name and office contact information.</P>
+<P>(<I>5</I>) Inpatient setting only. Admission and discharge dates and locations; discharge instructions; and reason(s) for hospitalization.</P>
+<P>(<I>6</I>) Laboratory test report(s). Laboratory test report(s), including:</P>
+<P>(<I>i</I>) The information for a test report as specified all the data specified in 42 CFR 493.1291(c)(1) through (7);</P>
+<P>(<I>ii</I>) The information related to reference intervals or normal values as specified in 42 CFR 493.1291(d); and</P>
+<P>(<I>iii</I>) The information for corrected reports as specified in 42 CFR 493.1291(k)(2).</P>
+<P>(<I>7</I>) Diagnostic image report(s).</P>
+<P>(B) <I>Download.</I> (<I>1</I>) Patients (and their authorized representatives) must be able to use technology to download an ambulatory summary or inpatient summary (as applicable to the health IT setting for which certification is requested) in the following formats:</P>
+<P>(<I>i</I>) Human readable format; and</P>
+<P>(<I>ii</I>) The format specified in accordance with the standard specified in § 170.205(a)(4) and (5) for the time period up to and including December 31, 2025, or § 170.205(a)(4) and (6), and following the CCD document template.</P>
+<P>(<I>2</I>) When downloaded according to the standard specified in § 170.205(a)(4) through (6) following the CCD document template, the ambulatory summary or inpatient summary must include, at a minimum, the following data (which, for the human readable version, should be in their English representation if they associate with a vocabulary/code set):</P>
+<P>(<I>i</I>) <I>Ambulatory setting only.</I> All of the data specified in paragraph (e)(1)(i)(A)(<I>1</I>), (<I>2</I>), (<I>4</I>), and (<I>5</I>) of this section.</P>
+<P>(<I>ii</I>) <I>Inpatient setting only.</I> All of the data specified in paragraphs (e)(1)(i)(A)(<I>1</I>), and (<I>3</I>) through (<I>5</I>) of this section.</P>
+<P>(<I>3</I>) <I>Inpatient setting only.</I> Patients (and their authorized representatives) must be able to download transition of care/referral summaries that were created as a result of a transition of care (pursuant to the capability expressed in the certification criterion specified in paragraph (b)(1) of this section).</P>
+<P>(C) <I>Transmit to third party.</I> Patients (and their authorized representatives) must be able to:</P>
+<P>(<I>1</I>) Transmit the ambulatory summary or inpatient summary (as applicable to the health IT setting for which certification is requested) created in paragraph (e)(1)(i)(B)(<I>2</I>) of this section in accordance with both of the following ways:</P>
+<P>(<I>i</I>) Email transmission to any email address; and</P>
+<P>(<I>ii</I>) An encrypted method of electronic transmission.</P>
+<P>(<I>2</I>) <I>Inpatient setting only.</I> Transmit transition of care/referral summaries (as a result of a transition of care/referral as referenced by (e)(1)(i)(B)(<I>3</I>)) of this section selected by the patient (or their authorized representative) in both of the ways referenced (e)(1)(i)(C)(<I>1</I>)(<I>i</I>) and (<I>ii</I>) of this section).</P>
+<P>(D) <I>Timeframe selection.</I> With respect to the data available to view, download, and transmit as referenced paragraphs (e)(1)(i)(A), (B), and (C) of this section, patients (and their authorized representatives) must be able to:</P>
+<P>(<I>1</I>) Select data associated with a specific date (to be viewed, downloaded, or transmitted); and</P>
+<P>(<I>2</I>) Select data within an identified date range (to be viewed, downloaded, or transmitted).</P>
+<P>(ii) <I>Activity history log.</I> (A) When any of the capabilities included in paragraphs (e)(1)(i)(A) through (C) of this section are used, the following information must be recorded and made accessible to the patient (or his/her authorized representative):</P>
+<P>(<I>1</I>) The action(s) (<I>i.e.</I>, view, download, transmission) that occurred;</P>
+<P>(<I>2</I>) The date and time each action occurred in accordance with the standard specified in § 170.210(g);</P>
+<P>(<I>3</I>) The user who took the action; and</P>
+<P>(<I>4</I>) Where applicable, the addressee to whom an ambulatory summary or inpatient summary was transmitted.</P>
+<P>(B) [Reserved]</P>
+<P>(iii) <I>Request for restrictions.</I> Patients (and their authorized representatives) must be able to use an internet-based method to request a restriction to be applied for any data expressed in the standards in § 170.213. Conformance with this paragraph is required by January 1, 2026.</P>
+<P>(2) [Reserved]</P>
+<P>(3) <I>Patient health information capture.</I> Enable a user to:</P>
+<P>(i) Identify, record, and access information directly and electronically shared by a patient (or authorized representative).</P>
+<P>(ii) Reference and link to patient health information documents.</P>
+<P>(f) <I>Public health</I>—(1) <I>Transmission to immunization registries.</I> (i) Create immunization information for electronic transmission in accordance with:</P>
+<P>(A) The standard and applicable implementation specifications specified in § 170.205(e)(4).</P>
+<P>(B) At a minimum, the version of the standard specified in § 170.207(e)(1) for historical vaccines.</P>
+<P>(C) At a minimum, the version of the standard specified in § 170.207(e)(2) for administered vaccines.</P>
+<P>(ii) Enable a user to request, access, and display a patient's evaluated immunization history and the immunization forecast from an immunization registry in accordance with the standard at § 170.205(e)(4).</P>
+<P>(2) <I>Transmission to public health agencies—syndromic surveillance.</I> Create syndrome-based public health surveillance information for electronic transmission in accordance with the standard (and applicable implementation specifications) specified in § 170.205(d)(4).</P>
+<P>(3) <I>Transmission to public health agencies—reportable laboratory tests and values/results.</I> Create reportable laboratory tests and values/results for electronic transmission in accordance with:</P>
+<P>(i) The standard (and applicable implementation specifications) specified in § 170.205(g).</P>
+<P>(ii) At a minimum, the versions of the standards specified in § 170.207(a)(1) and (c)(1).</P>
+<P>(4) <I>Transmission to cancer registries.</I> Create cancer case information for electronic transmission in accordance with:</P>
+<P>(i) The standard (and applicable implementation specifications) specified in § 170.205(i)(2).</P>
+<P>(ii) At a minimum, the versions of the standards specified in § 170.207(a)(1) and (c)(1).</P>
+<P>(5) <I>Transmission to public health agencies</I>—<I>electronic case reporting.</I> Enable a user to create a case report for electronic transmission meeting the requirements described in paragraphs (f)(5)(i) of this section for the time period up to and including December 31, 2025; or the requirements described in paragraph (f)(5)(ii) of this section.</P>
+<P>(i) <I>Functional electronic case reporting.</I> A Health IT Module must enable a user to create a case report for electronic transmission in accordance with the following:</P>
+<P>(A) Consume and maintain a table of trigger codes to determine which encounters may be reportable.</P>
+<P>(B) Match a patient visit or encounter to the trigger code based on the parameters of the trigger code table.</P>
+<P>(C) <I>Case report creation.</I> Create a case report for electronic transmission:</P>
+<P>(<I>1</I>) Based on a matched trigger from paragraph (f)(5)(i)(B).</P>
+<P>(<I>2</I>) That includes, at a minimum:</P>
+<P>(<I>i</I>) The data classes expressed in the standards in § 170.213.</P>
+<P>(<I>ii</I>) Encounter diagnoses formatted according to at least one of the standards specified in § 170.207(i) or § 170.207(a)(1).</P>
+<P>(<I>iii</I>) The provider's name, office contact information, and reason for visit.</P>
+<P>(<I>iv</I>) An identifier representing the row and version of the trigger table that triggered the case report.</P>
+<P>(ii) <I>Standards-based electronic case reporting.</I> A Health IT Module must enable a user to create a case report for electronic transmission in accordance with the following:</P>
+<P>(A) Consume and process case reporting trigger codes and identify a reportable patient visit or encounter based on a match from the Reportable Conditions Trigger Code value set in § 170.205(t)(4).</P>
+<P>(B) Create a case report consistent with at least one of the following standards:</P>
+<P>(<I>1</I>) The eICR profile of the HL7 FHIR eCR IG in § 170.205(t)(1); or</P>
+<P>(<I>2</I>) The HL7 CDA eICR IG in § 170.205(t)(2).</P>
+<P>(C) Receive, consume, and process a case report response that is formatted to either the reportability response profile of the HL7 FHIR eCR IG in § 170.205(t)(1) or the HL7 CDA RR IG in § 170.205(t)(3) as determined by the standard used in (f)(5)(ii)(B) of this section.</P>
+<P>(D) Transmit a case report electronically to a system capable of receiving a case report.</P>
+<P>(6) <I>Transmission to public health agencies—antimicrobial use and resistance reporting.</I> Create antimicrobial use and resistance reporting information for electronic transmission in accordance with the standard specified in § 170.205(r)(1).</P>
+<P>(7) <I>Transmission to public health agencies—health care surveys.</I> Create health care survey information for electronic transmission in accordance with the standard specified in § 170.205(s)(1).</P>
+<P>(g) <I>Design and performance</I>—(1) <I>Automated numerator recording.</I> For each Promoting Interoperability Programs percentage-based measure, technology must be able to create a report or file that enables a user to review the patients or actions that would make the patient or action eligible to be included in the measure's numerator. The information in the report or file created must be of sufficient detail such that it enables a user to match those patients or actions to meet the measure's denominator limitations when necessary to generate an accurate percentage.</P>
+<P>(2) <I>Automated measure calculation.</I> For each Promoting Interoperability Programs percentage-based measure that is supported by a capability included in a technology, record the numerator and denominator and create a report including the numerator, denominator, and resulting percentage associated with each applicable measure.</P>
+<P>(3) <I>Safety-enhanced design.</I>
+(i) User-centered design processes must be applied to each capability technology includes that is specified in the following certification criteria: paragraphs (a)(1) through (5), (9) (until the criterion's expiration date), and (14) and (b)(2), (3), and (11) of this section.</P>
+<P>(ii) <I>Number of test participants.</I> A minimum of 10 test participants must be used for the testing of each capability identified in paragraph (g)(3)(i) of this section.</P>
+<P>(iii) One of the following must be submitted on the user-centered design processed used:</P>
+<P>(A) Name, description and citation (URL and/or publication citation) for an industry or federal government standard.</P>
+<P>(B) Name the process(es), provide an outline of the process(es), a short description of the process(es), and an explanation of the reason(s) why use of any of the existing user-centered design standards was impractical.</P>
+<P>(iv) The following information/sections from NISTIR 7742 must be submitted for each capability to which user-centered design processes were applied:</P>
+<P>(A) Name and product version; date and location of the test; test environment; description of the intended users; and total number of participants;</P>
+<P>(B) Description of participants, including: Sex; age; education; occupation/role; professional experience; computer experience; and product experience;</P>
+<P>(C) Description of the user tasks that were tested and association of each task to corresponding certification criteria;</P>
+<P>(D) The specific metrics captured during the testing of each user task performed in (g)(3)(iv)(C) of this section, which must include: Task success (%); task failures (%); task standard deviations (%); task performance time; and user satisfaction rating (based on a scale with 1 as very difficult and 5 as very easy) or an alternative acceptable user satisfaction measure;</P>
+<P>(E) Test results for each task using the metrics identified above in paragraph (g)(3)(iv)(D) of this section; and</P>
+<P>(F) Results and data analysis narrative, including: Major test finding; effectiveness; efficiency; satisfaction; and areas for improvement.</P>
+<P>(v) Submit test scenarios used in summative usability testing.</P>
+<P>(4) <I>Quality management system.</I> (i) For each capability that a technology includes and for which that capability's certification is sought, the use of a Quality Management System (QMS) in the development, testing, implementation, and maintenance of that capability must be identified that satisfies one of the following ways:</P>
+<P>(A) The QMS used is established by the Federal government or a standards developing organization.</P>
+<P>(B) The QMS used is mapped to one or more QMS established by the Federal government or standards developing organization(s).</P>
+<P>(ii) When a single QMS was used for applicable capabilities, it would only need to be identified once.</P>
+<P>(iii) When different QMS were applied to specific capabilities, each QMS applied would need to be identified.</P>
+<P>(5) <I>Accessibility-centered design.</I> For each capability that a Health IT Module includes and for which that capability's certification is sought, the use of a health IT accessibility-centered design standard or law in the development, testing, implementation and maintenance of that capability must be identified.</P>
+<P>(i) When a single accessibility-centered design standard or law was used for applicable capabilities, it would only need to be identified once.</P>
+<P>(ii) When different accessibility-centered design standards and laws were applied to specific capabilities, each accessibility-centered design standard or law applied would need to be identified. This would include the application of an accessibility-centered design standard or law to some capabilities and none to others.</P>
+<P>(iii) When no accessibility-centered design standard or law was applied to all applicable capabilities such a response is acceptable to satisfy this certification criterion.</P>
+<P>(6) <I>Consolidated CDA creation performance.</I> The following technical and performance outcomes must be demonstrated related to Consolidated CDA creation. The capabilities required under paragraphs (g)(6)(i) through (v) of this section can be demonstrated in tandem and do not need to be individually addressed in isolation or sequentially.</P>
+<P>(i) This certification criterion's scope includes:</P>
+<P>(A) The data classes expressed in the standards in § 170.213 in accordance with § 170.205(a)(4) and (a)(5) and paragraphs (g)(6)(i)(C)(<I>1</I>) through (<I>4</I>) of this section for the time period up to and including December 31, 2025; or</P>
+<P>(B) The data classes expressed in the standards in § 170.213, and in accordance with § 170.205(a)(4) and (6) and paragraphs (g)(6)(i)(C)(<I>1</I>) through (<I>3</I>) of this section.</P>
+<P>(C) The following data classes:</P>
+<P>(<I>1</I>) <I>Assessment and plan of treatment.</I> In accordance with the “Assessment and Plan Section (V2)” of the standard specified in § 170.205(a)(4); or in accordance with the “Assessment Section (V2)” and “Plan of Treatment Section (V2)” of the standard specified in § 170.205(a)(4).</P>
+<P>(<I>2</I>) <I>Goals.</I> In accordance with the “Goals Section” of the standard specified in § 170.205(a)(4).</P>
+<P>(<I>3</I>) <I>Health concerns.</I> In accordance with the “Health Concerns Section” of the standard specified in § 170.205(a)(4).</P>
+<P>(<I>4</I>) <I>Unique device identifier(s) for a patient's implantable device(s).</I> In accordance with the “Product Instance” in the “Procedure Activity Procedure Section” of the standard specified in § 170.205(a)(4).</P>
+<P>(ii) <I>Reference C-CDA match.</I> (A) For health IT certified to (g)(6)(i)(A) of this section, create a data file formatted in accordance with the standard adopted in § 170.205(a)(4) and (5) that matches a gold-standard, reference data file.</P>
+<P>(B) For health IT certified to (g)(6)(i)(B) of this section, create a data file formatted in accordance with the standard adopted in § 170.205(a)(4) that matches a gold-standard, reference data file.</P>
+<P>(iii) <I>Document-template conformance.</I> (A) For health IT certified to (g)(6)(i)(A) of this section, create a data file formatted in accordance with the standard adopted in § 170.205(a)(4) and (5) that demonstrates a valid implementation of each document template applicable to the certification criterion or criteria within the scope of the certificate sought.</P>
+<P>(B) For health IT certified to (g)(6)(i)(B) of this section, create a data file formatted in accordance with the standard adopted in § 170.205(a)(4) that demonstrates a valid implementation of each document template applicable to the certification criterion or criteria within the scope of the certificate sought.</P>
+<P>(iv) <I>Vocabulary conformance.</I> (A) For health IT certified to (g)(6)(i)(A) of this section, create a data file formatted in accordance with the standard adopted in § 170.205(a)(4) and (5) that demonstrates the required vocabulary standards (and value sets) are properly implemented.</P>
+<P>(B) For health IT certified to (g)(6)(i)(B) of this section, create a data file formatted in accordance with the standard adopted in § 170.205(a)(4) that demonstrates the required vocabulary standards (and value sets) are properly implemented.</P>
+<P>(v) <I>Completeness verification.</I> Create a data file for each of the applicable document templates referenced in paragraph (g)(6)(iii) of this section without the omission of any of the data included in either paragraph (g)(6)(i)(A) or (B) of this section, as applicable.</P>
+<P>(7) <I>Application access—patient selection.</I> The following technical outcome and conditions must be met through the demonstration of an application programming interface (API).</P>
+<P>(i) <I>Functional requirement.</I> The technology must be able to receive a request with sufficient information to uniquely identify a patient and return an ID or other token that can be used by an application to subsequently execute requests for that patient's data.</P>
+<P>(ii) <I>Documentation.</I> (A) The API must include accompanying documentation that contains, at a minimum:</P>
+<P>(<I>1</I>) API syntax, function names, required and optional parameters and their data types, return variables and their types/structures, exceptions and exception handling methods and their returns.</P>
+<P>(<I>2</I>) The software components and configurations that would be necessary for an application to implement in order to be able to successfully interact with the API and process its response(s).</P>
+<P>(B) The documentation used to meet paragraph (g)(7)(ii)(A) of this section must be available via a publicly accessible hyperlink.</P>
+<P>(8) [Reserved]</P>
+<P>(9) <I>Application access—all data request.</I> The following technical outcome and conditions must be met through the demonstration of an application programming interface.</P>
+<P>(i) <I>Functional requirements.</I> (A)(<I>1</I>) Respond to requests for patient data (based on an ID or other token) for all of the data classes expressed in the standards in § 170.213 at one time and return such data (according to the specified standards, where applicable) in a summary record formatted in accordance with § 170.205(a)(4) and (5) following the CCD document template, and as specified in paragraphs (g)(9)(i)(A)(<I>3</I>)(<I>i</I>) through (<I>iv</I>) of this section for the time period up to and including December 31, 2025; or</P>
+<P>(<I>2</I>) Respond to requests for patient data (based on an ID or other token) for all of the data classes expressed in the standards in § 170.213 at one time and return such data (according to the specified standards, where applicable) in a summary record formatted in accordance with § 170.205(a)(4) and (6) following the CCD document template, and as specified in paragraphs (g)(9)(i)(A)(<I>3</I>)(<I>i</I>) through (<I>iv</I>) of this section.</P>
+<P>(<I>3</I>) The following data classes:</P>
+<P>(<I>i</I>) <I>Assessment and plan of treatment.</I> In accordance with the “Assessment and Plan Section (V2)” of the standards specified in § 170.205(a)(4); or in accordance with the “Assessment Section (V2)” and “Plan of Treatment Section (V2)” of the standards specified in § 170.205(a)(4).</P>
+<P>(<I>ii</I>) <I>Goals.</I> In accordance with the “Goals Section” of the standards specified in § 170.205(a)(4).</P>
+<P>(<I>iii</I>) <I>Health concerns.</I> In accordance with the “Health Concerns Section” of the standards specified in § 170.205(a)(4).</P>
+<P>(<I>iv</I>) <I>Unique device identifier(s) for a patient's implantable device(s).</I> In accordance with the “Product Instance” in the “Procedure Activity Procedure Section” of the standards specified in § 170.205(a)(4).</P>
+<P>(B) Respond to requests for patient data associated with a specific date as well as requests for patient data within a specified date range.</P>
+<P>(ii) <I>Documentation</I>—(A) The API must include accompanying documentation that contains, at a minimum:</P>
+<P>(<I>1</I>) API syntax, function names, required and optional parameters and their data types, return variables and their types/structures, exceptions and exception handling methods and their returns.</P>
+<P>(<I>2</I>) The software components and configurations that would be necessary for an application to implement in order to be able to successfully interact with the API and process its response(s).</P>
+<P>(B) The documentation used to meet paragraph (g)(9)(ii)(A) of this section must be available via a publicly accessible hyperlink.</P>
+<P>(10) <I>Standardized API for patient and population services.</I> The following technical outcomes and conditions must be met through the demonstration of application programming interface technology.</P>
+<P>(i) <I>Data response.</I>
+(A) Respond to requests for a single patient's data according to the standards and implementation specifications adopted in § 170.215(a) and in § 170.215(b)(1), including the mandatory capabilities described in “US Core Server CapabilityStatement,” for each of the data included in the standards adopted in § 170.213. All data elements indicated as “mandatory” and “must support” by the standards and implementation specifications must be supported.</P>
+<P>(B) Respond to requests for multiple patients' data as a group according to the standards and implementation specifications adopted in § 170.215(a), (b)(1), and (d), for each of the data included in the standards adopted in § 170.213. All data elements indicated as “mandatory” and “must support” by the standards and implementation specifications must be supported.</P>
+<P>(ii) <I>Supported search operations.</I> (A) Respond to search requests for a single patient's data consistent with the search criteria included in the implementation specifications adopted in § 170.215(b)(1), specifically the mandatory capabilities described in “US Core Server CapabilityStatement.”</P>
+<P>(B) Respond to search requests for multiple patients' data consistent with the search criteria included in the implementation specification adopted in § 170.215(d).</P>
+<P>(iii) <I>Application registration.</I> Enable an application to register with the Health IT Module's “authorization server.”</P>
+<P>(iv) <I>Secure connection.</I> (A) Establish a secure and trusted connection with an application that requests data for patient and user scopes in accordance with the implementation specifications adopted in § 170.215(b)(1) and (c).</P>
+<P>(B) Establish a secure and trusted connection with an application that requests data for system scopes in accordance with the implementation specification adopted in § 170.215(d).</P>
+<P>(v) <I>Authentication and authorization</I>—(A) <I>Authentication and authorization for patient and user scopes</I>—(<I>1</I>) <I>First time connections.</I> (<I>i</I>) Authentication and authorization must occur during the process of granting access to patient data in accordance with the implementation specification adopted in § 170.215(c) and standard adopted in § 170.215(e).</P>
+<P>(<I>ii</I>) A Health IT Module's authorization server must issue a refresh token valid for a period of no less than three months to applications using the “confidential app” profile according to an implementation specification adopted in § 170.215(c).</P>
+<P>(<I>iii</I>) A Health IT Module's authorization server must issue a refresh token for a period of no less than three months to native applications capable of securing a refresh token</P>
+<P>(<I>2</I>) <I>Subsequent connections.</I> (<I>i</I>) Access must be granted to patient data in accordance with the implementation specification adopted in § 170.215(c) without requiring re-authorization and re-authentication when a valid refresh token is supplied by the application.</P>
+<P>(<I>ii</I>) A Health IT Module's authorization server must issue a refresh token valid for a new period of no less than three months to applications using the “confidential app” profile according to an implementation specification adopted in § 170.215(c).</P>
+<P>(B) Authentication and authorization for system scopes. Authentication and authorization must occur during the process of granting an application access to patient data in accordance with the “SMART Backend Services: Authorization Guide” section of the implementation specification adopted in § 170.215(d) and the application must be issued a valid access token.</P>
+<P>(vi) <I>Patient authorization revocation.</I> A Health IT Module's authorization server must be able to revoke and must revoke an authorized application's access at a patient's direction within 1 hour of the request.</P>
+<P>(vii) <I>Token introspection.</I> A Health IT Module's authorization server must be able to receive and validate tokens it has issued in accordance with an implementation specification in § 170.215(c).</P>
+<P>(viii) <I>Documentation.</I> (A) The API(s) must include complete accompanying documentation that contains, at a minimum:</P>
+<P>(<I>1</I>) API syntax, function names, required and optional parameters supported and their data types, return variables and their types/structures, exceptions and exception handling methods and their returns.</P>
+<P>(<I>2</I>) The software components and configurations that would be necessary for an application to implement in order to be able to successfully interact with the API and process its response(s).</P>
+<P>(<I>3</I>) All applicable technical requirements and attributes necessary for an application to be registered with a Health IT Module's authorization server.</P>
+<P>(B) The documentation used to meet paragraph (g)(10)(viii)(A) of this section must be available via a publicly accessible hyperlink without any preconditions or additional steps.</P>
+<P>(11)-(30) [Reserved]</P>
+<P>(31) <I>Provider prior authorization API—coverage requirements discovery.</I> Support the following capabilities to enable users to request and receive coverage requirements.</P>
+<P>(i) <I>Coverage discovery.</I> Support the capability to initiate and exchange information as a “CRD Client” to enable the identification of coverage requirements according to at least one of the versions of the implementation specification adopted in § 170.215(j)(1), including the following:</P>
+<P>(A) <I>Registration.</I> Support registration capabilities applicable to “CRD Clients”.</P>
+<P>(B) <I>CDS Hooks support.</I> Support the capabilities in paragraph (j)(20) of this section to enable workflow triggers to call decision support services including support for the “order-sign” CDS Hook.</P>
+<P>(C) <I>CRD Client capabilities.</I> Support all requirements and required capabilities applicable to a “CRD Client.”</P>
+<P>(ii) <I>Documentation.</I> Supported API server capabilities of “CRD Clients” from an implementation specification adopted in § 170.215(j)(1) must include complete accompanying technical documentation.</P>
+<P>(32) <I>Provider prior authorization API—documentation templates and rules.</I> Support the capability for users to request and populate prior authorization documentation using templates and rules as a “Full DTR EHR” according to at least one of the versions of the implementation specification adopted in § 170.215(j)(2), including:</P>
+<P>(i) <I>Registration.</I> Support registration capabilities applicable to a “Full DTR EHR.”</P>
+<P>(ii) <I>Authentication and authorization.</I> Support system authentication and authorization as a client in accordance with the “Backend Services” section of at least one of the versions of the implementation specification adopted in § 170.215(c).</P>
+<P>(iii) <I>Full DTR EHR capabilities.</I> Support all requirements and required capabilities applicable to a “Full DTR EHR.”</P>
+<P>(33) <I>Provider prior authorization API—prior authorization support.</I> Support the following capabilities to enable users to submit prior authorization requests.</P>
+<P>(i) <I>Prior authorization submission.</I> Support submitting a prior authorization request as a client in accordance with at least one of the versions of the implementation specification adopted in § 170.215(j)(3) including the following:</P>
+<P>(A) <I>Registration.</I> Support registration capabilities applicable to a client system.</P>
+<P>(B) <I>Authentication and authorization.</I> Support system authentication and authorization as a client in accordance with the “Backend Services” section of at least one of the versions of the implementation specification adopted in § 170.215(c).</P>
+<P>(C) <I>Prior authorization transactions.</I> Support the ability to submit a prior authorization request as a client system including the following:</P>
+<P>(<I>1</I>) Support the capabilities in the “EHR PAS Capabilities” Capability Statement.</P>
+<P>(<I>2</I>) Support the ability to consume and process a “ClaimResponse.”</P>
+<P>(<I>3</I>) Support subscriptions as a client according to the requirements in paragraph (j)(21) of this section in order to support “pended authorization responses.”</P>
+<P>(ii) <I>Documentation.</I> Supported subscriptions client endpoint capabilities for the “REST-Hook” channel from implementation specifications adopted in § 170.215(j)(3) must include complete accompanying technical documentation.</P>
+<P>(h) <I>Transport methods and other protocols</I>—(1) <I>Direct Project</I>—(i) <I>Applicability Statement for Secure Health Transport.</I> Able to send and receive health information in accordance with the standard specified in § 170.202(a)(2), including formatted only as a “wrapped” message.</P>
+<P>(ii) <I>Delivery Notification in Direct.</I> Able to send and receive health information in accordance with the standard specified in § 170.202(e)(1).</P>
+<P>(2) <I>Direct Project, Edge Protocol, and XDR/XDM.</I> (i) Able to send and receive health information in accordance with:</P>
+<P>(A) The standard specified in § 170.202(a)(2), including formatted only as a “wrapped” message;</P>
+<P>(B) The standard specified in § 170.202(b), including support for both limited and full XDS metadata profiles; and</P>
+<P>(C) Both edge protocol methods specified by the standard in § 170.202(d).</P>
+<P>(ii) <I>Delivery Notification in Direct.</I> Able to send and receive health information in accordance with the standard specified in § 170.202(e)(1).</P>
+<P>(i) [Reserved]</P>
+<P>(j) <I>Modular API capabilities.</I> The following technical outcomes and conditions must be met through the demonstration of application programming interface technology.</P>
+<P>(1)-(19) [Reserved]</P>
+<P>(20) <I>Workflow triggers for decision support interventions—clients.</I> Support the requirements applicable to a “CDS Client” according to at least one of the implementation specifications in § 170.215(f) including the following:</P>
+<P>(i) <I>Registration.</I> Support registration capabilities applicable to “CDS Clients”.</P>
+<P>(ii) <I>Authentication and authorization.</I> Support authentication and authorization, including the following:</P>
+<P>(A) Support for client authentication using JSON web tokens (JWT).</P>
+<P>(B) Support for data access authorization of a “CDS Service” using access tokens.</P>
+<P>(iii) <I>Workflow triggers.</I> Support the execution of decision support workflow triggers.</P>
+<P>(iv) <I>Information exchange.</I> Send a decision support request to a “CDS Service,” including support for the following:</P>
+<P>(A) <I>Resource access via API.</I> Support access to HL7 FHIR Resources via a RESTful API to support decision support intervention workflows according to the “FHIR Resource Access” section.</P>
+<P>(B) <I>Receive and display response.</I> Support the receipt of a decision support response, including support for the display of the contents of a decision support response to an end-user.</P>
+<P>(21) <I>Subscriptions—client.</I> Support subscriptions as a client according to at least one of the implementation specifications in § 170.215(h), including the following:</P>
+<P>(i) Support the requirements in section “Topic-Based Subscriptions—FHIR R4.”</P>
+<P>(ii) Support the “R4/B Topic-Based Subscription” profile.</P>
+<P>(iii) Support the accompanying client capabilities for the minimum requirements included in the “R4 Topic-Based Subscription Server Capability Statement,” including support for “create,” “update,” and “delete” interactions for Subscription Resources.</P>
+<P>(iv) Receive subscription notifications according to section “Topic-Based Subscriptions—FHIR R4,” including support for consuming notifications via the “REST-Hook” channel as specified in the “Channels” section.</P>
+<CITA TYPE="N">[80 FR 62747, Oct. 16, 2015, as amended at 80 FR 76871, Dec. 11, 2015; 85 FR 25941, May 1, 2020; 85 FR 47099, Aug. 4, 2020; 85 FR 70083, Nov. 4, 2020; 85 FR 78236, Dec. 4, 2020; 89 FR 1429, Jan. 9, 2024; 89 FR 8548, Feb. 8, 2024; 89 FR 16470, Mar. 7, 2024; 89 FR 101809, Dec. 16, 2024; 90 FR 37210, Aug. 4, 2025]
+</CITA>
+</DIV8>
+

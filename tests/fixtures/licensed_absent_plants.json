@@ -1,0 +1,18 @@
+{
+  "_why": "Planted pointers for tests/test_licensed_parsers_absent.py, as TEMPLATES: {m} is filled with a moved module's name at test time, so no byte of the public commit spells an import of one (the publish guard's L3 reads every blob's text, and #37's publish step reads *.py).",
+  "texts": {
+    "README.md": "See `ingest/{m0}.py`, and ingest.{m1}.",
+    "docs/x.md": "{f0} reads it.",
+    "tests/t.py": "    from policyforge.ingest import levelled, {m2}",
+    "tests/test_gen.py": "def {f0}(path): ...",
+    "src/policyforge/ingest/levelled.py": "from policyforge.ingest.levelled import Record",
+    "CHANGELOG.md": "See ingest/{m0}.py."
+  },
+  "live": [
+    ["README.md", "ingest/{m0}.py"],
+    ["README.md", "ingest.{m1}"],
+    ["docs/x.md", "{f0}"],
+    ["tests/t.py", "from policyforge.ingest import levelled, {m2}"]
+  ],
+  "history": [["CHANGELOG.md", "ingest/{m0}.py"]]
+}

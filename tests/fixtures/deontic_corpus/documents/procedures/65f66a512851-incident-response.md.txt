@@ -1,0 +1,91 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001184
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 2b0785683d4f5592
+  provider: litellm
+  provider_class: third-party
+---
+
+# Incident Response Policy and Procedure Management Procedure
+
+## Purpose
+
+Executing this procedure develops, documents, disseminates, and maintains Example Org's incident response policy and its supporting implementation procedures, ensuring they remain compliant with applicable laws and regulations and effective against current threats. It establishes the named ownership, review cadence, and privacy guidance integration required for the organization's incident response program.
+
+## Scope
+
+This procedure is performed by Security Operations, which is accountable end to end for incident response policy and procedure lifecycle management, on a continuous basis across Example Org at the organization level. It covers the incident response policy document, its implementing procedures, and the review and update activities that keep both current.
+
+## Prerequisites
+
+- Access to the organization's document management and publication system ([Document Management System]) for drafting, versioning, and disseminating the policy and procedures.
+- A formally designated official responsible for the incident response policy and procedures, named in the appropriate security and privacy documents ([Designated IR Policy Official]).
+- A named point of contact in the privacy office for PII-related incident handling guidance ([Privacy Office]).
+- Access to incident tickets with timelines and the most recent tabletop exercise report for event-triggered reviews ([Incident Management System], [Exercise Records Repository]).
+- Awareness of current applicable laws, executive orders, directives, regulations, policies, standards, and guidelines governing incident response.
+
+## Procedure Steps
+
+### Develop and Document the Incident Response Policy [NIST IR-1 Low/Moderate/High | FedRAMP IR-1 | ARC-AMPE IR-1 AE Mandatory | HIPAA 164.308(a)(6)(i)]
+
+1. Security Operations drafts the incident response policy, ensuring it explicitly addresses each required element: purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance.
+1. Cross-check each policy element against applicable laws, executive orders, directives, regulations, policies, standards, and guidelines to confirm consistency, and record the sources consulted in the policy document's references section.
+1. Submit the draft to the [Designated IR Policy Official] for review and to management for sign-off evidencing management commitment.
+1. Publish the approved policy in the [Document Management System] as a versioned document.
+
+### Establish the Policy at the Organization Level [NIST IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1 AE Mandatory]
+
+1. Author the policy as an organization-level policy document, per the ARC-AMPE requirement, rather than scoping it to a single mission/business process or system.
+1. Verify the policy's stated scope covers all Example Org personnel and systems subject to incident response obligations.
+1. If any mission/business process-level or system-level supplements exist, confirm they align with and do not contradict the organization-level policy.
+
+### Develop Implementation Procedures [NIST IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1 AE Mandatory]
+
+1. Security Operations develops procedures that operationalize each requirement of the incident response policy and its associated incident response controls.
+1. Map each procedure section to the specific policy provision and control it implements so traceability between policy, procedures, and controls is explicit.
+1. Publish the procedures alongside the policy in the [Document Management System] under version control.
+
+### Designate the Responsible Official and Disseminate [NIST IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1 AE Mandatory]
+
+1. Confirm the [Designated IR Policy Official] assigned to manage the development, documentation, and dissemination of the incident response policy and procedures is recorded by name in the appropriate security and privacy documents, as ARC-AMPE requires.
+1. Record the designated official's name and role in the policy document's header/metadata block.
+1. Security Operations disseminates the approved policy and procedures to all applicable personnel and roles using the [Document Management System] distribution workflow, and tracks acknowledgement of receipt.
+1. Re-disseminate each time a new or updated version is published.
+
+### Review and Update at the Defined Frequency and Following Defined Events [NIST IR-1 | FedRAMP IR-1]
+
+1. Security Operations reviews and updates the incident response policy and procedures on the organization-defined schedule ([Review Frequency]).
+1. Trigger an out-of-cycle review following any organization-defined event, including assessment or audit findings; security or privacy incidents; and changes to applicable laws, executive orders, directives, regulations, policies, standards, or guidelines.
+1. Record the review outcome — date, reviewer, changes made, and rationale — in the document's version history.
+
+### Conduct the Annual Review and Event-Triggered Updates [ARC-AMPE IR-1 AE Mandatory]
+
+1. At least every one (1) year, Security Operations conducts a full review of the incident response policy and procedures, and updates them as needed.
+1. Following any assessment or audit finding, security incident, or privacy incident, pull the relevant incident tickets with timelines (or audit/assessment findings) from the [Incident Management System] and the most recent tabletop exercise report, and evaluate whether the policy and procedures performed as written.
+1. Where the review identifies gaps, Security Operations updates the policy or procedures, obtains [Designated IR Policy Official] approval, and re-disseminates per the dissemination steps above.
+1. Retain each annual review record and its supporting artifacts (incident tickets with timelines, tabletop exercise report) as evidence of the review.
+
+### Monitor for Legal and Regulatory Changes Affecting Incident Response [ARC-AMPE IR-1 AE Mandatory]
+
+1. On a continuous basis, Security Operations actively monitors for changes to applicable privacy laws, regulations, and overarching organizational policy that affect the incident response policy, using [Legal/Regulatory Monitoring Source].
+1. When a change is identified, log it in a change-tracking record ([Ticketing System]) and assess its impact on the incident response policy and procedures.
+1. At least every one (1) year, review the accumulated change record and confirm the incident response policies and procedures remain effective in light of those changes, documenting the effectiveness determination in the review record.
+
+### Incorporate Privacy Office Guidance for PII Incidents
+
+1. Obtain written guidance from the [Privacy Office] on handling incidents involving Personally Identifiable Information (PII), including any support the privacy office requires during such incidents.
+1. Incorporate that guidance directly into the incident response policy and procedures as a dedicated PII incident handling section.
+1. Re-engage the [Privacy Office] whenever the policy or procedures are updated, to confirm the PII guidance remains accurate and complete.
+
+## Roles & Responsibilities
+
+Security Operations is authorized to develop, document, disseminate, review, and update the incident response policy and procedures and owns this process end to end. The [Designated IR Policy Official] approves policy content and is named in the security and privacy documents, the [Privacy Office] provides and validates PII incident handling guidance, and exceptions to any step in this procedure require review and approval by the [Designated IR Policy Official].
+
+## Related Standard
+
+Example Org Information Security Standard: Incident Response

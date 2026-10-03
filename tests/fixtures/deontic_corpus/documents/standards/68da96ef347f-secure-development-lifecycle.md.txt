@@ -1,0 +1,509 @@
+# System Acquisition and Development Standard
+
+## 1. Purpose and Scope
+
+This standard establishes requirements for the acquisition, development, and management of information systems, system components, and services at Acme Health. These requirements apply to all systems that store, process, or transmit organizational data, including systems containing Personally Identifiable Information (PII) and Protected Health Information (PHI).
+
+## 2. System Development Life Cycle
+
+### 2.1 SDLC Requirements
+
+Acme Health shall acquire, develop, and manage systems using a formally defined and documented system development life cycle (SDLC) that incorporates information security and privacy considerations. [NIST 800-53 SA-3 | ARC-AMPE SA-3]
+
+Acme Health shall define and document information security and privacy roles and responsibilities throughout the system development life cycle. [NIST 800-53 SA-3 | ARC-AMPE SA-3]
+
+Acme Health shall identify individuals having information security and privacy roles and responsibilities. [NIST 800-53 SA-3 | ARC-AMPE SA-3]
+
+Acme Health shall integrate the organizational information security and privacy risk management process into system development life cycle activities. [NIST 800-53 SA-3 | ARC-AMPE SA-3]
+
+Acme Health shall ensure the security and privacy offices have an opportunity to ensure requirements to protect Personally Identifiable Information (PII) are appropriately considered throughout the system development life cycle. [ARC-AMPE SA-3]
+
+### 2.2 Preproduction Environment Protection
+
+Acme Health shall protect system preproduction environments commensurate with risk throughout the system development life cycle for the system, system component, or system service. [NIST 800-53 SA-3(1) | ARC-AMPE SA-3(1)]
+
+Acme Health shall approve, document, and control the use of live data in preproduction environments for the system, system component, or system service. [NIST 800-53 SA-3(2) | ARC-AMPE SA-3(2)]
+
+Acme Health shall protect preproduction environments for the system, system component, or system service at the same impact or classification level as any live data in use within the preproduction environments. [NIST 800-53 SA-3(2) | ARC-AMPE SA-3(2)]
+
+If Personally Identifiable Information (PII) is used in the test environment, Acme Health shall apply the same controls required for systems containing PII to the test environment. [ARC-AMPE SA-3(2)]
+
+Acme Health shall use synthetic PII information to the maximum extent practicable when testing system functionality. [ARC-AMPE SA-3(2)]
+
+Acme Health shall limit the creation, collection, use, and/or disclosure of PII only to the extent necessary to accomplish a specified and authorized purpose(s). [ARC-AMPE SA-3(2)]
+
+Acme Health shall obtain approval from the senior official for privacy for the use of PII in testing, training, and research, with preference for using synthetic or de-identified data. [ARC-AMPE SA-3(2)]
+
+Acme Health shall use non-production data when executing test scripts or in a test environment that is configured to comply with the security controls as though it were a production environment. [ARC-AMPE SA-11]
+
+Acme Health shall connect all systems supporting development and pre-production testing to an isolated network separated from production systems, with network traffic permitted only to facilitate system testing and restricted by source and destination access control lists as well as ports and protocols. [ARC-AMPE SA-11]
+
+### 2.3 Technology Refresh
+
+Acme Health shall plan for and implement a technology refresh schedule for the system throughout the system development life cycle. [NIST 800-53 SA-3(3)]
+
+## 3. Acquisition and Contracting Requirements
+
+### 3.1 General Acquisition Contract Requirements
+
+Acme Health shall include the following requirements, descriptions, and criteria, explicitly or by reference, in the acquisition contract for the system, system component, or system service: security and privacy functional requirements; strength of mechanism requirements; security and privacy assurance requirements; controls needed to satisfy the security and privacy requirements; security and privacy documentation requirements; requirements for protecting security and privacy documentation; description of the system development environment and environment in which the system is intended to operate; allocation of responsibility or identification of parties responsible for information security, privacy, and supply chain risk management; and acceptance criteria. [NIST 800-53 SA-4 | ARC-AMPE SA-4]
+
+Acme Health shall include standardized contract language in acquisition contracts. [ARC-AMPE SA-4]
+
+In each contract and Statement of Work (SOW) that requires development or access to systems that contain Personally Identifiable Information (PII), Acme Health shall include language requiring adherence to the security and privacy policies and standards set by the organization, define security and privacy roles and responsibilities, and receive approval from the system owner. [ARC-AMPE SA-4]
+
+When acquiring information systems, components, or services used to store, process, or transmit PII, Acme Health shall ensure the acquisition contract includes: a list of security and privacy controls necessary to ensure protection of PII; privacy requirements, including privacy training and awareness, and rules of behavior; and privacy functional requirements. [ARC-AMPE SA-4]
+
+### 3.2 Developer Functional Properties and Design Information
+
+Acme Health shall require the developer of the system, system component, or system service to provide a description of the functional properties of the controls to be implemented. [NIST 800-53 SA-4(1) Moderate, High | ARC-AMPE SA-4(1)]
+
+Acme Health shall require the developer of the system, system component, or system service to provide design and implementation information for the controls that includes: [Selection (one or more): security-relevant external system interfaces; high-level design; low-level design; source code or hardware schematics; [Assignment: organization-defined design and implementation information]] at [Assignment: organization-defined level of detail]. [NIST 800-53 SA-4(2) Moderate, High]
+
+Acme Health shall require the developer of the system, system component, or system service to provide design and implementation information for the controls that includes security-relevant external system interfaces, high-level design documentation, and source code or hardware schematics at organization-defined level of detail to prove the control implementation. [ARC-AMPE SA-4(2)]
+
+Functional properties of security controls describe the functionality visible at the interfaces of the controls and specifically exclude functionality and data structures internal to the operation of the controls. [ARC-AMPE SA-4(2)]
+
+### 3.3 Developer Methods and Processes
+
+Acme Health shall require the developer to use [Assignment: organization-defined systems engineering methods]; [Selection (one or more): [Assignment: organization-defined system security engineering methods]; [Assignment: organization-defined privacy engineering methods]]; and [Selection (one or more): [Assignment: organization-defined software development methods]; [Assignment: organization-defined testing, evaluation, assessment, verification, and validation methods]; [Assignment: organization-defined quality control processes]]. [NIST 800-53 SA-4(3)]
+
+### 3.4 Security Configurations and Product Requirements
+
+Acme Health shall deliver the system, component, or service with [Assignment: organization-defined security configurations] implemented and use the configurations as the default for any subsequent system, component, or service reinstallation or upgrade. [NIST 800-53 SA-4(5) High]
+
+Acme Health shall employ only government off-the-shelf or commercial off-the-shelf information assurance and information assurance-enabled information technology products that compose an NSA-approved solution to protect classified information when the networks used to transmit the information are at a lower classification level than the information being transmitted, and ensure that these products have been evaluated and/or validated by NSA or in accordance with NSA-approved procedures. [NIST 800-53 SA-4(6)]
+
+Acme Health shall limit the use of commercially provided information assurance and information assurance-enabled information technology products to those products that have been successfully evaluated against a National Information Assurance partnership (NIAP)-approved Protection Profile for a specific technology type, if such a profile exists. [NIST 800-53 SA-4(7)]
+
+If no NIAP-approved Protection Profile exists for a specific technology type but a commercially provided information technology product relies on cryptographic functionality to enforce its security policy, Acme Health shall require that the cryptographic module is FIPS-validated or NSA-approved. [NIST 800-53 SA-4(7)]
+
+Acme Health shall employ only information technology products on the FIPS 201-approved products list for Personal Identity Verification (PIV) capability implemented within organizational systems. [NIST 800-53 SA-4(10) Low, Moderate, High]
+
+### 3.5 Continuous Monitoring and Functions
+
+Acme Health shall require the developer of the system, system component, or system service to produce a plan for continuous monitoring of control effectiveness that is consistent with the continuous monitoring program of the organization. [NIST 800-53 SA-4(8)]
+
+Acme Health shall require the developer of the system, system component, or system service to identify the functions, ports, protocols, and services intended for organizational use. [NIST 800-53 SA-4(9) Moderate, High | ARC-AMPE SA-4(9)]
+
+### 3.6 Data Ownership and Privacy Requirements
+
+Acme Health shall include [Assignment: organization-defined Privacy Act requirements] in the acquisition contract for the operation of a system of records on behalf of an organization to accomplish an organizational mission or function. [NIST 800-53 SA-4(11)]
+
+Acme Health shall include organizational data ownership requirements in the acquisition contract and require all data to be removed from the contractor's system and returned to the organization within [Assignment: organization-defined time frame]. [NIST 800-53 SA-4(12)]
+
+### 3.7 HIPAA Business Associate Agreements
+
+Acme Health shall permit a business associate to create, receive, maintain, or transmit electronic protected health information on the covered entity's behalf only if the covered entity obtains satisfactory assurances, documented through a written contract, that the business associate will appropriately safeguard the information. [HIPAA Security Rule 164.308(b)(1) | HIPAA Security Rule 164.308(b)(3) | HIPAA Security Rule 164.314(a)(1)]
+
+Acme Health shall ensure the business associate contract requires the business associate to: comply with the applicable requirements of this subpart; ensure that any subcontractors that create, receive, maintain, or transmit electronic protected health information on behalf of the business associate agree to comply with the applicable requirements by entering into a contract that complies with this section; and report to the covered entity any security incident of which it becomes aware, including breaches of unsecured protected health information. [HIPAA Security Rule 164.314(a)(2)(i)]
+
+Acme Health shall apply the same contract requirements to business associate contracts with subcontractors as apply to contracts between a covered entity and business associate. [HIPAA Security Rule 164.314(a)(2)(iii)]
+
+## 4. System and Developer Documentation
+
+### 4.1 Administrator Documentation
+
+Acme Health shall obtain or develop administrator documentation for the system, system component, or system service that describes: secure configuration, installation, and operation of the system, component, or service; effective use and maintenance of security and privacy functions and mechanisms; and known vulnerabilities regarding configuration and use of administrative or privileged functions. [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5]
+
+### 4.2 User Documentation
+
+Acme Health shall obtain or develop user documentation for the system, system component, or system service that describes: user-accessible security and privacy functions and mechanisms and how to effectively use those functions and mechanisms; methods for user interaction, which enables individuals to use the system, component, or service in a more secure manner and protect individual privacy; and user responsibilities in maintaining the security of the system, component, or service and privacy of individuals. [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5]
+
+### 4.3 Documentation Management
+
+Acme Health shall document attempts to obtain system, system component, or system service documentation when such documentation is either unavailable or nonexistent and take [Assignment: organization-defined actions] in response. [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5]
+
+Acme Health shall distribute documentation to [Assignment: organization-defined personnel or roles]. [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5]
+
+Acme Health shall follow the FedRAMP Secure Configuration Guide rules. [FedRAMP SA-5]
+
+Acme Health shall develop system documentation to describe the system and to specify the purpose, technical operation, access, maintenance, and required training for administrators and users. [ARC-AMPE SA-5]
+
+Acme Health shall maintain an updated list of related system operations and security documentation. [ARC-AMPE SA-5]
+
+Upon changes in system functions or processes, Acme Health shall update relevant system documentation and ensure these documents include date and version numbers. [ARC-AMPE SA-5]
+
+Acme Health shall evaluate and protect documentation based on whether it is in alignment with the risk management strategy or essential for the effective implementation or operation of security controls. [ARC-AMPE SA-5]
+
+## 5. Security and Privacy Engineering Principles
+
+### 5.1 General Engineering Principles
+
+Acme Health shall apply [Assignment: organization-defined systems security and privacy engineering principles] in the specification, design, development, implementation, and modification of the system and system components. [NIST 800-53 SA-8 | ARC-AMPE SA-8]
+
+### 5.2 Least Privilege
+
+Acme Health shall implement the security design principle of least privilege in [Assignment: organization-defined systems or system components]. [NIST 800-53 SA-8(14) | ARC-AMPE SA-8(14)]
+
+Acme Health shall implement the principle of least privilege consistent with the principle of least privilege as discussed in AC-6. [ARC-AMPE SA-8(14)]
+
+### 5.3 Trusted Communications Channels
+
+Acme Health shall implement the security design principle of trusted communications channels in [Assignment: organization-defined systems or system components]. [NIST 800-53 SA-8(18) | ARC-AMPE SA-8(18)]
+
+Acme Health shall restrict access to the communication channel and employ end-to-end protections for data transmitted over the communication channel. [ARC-AMPE SA-8(18)]
+
+### 5.4 Accountability and Traceability
+
+Acme Health shall implement the security design principle of accountability and traceability in [Assignment: organization-defined systems or system components]. [NIST 800-53 SA-8(22) | ARC-AMPE SA-8(22)]
+
+Acme Health shall trace security-relevant actions (i.e., subject-object interactions) to the entity on whose behalf the action is being taken and create a trustworthy infrastructure that can record details about actions that affect system security. [ARC-AMPE SA-8(22)]
+
+### 5.5 Secure Defaults
+
+Acme Health shall implement the security design principle of secure defaults in [Assignment: organization-defined systems or system components]. [NIST 800-53 SA-8(23) | ARC-AMPE SA-8(23)]
+
+### 5.6 Secure System Modification
+
+Acme Health shall implement the security design principle of secure system modification in [Assignment: organization-defined systems or system components]. [NIST 800-53 SA-8(31) | ARC-AMPE SA-8(31)]
+
+Acme Health shall accompany all system changes with a Security Impact Analysis (SIA) and a Privacy Impact Assessment (PIA). [ARC-AMPE SA-8(31)]
+
+### 5.7 Sufficient Documentation
+
+Acme Health shall implement the security design principle of sufficient documentation in [Assignment: organization-defined systems or system components]. [NIST 800-53 SA-8(32) | ARC-AMPE SA-8(32)]
+
+### 5.8 Minimization
+
+Acme Health shall implement the privacy principle of minimization using [Assignment: organization-defined processes]. [NIST 800-53 SA-8(33) | ARC-AMPE SA-8(33)]
+
+Acme Health shall drive processes used to implement minimization by business needs and coordinate with the senior privacy officer, consistent with PM-25, PT-2, and SI-12. [ARC-AMPE SA-8(33)]
+
+## 6. Developer Configuration Management
+
+### 6.1 Configuration Management Requirements
+
+Acme Health shall require the developer to perform configuration management during system, component, or service [Selection (one or more): design; development; implementation; operation; disposal]. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10]
+
+Acme Health shall document, manage, and control the integrity of changes to [Assignment: organization-defined configuration items]. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10]
+
+Acme Health shall implement only organization-approved changes to the system, component, or service. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10]
+
+Acme Health shall document approved changes to the system, component, or service and the potential security and privacy impacts of such changes. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10]
+
+Acme Health shall track security flaws and flaw resolution within the system, component, or service and report findings to [Assignment: organization-defined personnel]. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10]
+
+### 6.2 Integrity Verification
+
+Acme Health shall require the developer of the system, system component, or system service to enable integrity verification of software and firmware components. [NIST 800-53 SA-10(1) | ARC-AMPE SA-10(1)]
+
+Acme Health shall require the developer of the system, system component, or system service to enable integrity verification of hardware components. [NIST 800-53 SA-10(3)]
+
+### 6.3 Alternate Configuration Management
+
+Acme Health shall provide an alternate configuration management process using organizational personnel in the absence of a dedicated developer configuration management team. [NIST 800-53 SA-10(2)]
+
+### 6.4 Configuration Management Tools and Procedures
+
+Acme Health shall require the developer of the system, system component, or system service to employ tools for comparing newly generated versions of security-relevant hardware descriptions, source code, and object code with previous versions. [NIST 800-53 SA-10(4)]
+
+Acme Health shall require the developer of the system, system component, or system service to maintain the integrity of the mapping between the master build data describing the current version of security-relevant hardware, software, and firmware and the on-site master copy of the data for the current version. [NIST 800-53 SA-10(5)]
+
+Acme Health shall require the developer of the system, system component, or system service to execute procedures for ensuring that security-relevant hardware, software, and firmware updates distributed to the organization are exactly as specified by the master copies. [NIST 800-53 SA-10(6)]
+
+Acme Health shall include [Assignment: organization-defined security and privacy representatives] in the [Assignment: organization-defined configuration change management and control process]. [NIST 800-53 SA-10(7)]
+
+## 7. Developer Security and Privacy Testing
+
+### 7.1 General Testing Requirements
+
+Acme Health shall require the developer to develop and implement a plan for ongoing security and privacy control assessments. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11]
+
+Acme Health shall require the developer to perform [Selection (one or more): unit; integration; system; regression] testing/evaluation [Assignment: organization-defined frequency to conduct] at [Assignment: organization-defined depth and coverage]. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11]
+
+Acme Health shall require the developer to produce evidence of the execution of the assessment plan and the results of the testing and evaluation. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11]
+
+Acme Health shall require the developer to implement a verifiable flaw remediation process. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11]
+
+Acme Health shall require the developer to correct flaws identified during testing and evaluation. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11]
+
+Acme Health shall not make security-relevant modifications of the information systems after the assessment. [ARC-AMPE SA-11]
+
+### 7.2 Static and Dynamic Code Analysis
+
+Acme Health shall require the developer of the system, system component, or system service to employ static code analysis tools to identify common flaws and document the results of the analysis. [NIST 800-53 SA-11(1) | ARC-AMPE SA-11(1)]
+
+Acme Health shall require the developer of the system, system component, or system service to employ dynamic code analysis tools to identify common flaws and document the results of the analysis. [NIST 800-53 SA-11(8) | ARC-AMPE SA-11(8)]
+
+Acme Health shall require the developer of the system, system component, or system service to employ interactive application security testing tools to identify flaws and document the results. [NIST 800-53 SA-11(9)]
+
+### 7.3 Threat Modeling and Vulnerability Analysis
+
+Acme Health shall require the developer of the system, system component, or system service to perform threat modeling and vulnerability analyses during development and subsequent testing and evaluation that: uses [Assignment: organization-defined information]; employs [Assignment: organization-defined tools and methods]; conducts the modeling and analyses at [Assignment: organization-defined breadth and depth of modeling and analyses]; and produces evidence that meets [Assignment: organization-defined acceptance criteria]. [NIST 800-53 SA-11(2) | ARC-AMPE SA-11(2)]
+
+### 7.4 Independent Verification
+
+Acme Health shall require an independent agent satisfying [Assignment: organization-defined independence criteria] to verify the correct implementation of the developer security and privacy assessment plans and the evidence produced during testing and evaluation, and verify that the independent agent is provided with sufficient information to complete the verification process or granted the authority to obtain such information. [NIST 800-53 SA-11(3)]
+
+### 7.5 Manual Code Review
+
+Acme Health shall require the developer of the system, system component, or system service to perform a manual code review of [Assignment: organization-defined specific code] using [Assignment: organization-defined processes, procedures, and/or techniques]. [NIST 800-53 SA-11(4)]
+
+### 7.6 Penetration Testing
+
+Acme Health shall require the developer to perform penetration testing at [Assignment: organization-defined breadth and depth of testing] under [Assignment: organization-defined constraints]. [NIST 800-53 SA-11(5)]
+
+### 7.7 Attack Surface Reviews
+
+Acme Health shall require the developer of the system, system component, or system service to perform attack surface reviews. [NIST 800-53 SA-11(6)]
+
+### 7.8 Test Coverage
+
+Acme Health shall require the developer of the system, system component, or system service to verify that the scope of testing and evaluation provides complete coverage of the required controls at [Assignment: organization-defined breadth and depth of testing and evaluation]. [NIST 800-53 SA-11(7)]
+
+## 8. Development Process Requirements
+
+### 8.1 Documented Development Process
+
+Acme Health shall require the developer of the system, system component, or system service to follow a documented development process that: explicitly addresses security and privacy requirements; identifies the standards and tools used in the development process; documents the specific tool options and tool configurations used in the development process; and documents, manages, and ensures the integrity of changes to the process and/or tools used in development. [NIST 800-53 SA-15 Moderate, High | ARC-AMPE SA-15]
+
+Acme Health shall review the development process, standards, tools, tool options, and tool configurations [Assignment: organization-defined frequency] to determine if the process, standards, tools, tool options and tool configurations selected and employed can satisfy [Assignment: organization-defined security and privacy requirements]. [NIST 800-53 SA-15 Moderate, High]
+
+Acme Health shall review the development process, standards, tools, tool options, and tool configurations at least every one (1) year or as needed to determine if the process, standards, tools, and tool options/configurations selected and employed can satisfy organization-defined security and privacy requirements. [ARC-AMPE SA-15]
+
+Acme Health shall ensure organization-defined security and privacy requirements include all applicable System Acquisition (SA) and Configuration Management (CM) security controls and are based on the ARC-AMPE security and privacy controls or their equivalent. [ARC-AMPE SA-15]
+
+When documenting a development process, Acme Health shall consider how to reduce risk to the organization's system architecture and design through efforts such as attack surface reduction, layered defenses, or applying secure software development practices. [ARC-AMPE SA-15]
+
+### 8.2 Quality Metrics
+
+Acme Health shall define quality metrics at the beginning of the development process and provide evidence of meeting the quality metrics [Selection (one or more): [Assignment: organization-defined frequency]; [Assignment: organization-defined program review]; upon delivery]. [NIST 800-53 SA-15(1)]
+
+### 8.3 Security and Privacy Tracking Tools
+
+Acme Health shall require the developer of the system, system component, or system service to select and employ security and privacy tracking tools for use during the development process. [NIST 800-53 SA-15(2)]
+
+### 8.4 Criticality Analysis
+
+Acme Health shall perform criticality analysis at [Assignment: organization-defined decision points] in the system development life cycle at [Assignment: organization-defined breadth and depth of criticality analysis]. [NIST 800-53 SA-15(3) Moderate, High]
+
+### 8.5 Attack Surface Reduction
+
+Acme Health shall require the developer of the system, system component, or system service to reduce attack surfaces to [Assignment: organization-defined thresholds]. [NIST 800-53 SA-15(5)]
+
+### 8.6 Continuous Improvement
+
+Acme Health shall require the developer of the system, system component, or system service to implement an explicit process to continuously improve the development process. [NIST 800-53 SA-15(6)]
+
+### 8.7 Vulnerability Analysis
+
+Acme Health shall perform an automated vulnerability analysis using [Assignment: organization-defined tools]; determine the exploitation potential for discovered vulnerabilities; determine potential risk mitigations for delivered vulnerabilities; and deliver the outputs of the tools and results of the analysis to [Assignment: organization-defined personnel or roles]. [NIST 800-53 SA-15(7)]
+
+### 8.8 Reuse of Threat and Vulnerability Information
+
+Acme Health shall require the developer of the system, system component, or system service to use threat modeling and vulnerability analyses from similar systems, components, or services to inform the current development process. [NIST 800-53 SA-15(8)]
+
+### 8.9 Incident Response Plan
+
+Acme Health shall require the developer of the system, system component, or system service to provide, implement, and test an incident response plan. [NIST 800-53 SA-15(10)]
+
+### 8.10 Archive and Evidence
+
+Acme Health shall require the developer of the system or system component to archive the system or component to be released or delivered together with the corresponding evidence supporting the final security and privacy review. [NIST 800-53 SA-15(11)]
+
+### 8.11 Minimization in Development and Test
+
+Acme Health shall require the developer of the system or system component to minimize the use of personally identifiable information in development and test environments. [NIST 800-53 SA-15(12) | ARC-AMPE SA-15(12)]
+
+Acme Health shall require the developer of the system or system component to minimize the use of personally identifiable information in development and test environments. [NIST 800-53 SA-15(13)]
+
+## 9. Developer Training Requirements
+
+Acme Health shall require the developer of the system, system component, or system service to provide [Assignment: organization-defined training] on the correct use and operation of the implemented security and privacy functions, controls, and/or mechanisms. [NIST 800-53 SA-16 High]
+
+## 10. Formal Design Requirements
+
+### 10.1 Design Specification and Architecture
+
+Acme Health shall require the developer to produce a design specification and security and privacy architecture that: is consistent with the organization's security and privacy architecture that is an integral part the organization's enterprise architecture; accurately and completely describes the required security and privacy functionality, and the allocation of controls among physical and logical components; and expresses how individual security and privacy functions, mechanisms, and services work together to provide required security and privacy capabilities and a unified approach to protection. [NIST 800-53 SA-17 High | ARC-AMPE SA-17]
+
+### 10.2 Formal Policy Model
+
+Acme Health shall produce, as an integral part of the development process, a formal policy model describing [Assignment: organization-defined elements of organizational security and privacy policy] to be enforced, and prove that the formal policy model is internally consistent and sufficient to enforce the defined elements of the organizational security and privacy policy when implemented. [NIST 800-53 SA-17(1)]
+
+### 10.3 Security-Relevant Components
+
+Acme Health shall define security-relevant hardware, software, and firmware, and provide a rationale that the definition for security-relevant hardware, software, and firmware is complete. [NIST 800-53 SA-17(2)]
+
+### 10.4 Formal Top-Level Specification
+
+Acme Health shall produce, as an integral part of the development process, a formal top-level specification that specifies the interfaces to security-relevant hardware, software, and firmware in terms of exceptions, error messages, and effects; show via proof to the extent feasible with additional informal demonstration as necessary that the formal top-level specification is consistent with the formal policy model; show via informal demonstration that the formal top-level specification completely covers the interfaces to security-relevant hardware, software, and firmware; show that the formal top-level specification is an accurate description of the implemented security-relevant hardware, software, and firmware; and describe the security-relevant hardware, software, and firmware mechanisms not addressed in the formal top-level specification but strictly internal to the security-relevant hardware, software, and firmware. [NIST 800-53 SA-17(3)]
+
+### 10.5 Informal Correspondence
+
+Acme Health shall produce, as an integral part of the development process, an informal descriptive top-level specification that specifies the interfaces to security-relevant hardware, software, and firmware in terms of exceptions, error messages, and effects; show via [Selection: informal demonstration, convincing argument with formal methods as feasible] that the descriptive top-level specification is consistent with the formal policy model; show via informal demonstration that the descriptive top-level specification completely covers the interfaces to security-relevant hardware, software, and firmware; show that the descriptive top-level specification is an accurate description of the interfaces to security-relevant hardware, software, and firmware; and describe the security-relevant hardware, software, and firmware mechanisms not addressed in the descriptive top-level specification but strictly internal to the security-relevant hardware, software, and firmware. [NIST 800-53 SA-17(4)]
+
+### 10.6 Conceptually Simple Design
+
+Acme Health shall design and structure the security-relevant hardware, software, and firmware to use a complete, conceptually simple protection mechanism with precisely defined semantics, and internally structure the security-relevant hardware, software, and firmware with specific regard for this mechanism. [NIST 800-53 SA-17(5)]
+
+### 10.7 Structure for Testing
+
+Acme Health shall require the developer of the system, system component, or system service to structure security-relevant hardware, software, and firmware to facilitate testing. [NIST 800-53 SA-17(6)]
+
+### 10.8 Structure for Least Privilege
+
+Acme Health shall require the developer of the system, system component, or system service to structure security-relevant hardware, software, and firmware to facilitate controlling access with least privilege. [NIST 800-53 SA-17(7)]
+
+### 10.9 Coordinated Behavior
+
+Acme Health shall design [Assignment: organization-defined critical systems] with coordinated behavior to implement [Assignment: organization-defined capabilities]. [NIST 800-53 SA-17(8)]
+
+### 10.10 Design Diversity
+
+Acme Health shall use different designs for [Assignment: organization-defined critical systems] to satisfy a common set of requirements or to provide equivalent functionality. [NIST 800-53 SA-17(9)]
+
+## 11. Developer Personnel Requirements
+
+Acme Health shall require that the developer of systems, system components, or system services has appropriate access authorizations as determined by [Assignment: organization-defined official government duties]. [NIST 800-53 SA-21 High]
+
+Acme Health shall require that the developer of systems, system components, or system services has appropriate access authorizations as determined by the assigned Authorizing Official (AO) or Designee. [ARC-AMPE SA-21]
+
+Acme Health shall require that the developer satisfies [Assignment: organization-defined additional personnel screening criteria]. [NIST 800-53 SA-21 High]
+
+Acme Health shall require that the developer satisfies personnel screening criteria consistent with PS-3. [ARC-AMPE SA-21]
+
+## 12. Component Support and Lifecycle Management
+
+Acme Health shall replace system components when support for the components is no longer available from the developer, vendor, or manufacturer. [NIST 800-53 SA-22 Low, Moderate, High | ARC-AMPE SA-22]
+
+Acme Health shall provide [Selection (one or more): in-house support; [Assignment: organization-defined support from external providers]] for alternative sources for continued support for unsupported components. [NIST 800-53 SA-22 Low, Moderate, High]
+
+Acme Health shall provide justification and document the approval for the continued use of unsupported system components required to satisfy mission/business needs. [ARC-AMPE SA-22]
+
+Acme Health shall document the justification and approval for the continued use of unsupported system components required to satisfy mission/business needs in a risk acceptance form and ensure the related Plan of Action & Milestones (POA&M) finding is updated. [ARC-AMPE SA-22]
+
+Acme Health shall establish plans to mitigate or remove the unsupported system, application, operating system, or software once identified. [ARC-AMPE SA-22]
+
+Acme Health shall upgrade, retire, or stop the use of the element or component before end of life or the vendor discontinues product support. [ARC-AMPE SA-22]
+
+Acme Health shall have in place a governance process to review unsupported system components and make a risk-based decision on its continued use when removal is not feasible. [ARC-AMPE SA-22]
+
+## 13. Input Validation and Error Handling
+
+### 13.1 Information Input Validation
+
+Acme Health shall check the validity of [Assignment: organization-defined information inputs]. [NIST 800-53 SI-10 Moderate, High]
+
+Acme Health shall check the validity of all inputs to web/application servers, database servers, and any system or application input that might receive a crafted exploit toward executing some code or buffer overflow. [ARC-AMPE SI-10]
+
+Acme Health shall check the validity of defined information inputs for accuracy, completeness, and validity to ensure that inputs match the specific definitions for format and content. [ARC-AMPE SI-10]
+
+When Personally Identifiable Information (PII) is entered, Acme Health shall use validation techniques to support data quality measures and provide the capability to limit or exclude entering PII within a field. [ARC-AMPE SI-10]
+
+### 13.2 Manual Override
+
+Acme Health shall provide a manual override capability for input validation of [Assignment: organization-defined information inputs]; restrict the use of the manual override capability to only [Assignment: organization-defined authorized individuals]; and audit the use of the manual override capability. [NIST 800-53 SI-10(1)]
+
+### 13.3 Review and Resolution of Errors
+
+Acme Health shall review and resolve input validation errors within [Assignment: organization-defined time period]. [NIST 800-53 SI-10(2)]
+
+### 13.4 Predictable Behavior
+
+Acme Health shall verify that the system behaves in a predictable and documented manner when invalid inputs are received. [NIST 800-53 SI-10(3)]
+
+### 13.5 Timing Interactions
+
+Acme Health shall account for timing interactions among system components in determining appropriate responses for invalid inputs. [NIST 800-53 SI-10(4)]
+
+### 13.6 Restricted Inputs
+
+Acme Health shall restrict the use of information inputs to [Assignment: organization-defined trusted sources] and/or [Assignment: organization-defined formats]. [NIST 800-53 SI-10(5)]
+
+### 13.7 Injection Prevention
+
+Acme Health shall prevent untrusted data injections. [NIST 800-53 SI-10(6)]
+
+### 13.8 Error Handling
+
+Acme Health shall generate error messages that provide information necessary for corrective actions without revealing information that could be exploited. [NIST 800-53 SI-11 Moderate, High | ARC-AMPE SI-11]
+
+Acme Health shall reveal error messages only to [Assignment: organization-defined personnel or roles]. [NIST 800-53 SI-11 Moderate, High | ARC-AMPE SI-11]
+
+Generated error messages shall not reveal user name and password combinations; attributes used to validate a password reset request; Personally Identifiable Information (PII) (excluding unique user name identifiers provided as a normal part of a transactional record); biometric data or personal characteristics used to authenticate identity; sensitive financial records; or content related to internal security functions in error logs and administrative messages that could be exploited by adversaries. [ARC-AMPE SI-11]
+
+## 14. Supply Chain Risk Management
+
+### 14.1 Supply Chain Controls and Processes
+
+Acme Health shall establish a process or processes to identify and address weaknesses or deficiencies in the supply chain elements and processes of [Assignment: organization-defined system or system component] in coordination with [Assignment: organization-defined supply chain personnel]. [NIST 800-53 SR-3 Low, Moderate, High | FedRAMP SR-3 | ARC-AMPE SR-3]
+
+Acme Health shall employ [Assignment: organization-defined supply chain controls] to protect against supply chain risks to the system, system component, or system service and to limit the harm or consequences from supply chain-related events. [NIST 800-53 SR-3 Low, Moderate, High | FedRAMP SR-3 | ARC-AMPE SR-3]
+
+Acme Health shall document the selected and implemented supply chain processes and controls in [Selection (one or more): security and privacy plans; supply chain risk management plan; [Assignment: organization-defined document]]. [NIST 800-53 SR-3 Low, Moderate, High | FedRAMP SR-3 | ARC-AMPE SR-3]
+
+Acme Health shall document and maintain the supply chain custody, including replacement devices, to ensure the integrity of the devices before being introduced to the boundary. [FedRAMP SR-3]
+
+Acme Health shall select organization-defined supply chain controls that are not limited to those defined in ARC-AMPE; select other NIST SP 800-53 Rev. 5 supply chain controls as appropriate for the organization. [ARC-AMPE SR-3]
+
+### 14.2 Diverse Supply Base
+
+Acme Health shall employ a diverse set of sources for [Assignment: organization-defined system components and services]. [NIST 800-53 SR-3(1)]
+
+### 14.3 Supply Chain Protection
+
+Acme Health shall employ [Assignment: organization-defined controls] to limit harm from potential adversaries identifying and targeting the organizational supply chain. [NIST 800-53 SR-3(2)]
+
+### 14.4 Sub-Tier Flow Down
+
+Acme Health shall ensure that the controls included in the contracts of prime contractors are also included in the contracts of subcontractors. [NIST 800-53 SR-3(3)]
+
+### 14.5 Acquisition Strategies and Tools
+
+Acme Health shall employ [Assignment: organization-defined strategies, tools, and methods] acquisition strategies, contract tools, and procurement methods to protect against, identify, and mitigate supply chain risks. [NIST 800-53 SR-5 Low, Moderate, High]
+
+### 14.6 Supply of Critical Components
+
+Acme Health shall employ [Assignment: organization-defined controls] to ensure an adequate supply of [Assignment: organization-defined critical system components]. [NIST 800-53 SR-5(1)]
+
+### 14.7 Assessments Prior to Selection
+
+Acme Health shall assess the system, system component, or system service prior to selection, acceptance, modification, or update. [NIST 800-53 SR-5(2)]
+
+### 14.8 Tamper Protection
+
+Acme Health shall implement a tamper protection program for the system, system component, or system service. [NIST 800-53 SR-9 High]
+
+Acme Health shall employ anti-tamper technologies, tools, and techniques throughout the system development life cycle. [NIST 800-53 SR-9(1) High]
+
+### 14.9 Inspection of Systems and Components
+
+Acme Health shall inspect [Assignment: organization-defined systems or system components] [Selection (one or more): at random; at [Assignment: organization-defined frequency]; upon [Assignment: organization-defined indications of need for inspection]] to detect tampering. [NIST 800-53 SR-10 Low, Moderate, High]
+
+### 14.10 Anti-Counterfeit Measures
+
+Acme Health shall develop and implement anti-counterfeit policy and procedures that include the means to detect and prevent counterfeit components from entering the system. [NIST 800-53 SR-11 Low, Moderate, High]
+
+Acme Health shall report counterfeit system components to [Selection (one or more): source of counterfeit component; [Assignment: organization-defined external reporting organizations]; [Assignment: organization-defined personnel or roles]]. [NIST 800-53 SR-11 Low, Moderate, High]
+
+Acme Health shall train [Assignment: organization-defined personnel or roles] to detect counterfeit system components (including hardware, software, and firmware). [NIST 800-53 SR-11(1) Low, Moderate, High]
+
+Acme Health shall maintain configuration control over [Assignment: organization-defined system components] awaiting service or repair and serviced or repaired components awaiting return to service. [NIST 800-53 SR-11(2) Low, Moderate, High]
+
+Acme Health shall scan for counterfeit system components [Assignment: organization-defined frequency]. [NIST 800-53 SR-11(3)]
+
+### 14.11 Component Disposal
+
+Acme Health shall dispose of [Assignment: organization-defined data, documentation, tools, or system components] using [Assignment: organization-defined techniques and methods]. [NIST 800-53 SR-12 Low, Moderate, High]
+
+Acme Health shall dispose of organization-defined data, documentation, tools, or system components using techniques and methods in accordance with the latest published NIST SP 800-88, Guidelines for Media Sanitization. [ARC-AMPE SR-12]
+
+Acme Health shall apply disposal techniques and methods consistent with MP-6 Media Sanitization. [ARC-AMPE SR-12]
+
+---
+
+**Document Control**
+
+| Version | Date | Description |
+|---------|------|-------------|
+| 1.0 | [Date] | Initial Release |
+
+**Approval**
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| Chief Information Security Officer | | | |
+| Chief Privacy Officer | | | |
+| [Authorizing Official] | | | |

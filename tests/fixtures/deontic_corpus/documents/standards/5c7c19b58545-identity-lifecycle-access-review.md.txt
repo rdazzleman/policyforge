@@ -1,0 +1,458 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.005863
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 4df70ba4ddd45092
+  provider: litellm
+  provider_class: third-party
+---
+
+# Identity Lifecycle & Access Review Standard
+
+**Organization:** Example Org
+**Document Owner:** IAM Engineering
+**Classification:** Internal — Security Policy
+
+## 1. Purpose
+
+This Standard defines the requirements for managing user identities, accounts, access authorizations, and access reviews at Example Org. It applies to all security and IT personnel who provision, administer, monitor, or audit access to organizational systems, and it governs the identity lifecycle from initial identity proofing through account termination. IAM Engineering is accountable for this process end to end, including all handoffs between participating teams.
+
+## 2. Roles and Responsibilities
+
+- **IAM Engineering** owns this Standard and the identity lifecycle and access review process it defines. IAM Engineering performs account provisioning, modification, disablement, and removal; conducts access reviews; designates account managers; and answers for the outcome of every step in this document.
+- **Authorizing Official** approves documented business needs for shared and group accounts and authorizes compelling operational needs as referenced herein.
+- **System Owner** provides explicit authorization for access to security functions and security-relevant information as required by Section 10.
+- **Business Owner, ISSO, system developers/maintainers, and system administrators** are excluded from performing independent information security testing as required by Section 9.
+- **Senior privacy official and legal counsel** consult on the mechanisms required by Section 8.15.
+- **Supervisors and sponsors** provide registration authorization as required by Section 12.
+
+## 3. Access Control Policy and Procedures
+
+### 3.1 Access Control Policy
+
+IAM Engineering must develop, document, and disseminate to applicable personnel and roles an access control policy (at the organization, mission/business process, and/or system level) that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST AC-1 | ARC-AMPE AC-1 | HIPAA 164.308(a)(4)(i)]
+
+### 3.2 Procedures
+
+IAM Engineering must develop, document, and disseminate procedures to facilitate implementation of the access control policy and associated access controls. [NIST AC-1 | ARC-AMPE AC-1 | HIPAA 164.308(a)(3)(i)]
+
+### 3.3 Designated Official
+
+IAM Engineering is the designated official responsible for managing the development, documentation, and dissemination of the access control policy and procedures. [NIST AC-1 | ARC-AMPE AC-1]
+
+### 3.4 Policy Review and Update
+
+IAM Engineering must review and update the access control policy and procedures at [Assignment: organization-defined frequency] and following [Assignment: organization-defined events] (such as assessment or audit findings, security or privacy incidents, and changes to applicable laws, regulations, policies, standards, and guidelines). [NIST AC-1 | ARC-AMPE AC-1 | HIPAA 164.316(b)(2)(iii)]
+
+IAM Engineering must review and update the access control policy and procedures at least every one (1) year, actively monitoring for changes to applicable privacy laws, regulations, and overarching policy that affect them. [ARC-AMPE AC-1]
+
+### 3.5 Documentation Form, Retention, and Availability
+
+IAM Engineering must maintain the implemented policies and procedures in written (which may be electronic) form, retain such documentation (and records of required actions, activities, or assessments) for 6 years from creation or the date last in effect (whichever is later), and make it available to those responsible for implementing the procedures. [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii)]
+
+## 4. Account Types and Account Management
+
+### 4.1 Allowed and Prohibited Account Types
+
+IAM Engineering must define and document the types of accounts allowed and specifically prohibited for use within the system. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 4.2 Default Accounts
+
+Default user accounts must be removed or disabled, and any active default accounts must be renamed. [ARC-AMPE AC-2]
+
+### 4.3 Account Managers
+
+Account managers must be assigned. IAM Engineering designates account managers for the systems within scope of this Standard. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 4.4 Group and Role Membership Criteria
+
+IAM Engineering must require [Assignment: organization-defined prerequisites and criteria] for group and role membership. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 4.5 Authorized Users and Access Authorizations
+
+IAM Engineering must specify the authorized users of the system, group and role membership, and the access authorizations (privileges) and required attributes for each account. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 4.6 Account Creation Approval
+
+Requests to create accounts must be approved by [Assignment: organization-defined personnel or roles]; IAM Engineering performs this approval function. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 4.7 Account Lifecycle Actions
+
+Accounts must be created, enabled, modified, disabled, and removed in accordance with [Assignment: organization-defined policy, procedures, prerequisites, and criteria]. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 4.8 Centralized Administration
+
+User access administrator functions must be centrally controlled. [ARC-AMPE AC-2]
+
+### 4.9 Access Authorization Basis
+
+Access to the system must be authorized based on a valid access authorization, intended system usage, and other [Assignment: organization-defined or mission-required] attributes. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 4.10 Contractor Access
+
+Access provided to contractors must be regulated, security requirements for contractors must be defined, and contractors must be provided only minimal system and physical access contingent on their agreement to support organizational security requirements. [ARC-AMPE AC-2 | ARC-AMPE AC-6]
+
+### 4.11 Minimum Necessary PII Access
+
+Users must be provided access only to the minimum amount of PII necessary to perform their duties, and the use of guest, anonymous, and shared accounts for providing access to PII is prohibited. [ARC-AMPE AC-2 | ARC-AMPE AC-6]
+
+### 4.12 Shared and Group Account Authenticators
+
+IAM Engineering must establish and implement a process for changing shared or group account authenticators (if deployed) when individuals are removed from the group. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 4.13 Alignment with Personnel Processes
+
+Account management processes must be aligned with personnel termination and transfer processes. [NIST AC-2 | ARC-AMPE AC-2]
+
+## 5. Account Monitoring, Notification, and Review
+
+### 5.1 Account Usage Monitoring
+
+The use of accounts must be monitored. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 5.2 Account Manager and Role Notification
+
+Account managers and [Assignment: organization-defined personnel or roles] must be notified within twenty-four (24) hours when accounts are no longer required, and within eight (8) hours when users are terminated or transferred or when system usage or need-to-know changes for an individual. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 5.3 Account Compliance Review
+
+Accounts must be reviewed for compliance with account management requirements quarterly, and in no case less often than at least every ninety (90) days for all systems. [NIST AC-2 | ARC-AMPE AC-2]
+
+### 5.4 Automated Auditing of Account Actions
+
+Account creation, modification, enabling, disabling, and removal actions must be automatically audited. [NIST AC-2(4) Moderate, High | ARC-AMPE AC-2(4)]
+
+### 5.5 Atypical Usage Monitoring
+
+System accounts must be monitored for atypical usage (e.g., access at unusual times or from locations inconsistent with normal usage patterns), and such usage must be reported to [Assignment: organization-defined personnel or roles] and, if necessary, to applicable incident response team(s). [NIST AC-2(12) High | ARC-AMPE AC-2(12)]
+
+## 6. Account Management Enhancements
+
+### 6.1 Automated Account Management Mechanisms
+
+The management of system accounts must be supported using [Assignment: organization-defined automated mechanisms], which may include email or text notification of account managers upon user termination or transfer, system monitoring of account usage, and telephonic notification to report atypical account usage. The [Identity Provider] must be used as the automated mechanism for account lifecycle notification and monitoring. [NIST AC-2(1) Moderate, High | ARC-AMPE AC-2(1)]
+
+### 6.2 Temporary and Emergency Accounts
+
+Temporary and emergency accounts must be automatically removed or disabled after [Assignment: organization-defined time period], and in no case later than ninety-six (96) hours from last use. [NIST AC-2(2) Moderate, High | ARC-AMPE AC-2(2)]
+
+### 6.3 Expired, Orphaned, Violating, and Inactive Accounts
+
+Accounts that have expired, are no longer associated with a user or individual, are in violation of organizational policy, or have been inactive must be disabled within twenty-four (24) hours of meeting those conditions; the inactivity threshold is sixty (60) days. [NIST AC-2(3) Moderate, High | ARC-AMPE AC-2(3)]
+
+### 6.4 Session Termination and Logout
+
+Users must be required to log out when the expected period of inactivity is exceeded ([Assignment: organization-defined period] per NIST; no more than twenty-four (24) hours of inactivity per ARC-AMPE, implemented as a user action in organizational user policies rather than an automated control). For HIPAA-covered systems, electronic procedures that terminate an electronic session after a predetermined time of inactivity must be implemented. [NIST AC-2(5) Moderate, High | ARC-AMPE AC-2(5) | HIPAA 164.312(a)(2)(iii)]
+
+### 6.5 Dynamic Privilege Management
+
+[Assignment: organization-defined] dynamic privilege management capabilities must be implemented. [NIST AC-2(6)]
+
+### 6.6 Privileged Account Administration
+
+Privileged user accounts must be established and administered in accordance with a role-based access scheme (including application-specific privileged accounts organized by user responsibilities), privileged role or attribute assignments and changes to them must be monitored, and access must be revoked when privileged role or attribute assignments are no longer appropriate. [NIST AC-2(7) Moderate, High | ARC-AMPE AC-2(7)]
+
+Administrator groups, root accounts, and other system-related accounts must be inspected on demand and at least once every fourteen (14) days to ensure unauthorized accounts have not been created, and application-specific privileged user roles must be inspected at least every thirty (30) days. [ARC-AMPE AC-2(7)]
+
+### 6.7 Dynamic Account Lifecycle
+
+[Assignment: organization-defined] system accounts must be created, activated, managed, and deactivated dynamically. [NIST AC-2(8)]
+
+### 6.8 Shared and Group Account Conditions
+
+The use of shared and group accounts is permitted only under [Assignment: organization-defined conditions], including a documented business need approved in advance by the Authorizing Official, and a system security plan that describes how the accounts are used and includes compensating processes to uniquely attribute account user activities. [NIST AC-2(9) | ARC-AMPE AC-2(9)]
+
+### 6.9 Usage Conditions for System Accounts
+
+[Assignment: organization-defined circumstances and/or usage conditions] for [Assignment: organization-defined] system accounts must be enforced. [NIST AC-2(11) High]
+
+### 6.10 Significant-Risk Account Disablement
+
+Accounts of individuals posing a significant risk must be disabled within one (1) hour of discovery that the individual poses a significant risk. [NIST AC-2(13) Moderate, High | ARC-AMPE AC-2(13)]
+
+## 7. Emergency Access to Electronic Protected Health Information
+
+IAM Engineering must establish (and implement as needed) procedures for obtaining necessary electronic protected health information during an emergency. [HIPAA 164.312(a)(2)(ii)]
+
+## 8. Access Enforcement
+
+### 8.1 Logical Access Enforcement
+
+Approved authorizations for logical access to information and system resources must be enforced in accordance with applicable access control policies, using technical policies and procedures that allow access only to those persons or software programs that have been granted access rights. [NIST AC-3 | ARC-AMPE AC-3 | HIPAA 164.312(a)(1)]
+
+### 8.2 Workforce Authorization and Supervision
+
+Procedures must be implemented for the authorization and/or supervision of workforce members who work with electronic protected health information or in locations where it might be accessed, and procedures to determine that a workforce member's access to such information is appropriate. [HIPAA 164.308(a)(3)(ii)(A) | HIPAA 164.308(a)(3)(ii)(B)]
+
+### 8.3 Access Right Establishment and Modification
+
+Policies and procedures must be implemented for granting (e.g., via workstation, transaction, program, process, or other mechanism), establishing, documenting, reviewing, and modifying user access rights based on the entity's access authorization policies. [HIPAA 164.308(a)(4)(ii)(B) | HIPAA 164.308(a)(4)(ii)(C)]
+
+### 8.4 Clearinghouse Segregation
+
+If a health care clearinghouse is part of a larger organization, policies and procedures must be implemented that protect the clearinghouse's electronic protected health information from unauthorized access by the larger organization. [HIPAA 164.308(a)(4)(ii)(A)]
+
+### 8.5 Operating System Access Controls and Encryption
+
+Operating system controls must be configured to disable public "read" and "write" access to system-related files, objects, and directories containing sensitive information, and data stored in the information system must be encrypted when it resides in non-secure areas (using FIPS 140-compliant encryption if encryption is used as an access control mechanism). [ARC-AMPE AC-3 | HIPAA 164.312(a)(2)(iv)]
+
+### 8.6 External Service Provider Isolation
+
+When contracting with external service providers, PII (and software and services that receive, process, store, or transmit PII) must be isolated within the service provider environment to the maximum extent possible so other customers sharing physical or virtual space cannot access it. [ARC-AMPE AC-3]
+
+### 8.7 Dual Authorization
+
+Dual authorization must be enforced for [Assignment: organization-defined privileged commands and/or other actions]. [NIST AC-3(2)]
+
+### 8.8 Mandatory Access Control
+
+A mandatory access control policy must be enforced uniformly across covered subjects and objects, constraining subjects from passing information to unauthorized recipients, granting their privileges to others, changing security attributes, choosing security attributes for newly created or modified objects, or changing access control rules. [NIST AC-3(3) | ARC-AMPE AC-5]
+
+### 8.9 Discretionary Access Control
+
+A discretionary access control policy must be enforced covering covered subjects and objects. [NIST AC-3(4) | NIST AC-3(15)]
+
+### 8.10 Protection of Security-Relevant Information
+
+Access to [Assignment: organization-defined security-relevant information] must be prevented except during secure, non-operable system states. [NIST AC-3(5)]
+
+### 8.11 Role-Based Access Control
+
+A role-based access control policy must be enforced over defined subjects and objects, controlling access based on [Assignment: organization-defined roles] and users authorized to assume them. [NIST AC-3(7)]
+
+### 8.12 Revocation Upon Attribute Change
+
+The revocation of access authorizations resulting from changes to the security attributes of subjects and objects must be enforced, based on [Assignment: organization-defined rules] governing the timing of revocations (e.g., revocation upon next object open or access attempt). [NIST AC-3(8) | ARC-AMPE AC-3(8)]
+
+### 8.13 External Information Release
+
+Information must be released outside of the system only if the receiving external organization provides information security and privacy safeguards commensurate with the organization's own, and [Assignment: organization-defined controls] are used to validate the appropriateness of the information designated for release. [NIST AC-3(9) | ARC-AMPE AC-3(9)]
+
+### 8.14 Audited Override
+
+An audited override of automated access control mechanisms must be employed under [Assignment: organization-defined conditions] by [Assignment: organization-defined roles]. [NIST AC-3(10)]
+
+### 8.15 Data Repository Restrictions
+
+Access to data repositories containing [Assignment: organization-defined information types] must be restricted. [NIST AC-3(11)]
+
+### 8.16 Application Access Assertions
+
+Applications must be required to assert, as part of installation, the access needed to defined system applications and functions; an enforcement mechanism must be provided to prevent unauthorized access; and access changes must be approved after initial installation. [NIST AC-3(12)]
+
+### 8.17 Attribute-Based Access Control
+
+An attribute-based access control policy must be enforced over defined subjects and objects, controlling access based on [Assignment: organization-defined attributes]. [NIST AC-3(13)]
+
+### 8.18 Individual Access to PII/PHI
+
+[Assignment: organization-defined] mechanisms (including individual authentication and identification, accounting of disclosures, notice of privacy practices, request forms and application interfaces, and other mechanisms developed in consultation with the senior privacy official and legal counsel) must be provided enabling individuals to access their PII/PHI elements defined in applicable security/privacy plans, in readable form and format, with published access request policies and procedures. [NIST AC-3(14) | ARC-AMPE AC-3(14)]
+
+## 9. Separation of Duties
+
+### 9.1 Separation of Duties Requirements
+
+Duties of individuals requiring separation must be identified and documented, and system access authorizations must be defined to support separation of duties (e.g., via role-based access control), ensuring that personnel who administer access control functions do not also administer audit functions. [NIST AC-5 Moderate, High | ARC-AMPE AC-5]
+
+### 9.2 Division of Critical Functions
+
+Critical mission functions, information system support functions, and information system testing functions (user acceptance, quality assurance, information security) must be divided among separate individuals or groups, with information security testing conducted by an independent entity other than the Business Owner, ISSO, system developers/maintainers, or system administrators. [ARC-AMPE AC-5]
+
+## 10. Least Privilege
+
+### 10.1 Least Privilege Principle
+
+The principle of least privilege must be employed, allowing only authorized accesses for users (or processes acting on behalf of users) that are necessary to accomplish assigned organizational tasks. [NIST AC-6 Moderate, High | FedRAMP AC-6 | ARC-AMPE AC-6]
+
+### 10.2 Restriction of Non-Essential Access Capabilities
+
+All file system, network share, port, protocol, service, and removable media/system boot access not explicitly required for system, application, and administrator functionality or authorized by the Authorizing Official for compelling operational needs must be disabled (password-protecting any authorized boot access), and only authorized users must be able to access files, directories, drives, workstations, servers, and other resources expressly required for their job duties. [ARC-AMPE AC-6]
+
+### 10.3 Database Management Utilities
+
+The use of database management utilities must be restricted to authorized database administrators, and table-level access control must be implemented to prevent users from accessing database data files at the logical data view, field, or field-value level. [ARC-AMPE AC-6]
+
+### 10.4 Security Functions and Security-Relevant Information
+
+Access to [Assignment: organization-defined security functions] (deployed in hardware, software, and firmware) and security-relevant information — including setting/modifying audit logs and auditing behavior, boundary protection system rules, access authorizations, authentication parameters, and system configurations and parameters — must be authorized for [Assignment: organization-defined individuals or roles], with explicit System Owner authorization (FedRAMP defines these as all functions not publicly accessible and all security-relevant information not publicly available). [NIST AC-6(1) Moderate, High | FedRAMP AC-6(1) | ARC-AMPE AC-6(1)]
+
+### 10.5 Nonprivileged Use for Nonsecurity Functions
+
+Users of system accounts (or roles) with access to security functions or security-relevant information (all security functions per FedRAMP) must use non-privileged accounts or roles when accessing nonsecurity functions, and if feasible, any use of privileged accounts for such functions must be audited. [NIST AC-6(2) Moderate, High | FedRAMP AC-6(2) | ARC-AMPE AC-6(2)]
+
+### 10.6 Network Access to Privileged Commands
+
+Network access to [Assignment: organization-defined privileged commands] must be authorized only for compelling operational needs, and the rationale must be documented in the system security plan. [NIST AC-6(3) High]
+
+### 10.7 Separate Processing Domains
+
+Separate processing domains must be provided to enable finer-grained allocation of user privileges. [NIST AC-6(4)]
+
+### 10.8 Privileged Account Restriction
+
+Privileged accounts on the system must be restricted to [Assignment: organization-defined personnel or roles] (defined in the System Security and Privacy Plan). [NIST AC-6(5) Moderate, High | ARC-AMPE AC-6(5)]
+
+### 10.9 No External Privileged Access
+
+Privileged access to the system by non-organizational users is prohibited. [NIST AC-6(6)]
+
+### 10.10 Privilege Review
+
+The privileges assigned to [Assignment: organization-defined roles and classes] must be reviewed quarterly — and in no case less often than at least every ninety (90) days for all users with privileges — to validate the need for such privileges, and privileges must be reassigned or removed as necessary to correctly reflect organizational mission and business needs. [NIST AC-6(7) Moderate, High | ARC-AMPE AC-6(7)]
+
+### 10.11 Software Privilege Execution
+
+[Assignment: organization-defined software] (any software except software explicitly documented, per FedRAMP) must be prevented from executing at higher privilege levels than the users executing the software. [NIST AC-6(8) | FedRAMP AC-6(8)]
+
+### 10.12 Logging of Privileged Functions
+
+The execution of privileged functions must be logged. [NIST AC-6(9) Moderate, High | ARC-AMPE AC-6(9)]
+
+### 10.13 Privileged Function Restriction
+
+Non-privileged users must be prevented from executing privileged functions. [NIST AC-6(10) Moderate, High | ARC-AMPE AC-6(10)]
+
+## 11. System Identifiers
+
+### 11.1 Identifier Management
+
+System identifiers must be managed by receiving authorization from [Assignment: organization-defined personnel or roles] to assign an identifier, selecting an identifier that identifies the individual, group, role, service, or device, assigning the identifier to the intended party, and preventing reuse of identifiers for [Assignment: organization-defined time period]. [NIST IA-4 | FedRAMP IA-4]
+
+Identifiers must not be reused for two (2) years, and previous identifier-based access authorizations (e.g., to sensitive files or folders) must be removed from the system before the identifier is reused. [ARC-AMPE IA-4]
+
+### 11.2 Unique Identity and Verification
+
+A unique name and/or number must be assigned for identifying and tracking user identity, and procedures must be implemented to verify that a person or entity seeking access to electronic protected health information is the one claimed. [HIPAA 164.312(a)(2)(i) | HIPAA 164.312(d)]
+
+### 11.3 Public Identifier Prohibition
+
+The use of system account identifiers that are the same as public identifiers for individual accounts is prohibited. [NIST IA-4(1)]
+
+### 11.4 Individual Status Characteristics
+
+Individual identifiers must be managed by uniquely identifying each individual using [Assignment: organization-defined characteristics] identifying individual status, such as contractors, foreign nationals, and non-organizational users. [NIST IA-4(4) Moderate, High | FedRAMP IA-4(4) | ARC-AMPE IA-4(4)]
+
+### 11.5 Dynamic Identifier Management
+
+Individual identifiers must be managed dynamically in accordance with an [Assignment: organization-defined dynamic identifier policy]. [NIST IA-4(5)]
+
+### 11.6 Cross-Organization Identifier Management
+
+Coordination with [Assignment: organization-defined external organizations] for cross-organization management of identifiers is required. [NIST IA-4(6)]
+
+### 11.7 Pairwise Pseudonymous Identifiers
+
+Pairwise pseudonymous identifiers must be generated. [NIST IA-4(8)]
+
+### 11.8 Protected Attribute Storage
+
+The attributes for each uniquely identified individual, device, or service must be maintained in [Assignment: organization-defined protected central storage]. [NIST IA-4(9)]
+
+## 12. Identity Proofing and Registration
+
+### 12.1 Identity Proofing
+
+Users requiring accounts for logical access to systems must be identity proofed based on appropriate identity assurance level requirements as specified in applicable standards and guidelines, user identities must be resolved to a unique individual, and identity evidence must be collected, validated, and verified. [NIST IA-12 Moderate, High | ARC-AMPE IA-12]
+
+All users requiring logical access accounts (including non-privileged/consumer accounts) must be identity proofed to Identity Assurance Level 2 (IAL-2) or higher per the latest NIST SP 800-63 suite; for ACA consumer accounts, the FDSH Remote Identity Proofing Service may be used. [ARC-AMPE IA-12]
+
+### 12.2 Registration Authorization
+
+The registration process to receive an account for logical access must include supervisor or sponsor authorization. [NIST IA-12(1) | ARC-AMPE IA-12(1)]
+
+### 12.3 Presentation of Identity Evidence
+
+Evidence of individual identification must be presented to the registration authority. [NIST IA-12(2) Moderate, High | ARC-AMPE IA-12(2)]
+
+### 12.4 Validation and Verification of Identity Evidence
+
+Presented identity evidence must be validated and verified through [Assignment: organization-defined (organization-approved) methods], which must comply with applicable CMS agreements. [NIST IA-12(3) Moderate, High | ARC-AMPE IA-12(3)]
+
+### 12.5 In-Person Validation
+
+The validation and verification of identity evidence must be conducted in person before a designated registration authority. [NIST IA-12(4) High]
+
+### 12.6 Out-of-Band Delivery
+
+A registration code or notice of proofing must be delivered through an out-of-band channel to verify the user's physical or digital address of record. [NIST IA-12(5) Moderate, High]
+
+### 12.7 Externally-Proofed Identities
+
+Externally-proofed identities must be accepted at [Assignment: organization-defined identity assurance level]. [NIST IA-12(6)]
+
+## 13. Personnel Termination
+
+### 13.1 Access Disablement Upon Termination
+
+Upon termination of employment, system access must be disabled within the same day as termination. [NIST PS-4 | ARC-AMPE PS-4]
+
+Procedures must be implemented for terminating access to electronic protected health information when employment or other arrangement with a workforce member ends, or as required by access-determination procedures. [HIPAA 164.308(a)(3)(ii)(C)]
+
+### 13.2 Authenticator Termination
+
+Upon termination, any authenticators and credentials associated with the individual must be terminated or revoked. [NIST PS-4 | ARC-AMPE PS-4]
+
+### 13.3 Exit Interviews
+
+Exit interviews must be conducted that include a discussion of information security topics, including non-disclosure of information security and privacy information. [NIST PS-4 | ARC-AMPE PS-4]
+
+### 13.4 Retrieval of Organizational Property
+
+All security-related organizational system-related property (including hardware authentication tokens, technical manuals, keys, identification cards, and building passes) must be retrieved from terminated individuals. [NIST PS-4 | ARC-AMPE PS-4]
+
+### 13.5 Organizational Retention of Access
+
+The organization must retain access to organizational information and systems formerly controlled by the terminated individual. [NIST PS-4 | ARC-AMPE PS-4]
+
+### 13.6 Post-Employment Requirements
+
+Terminated individuals must be notified of applicable legally binding post-employment requirements for the protection of organizational information and must sign an acknowledgment of those requirements as part of termination. [NIST PS-4(1)]
+
+### 13.7 Automated Termination Notification
+
+[Assignment: organization-defined automated mechanisms] must be used to notify [Assignment: organization-defined personnel or roles] of individual termination actions and/or disable access to system resources. [NIST PS-4(2) High]
+
+## 14. Personnel Transfer and Reassignment
+
+### 14.1 Review of Ongoing Need
+
+When individuals are reassigned or transferred, the ongoing operational need for current logical and physical access authorizations to systems and facilities must be reviewed and confirmed, reviewing access to sensitive information such as PII to determine how permissions should change. [NIST PS-5 | ARC-AMPE PS-5]
+
+### 14.2 Timely Transfer Actions
+
+[Assignment: organization-defined transfer or reassignment actions] must be initiated within twenty-four (24) hours following the formal transfer action. [NIST PS-5 | ARC-AMPE PS-5]
+
+### 14.3 Removal of Unneeded Access
+
+Reassignment actions must be initiated to ensure all system accesses no longer required (e.g., need to know) are removed or disabled within twenty-four (24) hours. [ARC-AMPE PS-5]
+
+### 14.4 Modification of Access Authorizations
+
+Access authorizations must be modified as needed to correspond with changes in operational need due to reassignment or transfer. [NIST PS-5 | ARC-AMPE PS-5]
+
+### 14.5 Transfer Notification
+
+[Assignment: organization-defined personnel or roles] must be notified of personnel transfers within twenty-four (24) hours. [NIST PS-5 | ARC-AMPE PS-5]
+
+## 15. Workstation Use
+
+Policies and procedures must be implemented that specify the proper functions to be performed, the manner in which those functions are to be performed, and the physical attributes of the surroundings of workstations (or classes of workstations) that can access electronic protected health information. [HIPAA 164.310(b)]
+
+## 16. Quarterly Access Review Process
+
+IAM Engineering must execute the access review process quarterly. Each quarterly cycle must include, at minimum:
+
+1. **Population reconciliation.** IAM Engineering must obtain the Identity provider user export and the HR active-employee roster and reconcile the two to identify accounts that are expired, no longer associated with a user or individual, or otherwise non-compliant with Section 4 requirements.
+1. **Account compliance review.** IAM Engineering must review accounts for compliance with the account management requirements in Sections 4 through 6, satisfying the review requirement in Section 5.3.
+1. **Privilege review.** IAM Engineering must review the privileges assigned to all users with privileges per Section 10.10, reassigning or removing privileges as necessary.
+1. **Recording and sign-off.** Each review cycle must be recorded as access review tickets with sign-off in the [Ticketing System], including findings and the disposition of each identified account or privilege.
+
+Administrator group, root account, and other system-related account inspections (at least every fourteen (14) days) and application-specific privileged role inspections (at least every thirty (30) days) required by Section 6.6 are performed on their own cadences independent of the quarterly cycle, and their results must also be recorded in the [Ticketing System].
+
+## 17. Records and Evidence
+
+The evidence of record for this process is the Identity provider user export, the HR active-employee roster, and the access review tickets with sign-off produced each quarterly cycle. IAM Engineering must retain these artifacts, together with all documentation and records of required actions, activities, or assessments under this Standard, in accordance with the retention requirements of Section 3.5. [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii)]

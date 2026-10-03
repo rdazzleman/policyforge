@@ -1,0 +1,251 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.14661
+  models:
+    - anthropic/claude-sonnet-5
+  prompt_shas:
+    - b75bbf1dae73c596
+  provider: litellm
+  provider_class: third-party
+---
+
+# Risk Assessment & Authorization Procedure
+
+## Purpose
+
+This procedure defines the concrete steps Example Org's Security Program / GRC team follows to categorize systems, assess and respond to risk, obtain and maintain authorization to operate, and continuously monitor control effectiveness, producing an auditable risk register and authorization decision record for each system.
+
+## Scope
+
+This procedure applies to the Security Program / GRC team, Authorizing Officials, system/business owners, and independent assessors involved in risk assessment and authorization activities for all Example Org information systems that process, store, or transmit organizational or regulated data (including electronic protected health information where applicable).
+
+## Prerequisites
+
+- Access to the organization's [GRC Platform] where the risk register and authorization decision record are maintained
+- Current system inventory, system boundary diagram, and system security plan for the system(s) under review
+- A designated Authorizing Official (AO) identified and available to review and approve categorization, assessment, and authorization decisions
+- Access to [Vulnerability Scanning Tool] for scheduled scans and to [Penetration Testing Vendor] engagement records
+- An approved Rules of Engagement template for penetration testing
+- [Ticketing System] access for tracking POA&M remediation items and risk response actions
+- Prior risk assessment, POA&M, control assessment, and continuous monitoring documentation for the system, where they exist
+- Executive/management approval to commit resources to the assessment and authorization activity
+
+## Procedure Steps
+
+### Risk Assessment and Assessment/Authorization/Monitoring Policies & Procedures [NIST 800-53 RA-1 | ARC-AMPE RA-1 AE Mandatory | NIST 800-53 CA-1 | ARC-AMPE CA-1 AE Mandatory]
+
+1. Security Program / GRC drafts a risk assessment policy and a separate assessment, authorization, and monitoring policy, each addressing purpose, scope, roles, responsibilities, management commitment, coordination across teams, and compliance with applicable laws, regulations, and standards.
+1. Security Program / GRC drafts implementing procedures for each policy sufficient to operationalize the associated controls.
+1. Security Program / GRC designates an official accountable for developing, documenting, and disseminating each policy and its procedures; record the designation in the [GRC Platform].
+1. Disseminate both policies and procedures to the defined personnel or roles named in each policy via [Ticketing System] or organizational communication channel, and retain acknowledgment records.
+1. Security Program / GRC reviews and updates both policies and procedures on an annual cadence and immediately following triggering events (assessment or audit findings, security or privacy incidents, or changes in applicable laws, regulations, or standards).
+1. Log each review, its outcome, and any updates in the [GRC Platform].
+
+### HIPAA Security Policies, Procedures, and Documentation Retention [HIPAA 164.316(a) | HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii) | HIPAA 164.316(b)(2)(iii) | HIPAA 164.308(a)(2) | HIPAA 164.308(a)(1)(i)]
+
+1. Security Program / GRC identifies and documents the security official responsible for developing and implementing the organization's security policies and procedures; record this designation in the [GRC Platform].
+1. Implement reasonable and appropriate policies and procedures addressing the applicable security rule requirements, factoring in system size, complexity, capabilities, and risk.
+1. Document any change to a policy or procedure at the time it is made, and implement the change consistently with the rule.
+1. Maintain all policies, procedures, and required documentation of actions, activities, and assessments in written or electronic form in the [GRC Platform].
+1. Retain each version of documentation for 6 years from its creation date or the date it was last in effect, whichever is later.
+1. Make current documentation available to the workforce members responsible for implementing the procedures it describes.
+1. Review documentation on an annual cadence and update it in response to environmental or operational changes affecting the security of electronic protected health information.
+1. Implement and maintain policies and procedures designed to prevent, detect, contain, and correct security violations; log violations and corrective actions in the [Ticketing System].
+
+### Security Categorization [NIST 800-53 RA-2 | ARC-AMPE RA-2 AE Mandatory | NIST 800-53 RA-2(1)]
+
+1. Security Program / GRC, working with the system owner, categorizes the system and the information it processes, stores, and transmits using the organization's categorization methodology.
+1. Document the categorization result and supporting rationale in the system security plan.
+1. Route the categorization decision to the Authorizing Official (or designated representative) for review and approval; record the approval in the [GRC Platform].
+1. Conduct impact-level prioritization across organizational systems to obtain additional granularity on system impact levels, and record prioritization results alongside the categorization in the risk register.
+
+### System Risk Assessment [NIST 800-53 RA-3 | ARC-AMPE RA-3 AE Mandatory]
+
+1. Security Program / GRC conducts a risk assessment identifying threats to and vulnerabilities in the system, and determines the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system and its information.
+1. Determine the likelihood and impact of adverse effects on individuals arising from processing of personally identifiable information as part of the same assessment.
+1. Integrate the system-level risk assessment results with organization- and mission/business-process-level risk management decisions.
+1. Document results in the Information System Risk Assessment (ISRA), Security Assessment Report (SAR), and privacy plans (e.g., PIA) as applicable, and record a summary entry in the risk register.
+1. Review the risk assessment results on an annual cadence or when a significant change occurs, and disseminate results to the Business Owner and other personnel or roles named in the system security plan.
+1. Update the risk assessment at least every three (3) years, before issuing a new internal/organization-specific authorization, or upon significant change to the system, its environment, or other conditions affecting its security or privacy state.
+1. Record each review and update, with date and outcome, in the risk register.
+
+### Privacy Risk Management Process [ARC-AMPE RA-3 AE Mandatory]
+
+1. Security Program / GRC documents a privacy risk management process describing how privacy risk to individuals is assessed across the collection, sharing, storing, transmitting, use, and disposal of PII.
+1. Implement the process for each system that handles PII, recording privacy risk findings alongside the ISRA/PIA documentation and in the risk register.
+
+### Supply Chain Risk Assessment [NIST 800-53 RA-3(1)]
+
+1. Security Program / GRC, with input from procurement/system owners, assesses supply chain risks associated with defined systems, system components, and system services.
+1. Document supply chain risk findings in the risk register.
+1. Update the supply chain risk assessment on an annual cadence, upon significant change to the relevant supply chain, or when changes to the system or its operating environment necessitate reassessment.
+
+### All-Source Intelligence for Risk Analysis [NIST 800-53 RA-3(2) | ARC-AMPE RA-3(2) AE Mandatory]
+
+1. Security Program / GRC gathers all-source intelligence, including publicly available and open-source information, relevant to the system's engineering, acquisition, and risk management decisions.
+1. Use the gathered intelligence to analyze risk of vulnerabilities arising from development, manufacturing, delivery processes, people, and the operating environment.
+1. Incorporate findings into the risk assessment documentation and risk register.
+
+### Ongoing Cyber Threat Environment Determination [NIST 800-53 RA-3(3)]
+
+1. Security Program / GRC monitors [Threat Intelligence Source] on an ongoing basis to determine the current cyber threat environment relevant to the system.
+1. Record significant threat environment changes in the risk register and feed them into the next risk assessment update.
+
+### Advanced Automation and Analytics for Risk Prediction [NIST 800-53 RA-3(4)]
+
+1. Security Program / GRC employs [Advanced Analytics Tool] capabilities to predict and identify risks to defined systems or system components.
+1. Review generated predictions and record actionable findings in the risk register for follow-up under Risk Response.
+
+### HIPAA Security Risk Analysis, Risk Management, and Periodic Evaluation [HIPAA 164.308(a)(1)(ii)(A) | HIPAA 164.308(a)(1)(ii)(B) | HIPAA 164.308(a)(1)(ii)(C) | HIPAA 164.308(a)(1)(ii)(D) | HIPAA 164.308(a)(8)]
+
+1. Security Program / GRC conducts an accurate and thorough assessment of potential risks and vulnerabilities to the confidentiality, integrity, and availability of electronic protected health information held by the organization.
+1. Implement security measures sufficient to reduce identified risks and vulnerabilities to a reasonable and appropriate level; record measures adopted in the risk register.
+1. Apply sanctions, coordinated with HR, against workforce members who fail to comply with security policies and procedures; log sanctions in the [Ticketing System].
+1. Implement a recurring procedure to review records of information system activity — audit logs, access reports, and security incident tracking reports.
+1. Perform a periodic technical and nontechnical evaluation of the extent to which security policies and procedures meet the security rule's requirements, initially based on the standards implemented and thereafter in response to environmental or operational changes affecting ePHI security.
+1. Document evaluation results in the risk register and route findings requiring remediation into the POA&M process.
+
+### Criticality Analysis [NIST 800-53 RA-9 | ARC-AMPE RA-9 AE Mandatory]
+
+1. Security Program / GRC performs a criticality analysis of defined systems, system components, or system services at defined decision points in the system development life cycle.
+1. Treat all system components within the CMS ATC/RTC boundary (or equivalent State AE/other ARC-AMPE user boundary) as critical by default.
+1. Document identified critical components and functions in the system security plan and risk register.
+
+### Control Assessment Planning and Execution [NIST 800-53 CA-2 | FedRAMP CA-2 | ARC-AMPE CA-2 AE Mandatory]
+
+1. Security Program / GRC selects the appropriate assessor or assessment team for the type of assessment to be conducted.
+1. Develop a control assessment plan describing the scope of assessment (controls and enhancements under assessment), assessment procedures used to determine control effectiveness, and the assessment environment, team, and roles/responsibilities.
+1. Route the assessment plan to the Authorizing Official (or designated representative) for review and approval prior to conducting the assessment.
+1. Execute the assessment to determine the extent to which controls are implemented correctly, operating as intended, and producing the desired outcome.
+1. For entities under ARC-AMPE, plan and execute a complete independent assessment of all controls over a three (3) year period — either a full reassessment at ATC expiration, annually-designated control subsets across years one through three, or an assessment triggered by CMS guidance for significant system changes — and deliver the final ATC package no less than ninety (90) days prior to ATC expiration.
+1. Where the system is newly implemented or has undergone significant change, ensure an independent assessment of all security and privacy controls is completed before the Authorizing Official issues an authority to operate.
+1. Produce a control assessment report documenting results and distribute it to the Business Owner and personnel responsible for reviewing assessment documentation and updating security/privacy documentation (and to FedRAMP/agency customers where applicable).
+1. Update security and privacy documentation within thirty (30) days of assessment completion, and notify CMS within thirty (30) days of authorization artifact updates or significant role changes.
+1. Record the assessment report location and key findings in the risk register.
+
+### Independent Assessors for Control Assessments [NIST 800-53 CA-2(1) Moderate/High | ARC-AMPE CA-2(1) AE Mandatory]
+
+1. Security Program / GRC engages an independent assessor or assessment team, separate from the system implementation team, to conduct the control assessment.
+1. Record the independence determination in the assessment plan.
+
+### Specialized Assessment Activities [NIST 800-53 CA-2(2) High]
+
+1. Security Program / GRC includes specialized assessment activities — announced or unannounced — as part of control assessments on an annual cadence, selecting from in-depth monitoring, security instrumentation, automated security test cases, vulnerability scanning, malicious user testing, insider threat assessment, performance/load testing, or data leakage/loss assessment as applicable to the system.
+1. Document activities performed and results in the control assessment report.
+
+### Leveraging External Assessment Results [NIST 800-53 CA-2(3) | FedRAMP CA-2(3)]
+
+1. Security Program / GRC identifies whether an external organization's control assessment of the system meets organizational reliance requirements, including leveraging results from any FedRAMP Recognized independent assessment service where applicable.
+1. Document the reliance decision and the external assessment source in the risk register.
+
+### Plan of Action and Milestones (POA&M) [NIST 800-53 CA-5 | ARC-AMPE CA-5 AE Mandatory | NIST 800-53 CA-5(1)]
+
+1. Security Program / GRC develops a POA&M for the system documenting planned remediation actions for weaknesses or deficiencies identified during control assessments and known vulnerabilities.
+1. For each item, record a detailed weakness description, risk level, milestones with dates, and scheduled completion date in the [GRC Platform].
+1. Maintain the POA&M throughout the system lifecycle, beginning with development, incorporating all findings — self-discovered or via assessment.
+1. Update the POA&M in accordance with the frequency documented in the organization's Information Security Continuous Monitoring (ISCM) strategy, based on findings from control assessments, independent audits/reviews, and continuous monitoring activities.
+1. Deliver a fully updated and accurate POA&M to CMS quarterly, on January 31, April 30, July 31, and October 31.
+1. Use [GRC Platform] automated mechanisms to maintain the accuracy, currency, and availability of the POA&M.
+
+### Authorization [NIST 800-53 CA-6 | ARC-AMPE CA-6 AE Mandatory]
+
+1. Security Program / GRC ensures a senior official is assigned as the Authorizing Official (AO) for the system, and a senior official is assigned as the AO for common controls available for inheritance by organizational systems; record designations in the [GRC Platform].
+1. Before operations commence, obtain the system AO's acceptance of inherited common controls and authorization for the system to operate; obtain the common-control AO's authorization for the use of those controls for inheritance.
+1. Record the authorization decision, its date, and supporting rationale in the authorization decision record.
+1. Update the authorization at least every three (3) years for all entities, or at least every one (1) year for Direct Enrollment Technology Providers, and immediately following a significant security breach, a significant change to the system or its operating environment, or prior to expiration of the current authorization.
+1. Notify CMS of significant/major changes prior to making the change.
+1. Log each authorization update in the authorization decision record.
+
+### Joint Authorization Processes [NIST 800-53 CA-6(1) | NIST 800-53 CA-6(2)]
+
+1. Where required, Security Program / GRC coordinates a joint authorization process involving multiple Authorizing Officials from within the organization; document each AO's decision in the authorization decision record.
+1. Where required, coordinate a joint authorization process involving multiple Authorizing Officials, including at least one from an organization external to the organization conducting the authorization; document the external AO's decision in the authorization decision record.
+
+### Continuous Monitoring Strategy and Execution [NIST 800-53 CA-7 | FedRAMP CA-7 | ARC-AMPE CA-7 AE Mandatory]
+
+1. Security Program / GRC develops a system-level continuous monitoring strategy, consistent with any organization-level strategy, establishing metrics based on organizational security/privacy goals and the ISCM strategy.
+1. Set monitoring frequencies: scan operating systems, databases, and web applications using [Vulnerability Scanning Tool] at least monthly, and assess control effectiveness at least every one (1) year.
+1. Execute ongoing control assessments and metric monitoring per the strategy.
+1. Correlate and analyze information generated by control assessments and monitoring activities; take response actions to address the results, logging actions in the [Ticketing System].
+1. Report the security and privacy status of the system to designated personnel or roles at least every thirty (30) days.
+1. Follow FedRAMP's Continuous Collaborative Monitoring, Significant Change Notification, Vulnerability Detection and Response, and Vulnerability Evaluation and Reporting rules where the system is FedRAMP-authorized.
+1. Maintain continuous monitoring records; if the system becomes subject to a legal investigation (e.g., insider threat), retain records until released by the investigating authority.
+1. Monitor systems, appliances, devices, and applications (including databases), and provide security and privacy oversight — including via [SIEM Platform] where applicable — for each system.
+1. Record monitoring status and reporting history in the risk register.
+
+### Independent Monitoring [NIST 800-53 CA-7(1) Moderate/High | ARC-AMPE CA-7(1) AE Mandatory]
+
+1. Security Program / GRC engages independent assessors or an assessment team to monitor system controls on an ongoing basis, separate from the implementation team.
+
+### Trend Analysis [NIST 800-53 CA-7(3)]
+
+1. Security Program / GRC performs trend analyses on monitoring data to determine whether control implementations, monitoring frequency, or monitoring activity types require modification based on empirical data.
+1. Document trend analysis conclusions and any resulting strategy changes in the risk register.
+
+### Risk Monitoring Integration [NIST 800-53 CA-7(4) | ARC-AMPE CA-7(4) AE Mandatory]
+
+1. Security Program / GRC ensures the continuous monitoring strategy documents processes and guidance defining effectiveness monitoring, compliance monitoring, and change monitoring as a holistic risk monitoring strategy.
+1. Integrate outputs from each monitoring type into the risk register on an ongoing basis.
+
+### Control Consistency Validation [NIST 800-53 CA-7(5)]
+
+1. Security Program / GRC performs [Defined Validation Action] activities to validate that policies are established and implemented controls are operating in a consistent manner across the system.
+1. Record validation results and any inconsistencies identified in the risk register.
+
+### Automated Monitoring Results Assurance [NIST 800-53 CA-7(6)]
+
+1. Security Program / GRC uses [SIEM Platform]/[GRC Platform] automated mechanisms to ensure the accuracy, currency, and availability of monitoring results for the system.
+
+### Penetration Testing [NIST 800-53 CA-8 High | FedRAMP CA-8 | ARC-AMPE CA-8 AE Mandatory]
+
+1. Security Program / GRC schedules penetration testing at least every one (1) year on the documented system and its full boundary, and additionally when new risks/threats are identified or upon CMS request.
+1. Draft Rules of Engagement specifying the scope of systems/components to be tested and any exclusions.
+1. Obtain co-signature on the Rules of Engagement from the system Authorizing Official and the penetration testing organization official before testing begins.
+1. Coordinate with [Penetration Testing Vendor] to execute testing on production systems in a manner that minimizes risk of information corruption or service outage.
+1. Ensure scanning includes evaluation of embedded structures and interactive content, and information sources cover systems, appliances, devices, services, and applications (including databases).
+1. Fulfill organization-directed information collection requests within the timeframe specified by the requester.
+1. Require results in a searchable, CMS-compliant format.
+1. Receive from [Penetration Testing Vendor] a report summarizing findings, significance, impact, risk, and remediation plans, including underlying raw security information/results in unaltered format, and provide it to CMS.
+1. Follow FedRAMP's Vulnerability Detection and Response rules as part of vulnerability detection activities.
+1. Record test dates, findings, and remediation status in the risk register and POA&M.
+
+### Independent Penetration Testing Agent [NIST 800-53 CA-8(1) High | ARC-AMPE CA-8(1) AE Mandatory]
+
+1. Security Program / GRC obtains CISO (or equivalent) approval of the independent penetration testing agent or team before engagement.
+1. Confirm the agent/team is independent of the system implementation team prior to testing.
+
+### Red Team Exercises [NIST 800-53 CA-8(2)]
+
+1. Security Program / GRC coordinates red-team exercises simulating adversary attempts to compromise organizational systems, in accordance with the applicable Rules of Engagement.
+1. Document exercise scope, findings, and remediation actions in the risk register and POA&M.
+
+### Physical Access Penetration Testing [NIST 800-53 CA-8(3)]
+
+1. Security Program / GRC conducts announced and/or unannounced attempts, on an annual cadence, to bypass or circumvent controls associated with physical access points to the facility.
+1. Document findings and remediation actions in the POA&M.
+
+### Risk Response [NIST 800-53 RA-7 | FedRAMP RA-7 | ARC-AMPE RA-7 AE Mandatory]
+
+1. Security Program / GRC reviews each finding from security and privacy assessments, monitoring, and audits, and determines a response consistent with organizational risk tolerance: mitigate (implement new or strengthened controls), accept (with documented justification/rationale), share/transfer, or avoid.
+1. Follow FedRAMP's Vulnerability Detection and Response and Vulnerability Evaluation and Reporting rules where the system is FedRAMP-authorized.
+1. Before accepting a risk, discuss the proposed acceptance with CMS to reach agreement on approach and mitigations.
+1. Document accepted risks and the full rationale in a risk acceptance form, and track the item in the POA&M and risk register.
+
+### Contingency Planning (Risk-Related) [HIPAA 164.308(a)(7)(i) | HIPAA 164.308(a)(7)(ii)(A) | HIPAA 164.308(a)(7)(ii)(B) | HIPAA 164.308(a)(7)(ii)(C) | HIPAA 164.308(a)(7)(ii)(D) | HIPAA 164.308(a)(7)(ii)(E)]
+
+1. Security Program / GRC establishes and, as needed, implements policies and procedures for responding to an emergency or other occurrence (fire, vandalism, system failure, natural disaster) that damages systems containing electronic protected health information.
+1. Establish and implement procedures to create and maintain retrievable exact copies of electronic protected health information.
+1. Establish and implement, as needed, procedures to restore any loss of data from those copies.
+1. Establish and implement, as needed, procedures enabling continuation of critical business processes for protection of ePHI security while operating in emergency mode.
+1. Implement a recurring procedure for periodic testing and revision of the contingency plans; log test dates and revision history in the [GRC Platform].
+1. Assess the relative criticality of specific applications and data to inform and support the other contingency plan components; record the criticality assessment in the risk register.
+
+## Roles & Responsibilities
+
+The Security Program / GRC team owns this procedure end to end — performing categorization, risk assessment, control assessment coordination, POA&M management, continuous monitoring, and authorization support, and maintaining the risk register and authorization decision record. The Authorizing Official approves categorization decisions, assessment plans, authorization decisions, and risk acceptances; the CISO (or equivalent) approves independent assessor/tester selection; exceptions to this procedure require review and approval by the Authorizing Official or Security Program / GRC leadership.
+
+## Related Standard
+
+This procedure implements the **Example Org Risk Assessment and Authorization Standard**, which defines the underlying requirements and rationale for the steps above.

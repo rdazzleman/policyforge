@@ -1,0 +1,186 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.004378
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - dc70f60ed4f359b3
+  provider: litellm
+  provider_class: third-party
+---
+
+# Backup, Restore & Contingency Operational Procedure
+
+## Purpose
+
+Executing this procedure implements the contingency planning, backup, restore, and recovery requirements of the Backup, Restore & Contingency Standard, ensuring Example Org can protect, back up, and reconstitute systems and data — including systems containing electronic protected health information (ePHI) and PII — after disruption, compromise, or failure. It produces auditable evidence of backup reliability and tested recovery capability.
+
+## Scope
+
+Site Reliability Engineering (SRE) performs this procedure on all Example Org production systems, backup infrastructure, and contingency resources, coordinating with Business Owners, Physical Security, Human Resources/Training, and external service providers where steps require them. It covers contingency planning documentation, backup and restore operations, alternate site and telecommunications readiness, contingency training, testing, and recovery execution.
+
+## Prerequisites
+
+- Access to the [Backup Platform] administration console and to the [Documentation Repository] where contingency documentation is maintained.
+- Access to the [Ticketing System] for change tracking, task assignment, and evidence recording.
+- Approval from the [Designated Contingency Planning Official] for policy and plan revisions.
+- Business Owner-approved Maximum Tolerable Downtime (MTD), Recovery Time Objectives (RTO), and Recovery Point Objectives (RPO) documented for each system in scope.
+- Executed agreements (SLAs or contracts) for the [Alternate Storage Site], [Alternate Processing Site], and [Alternate Telecommunications Provider].
+- Encryption keys and cryptographic tooling governed under [Key Management Service], and access to the [Physical Access Control System] for facility access steps.
+- Access to the [Learning Management System] for training assignment and completion tracking.
+
+## Procedure Steps
+
+### Develop, disseminate, and maintain the contingency planning policy and procedures [NIST CP-1 Low/Moderate/High | ARC-AMPE CP-1 AE Mandatory]
+
+1. SRE drafts or updates the organization-level contingency planning policy so that it addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, regulations, and standards.
+1. SRE drafts or updates the implementing procedures that facilitate execution of the policy and its associated controls.
+1. SRE submits both documents to the [Designated Contingency Planning Official] and the [Approving Authority] for review and approval.
+1. Upon approval, SRE disseminates the policy and procedures to all applicable personnel and roles listed in the [Distribution List] via the [Documentation Repository], and records the dissemination date and recipients in the [Ticketing System].
+1. SRE establishes policies and procedures for responding to emergencies or other occurrences (for example, fire, vandalism, system failure, or natural disaster) that damage systems containing ePHI, per HIPAA 164.308(a)(7)(i).
+1. At least every year — and following any assessment or audit finding, security or privacy incident, or change to applicable laws, directives, regulations, policies, standards, or guidelines — SRE reviews the policy and procedures and updates them as needed, recording the review date and outcome in the [Documentation Repository].
+1. SRE maintains all contingency compliance documentation (policies, procedures, documented actions, activities, and assessments) in written form in the [Documentation Repository], makes it available to the persons responsible for implementing it, and retains it for 6 years from the date of creation or the date it was last in effect, whichever is later [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii)].
+1. SRE reviews the documentation periodically and updates it in response to environmental or operational changes affecting the security of ePHI [HIPAA 164.316(b)(2)(iii)].
+
+### Develop, distribute, and maintain the system contingency plan (ISCP) [NIST CP-2 Low/Moderate/High | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]
+
+1. SRE develops the Information System Contingency Plan (ISCP) that identifies essential mission and business functions and associated contingency requirements, and provides recovery objectives, restoration priorities, and metrics.
+1. SRE documents contingency roles, responsibilities, and assigned individuals with current contact information, and addresses maintaining essential mission and business functions despite system disruption, compromise, or failure, and eventual full system restoration without deterioration of the originally planned and implemented controls.
+1. SRE includes provisions for sharing contingency information and submits the plan for review and approval by the [Designated Contingency Planning Official] and the Business Owner.
+1. For systems containing PHI or PII, SRE confirms the ISCP includes four components: a data backup plan, a disaster recovery plan, an emergency mode operation plan, and emergency access procedures [ARC-AMPE CP-2 AE Mandatory | HIPAA 164.308(a)(7)(ii)].
+1. SRE distributes copies of the approved plan to key contingency personnel, identified by name and/or role on the [Key Contingency Personnel Roster], and to the organizational elements listed on the [Distribution List], recording distribution in the [Ticketing System].
+1. SRE coordinates contingency planning activities with the incident handling team, exchanging the plan and any relevant incident-response lessons at each plan review.
+1. At least within every one (1) year, SRE reviews the contingency plan and records the review in the [Documentation Repository]; SRE also runs the plan maintenance workflow quarterly to keep it current.
+1. SRE updates the plan to address changes to the organization, system, or environment of operation, and to correct problems encountered during plan implementation, execution, or testing.
+1. SRE communicates every plan change to the key contingency personnel and organizational elements on the [Key Contingency Personnel Roster] and [Distribution List].
+1. SRE incorporates lessons learned from contingency plan testing, training, or actual contingency activities into subsequent testing and training plans.
+1. SRE protects the contingency plan from unauthorized disclosure and modification by storing it in an access-controlled location in the [Documentation Repository], restricting edit rights to SRE plan maintainers, and marking it with the organization's handling classification.
+
+### Maintain the critical asset inventory in the ISCP [NIST CP-2(8) Moderate/High | ARC-AMPE CP-2(8) AE Mandatory | HIPAA 164.308(a)(7)(ii)(E) Addressable]
+
+1. SRE identifies critical system assets — hardware, software, firmware, information, data, applications, communications, and people — supporting the essential mission and business functions listed in the ISCP.
+1. SRE assesses the relative criticality of specific applications and data in support of the other contingency plan components, and records the criticality ranking in the ISCP asset inventory.
+1. SRE reviews and refreshes the critical asset inventory as part of the quarterly plan maintenance workflow, so the inventory remains active and current.
+
+### Coordinate contingency planning with related plans [NIST CP-2(1) Moderate/High | ARC-AMPE CP-2(1) AE Mandatory]
+
+1. SRE contacts the organizational elements responsible for related plans — Business Continuity Plans, Disaster Recovery Plans, Continuity of Operations Plans, Crisis Communications Plans, Critical Infrastructure Plans, Cyber Incident Response Plans, Insider Threat Implementation Plans, and Occupant Emergency Plans — through the [Coordination Channel], including the [COOP Program Office].
+1. SRE reconciles assumptions, recovery priorities, contact lists, and activation triggers across the ISCP and each related plan, and records reconciliation outcomes in the ISCP coordination log.
+1. SRE schedules this coordination review to occur with each quarterly plan maintenance cycle and whenever a related plan is revised.
+
+### Plan capacity, resumption timelines, continuity, and alternate-site transfer [NIST CP-2(2)–(7) | FedRAMP CP-2(3) | ARC-AMPE CP-2(3) AE Mandatory]
+
+1. SRE conducts capacity planning to confirm that necessary capacity for information processing, telecommunications, and environmental support exists during contingency operations, and documents projected contingency-state capacity in the ISCP [NIST CP-2(2) High].
+1. SRE plans for the resumption of essential mission and business functions within the time period defined in the service provider and organization Service Level Agreements following contingency plan activation [NIST CP-2(3) | FedRAMP CP-2(3)].
+1. SRE calculates the MTD for each essential function, consistent with the mission/business Continuity of Operations Plan, and sets the RTO for each system so that the RTO is less than and does not exceed the MTD; SRE documents activation decision criteria, the MTD, and the RTO results in the contingency plan, with MTD approved by the Business Owner [ARC-AMPE CP-2(3) AE Mandatory].
+1. SRE plans for the continuance of essential mission and business functions with minimal or no loss of operational continuity, sustaining that continuity until full system restoration at primary processing and/or storage sites [NIST CP-2(5) High].
+1. SRE plans for the transfer of essential mission and business functions to alternate processing and/or storage sites with minimal or no loss of operational continuity, sustaining that continuity through system restoration to the primary sites [NIST CP-2(6)].
+1. SRE coordinates the contingency plan with the contingency plans of external service providers and verifies, through the [Vendor Management Process], that the providers' contingency capabilities can satisfy Example Org's contingency requirements [NIST CP-2(7)].
+
+### Implement physical access safeguards for facilities and equipment [HIPAA 164.310(a)(1) | HIPAA 164.310(a)(2)(i)–(iv) Addressable]
+
+1. SRE works with Physical Security to confirm policies and procedures are in place that limit physical access to information systems and the facilities housing them, while allowing properly authorized access [HIPAA 164.310(a)(1)].
+1. SRE documents, with Physical Security, the procedures that allow facility access in support of data restoration under the disaster recovery plan and emergency mode operations plan in the event of an emergency, and includes these procedures in the ISCP [HIPAA 164.310(a)(2)(i) Addressable].
+1. SRE confirms with Physical Security that policies and procedures safeguard the facility and equipment from unauthorized physical access, tampering, and theft — including the [Alternate Storage Site] and [Alternate Processing Site] facilities [HIPAA 164.310(a)(2)(ii) Addressable].
+1. Physical Security operates role-based facility access validation, including visitor control and control of access to software programs for testing and revision; SRE verifies the roles granting contingency personnel facility access match the roles in the ISCP [HIPAA 164.310(a)(2)(iii) Addressable].
+1. SRE and Physical Security document all repairs and modifications to physical security components of the facility — for example hardware, walls, doors, and locks — in the [Facility Modification Log] [HIPAA 164.310(a)(2)(iv) Addressable].
+
+### Implement technical access controls for systems containing ePHI [HIPAA 164.312(a)(1) | HIPAA 164.312(a)(2)(i)–(iv) Required/Addressable]
+
+1. SRE configures the [Identity Provider] so that only persons or software programs granted access rights under the access management policy can access systems that maintain ePHI [HIPAA 164.312(a)(1)].
+1. SRE verifies each user account carries a unique name and/or number for identifying and tracking user identity, and audits account creation through the [Identity Provider] provisioning workflow [HIPAA 164.312(a)(2)(i) Required].
+1. SRE sets session timeout policies in the [Identity Provider] so electronic sessions terminate after the organization's predetermined period of inactivity [HIPAA 164.312(a)(2)(iii) Addressable].
+1. SRE enables encryption and decryption of ePHI at rest and in transit using the cryptographic mechanisms configured through [Key Management Service] [HIPAA 164.312(a)(2)(iv) Addressable].
+
+### Deliver and maintain contingency training [NIST CP-3 Low/Moderate/High | ARC-AMPE CP-3 AE Mandatory | NIST CP-3(1) | NIST CP-3(2)]
+
+1. SRE assigns contingency training, through the [Learning Management System], to each system user consistent with their assigned contingency roles and responsibilities.
+1. SRE ensures each individual receives contingency training within thirty (30) days of assuming a contingency role or responsibility, whenever system changes require it, and every one (1) year thereafter [ARC-AMPE CP-3 AE Mandatory].
+1. SRE reviews and updates contingency training content at least every one (1) year, and following organization-defined events such as plan updates, test findings, or actual contingency activations [NIST CP-3 | ARC-AMPE CP-3 AE Mandatory].
+1. SRE incorporates simulated events into contingency training — including scenario exercises run during the quarterly test cycle — so personnel can respond effectively in crisis situations [NIST CP-3(1) High].
+1. SRE uses the organization's operational mechanisms — the actual [Backup Platform], [Ticketing System], and runbooks — in training exercises to provide a more thorough and realistic training environment [NIST CP-3(2)].
+
+### Test the contingency plan and produce after-action results [NIST CP-4 Low/Moderate/High | HIPAA 164.308(a)(7)(ii)(D) Addressable | ARC-AMPE CP-4 AE Mandatory | NIST CP-4(1)–(5)]
+
+1. SRE executes contingency plan testing quarterly, at a minimum satisfying the ARC-AMPE requirement to test at least within every one (1) year, using tests based on the latest published NIST SP 800-34 and NIST SP 800-84 plus any organization-defined functional tests or exercises.
+1. SRE coordinates each test with the organizational elements responsible for related plans — COOP, BCP, CIP, DRP, ISCP, CIRP, and OEP — via the [Coordination Channel], scheduling the test so it does not conflict with their exercises [NIST CP-4(1) Moderate/High | ARC-AMPE CP-4(1) AE Mandatory].
+1. When the test involves the alternate processing site, SRE runs the exercise at the [Alternate Processing Site] to familiarize contingency personnel with the facility and available resources and to evaluate the site's capability to support contingency operations [NIST CP-4(2) High].
+1. SRE uses the organization-defined automated mechanisms — the [Backup Platform] automated verification tooling and monitoring — to execute and measure test steps [NIST CP-4(3)].
+1. Each test must include a full recovery and reconstitution of the system to a known state; SRE executes the restore, verifies application and data state against the baseline, and records the outcome in the Restore test results evidence artifact [NIST CP-4(4)].
+1. SRE employs self-challenge mechanisms to disrupt and adversely affect the defined system or system component — for example, induced failover or simulated component failure in a non-production replica — during the test window [NIST CP-4(5)].
+1. SRE reviews the test results, initiates corrective actions for any failures via the [Ticketing System], and tracks each corrective action to closure.
+1. SRE produces an after-action report that identifies improvements to existing processes, procedures, and policies; makes the test results available to the Business Owner; and includes an evaluation of the capability to meet privacy requirements in a contingency scenario, with corrective measures for any privacy risks identified [ARC-AMPE CP-4 AE Mandatory].
+1. SRE files the Restore test results and after-action report in the [Documentation Repository] per the retention rules in the first subsection.
+
+### Establish and maintain the alternate storage site [NIST CP-6 Moderate/High | ARC-AMPE CP-6 AE Mandatory | NIST CP-6(1)–(3)]
+
+1. SRE establishes the [Alternate Storage Site], executing the necessary agreement permitting storage and retrieval of system backup information, and confirms the site provides controls equivalent to those of the primary site.
+1. SRE identifies the site so it is sufficiently separated from the primary storage site to reduce susceptibility to the same threats, determining the minimum safe distance based on the types of threats of concern to the operation, and records the separation rationale in the ISCP [NIST CP-6(1) Moderate/High | ARC-AMPE CP-6(1) AE Mandatory].
+1. SRE configures the site so recovery operations can proceed in accordance with the documented RTO and RPO, including replication schedules and retrieval procedures [NIST CP-6(2) High].
+1. SRE identifies potential accessibility problems to the site in the event of an area-wide disruption or disaster, outlines explicit mitigation actions — for example, duplicating backup information at other geographically diverse alternate storage sites or planning physical access to retrieve backup information — and documents those mitigation actions in the ISCP [NIST CP-6(3) Moderate/High | ARC-AMPE CP-6(3) AE Mandatory].
+
+### Establish and maintain the alternate processing site [NIST CP-7 Moderate/High | FedRAMP CP-7 | ARC-AMPE CP-7 AE Mandatory | NIST CP-7(1)–(4), (6)]
+
+1. SRE establishes the [Alternate Processing Site] under an agreement that permits transfer and resumption of system operations for essential mission and business functions within an allowable outage time consistent with the RTO and RPO in the ISCP or COOP, as approved and accepted by the Business Owner.
+1. SRE verifies the site is sufficiently separated from the primary processing site to reduce susceptibility to the same threats, documenting the separation rationale (noting that for hostile cyber attacks the degree of physical separation is less relevant) [NIST CP-7(1) Moderate/High | FedRAMP CP-7(1) | ARC-AMPE CP-7(1) AE Mandatory].
+1. SRE identifies potential accessibility problems at the site in an area-wide disruption or disaster, outlines explicit mitigation actions — for example, duplicating backup information at geographically diverse sites or planning physical access for retrieval — and documents the remediation actions in the ISCP [NIST CP-7(2) Moderate/High | ARC-AMPE CP-7(2) AE Mandatory].
+1. SRE develops the site's service agreements containing priority-of-service provisions in accordance with availability requirements, including RTOs [NIST CP-7(3) Moderate/High | ARC-AMPE CP-7(3) AE Mandatory].
+1. SRE makes the required equipment and supplies available at the site, or puts contracts in place supporting delivery to the site within the organization-defined time period for transfer and resumption [NIST CP-7 | FedRAMP CP-7 | ARC-AMPE CP-7 AE Mandatory].
+1. SRE provides controls at the site — administrative, physical, and technical — equivalent to those at the primary site, and implements additional controls to protect PII in accordance with the privacy risks identified [NIST CP-7 | FedRAMP CP-7 | ARC-AMPE CP-7 AE Mandatory].
+1. SRE prepares the site so it can serve as the operational site supporting essential mission and business functions, verifying configuration, connectivity, and access as part of the quarterly test cycle [NIST CP-7(4) High].
+1. SRE plans and documents the course of action for circumstances that preclude returning to the primary processing site, including re-baselining operations at the alternate site, and records this plan in the ISCP [NIST CP-7(6)].
+
+### Establish and maintain alternate telecommunications services [NIST CP-8 Moderate/High | ARC-AMPE CP-8 AE Mandatory | NIST CP-8(1)–(5)]
+
+1. SRE establishes alternate telecommunications services through the [Alternate Telecommunications Provider], with agreements permitting resumption of system operations for essential mission and business functions within the resumption time specified by the RTO and business-function MTD in the ISCP, ISCP's Business Impact Analysis, or COOP, as approved and accepted by the Business Owner.
+1. SRE develops primary and alternate telecommunications service agreements containing priority-of-service provisions in accordance with availability requirements, including RTOs, and requests Telecommunications Service Priority for all services used for national security emergency preparedness where the services are provided by a common carrier [NIST CP-8(1) Moderate/High | ARC-AMPE CP-8(1) AE Mandatory].
+1. SRE obtains alternate services that reduce the likelihood of sharing a single point of failure with the primary telecommunications services [NIST CP-8(2) Moderate/High | ARC-AMPE CP-8(2) AE Mandatory].
+1. SRE obtains alternate services from providers separated from the primary service providers to reduce susceptibility to the same threats [NIST CP-8(3) High].
+1. SRE requires primary and alternate telecommunications providers to maintain contingency plans, reviews those plans to confirm they meet organizational contingency requirements, and obtains evidence of provider contingency testing and training at [Provider Evidence Frequency] [NIST CP-8(4) High].
+1. SRE tests the alternate telecommunications services quarterly, recording call/failover test outcomes in the [Ticketing System] [NIST CP-8(5)].
+
+### Perform and protect backups [NIST CP-9 Low/Moderate/High | ARC-AMPE CP-9 AE Mandatory | NIST CP-9(1), (2), (3), (5)–(8)]
+
+1. SRE configures the [Backup Platform] to back up user-level information contained in the defined system components, system-level information, and system documentation (including security- and privacy-related documentation) at the documented frequencies [NIST CP-9 Low/Moderate/High].
+1. SRE configures daily incremental backups and weekly full backups, maintaining three (3) generations of backups, at least one (1) of which is available online — a full backup plus all related incremental backups [ARC-AMPE CP-9 AE Mandatory].
+1. SRE protects the confidentiality, integrity, and availability of backup information: restricting access to backup repositories, storing copies at the [Alternate Storage Site], and monitoring job health [NIST CP-9 | ARC-AMPE CP-9 AE Mandatory].
+1. SRE tests backup information to verify media reliability and information integrity at least every six (6) months — quarterly under this procedure's cadence — by decrypting and transporting or transmitting a random sample of backup files from the alternate storage or backup site and comparing them to the same information at the primary processing site [NIST CP-9(1) Moderate/High | ARC-AMPE CP-9(1) AE Mandatory].
+1. SRE uses a sample of backup information in the restoration of selected system functions as part of contingency plan testing, recording results in the Restore test results artifact [NIST CP-9(2) High].
+1. SRE stores backup copies of critical system software and other security-related information in a separate facility — the [Alternate Storage Site] — or in a fire-rated container that is not collocated with the operational system [NIST CP-9(3) High].
+1. SRE transfers system backup information to the alternate storage site within [Transfer Time Period] at [Transfer Rate], consistent with the RTO and RPO [NIST CP-9(5) High].
+1. Where the redundant secondary system architecture is used, SRE maintains it on infrastructure not collocated with the primary system and verifies it can be activated without loss of information or disruption to operations [NIST CP-9(6)].
+1. SRE enforces dual authorization in the [Backup Platform] for deletion or destruction of the defined backup information, requiring approval from two authorized SRE administrators before any destructive action [NIST CP-9(7)].
+1. SRE implements cryptographic mechanisms to prevent unauthorized disclosure and modification of all backup files: encrypting PII in backups at the storage location using the methodology specified in SC-13, and applying digital signatures or cryptographic hashes to protect backup integrity, with keys managed in [Key Management Service] [NIST CP-9(8) Moderate/High | ARC-AMPE CP-9(8) AE Mandatory].
+1. SRE reviews the Backup job success report after each daily and weekly backup cycle, investigates any failed job through the [Ticketing System], and retains the report as process evidence.
+
+### Control receipt, removal, movement, and disposal of hardware and electronic media [HIPAA 164.310(d)(1) | HIPAA 164.310(d)(2)(i)–(iv) Required/Addressable | ARC-AMPE CP-9 AE Mandatory]
+
+1. SRE follows the organization's policies and procedures governing receipt and removal of hardware and electronic media containing ePHI into and out of a facility, and movement of these items within the facility [HIPAA 164.310(d)(1)].
+1. Before disposing of ePHI, or any hardware or electronic media on which it is stored, SRE executes the final disposition procedure — sanitization or destruction per the [Media Sanitization Procedure] — and records the disposition in the [Media Disposition Log] [HIPAA 164.310(d)(2)(i) Required].
+1. Before media are made available for re-use, SRE removes all ePHI from the media using the approved sanitization method and records the sanitization event [HIPAA 164.310(d)(2)(ii) Required].
+1. SRE records every movement of hardware and electronic media, and the person responsible for each movement, in the [Media Movement Log] [HIPAA 164.310(d)(2)(iii) Addressable].
+1. Before moving any equipment, SRE confirms a current, retrievable, exact copy of the ePHI (and PII) on that equipment has been created and is available when needed, verifying backup job completion in the Backup job success report [HIPAA 164.310(d)(2)(iv) Addressable | ARC-AMPE CP-9 AE Mandatory].
+
+### Protect ePHI against improper alteration or destruction [HIPAA 164.312(c)(1) | HIPAA 164.312(c)(2) Addressable]
+
+1. SRE follows the organization's policies and procedures protecting ePHI from improper alteration or destruction, including the backup, integrity-checking, and dual-authorization controls defined in this procedure [HIPAA 164.312(c)(1)].
+1. SRE enables electronic mechanisms — cryptographic hashes, digital signatures, and storage-layer integrity checks through [Key Management Service] and the [Backup Platform] — to corroborate that ePHI has not been altered or destroyed in an unauthorized manner [HIPAA 164.312(c)(2) Addressable].
+
+### Recover and reconstitute the system to a known state [NIST CP-10 Low/Moderate/High | FedRAMP CP-10 | ARC-AMPE CP-10 AE Mandatory | NIST CP-10(2), (4), (6)]
+
+1. Upon a disruption, compromise, or failure, SRE executes the recovery runbook to restore and reconstitute the system to a known state within the time period specified in the contingency plan or COOP, consistent with the RTO and RPO [NIST CP-10 | FedRAMP CP-10 | ARC-AMPE CP-10 AE Mandatory].
+1. SRE performs the recovery in a trusted, secure, and verifiable manner: resetting all system parameters, reinstalling patches, reestablishing configuration settings, reinstalling application and system software, and fully testing the system before returning it to service [ARC-AMPE CP-10 AE Mandatory].
+1. For transaction-based systems such as database management systems and transaction processing systems, SRE implements transaction recovery using transaction rollback and transaction journaling mechanisms configured in the [Database Platform] [NIST CP-10(2) Moderate/High | ARC-AMPE CP-10(2) AE Mandatory].
+1. SRE restores system components within the restoration time periods defined in the service provider and organization Service Level Agreements, using configuration-controlled and integrity-protected information — versioned, checksummed images and configuration baselines — representing a known, operational state [NIST CP-10(4) High | FedRAMP CP-10(4)].
+1. SRE protects the system components used for recovery and reconstitution — recovery images, baselines, restore tooling, and recovery environments — with access controls, integrity verification, and restricted administrative access [NIST CP-10(6)].
+1. After each recovery or test recovery, SRE records outcomes and lessons learned in the Restore test results artifact and files corrective actions in the [Ticketing System].
+
+## Roles & Responsibilities
+
+Site Reliability Engineering is authorized to and accountable for executing every step of this procedure end to end, including backup operations, plan maintenance, testing, training coordination, and recovery execution. Participants from Physical Security, the incident handling team, related-plan owners (COOP, BCP, CIRP, and others), Business Owners, and external service providers contribute where named in individual steps; exceptions to any step in this procedure are reviewed and approved by the [Designated Contingency Planning Official] in consultation with the Business Owner.
+
+## Related Standard
+
+Backup, Restore & Contingency Standard

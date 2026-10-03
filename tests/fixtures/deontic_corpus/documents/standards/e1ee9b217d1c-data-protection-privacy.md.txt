@@ -1,0 +1,250 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.003273
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 69ad275f0d7182f8
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Data Protection and Privacy Standard
+
+| Field                       | Value                                                                                                                                                       |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Document Owner              | Data Governance                                                                                                                                             |
+| Review Cadence              | Annual                                                                                                                                                      |
+| Required Evidence Artifacts | Data inventory and classification register; Retention schedule                                                                                              |
+| Applies To                  | All Example Org personnel, systems, applications, and projects that process personally identifiable information (PII) or protected health information (PHI) |
+
+## 1. Purpose and Scope
+
+This Standard establishes the requirements for the processing, transparency, minimization, sharing, retention, quality management, and inventory of personally identifiable information (PII) and protected health information (PHI) at Example Org. Data Governance is accountable for this process end to end, including all handoffs to participating teams. All personnel and roles identified by Data Governance must comply with this Standard.
+
+## 2. PII Processing and Transparency Policy and Procedures
+
+### 2.1 Policy Development and Dissemination
+
+Data Governance must develop, document, and disseminate to organization-defined personnel and roles a personally identifiable information (PII) processing and transparency policy at the organization level (NIST also permits mission/business process-level and system-level policies). The policy must address purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and must be consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+### 2.2 Procedures
+
+Data Governance must develop, document, and disseminate procedures to facilitate implementation of the PII processing and transparency policy and the associated PII processing and transparency controls. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+### 2.3 Designated Official
+
+Data Governance must designate an organization-defined official to manage the development, documentation, and dissemination of the PII processing and transparency policy and procedures. These officials must be named in the appropriate security and privacy documents. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+### 2.4 Review and Update
+
+Data Governance must review and update the current PII processing and transparency policy and procedures at least every one (1) year and following organization-defined events (e.g., assessment or audit findings, security or privacy incidents, breaches, or changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines). Data Governance must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect these policies. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+### 2.5 Life Cycle Support
+
+The PII processing and transparency policies and procedures must support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and the information on that system. [ARC-AMPE PT-1 AE Mandatory]
+
+### 2.6 Documentation Form, Retention, and Availability
+
+- Data Governance must maintain the policies and procedures implemented to comply with the rule in written (which may be electronic) form, and must maintain a written (which may be electronic) record of any action, activity, or assessment that the rule requires to be documented. [HIPAA Security Rule 164.316(b)(1)]
+- Required documentation must be retained for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+- The documentation must be made available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+- Data Governance must review the documentation periodically and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+## 3. Authority for PII Processing
+
+### 3.1 Determination and Documentation of Authority
+
+Data Governance must determine and document the organization-defined authority that permits the organization-defined processing of PII. Personnel must consult with the senior agency official for privacy and legal counsel regarding such authority, particularly where multiple jurisdictions or sources of authority apply. [NIST 800-53 PT-2 | ARC-AMPE PT-2 AE Mandatory]
+
+### 3.2 Restriction to Authorized Processing
+
+The organization-defined processing of PII must be restricted to only that which is authorized, including through training personnel on authorized processing and monitoring and auditing organizational use of PII. [NIST 800-53 PT-2 | ARC-AMPE PT-2 AE Mandatory]
+
+### 3.3 Documented Policies and Applicable Law
+
+Policies and procedures regarding the creation, collection, use, and disclosure of PII must, at a minimum, be documented and available to appropriate authorities upon request, and must identify the applicable law governing collection, use, and disclosure of PII. [ARC-AMPE PT-2 AE Mandatory | ARC-AMPE PT-3 AE Mandatory]
+
+### 3.4 Data Tags for Authorized Processing
+
+Data tags containing the organization-defined authorized processing must be attached to organization-defined elements of PII. [NIST 800-53 PT-2(1)]
+
+### 3.5 Automated Enforcement
+
+Enforcement of the authorized processing of PII must be managed using organization-defined automated mechanisms ([Automated Mechanism]). [NIST 800-53 PT-2(2)]
+
+## 4. Processing Purposes
+
+### 4.1 Identification and Documentation of Purposes
+
+Data Governance must identify and document the organization-defined purpose(s) for processing PII. [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+### 4.2 Public Description of Purposes
+
+The processing purpose(s) must be described in the organization's public privacy notices and policies and in related privacy compliance documentation, such as privacy impact assessments and system of records notices. [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+### 4.3 Compatibility Restriction
+
+The organization-defined processing of PII must be restricted to only that which is compatible with the identified purpose(s). [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+### 4.4 Monitoring of Processing Changes
+
+Changes in PII processing must be monitored, and organization-defined mechanisms must be implemented to ensure that any changes are made in accordance with organization-defined requirements. [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+### 4.5 Authorized Purposes Under the ACA
+
+Per ARC-AMPE, authorized purposes for processing PII in accordance with the ACA include determining eligibility for enrollment in a qualified health plan, determining eligibility for other insurance affordability programs (as defined in 45 CFR §155.300), and determining eligibility for exemptions from the individual shared responsibility provisions in Code section 5000A. [ARC-AMPE PT-3 AE Mandatory]
+
+### 4.6 Limits on Use and Disclosure by the Exchange
+
+Per ARC-AMPE, the Exchange may only use or disclose such PII to the extent necessary to carry out functions described in 45 CFR §155.200; other functions the Secretary determines to be in compliance with the ACA and for which the individual provides consent; or other functions pursuant to the substantive and procedural requirements in 45 CFR §155.260(a)(iii). [ARC-AMPE PT-3 AE Mandatory]
+
+### 4.7 Data Tags for Processing Purposes
+
+Data tags containing the organization-defined processing purposes must be attached to organization-defined elements of PII. [NIST 800-53 PT-3(1)]
+
+### 4.8 Tracking of Processing Purposes
+
+Processing purposes of PII must be tracked using organization-defined automated mechanisms ([Automated Mechanism]). [NIST 800-53 PT-3(2)]
+
+## 5. Information Sharing and Collaboration Decisions
+
+### 5.1 Verification of Sharing Partner Authorizations
+
+Authorized users must be enabled to determine whether access authorizations assigned to a sharing partner match the information's access and use restrictions for organization-defined information-sharing circumstances. ARC-AMPE scopes this to circumstances where user discretion is required, as defined in data sharing agreements such as Computer Matching Agreements or Information Exchange Agreements, and consistent with 45 CFR §155.260(e). [NIST 800-53 AC-21 Moderate, High | ARC-AMPE AC-21 AE Mandatory]
+
+### 5.2 Decision Support Mechanisms
+
+Organization-defined automated mechanisms — or, per ARC-AMPE, manual processes — must be employed to assist users in making information-sharing and collaboration decisions. [NIST 800-53 AC-21 Moderate, High | ARC-AMPE AC-21 AE Mandatory]
+
+### 5.3 Conditions for Sharing
+
+PII may only be shared when authorized, there is a need to know, and adequate assurances of protection have been provided. [ARC-AMPE AC-21 AE Mandatory]
+
+### 5.4 Automated Enforcement of Sharing Decisions
+
+Organization-defined automated mechanisms must be employed to enforce information-sharing decisions by authorized users based on the access authorizations of sharing partners and access restrictions on the information to be shared. [NIST 800-53 AC-21(1)]
+
+### 5.5 Search and Retrieval Services
+
+Information search and retrieval services ([Information Search and Retrieval Service]) must be implemented that enforce organization-defined information-sharing restrictions. [NIST 800-53 AC-21(2)]
+
+## 6. Information Management and Retention
+
+### 6.1 Life Cycle Management
+
+Information within the system and information output from the system must be managed and retained in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines, and operational requirements, covering the full information life cycle. Data Governance must record the applicable retention requirements for each data category in the Retention schedule. [NIST 800-53 SI-12 Low, Moderate, High | ARC-AMPE SI-12 AE Mandatory]
+
+### 6.2 Retention of System Output
+
+System output — including but not limited to audit records, system reports, business and financial reports, and business records — must be retained for ten (10) years (per 45 CFR §155.1210 and 45 CFR §156.705) or in accordance with organizational policy; NARA policy applies to the retention of federal data held by Enrollment Partners. [ARC-AMPE SI-12 AE Mandatory]
+
+### 6.3 PHI Documentation Requirements
+
+For systems processing, storing, or transmitting protected health information (PHI), the following must be documented and retained for at least six (6) years from creation or last effective date, whichever is later: [ARC-AMPE SI-12 AE Mandatory | HIPAA Security Rule 164.316(b)(2)(i)]
+
+- Decisions regarding addressable implementation specifications (including why a particular implementation specification would not be reasonable and appropriate);
+- A user's right of access to a workstation, transaction, program, or process;
+- Security incidents and their outcomes;
+- Satisfactory assurances that a business associate will appropriately safeguard PHI (recorded in a written contract or other arrangement meeting business associate agreement requirements, with documented attempts and reasons if satisfactory assurances cannot be obtained);
+- Repairs and modifications to physical components of a facility related to security (e.g., hardware, walls, doors, locks);
+- Changes to organizational policies and procedures.
+
+## 7. Data Minimization
+
+### 7.1 Minimum Necessary PII Elements
+
+The PII being processed in the information life cycle must be limited to the minimum PII elements necessary to accomplish the legally authorized purpose of collection (organization-defined elements). [NIST 800-53 SI-12(1) | ARC-AMPE SI-12(1) AE Mandatory]
+
+### 7.2 Minimization for Research, Testing, and Training
+
+Organization-defined techniques — in accordance with organizational standards and applicable federal and state laws and regulations — must be used to minimize the use of PII for research, testing, or training. [NIST 800-53 SI-12(2) | ARC-AMPE SI-12(2) AE Mandatory]
+
+### 7.3 Limitation to Authorized Purpose
+
+The creation, collection, use, and/or disclosure of PII must be limited only to the extent necessary to accomplish a specified and authorized purpose(s). [ARC-AMPE SI-12(2) AE Mandatory]
+
+### 7.4 PII in Test Environments
+
+If PII is used in the test environment, the same controls required for systems containing PII must be applied to the test environment, and synthetic PII must be used to the maximum extent practicable when testing system functionality. [ARC-AMPE SI-12(2) AE Mandatory]
+
+### 7.5 Approval of PII Use in Testing, Training, and Research
+
+The senior official for privacy must approve the use of PII in testing, training, and research; using synthetic or de-identified data is preferred. [ARC-AMPE SI-12(2) AE Mandatory]
+
+## 8. Disposal, Destruction, and Erasure
+
+### 8.1 Disposal Techniques
+
+Organization-defined techniques must be used to dispose of, destroy, or erase information following the retention period, in a manner that prevents loss, theft, misuse, or unauthorized access. [NIST 800-53 SI-12(3) | ARC-AMPE SI-12(3) AE Mandatory]
+
+### 8.2 Media Sanitization Guidance
+
+The latest published NIST SP 800-88, *Guidelines for Media Sanitization*, must be referred to for guidance on information disposal techniques. [ARC-AMPE SI-12(3) AE Mandatory]
+
+### 8.3 Encryption Standards for Secure Deletion
+
+The latest published FIPS 140-compliant encryption standards must be used to ensure secure deletion or destruction of PII (including originals, copies, and archived records). [ARC-AMPE SI-12(3) AE Mandatory]
+
+## 9. PII Quality and Integrity
+
+### 9.1 Accuracy Review
+
+The accuracy, relevance, timeliness, and completeness of PII must be checked across the information life cycle at least every one (1) year. Data Governance owns this review and must record its results in the Data inventory and classification register. [NIST 800-53 SI-18 | ARC-AMPE SI-18 AE Mandatory]
+
+### 9.2 Correction and Deletion
+
+Inaccurate or outdated PII must be corrected or deleted. [NIST 800-53 SI-18 | ARC-AMPE SI-18 AE Mandatory]
+
+### 9.3 Retention Regardless of Activity
+
+An individual's record must be maintained in accordance with the Retention schedule regardless of that individual's activity or inactivity; correcting or deleting inaccurate data does not violate retention rules provided a log of those changes is maintained. [ARC-AMPE SI-18 AE Mandatory]
+
+### 9.4 Automated Correction and Deletion
+
+PII that is inaccurate or outdated, incorrectly determined regarding impact, or incorrectly de-identified must be corrected or deleted using organization-defined automated mechanisms ([Automated Mechanism]). [NIST 800-53 SI-18(1)]
+
+### 9.5 Data Tags for Correction and Deletion
+
+Data tags must be employed to automate the correction or deletion of PII across the information life cycle within organizational systems. [NIST 800-53 SI-18(2)]
+
+### 9.6 Direct Collection
+
+PII must be collected directly from the individual. [NIST 800-53 SI-18(3)]
+
+### 9.7 Correction or Deletion Upon Individual Request
+
+PII must be corrected or deleted upon request by individuals or their designated representatives, noting that organizations may not be permitted to delete certain PII regardless of an individual's preference. [NIST 800-53 SI-18(4) | ARC-AMPE SI-18(4) AE Mandatory]
+
+### 9.8 Notification of Corrections and Deletions
+
+Organization-defined recipients of PII and the individuals whose PII has been corrected or deleted must be notified. [NIST 800-53 SI-18(5) | ARC-AMPE SI-18(5) AE Mandatory]
+
+### 9.9 Denial of Deletion Requests
+
+If an individual requests deletion of PII that the organization is legally required to maintain, that reason must be communicated in the denial of the individual's request. [ARC-AMPE SI-18(5) AE Mandatory]
+
+## 10. PII Inventory
+
+### 10.1 Systems Inventory
+
+Data Governance must develop and update an inventory of organizational systems at least every one (1) year or when there is a significant change to the inventory. This inventory must be maintained as the Data inventory and classification register. [NIST 800-53 PM-5 | ARC-AMPE PM-5 AE Mandatory]
+
+### 10.2 PII Inventory
+
+Data Governance must establish, maintain, and update — continuously or when there is a significant change to the systems, applications, and projects involved (organization-defined frequency) — an inventory of all systems, applications, and projects that process PII. This inventory must be maintained in the Data inventory and classification register. [NIST 800-53 PM-5(1) | ARC-AMPE PM-5(1) AE Mandatory]
+
+### 10.3 Operational Guidance
+
+The policies and procedures required by PM-1 must include operational guidance for compliance with the PII inventory control. [ARC-AMPE PM-5(1) AE Mandatory]
+
+## 11. Evidence and Records
+
+Data Governance must produce and maintain the following evidence artifacts in support of this Standard:
+
+- **Data inventory and classification register** — maintained under Sections 9.1, 10.1, and 10.2, recording organizational systems, applications, and projects that process PII, their classification, and the results of annual PII quality reviews.
+- **Retention schedule** — maintained under Section 6.1, recording the applicable retention requirements for each data category across the full information life cycle.
+
+All documentation and records required by this Standard must be maintained in written (which may be electronic) form, retained in accordance with Sections 2.6, 6.2, and 6.3, and made available to the persons responsible for implementing the procedures to which the documentation pertains.

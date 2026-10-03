@@ -1,0 +1,368 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.005887
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - c157b19e957e8707
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Information Security Standard: Secure Development Lifecycle
+
+**Standard ID:** STD-SDL-001
+**Owner:** Application Security
+**Cadence:** Continuous
+**Revision:** 1.0
+
+## 1. Purpose and Scope
+
+This Standard defines the requirements that Example Org must satisfy for the secure acquisition, development, and management of systems, system components, and system services. It applies to all systems, system components, and system services developed, acquired, operated, modified, and disposed of by Example Org, and to all developers, integrators, and contractors performing development work on behalf of Example Org.
+
+Application Security is accountable for this process end to end, including its execution, its handoffs to other teams, and the evidence it produces. Evidence artifacts expected from this process include SAST/DAST results per release and dependency and supply-chain scan output.
+
+## 2. System Development Life Cycle
+
+2.1. Example Org must acquire, develop, and manage the system using a formally defined and documented system development life cycle process that incorporates information security and privacy considerations. [NIST 800-53 SA-3 | ARC-AMPE SA-3 AE Mandatory]
+
+2.2. Information security and privacy roles and responsibilities throughout the system development life cycle must be defined and documented. [NIST 800-53 SA-3 | ARC-AMPE SA-3 AE Mandatory]
+
+2.3. The individuals holding information security and privacy roles and responsibilities must be identified. [NIST 800-53 SA-3 | ARC-AMPE SA-3 AE Mandatory]
+
+2.4. The organizational information security and privacy risk management process must be integrated into system development life cycle activities. [NIST 800-53 SA-3 | ARC-AMPE SA-3 AE Mandatory]
+
+2.5. The security and privacy offices must be provided an opportunity to ensure that requirements for protecting Personally Identifiable Information (PII) are appropriately considered throughout the system development life cycle. Application Security must coordinate this opportunity as part of its ownership of the lifecycle process. [ARC-AMPE SA-3 AE Mandatory]
+
+## 3. Preproduction and Test Environments
+
+3.1. System preproduction environments must be protected commensurate with risk throughout the system development life cycle for the system, system component, or system service. [NIST 800-53 SA-3(1) | ARC-AMPE SA-3(1) AE Mandatory]
+
+3.2. The use of live data in preproduction environments for the system, system component, or system service must be approved, documented, and controlled. Application Security owns the approval and control of this use. [NIST 800-53 SA-3(2) | ARC-AMPE SA-3(2) AE Mandatory]
+
+3.3. Preproduction environments must be protected at the same impact or classification level as any live data in use within those environments. [NIST 800-53 SA-3(2) | ARC-AMPE SA-3(2) AE Mandatory]
+
+3.4. If PII is used in a test environment, the same controls required for systems containing PII must be applied to that test environment, and synthetic PII must be used to the maximum extent practicable when testing system functionality. [ARC-AMPE SA-3(2) AE Mandatory]
+
+3.5. The creation, collection, use, and/or disclosure of PII must be limited only to the extent necessary to accomplish a specified and authorized purpose. [ARC-AMPE SA-3(2) AE Mandatory]
+
+3.6. Approval from the senior official for privacy must be obtained for the use of PII in testing, training, and research; the use of synthetic or de-identified data is preferred for these purposes. [ARC-AMPE SA-3(2) AE Mandatory]
+
+## 4. Technology Refresh
+
+4.1. A technology refresh schedule for the system must be planned for and implemented throughout the system development life cycle. Application Security owns the planning and implementation of this schedule. [NIST 800-53 SA-3(3)]
+
+## 5. Acquisition Contracts
+
+5.1. The acquisition contract for the system, system component, or system service must include, explicitly or by reference and using organization-defined standardized contract language, the following: security and privacy functional requirements; strength of mechanism requirements; security and privacy assurance requirements; controls needed to satisfy security and privacy requirements; security and privacy documentation requirements; requirements for protecting security and privacy documentation; a description of the system development environment and the intended operating environment; allocation of responsibility (or identification of parties responsible) for information security, privacy, and supply chain risk management; and acceptance criteria. [NIST 800-53 SA-4 | ARC-AMPE SA-4 AE Mandatory]
+
+5.2. Each contract and Statement of Work requiring development of, or access to, systems containing PII must include language requiring adherence to the organization's security and privacy policies and standards (consistent with 45 CFR § 155.260(b)), must define security and privacy roles and responsibilities, and must receive approval from the system owner. [ARC-AMPE SA-4 AE Mandatory]
+
+5.3. When acquiring systems, components, or services used to store, process, or transmit PII, the acquisition contract must include, in consultation with the privacy office: a list of security and privacy controls necessary to protect PII (e.g., how data is stored, handled, and accessed within the service provider environment) and, if appropriate, enforcement of applicable privacy requirements; privacy requirements including privacy training and awareness and rules of behavior; and privacy functional requirements specific to privacy. [ARC-AMPE SA-4 AE Mandatory]
+
+5.4. The developer of the system, system component, or system service must be required to provide a description of the functional properties of the security and privacy controls to be implemented. [NIST 800-53 SA-4(1) Moderate, High | ARC-AMPE SA-4(1) AE Mandatory]
+
+5.5. The developer of the system, system component, or system service must be required to provide design and implementation information for the controls — including security-relevant external system interfaces, high-level design documentation, and source code or hardware schematics — at [Assignment: organization-defined level of detail] to prove control implementation. [NIST 800-53 SA-4(2) Moderate, High | ARC-AMPE SA-4(2) AE Mandatory]
+
+5.6. Functional properties of security controls describe functionality (security capabilities, functions, or mechanisms) visible at the interfaces of the controls and specifically exclude functionality and data structures internal to the operation of the controls. [ARC-AMPE SA-4(2) AE Mandatory]
+
+5.7. The developer of the system, system component, or system service must be required to use [Assignment: organization-defined systems engineering methods]; \[Selection (one or more): [Assignment: organization-defined system security engineering methods]; [Assignment: organization-defined privacy engineering methods]\]; and \[Selection (one or more): [Assignment: organization-defined software development methods]; [Assignment: organization-defined testing, evaluation, assessment, verification, and validation methods]; [Assignment: organization-defined quality control processes]\]. [NIST 800-53 SA-4(3)]
+
+5.8. The system, component, or service must be delivered with [Assignment: organization-defined security configurations] implemented, and those configurations must be used as the default for any subsequent reinstallation or upgrade. [NIST 800-53 SA-4(5) High]
+
+5.9. Only government off-the-shelf or commercial off-the-shelf information assurance (and information assurance-enabled) IT products that compose an NSA-approved solution must be employed to protect classified information when the transmitting networks are at a lower classification level than the information, and such products must have been evaluated and/or validated by NSA or in accordance with NSA-approved procedures. [NIST 800-53 SA-4(6)]
+
+5.10. Commercially provided information assurance (and information assurance-enabled) IT products must be limited to those successfully evaluated against a NIAP-approved Protection Profile for the specific technology type, if such a profile exists; if no such profile exists but the product relies on cryptographic functionality to enforce its security policy, the cryptographic module must be FIPS-validated or NSA-approved. [NIST 800-53 SA-4(7)]
+
+5.11. The developer of the system, system component, or system service must be required to produce a plan for continuous monitoring of control effectiveness that is consistent with the organization's continuous monitoring program. [NIST 800-53 SA-4(8)]
+
+5.12. The developer of the system, system component, or system service must be required to identify the functions, ports, protocols, and services intended for organizational use. [NIST 800-53 SA-4(9) Moderate, High | ARC-AMPE SA-4(9) AE Mandatory]
+
+5.13. Only information technology products on the FIPS 201-approved products list must be employed for Personal Identity Verification (PIV) capability implemented within organizational systems. [NIST 800-53 SA-4(10) Low, Moderate, High]
+
+5.14. [Assignment: organization-defined Privacy Act requirements] must be included in the acquisition contract for the operation of a system of records on behalf of the organization. [NIST 800-53 SA-4(11)]
+
+5.15. Organizational data ownership requirements must be included in the acquisition contract, and the contract must require all data to be removed from the contractor's system and returned to the organization within [Assignment: organization-defined time frame]. [NIST 800-53 SA-4(12)]
+
+5.16. A covered entity may permit a business associate to create, receive, maintain, or transmit electronic protected health information on its behalf only if the covered entity obtains satisfactory assurances (in accordance with § 164.314(a)) that the business associate will appropriately safeguard the information; a business associate may permit a subcontractor to do the same only if the business associate obtains equivalent satisfactory assurances from the subcontractor. [HIPAA Security Rule 164.308(b)(1)]
+
+5.17. The satisfactory assurances obtained from a business associate (or subcontractor) must be documented through a written contract or other arrangement that meets the applicable requirements of § 164.314(a). [HIPAA Security Rule 164.308(b)(3) Required]
+
+5.18. Business associate contracts must require the business associate to comply with the applicable requirements of the Security Rule; to ensure that any subcontractors creating, receiving, maintaining, or transmitting electronic protected health information on its behalf agree to comply with those requirements by entering into a compliant contract or other arrangement; and to report to the covered entity any security incident of which it becomes aware, including breaches of unsecured protected health information as required by § 164.410. [HIPAA Security Rule 164.314(a)(2)(i) Required]
+
+5.19. The same contract requirements that apply between a covered entity and a business associate apply in the same manner to the contract or other arrangement between a business associate and its subcontractor. [HIPAA Security Rule 164.314(a)(2)(iii) Required]
+
+## 6. System Documentation
+
+6.1. Administrator documentation for the system, system component, or system service must be obtained or developed describing: secure configuration, installation, and operation; effective use and maintenance of security and privacy functions and mechanisms; and known vulnerabilities regarding configuration and use of administrative or privileged functions. [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5 AE Mandatory]
+
+6.2. User documentation for the system, system component, or system service must be obtained or developed describing: user-accessible security and privacy functions and mechanisms and how to use them effectively; methods for user interaction that enable more secure use of the system and protection of individual privacy; and user responsibilities for maintaining system security and individual privacy. [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5 AE Mandatory]
+
+6.3. Attempts to obtain system, component, or service documentation when it is unavailable or nonexistent must be documented, and [Assignment: organization-defined actions] must be taken in response. [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5 AE Mandatory]
+
+6.4. System documentation must be distributed to [Assignment: organization-defined personnel or roles]. [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5 AE Mandatory]
+
+6.5. System documentation must be developed that describes the system and specifies the purpose, technical operation, access, maintenance, and required training for administrators and users. [ARC-AMPE SA-5 AE Mandatory]
+
+6.6. An updated list of related system operations and security documentation must be maintained. Application Security maintains this list. [ARC-AMPE SA-5 AE Mandatory]
+
+6.7. Relevant system documentation must be updated upon changes in system functions or processes, and the documents must include date and version numbers. [ARC-AMPE SA-5 AE Mandatory]
+
+6.8. System documentation must be evaluated and protected based on whether it is aligned with the risk management strategy or is essential for the effective implementation or operation of security controls. [ARC-AMPE SA-5 AE Mandatory]
+
+6.9. The FedRAMP Secure Configuration Guide rules for system documentation must be followed. [FedRAMP SA-5]
+
+## 7. Security and Privacy Engineering Principles
+
+7.1. [Assignment: organization-defined systems security and privacy engineering principles] must be applied in the specification, design, development, implementation, and modification of the system and system components. [NIST 800-53 SA-8 | ARC-AMPE SA-8 AE Mandatory]
+
+7.2. The security design principles listed below must be implemented in [Assignment: organization-defined systems or system components]. [NIST 800-53 SA-8(1)–SA-8(32), as individually cited]
+
+| Principle                            | Citation                                                 |
+| ------------------------------------ | -------------------------------------------------------- |
+| Clear abstractions                   | [NIST 800-53 SA-8(1)]                                    |
+| Least common mechanism               | [NIST 800-53 SA-8(2)]                                    |
+| Modularity and layering              | [NIST 800-53 SA-8(3)]                                    |
+| Partially ordered dependencies       | [NIST 800-53 SA-8(4)]                                    |
+| Efficiently mediated access          | [NIST 800-53 SA-8(5)]                                    |
+| Minimized sharing                    | [NIST 800-53 SA-8(6)]                                    |
+| Reduced complexity                   | [NIST 800-53 SA-8(7)]                                    |
+| Secure evolvability                  | [NIST 800-53 SA-8(8)]                                    |
+| Trusted components                   | [NIST 800-53 SA-8(9)]                                    |
+| Hierarchical trust                   | [NIST 800-53 SA-8(10)]                                   |
+| Inverse modification threshold       | [NIST 800-53 SA-8(11)]                                   |
+| Hierarchical protection              | [NIST 800-53 SA-8(12)]                                   |
+| Minimized security elements          | [NIST 800-53 SA-8(13)]                                   |
+| Least privilege                      | [NIST 800-53 SA-8(14) \| ARC-AMPE SA-8(14) AE Mandatory] |
+| Predicate permission                 | [NIST 800-53 SA-8(15)]                                   |
+| Self-reliant trustworthiness         | [NIST 800-53 SA-8(16)]                                   |
+| Secure distributed composition       | [NIST 800-53 SA-8(17)]                                   |
+| Trusted communications channels      | [NIST 800-53 SA-8(18) \| ARC-AMPE SA-8(18) AE Mandatory] |
+| Continuous protection                | [NIST 800-53 SA-8(19)]                                   |
+| Secure metadata management           | [NIST 800-53 SA-8(20)]                                   |
+| Self-analysis                        | [NIST 800-53 SA-8(21)]                                   |
+| Accountability and traceability      | [NIST 800-53 SA-8(22) \| ARC-AMPE SA-8(22) AE Mandatory] |
+| Secure defaults                      | [NIST 800-53 SA-8(23) \| ARC-AMPE SA-8(23) AE Mandatory] |
+| Secure failure and recovery          | [NIST 800-53 SA-8(24)]                                   |
+| Economic security                    | [NIST 800-53 SA-8(25)]                                   |
+| Performance security                 | [NIST 800-53 SA-8(26)]                                   |
+| Human factored security              | [NIST 800-53 SA-8(27)]                                   |
+| Acceptable security                  | [NIST 800-53 SA-8(28)]                                   |
+| Repeatable and documented procedures | [NIST 800-53 SA-8(29)]                                   |
+| Procedural rigor                     | [NIST 800-53 SA-8(30)]                                   |
+| Secure system modification           | [NIST 800-53 SA-8(31) \| ARC-AMPE SA-8(31) AE Mandatory] |
+| Sufficient documentation             | [NIST 800-53 SA-8(32) \| ARC-AMPE SA-8(32) AE Mandatory] |
+
+7.3. The security design principle of least privilege must be implemented consistently with the principle of least privilege as discussed in AC-6 and reflected across all aspects of secure system design. [NIST 800-53 SA-8(14) | ARC-AMPE SA-8(14) AE Mandatory]
+
+7.4. The security design principle of trusted communications channels must be implemented including restricting access to the communication channel and employing end-to-end protections for data transmitted over it. [NIST 800-53 SA-8(18) | ARC-AMPE SA-8(18) AE Mandatory]
+
+7.5. The security design principle of accountability and traceability must be implemented enabling tracing of security-relevant actions (subject-object interactions) to the entity on whose behalf the action is taken, supported by a trustworthy infrastructure that records details of actions affecting system security. [NIST 800-53 SA-8(22) | ARC-AMPE SA-8(22) AE Mandatory]
+
+7.6. The security design principle of secure system modification must be implemented with all system changes accompanied by a Security Impact Analysis (SIA) and a Privacy Impact Assessment (PIA). Application Security owns the review of these analyses. [NIST 800-53 SA-8(31) | ARC-AMPE SA-8(31) AE Mandatory]
+
+7.7. The privacy principle of minimization must be implemented using [Assignment: organization-defined processes], with those processes driven by business needs, coordinated with the senior privacy officer, and implemented consistently with PM-25, PT-2, and SI-12. [NIST 800-53 SA-8(33) | ARC-AMPE SA-8(33) AE Mandatory]
+
+## 8. Developer Configuration Management
+
+8.1. The developer of the system, system component, or system service must be required to perform configuration management during design, development, implementation, operation, and disposal of the system, component, or service. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10 AE Mandatory]
+
+8.2. The developer must be required to document, manage, and control the integrity of changes to [Assignment: organization-defined configuration items]. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10 AE Mandatory]
+
+8.3. The developer must be required to implement only organization-approved changes to the system, component, or service. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10 AE Mandatory]
+
+8.4. The developer must be required to document approved changes to the system, component, or service and the potential security and privacy impacts of those changes. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10 AE Mandatory]
+
+8.5. The developer must be required to track security flaws and flaw resolution within the system, component, or service and report findings to [Assignment: organization-defined personnel or roles]. [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10 AE Mandatory]
+
+8.6. The developer must be required to enable integrity verification of software and firmware components. [NIST 800-53 SA-10(1) | ARC-AMPE SA-10(1) AE Mandatory]
+
+8.7. An alternate configuration management process using organizational personnel must be provided in the absence of a dedicated developer configuration management team. Application Security owns this alternate process. [NIST 800-53 SA-10(2)]
+
+8.8. The developer must be required to enable integrity verification of hardware components. [NIST 800-53 SA-10(3)]
+
+8.9. The developer must be required to employ tools for comparing newly generated versions of security-relevant hardware descriptions, source code, and object code with previous versions. [NIST 800-53 SA-10(4)]
+
+8.10. The developer must be required to maintain the integrity of the mapping between the master build data describing the current version of security-relevant hardware, software, and firmware and the on-site master copy of that data. [NIST 800-53 SA-10(5)]
+
+8.11. The developer must be required to execute procedures ensuring that security-relevant hardware, software, and firmware updates distributed to the organization are exactly as specified by the master copies. [NIST 800-53 SA-10(6)]
+
+8.12. [Assignment: organization-defined security and privacy representatives] must be required to be included in the [Assignment: organization-defined configuration change management and control process]. [NIST 800-53 SA-10(7)]
+
+## 9. Developer Testing and Evaluation
+
+9.1. The developer of the system, system component, or system service must be required, at all post-design stages of the system development life cycle, to develop and implement a plan for ongoing security and privacy control assessments. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11 AE Mandatory]
+
+9.2. The developer must be required to perform unit, integration, system, and regression testing/evaluation at [Assignment: organization-defined frequency to conduct] and at [Assignment: organization-defined depth and coverage]. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11 AE Mandatory]
+
+9.3. The developer must be required to produce evidence of the execution of the assessment plan and the results of the testing and evaluation. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11 AE Mandatory]
+
+9.4. The developer must be required to implement a verifiable flaw remediation process. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11 AE Mandatory]
+
+9.5. The developer must be required to correct flaws identified during testing and evaluation. [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11 AE Mandatory]
+
+9.6. No security-relevant modifications may be made to the information systems after the assessment. [ARC-AMPE SA-11 AE Mandatory]
+
+9.7. Non-production data must be used when executing test scripts, or a test environment configured to comply with the security controls as though it were a production environment must be used. [ARC-AMPE SA-11 AE Mandatory]
+
+9.8. All systems supporting development and pre-production testing must be connected to an isolated network separated from production systems, permitting network traffic into and out of that environment only to facilitate system testing and restricting it by source and destination access control lists as well as ports and protocols. [ARC-AMPE SA-11 AE Mandatory]
+
+9.9. The developer must be required to employ static code analysis tools to identify common flaws and document the results of the analysis. The results per release are recorded and retained as SAST/DAST results per release. [NIST 800-53 SA-11(1) | ARC-AMPE SA-11(1) AE Mandatory]
+
+9.10. The developer must be required to perform threat modeling and vulnerability analyses during development and subsequent testing and evaluation that use [Assignment: organization-defined information] (contextual information such as impact, environment of operations, known or assumed threats, and acceptable risk levels), employ [Assignment: organization-defined tools and methods], conduct the modeling and analyses at [Assignment: organization-defined breadth and depth], and produce evidence meeting [Assignment: organization-defined acceptance criteria]. [NIST 800-53 SA-11(2) | ARC-AMPE SA-11(2) AE Mandatory]
+
+9.11. An independent agent satisfying [Assignment: organization-defined independence criteria] must be required to verify the correct implementation of the developer security and privacy assessment plans and the evidence produced during testing and evaluation, and it must be verified that the independent agent is provided with sufficient information to complete the verification or granted the authority to obtain it. [NIST 800-53 SA-11(3)]
+
+9.12. The developer must be required to perform a manual code review of [Assignment: organization-defined specific code] using [Assignment: organization-defined processes, procedures, and/or techniques]. [NIST 800-53 SA-11(4)]
+
+9.13. The developer must be required to perform penetration testing at [Assignment: organization-defined breadth and depth of testing] and under [Assignment: organization-defined constraints]. [NIST 800-53 SA-11(5)]
+
+9.14. The developer must be required to perform attack surface reviews. [NIST 800-53 SA-11(6)]
+
+9.15. The developer must be required to verify that the scope of testing and evaluation provides complete coverage of the required controls at [Assignment: organization-defined breadth and depth of testing and evaluation]. [NIST 800-53 SA-11(7)]
+
+9.16. The developer must be required to employ dynamic code analysis tools to identify common flaws and document the results of the analysis. The results per release are recorded and retained as SAST/DAST results per release. [NIST 800-53 SA-11(8) | ARC-AMPE SA-11(8) AE Mandatory]
+
+9.17. The developer must be required to employ interactive application security testing tools to identify flaws and document the results. [NIST 800-53 SA-11(9)]
+
+## 10. Development Process, Standards, and Tools
+
+10.1. The developer of the system, system component, or system service must be required to follow a documented development process that explicitly addresses security and privacy requirements; identifies the standards and tools used in the development process; documents the specific tool options and tool configurations used; and documents, manages, and ensures the integrity of changes to the process and/or tools used in development. [NIST 800-53 SA-15 Moderate, High | ARC-AMPE SA-15 AE Mandatory]
+
+10.2. The development process, standards, tools, tool options, and tool configurations must be reviewed at [Assignment: organization-defined frequency] (at least annually, or as needed, per ARC-AMPE) to determine whether they can satisfy the [Assignment: organization-defined security and privacy requirements]. Application Security performs this review. [NIST 800-53 SA-15 Moderate, High | ARC-AMPE SA-15 AE Mandatory]
+
+10.3. The developer must be required to define quality metrics at the beginning of the development process and provide evidence of meeting them \[Selection (one or more): [Assignment: organization-defined frequency]; [Assignment: organization-defined program review]; upon delivery\]. [NIST 800-53 SA-15(1)]
+
+10.4. The developer must be required to select and employ security and privacy tracking tools for use during the development process. [NIST 800-53 SA-15(2)]
+
+10.5. Criticality analysis must be performed at [Assignment: organization-defined decision points] in the system development life cycle and at [Assignment: organization-defined breadth and depth of criticality analysis]. [NIST 800-53 SA-15(3) Moderate, High]
+
+10.6. The developer must be required to reduce attack surfaces to [Assignment: organization-defined thresholds]. [NIST 800-53 SA-15(5)]
+
+10.7. The developer must be required to implement an explicit process to continuously improve the development process. [NIST 800-53 SA-15(6)]
+
+10.8. The developer must be required to perform an automated vulnerability analysis using [Assignment: organization-defined tools]; determine the exploitation potential for discovered vulnerabilities; determine potential risk mitigations for delivered vulnerabilities; and deliver the tool outputs and analysis results to [Assignment: organization-defined personnel or roles]. The tool outputs per release are recorded and retained as dependency and supply-chain scan output. [NIST 800-53 SA-15(7)]
+
+10.9. The developer must be required to use threat modeling and vulnerability analyses from similar systems, components, or services to inform the current development process. [NIST 800-53 SA-15(8)]
+
+10.10. The developer must be required to provide, implement, and test an incident response plan. [NIST 800-53 SA-15(10)]
+
+10.11. The developer must be required to archive the system or component to be released or delivered together with the corresponding evidence supporting the final security and privacy review. [NIST 800-53 SA-15(11)]
+
+10.12. The developer of the system or system component must be required to minimize the use of personally identifiable information in development and test environments. [NIST 800-53 SA-15(12) | NIST 800-53 SA-15(13) | ARC-AMPE SA-15(12) AE Mandatory]
+
+## 11. Developer Training
+
+11.1. The developer of the system, system component, or system service must be required to provide [Assignment: organization-defined training] on the correct use and operation of the implemented security and privacy functions, controls, and/or mechanisms. [NIST 800-53 SA-16 High]
+
+## 12. Security and Privacy Architecture
+
+12.1. The developer of the system, system component, or system service must be required to produce a design specification and security and privacy architecture that is consistent with the organization's security and privacy architecture (an integral part of the enterprise architecture); accurately and completely describes the required security and privacy functionality and the allocation of controls among physical and logical components; and expresses how individual security and privacy functions, mechanisms, and services work together to provide the required capabilities and a unified approach to protection. Application Security reviews this specification and architecture. [NIST 800-53 SA-17 High | ARC-AMPE SA-17 AE Mandatory]
+
+12.2. The developer must be required to produce, as an integral part of the development process, a formal policy model describing [Assignment: organization-defined elements of organizational security and privacy policy] to be enforced, and prove that the model is internally consistent and sufficient to enforce those elements when implemented. [NIST 800-53 SA-17(1)]
+
+12.3. The developer must be required to define security-relevant hardware, software, and firmware and provide a rationale that the definition is complete. [NIST 800-53 SA-17(2)]
+
+12.4. The developer must be required to produce, as an integral part of the development process, a formal top-level specification of the interfaces to security-relevant hardware, software, and firmware; demonstrate (to the extent feasible via proof, supplemented by informal demonstration) its consistency with the formal policy model and its complete coverage of those interfaces; show it accurately describes the implemented security-relevant hardware, software, and firmware; and describe internal mechanisms not addressed in the specification. [NIST 800-53 SA-17(3)]
+
+12.5. The developer must be required to produce, as an integral part of the development process, an informal descriptive top-level specification of the interfaces to security-relevant hardware, software, and firmware; demonstrate via [Selection: informal demonstration, convincing argument with formal methods as feasible] its consistency with the formal policy model and via informal demonstration its complete coverage of those interfaces; show it accurately describes those interfaces; and describe internal mechanisms not addressed in the specification. [NIST 800-53 SA-17(4)]
+
+12.6. The developer must be required to design and structure security-relevant hardware, software, and firmware around a complete, conceptually simple protection mechanism with precisely defined semantics, and to internally structure them with specific regard for that mechanism. [NIST 800-53 SA-17(5)]
+
+12.7. The developer must be required to structure security-relevant hardware, software, and firmware to facilitate testing. [NIST 800-53 SA-17(6)]
+
+12.8. The developer must be required to structure security-relevant hardware, software, and firmware to facilitate controlling access with least privilege. [NIST 800-53 SA-17(7)]
+
+12.9. [Assignment: organization-defined critical systems] must be designed with coordinated behavior to implement [Assignment: organization-defined capabilities]. [NIST 800-53 SA-17(8)]
+
+12.10. Different designs must be used for [Assignment: organization-defined critical systems] to satisfy a common set of requirements or provide equivalent functionality. [NIST 800-53 SA-17(9)]
+
+## 13. Developer Personnel Security
+
+13.1. The developer of systems, system components, or system services must be required to have appropriate access authorizations as determined by assigned [Assignment: organization-defined official government duties] / the assigned Authorizing Official or designee. [NIST 800-53 SA-21 High | ARC-AMPE SA-21 AE Mandatory]
+
+13.2. The developer must be required to satisfy personnel screening criteria — [Assignment: organization-defined additional personnel screening criteria] per NIST, consistent with PS-3 per ARC-AMPE. [NIST 800-53 SA-21 High | ARC-AMPE SA-21 AE Mandatory]
+
+## 14. Unsupported System Components
+
+14.1. System components must be replaced when support for the components is no longer available from the developer, vendor, or manufacturer. [NIST 800-53 SA-22 | ARC-AMPE SA-22 AE Mandatory]
+
+14.2. Where replacement is not done, alternative sources for continued support for unsupported components must be provided \[Selection (one or more): in-house support; [Assignment: organization-defined support from external providers]\]. [NIST 800-53 SA-22]
+
+14.3. Alternatively (per ARC-AMPE), continued use of unsupported system components required to satisfy mission/business needs must be justified and approved, with the justification and approval recorded in a risk acceptance form and the related Plan of Action & Milestones (POA&M) finding updated. Application Security owns this justification and approval. [ARC-AMPE SA-22 AE Mandatory]
+
+14.4. Plans must be established to mitigate or remove the unsupported system, application, operating system, or software once identified, and the element or component must be upgraded, retired, or stopped from use before end of life or vendor discontinuation of product support. [ARC-AMPE SA-22 AE Mandatory]
+
+14.5. Where removal of unsupported components is not feasible, a governance process must be maintained to review them and make a risk-based decision on their continued use. Application Security owns this governance process. [ARC-AMPE SA-22 AE Mandatory]
+
+## 15. Information Input Validation
+
+15.1. The validity of [Assignment: organization-defined information inputs] — per ARC-AMPE, all inputs to web/application servers, database servers, and any system or application input that might receive a crafted exploit aimed at executing code or causing a buffer overflow — must be checked for accuracy, completeness, and validity (character set, length, numerical range, and acceptable values) to ensure inputs match the specified definitions for format and content. [NIST 800-53 SI-10 Moderate, High | ARC-AMPE SI-10 AE Mandatory]
+
+15.2. When PII is entered, validation techniques that support data quality must be used (e.g., ensuring the PII entered is the expected type and format), the capability must be provided to limit or exclude entering PII within a field that should not contain it (e.g., recognizing a restricted format such as a Social Security Number), and reasonable steps must be taken to ensure PII is complete, accurate, and up to date as required by laws and regulations. [ARC-AMPE SI-10 AE Mandatory]
+
+15.3. A manual override capability for input validation of [Assignment: organization-defined information inputs] must be provided, its use restricted to [Assignment: organization-defined authorized individuals], and its use audited. [NIST 800-53 SI-10(1)]
+
+15.4. Input validation errors must be reviewed and resolved within [Assignment: organization-defined time period]. [NIST 800-53 SI-10(2)]
+
+15.5. It must be verified that the system behaves in a predictable and documented manner when invalid inputs are received. [NIST 800-53 SI-10(3)]
+
+15.6. Timing interactions among system components must be accounted for in determining appropriate responses for invalid inputs. [NIST 800-53 SI-10(4)]
+
+15.7. The use of information inputs must be restricted to [Assignment: organization-defined trusted sources] and/or [Assignment: organization-defined formats]. [NIST 800-53 SI-10(5)]
+
+15.8. Untrusted data injections must be prevented. [NIST 800-53 SI-10(6)]
+
+## 16. Error Messages
+
+16.1. Error messages must be generated that provide the information necessary for corrective actions without revealing information that could be exploited (e.g., user name/password combinations, password-reset validation attributes, PII, biometric or authenticator data, sensitive financial records, or content related to internal security functions such as private encryption keys, allow/deny-list rules, and object permission settings). [NIST 800-53 SI-11 Moderate, High | ARC-AMPE SI-11 AE Mandatory]
+
+16.2. Error messages must be revealed only to [Assignment: organization-defined personnel or roles] — per ARC-AMPE, personnel or roles documented in the applicable System Security and Privacy Plan (SSPP), i.e., authorized individuals with a need for the information in the performance of their duties. [NIST 800-53 SI-11 Moderate, High | ARC-AMPE SI-11 AE Mandatory]
+
+## 17. Supply Chain Risk Management
+
+17.1. A process or processes must be established to identify and address weaknesses or deficiencies in the supply chain elements and processes of [Assignment: organization-defined system or system component], in coordination with [Assignment: organization-defined supply chain personnel]. [NIST 800-53 SR-3 | FedRAMP SR-3 | ARC-AMPE SR-3 AE Mandatory]
+
+17.2. [Assignment: organization-defined supply chain controls] must be employed to protect against supply chain risks to the system, system component, or system service and to limit the harm or consequences from supply chain-related events; these controls are not limited to those defined in ARC-AMPE and may include other NIST SP 800-53 Rev. 5 supply chain controls as appropriate. [NIST 800-53 SR-3 | FedRAMP SR-3 | ARC-AMPE SR-3 AE Mandatory]
+
+17.3. The selected and implemented supply chain processes and controls must be documented in \[Selection (one or more): security and privacy plans; supply chain risk management plan; [Assignment: organization-defined document]\]. [NIST 800-53 SR-3 | FedRAMP SR-3 | ARC-AMPE SR-3 AE Mandatory]
+
+17.4. The Cloud Service Operator must document and maintain supply chain custody — including replacement devices — to ensure the integrity of devices before they are introduced to the boundary. [FedRAMP SR-3]
+
+17.5. A diverse set of sources must be employed for [Assignment: organization-defined system components and services]. [NIST 800-53 SR-3(1)]
+
+17.6. [Assignment: organization-defined controls] must be employed to limit harm from potential adversaries identifying and targeting the organizational supply chain. [NIST 800-53 SR-3(2)]
+
+17.7. The controls included in the contracts of prime contractors must also be included in the contracts of subcontractors. [NIST 800-53 SR-3(3)]
+
+17.8. [Assignment: organization-defined acquisition strategies, contract tools, and procurement methods] must be employed to protect against, identify, and mitigate supply chain risks. [NIST 800-53 SR-5]
+
+17.9. [Assignment: organization-defined controls] must be employed to ensure an adequate supply of [Assignment: organization-defined critical system components]. [NIST 800-53 SR-5(1)]
+
+17.10. The system, system component, or system service must be assessed prior to selection, acceptance, modification, or update. [NIST 800-53 SR-5(2)]
+
+17.11. A tamper protection program must be implemented for the system, system component, or system service. [NIST 800-53 SR-9 High]
+
+17.12. Anti-tamper technologies, tools, and techniques must be employed throughout the system development life cycle. [NIST 800-53 SR-9(1) High]
+
+17.13. [Assignment: organization-defined systems or system components] must be inspected for tampering \[Selection (one or more): at random; at [Assignment: organization-defined frequency]; upon [Assignment: organization-defined indications of need for inspection]\]. [NIST 800-53 SR-10]
+
+17.14. Anti-counterfeit policy and procedures must be developed and implemented that include the means to detect and prevent counterfeit components from entering the system. [NIST 800-53 SR-11]
+
+17.15. Counterfeit system components must be reported to \[Selection (one or more): source of counterfeit component; [Assignment: organization-defined external reporting organizations]; [Assignment: organization-defined personnel or roles]\]. [NIST 800-53 SR-11]
+
+17.16. [Assignment: organization-defined personnel or roles] must be trained to detect counterfeit system components (including hardware, software, and firmware). [NIST 800-53 SR-11(1) Low, Moderate, High]
+
+17.17. Configuration control must be maintained over [Assignment: organization-defined system components] awaiting service or repair and serviced or repaired components awaiting return to service. [NIST 800-53 SR-11(2) Low, Moderate, High]
+
+17.18. Counterfeit system components must be scanned for at [Assignment: organization-defined frequency]. [NIST 800-53 SR-11(3)]
+
+17.19. [Assignment: organization-defined data, documentation, tools, or system components] must be disposed of using [Assignment: organization-defined techniques and methods] — per ARC-AMPE, in accordance with the latest published NIST SP 800-88, Guidelines for Media Sanitization, with techniques consistent with MP-6 Media Sanitization. [NIST 800-53 SR-12 | ARC-AMPE SR-12 AE Mandatory]
+
+## 18. Continuous Execution and Evidence
+
+18.1. This Standard's lifecycle process operates on a continuous basis. Application Security owns the continuous execution of the process, its handoffs to participating teams, and its outcomes.
+
+18.2. The process must produce and retain the following evidence artifacts: SAST/DAST results per release (generated per Sections 9.9 and 9.16) and dependency and supply-chain scan output (generated per Section 10.8). Application Security is accountable for the production and retention of these artifacts.

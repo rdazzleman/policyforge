@@ -1,0 +1,37 @@
+# Markdown is checked out with LF on every platform.
+#
+# Not a style preference. `mdformat` rejects any file containing CR, and
+# `scripts/check.py` runs it over every .md in the repository - so with
+# Git for Windows' default core.autocrlf=true, a fresh clone fails the
+# gate on files nobody has touched. The failure looks like a formatting
+# problem and is a line-ending one, which cost a while to work out.
+#
+# Scoped to *.md deliberately: Python files carry CRLF here without
+# trouble, since ruff does not care, and changing that would rewrite far
+# more of the working tree than this problem justifies.
+*.md text eol=lf
+
+# Byte-exact, never converted: the AI RMF Playbook parser REFUSES any export
+# whose SHA-256 is not the pinned one (#177), so an LF->CRLF rewrite on a
+# Windows checkout (core.autocrlf=true) would make the fixture fail its own
+# pin -- on Windows only, where nothing about it looks wrong.
+tests/fixtures/airc_ai_rmf_playbook.json -text
+
+# Byte-exact too: the deontic corpus (#376) is named by SHA-256 set-hashes
+# over these bytes, in its README, and a checkout that rewrote their line
+# endings would name a different corpus.
+tests/fixtures/deontic_corpus/documents/** -text
+
+# Byte-exact: `etl-csf` refuses either CSF 2.0 source whose SHA-256 is not
+# the pinned one (#408), for the same reason as the Playbook's above.
+tests/fixtures/oscal_csf_2_0.json -text
+tests/fixtures/olir_186_csf_2_0_to_800-53r5.xlsx -text
+
+# Byte-exact: the Privacy Rule's manifest records the SHA-256 of the pre-rule
+# eCFR file it quotes (#409), and `etl-hipaa-privacy` on these fixtures must
+# reproduce that record on every platform.
+tests/fixtures/ecfr_164_subparts_d_e/** -text
+
+# Byte-exact: nist_rev4_rev5 refuses any copy of NIST's comparison workbook
+# whose SHA-256 is not the pinned one (#410).
+tests/fixtures/sp800-53r4-to-r5-comparison-workbook.xlsx -text

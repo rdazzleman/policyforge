@@ -1,0 +1,79 @@
+{
+  "epoch": "25",
+  "computed_at": "d2a2cc0838ab8cc82343dd5b2ac431858a3935e1",
+  "pull_ref": "refs/pull/25/head",
+  "pr": 25,
+  "merge_commit": "d2a2cc0838ab8cc82343dd5b2ac431858a3935e1",
+  "merge_commit_on": "release/1.7",
+  "recorded_in": {
+    "pr": 71,
+    "merge_commit": "80b7895a9fbafb705fb59361715b11871ca9d42d"
+  },
+  "note": "Epoch 25 ran from a tree pinned to computed_at, which is PR 25's squash on release/1.7 (so computed_at and merge_commit are the same commit; the pull ref names the PR, whose head it does not equal). The fingerprints were computed there, from the pinned tree the run imported, and are identical at recorded_in's merge_commit, the release/1.7 tip this record was written against. The epoch was written into MEASUREMENTS.md by PR 71 (Forgejo).",
+  "prompts": {
+    "crosswalk.propose": {
+      "fingerprint": "dc1342fdc46a",
+      "version": 1
+    },
+    "edit.apply": {
+      "fingerprint": "1bc54ff2e02b",
+      "version": 1
+    },
+    "edit.plan": {
+      "fingerprint": "49afd7cad918",
+      "version": 2
+    },
+    "entail.judge": {
+      "fingerprint": "619d6f0d6cec",
+      "version": 1
+    },
+    "generate.policy": {
+      "fingerprint": "a10e9d1d4f4d",
+      "version": 1
+    },
+    "generate.procedure": {
+      "fingerprint": "becb0f33c587",
+      "version": 3
+    },
+    "generate.standard": {
+      "fingerprint": "ee664b5a81d2",
+      "version": 6
+    },
+    "synthesis.merge": {
+      "fingerprint": "21158dc4300b",
+      "version": 1
+    },
+    "zardoz.answer": {
+      "fingerprint": "8052fd27359b",
+      "version": 6
+    },
+    "zardoz.cluster.json": {
+      "fingerprint": "c06e89bdf1b8",
+      "version": 1
+    },
+    "zardoz.cluster.lines": {
+      "fingerprint": "3f58d07e4945",
+      "version": 1
+    },
+    "zardoz.expand": {
+      "fingerprint": "98054e760a61",
+      "version": 1
+    },
+    "zardoz.resolve": {
+      "fingerprint": "6fe729b4c6f6",
+      "version": 1
+    },
+    "zardoz.route": {
+      "fingerprint": "78f4d56ba1aa",
+      "version": 1
+    },
+    "zardoz.route.also": {
+      "fingerprint": "7ddf2e6787a9",
+      "version": 1
+    },
+    "zardoz.route.arguments": {
+      "fingerprint": "b76112165eeb",
+      "version": 1
+    }
+  }
+}

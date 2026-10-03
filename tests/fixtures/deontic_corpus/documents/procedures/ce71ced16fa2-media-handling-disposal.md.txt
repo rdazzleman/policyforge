@@ -1,0 +1,131 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002202
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 958681cca9b23bda
+  provider: litellm
+  provider_class: third-party
+---
+
+# Media Handling & Disposal Procedure
+
+## Purpose
+
+This procedure provides the operational steps Example Org personnel follow to protect, transport, account for, sanitize, and dispose of digital and non-digital media containing sensitive information, including PII and electronic protected health information (ePHI). Executing this procedure implements the requirements of the Media Handling & Disposal Standard and produces the evidence — Certificates of destruction and the Media transport log — needed to demonstrate compliance.
+
+## Scope
+
+IT Asset Management owns and executes this process end to end on a continuous basis, with participation from workforce members, facilities staff, authorized transport personnel, and [Media Sanitization Vendor] where indicated. It applies to all digital and non-digital media (magnetic tapes, external removable hard drives, flash/thumb drives, diskettes, compact disks, digital video disks, and hard-copy documents) that store, process, or contain sensitive information at Example Org facilities or under Example Org control.
+
+## Prerequisites
+
+- Access to the [Asset Management System] for media inventory and control numbers
+- Access to the [Ticketing System] for sanitization, disposal, and transport requests
+- Access to [Identity Provider] to verify requester authorization and need to know
+- Physical access authorization to media storage areas and [Controlled Areas]
+- Approved sanitization equipment and FIPS-validated sanitization tools consistent with the latest published NIST SP 800-88
+- Approved cross-cut shredder or contracted [Approved Shredding Vendor]
+- Tamper-evident packaging, sealed packing cartons, and locked/securable transport containers
+- Current risk assessment of media types and authorized information storage (see Media Access Restriction below)
+- Written marking exemption approvals signed by the Chief Information Officer or designated representative
+- Blank Media transport log and Certificate of destruction templates
+
+## Procedure Steps
+
+### Develop, Document, and Maintain the Media Protection Policy and Procedures [NIST MP-1 | ARC-AMPE MP-1 | HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii) | HIPAA 164.316(b)(2)(iii)]
+
+1. IT Asset Management maintains this procedure and its parent policy in written (electronic) form, covering purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and consistent with applicable laws, regulations, and guidelines.
+1. IT Asset Management designates the official responsible for the development, documentation, and dissemination of the media protection policy and procedures: [Policy Designation Official].
+1. IT Asset Management disseminates the policy and this procedure to all applicable personnel and roles via [Policy Distribution Mechanism], and confirms receipt where required.
+1. IT Asset Management reviews and updates the policy and procedures following triggering events — assessment or audit findings, security or privacy incidents, and changes to applicable laws, executive orders, directives, regulations, policies, standards, or guidelines — and at least every one (1) year per ARC-AMPE.
+1. IT Asset Management retains all versions of the policy and procedure documentation for 6 years from the date of creation or the date last in effect, whichever is later, and makes the current version available to all persons responsible for implementing the procedures.
+1. IT Asset Management updates the documentation in response to environmental or operational changes affecting the security of electronic protected health information.
+
+### Control Receipt and Removal of Media Into, Out of, and Within Facilities [HIPAA 164.310(d)(1)]
+
+1. IT Asset Management records the receipt of every hardware item or electronic medium containing ePHI entering a facility in the [Asset Management System] at the point of intake, including the media control number, source, and receiving personnel.
+1. IT Asset Management records the removal of such items from a facility in the Media transport log before release, identifying the item, the authorizing approver, the receiving party, and the purpose.
+1. IT Asset Management records the movement of such items between areas within a facility, so that the physical location of any ePHI-bearing medium is traceable at all times.
+1. Facilities and IT Asset Management jointly reconcile facility intake/removal records against the [Asset Management System] inventory [Reconciliation Frequency].
+
+### Restrict Media Access and Media Write Capabilities [NIST MP-2 | ARC-AMPE MP-2]
+
+1. IT Asset Management conducts a risk assessment to determine what sensitive information, if any, may be stored on each media type and which roles are authorized with a need to know that information.
+1. IT Asset Management restricts access to all digital and non-digital media, including media containing PII, to the authorized personnel or roles identified in the risk assessment, enforced via [Access Control Mechanism] and verified against [Identity Provider] role assignments.
+1. IT Asset Management disables CD/DVD writers and USB ports on systems where media write capability is not required, using [Endpoint Management Tool].
+1. IT Asset Management grants write-capability exceptions only to authorized individuals with a valid need to know, and configures each exception in compliance with the latest published NIST SP 800-88.
+1. IT Asset Management revalidates the access and write-capability exception lists [Revalidation Frequency].
+
+### Manage Workforce Access and Workstation Safeguards for ePHI [HIPAA 164.308(a)(3)(i) | HIPAA 164.308(a)(3)(ii)(A) | HIPAA 164.308(a)(3)(ii)(B) | HIPAA 164.308(a)(3)(ii)(C) | HIPAA 164.310(c)]
+
+1. [Human Resources] notifies IT Asset Management of workforce member authorization, role changes, and terminations affecting access to ePHI.
+1. IT Asset Management authorizes and supervises workforce member access to ePHI-bearing media only where the member's role requires it, provisioning access through [Identity Provider].
+1. IT Asset Management reviews workforce access to ePHI-bearing media to determine it remains appropriate, and removes access when employment or other arrangements end.
+1. IT Asset Management applies physical safeguards to all workstations that access ePHI — [Physical Safeguards, e.g., cable locks, privacy screens, locked work areas] — restricting use to authorized users.
+
+### Protect ePHI Against Improper Alteration or Destruction [HIPAA 164.312(c)(1) | HIPAA 164.312(c)(2)]
+
+1. IT Asset Management implements policies and procedures governing who may alter or destroy ePHI, and by what approved methods.
+1. IT Asset Management enables electronic mechanisms — [Integrity Verification Mechanism, e.g., checksums, hashes, audit logging] — to corroborate that ePHI has not been altered or destroyed in an unauthorized manner.
+1. IT Asset Management reviews integrity mechanism output for unauthorized alteration or destruction indicators and investigates any findings [Review Frequency].
+
+### Mark System Media [NIST MP-3 | ARC-AMPE MP-3]
+
+1. IT Asset Management marks each item of system media with its distribution limitations, handling caveats, and applicable security markings.
+1. IT Asset Management ensures every marking includes, at minimum: the creation date, the applicable information safeguarding marking based on record retention regulations, and the organization-defined contact information.
+1. IT Asset Management labels backup tapes with the system name in addition to the minimum markings.
+1. IT Asset Management marks media containing PII or PHI — or its container, where labeling the media itself is not practicable — consistently with ACA record retention regulations.
+1. IT Asset Management submits requests to exempt specific media types from marking (where the media remain within [Controlled Areas]) in writing to the Chief Information Officer or designated representative, and retains the written approval in [Document Repository].
+
+### Physically Control and Securely Store Media [NIST MP-4 | ARC-AMPE MP-4 | NIST MP-4(2)]
+
+1. IT Asset Management stores all digital and non-digital media within [Controlled Areas], physically controlling and securely storing magnetic tapes, external removable hard drives, flash/thumb drives, diskettes, compact disks, and digital video disks.
+1. IT Asset Management encrypts digital media using the latest published FIPS 140-compliant encryption standards before storage.
+1. IT Asset Management stores non-digital media in secure storage such as locked cabinets or safes, stores removable media containing PII in a securable area or locked container, protects magnetic media containing PII recorded alongside other data as if all data on the media were PII, and stores surplus equipment securely while not in use.
+1. IT Asset Management protects all stored media until it is destroyed or sanitized using approved equipment, techniques, and procedures.
+1. IT Asset Management restricts access to media storage areas using [Assignment: organization-defined automated mechanisms] and logs all access attempts and access granted, reviewing the logs [Log Review Frequency].
+
+### Transport Media Outside Controlled Areas [NIST MP-5 | ARC-AMPE MP-5 | HIPAA 164.310(d)(2)(iii) | NIST MP-5(3) | HIPAA 164.310(d)(2)(iv)]
+
+1. The requester submits a transport request through the [Ticketing System]; IT Asset Management approves the transport and designates an identified custodian — a named individual accountable for the media for the duration of the movement.
+1. IT Asset Management restricts all transport activities to authorized personnel and confirms the custodian's authorization against [Identity Provider].
+1. Before moving equipment containing ePHI, IT Asset Management creates a retrievable, exact copy of the electronic protected health information, when needed, and stores the copy in [Backup Location].
+1. IT Asset Management applies the following transport controls to digital and non-digital media containing sensitive information such as PII: encryption via a latest published FIPS 140-compliant encryption module; locked/securable containers or tamper-evident packaging carried by authorized personnel; trackable receipt by the commercial shipping carrier; and sealed packing cartons for non-digital media containing sensitive information.
+1. The custodian documents all transport activities in the Media transport log, recording the item, media control number, origin, destination, custodian name, departure and arrival times, and any person responsible for the media at each stage.
+1. IT Asset Management maintains the Media transport log as the accountability record of all movements of hardware and electronic media outside controlled areas, and reconciles it against the [Asset Management System] inventory [Reconciliation Frequency].
+
+### Sanitize and Dispose of Media [NIST MP-6 | ARC-AMPE MP-6 | HIPAA 164.310(d)(2)(i) | HIPAA 164.310(d)(2)(ii) | NIST MP-6(1) High | ARC-AMPE MP-6(1)]
+
+1. IT Asset Management reviews each sanitization or disposal request, approves it, and tracks it through the [Ticketing System] from approval through verified completion.
+1. IT Asset Management sanitizes digital and non-digital media prior to disposal, release out of organizational control, or release for reuse, using organization-defined sanitization techniques and procedures in accordance with the latest published NIST SP 800-88 guidelines.
+1. For media containing ePHI, IT Asset Management documents the final disposition of the information and of the hardware or media on which it is stored, and removes ePHI from electronic media before the media are made available for re-use.
+1. IT Asset Management selects sanitization mechanisms with strength and integrity commensurate with the security category or classification of the information on the media.
+1. IT Asset Management finely shreds hard-copy documents using approved equipment, techniques, and procedures with cross-cut shredding at a minimum, either in-house or via [Approved Shredding Vendor].
+1. IT Asset Management sanitizes media containing PII prior to disposal, release out of the organization, or release for reuse, using the latest FIPS-validated media sanitization techniques or procedures, and disposes of or sanitizes surplus equipment in accordance with the latest published NIST SP 800-88.
+1. IT Asset Management securely destroys or disposes of sensitive information, including PII, appropriately and reasonably and in accordance with the applicable retention schedules.
+1. IT Asset Management verifies each completed sanitization or disposal action before closing the ticket — verifying device state, vendor certificate, or shredding output as applicable.
+1. IT Asset Management records each sanitization and disposal action with: the name of the media recipient, the signature of the media recipient, the date/time received, the media control number and contents, movement or routing information, and — if disposed of — the date, time, and method of destruction.
+1. IT Asset Management obtains and retains a Certificate of destruction for every destruction action performed by [Approved Shredding Vendor] or [Media Sanitization Vendor], and retains all sanitization records [Record Retention Period].
+
+### Test Sanitization Equipment and Procedures [NIST MP-6(2) High | ARC-AMPE MP-6(2)]
+
+1. IT Asset Management tests sanitization equipment and procedures to ensure the intended sanitization is being achieved, at least every one (1) year per ARC-AMPE, using [Verification Method, e.g., sample re-verification, forensic tooling].
+1. IT Asset Management records the test results, removes from service any equipment that fails, and remediates or replaces it before further use.
+
+### Apply Specialized Sanitization Controls [NIST MP-6(3) High | NIST MP-6(7) | NIST MP-6(8)]
+
+1. IT Asset Management applies nondestructive sanitization techniques to portable storage devices prior to connecting such devices to the system under [Assignment: organization-defined circumstances].
+1. IT Asset Management enforces dual authorization for the sanitization of \[Assignment: organization-defined system media\]: two authorized individuals — the executing technician plus an approver designated in the [Ticketing System] — must both approve before sanitization proceeds.
+1. IT Asset Management maintains the capability to purge or wipe information from [Assignment: organization-defined systems or system components] remotely under [Assignment: organization-defined conditions], using [Remote Wipe Mechanism], and tests that capability [Test Frequency].
+
+## Roles & Responsibilities
+
+IT Asset Management is authorized to perform and is accountable for every step in this procedure, including media intake, storage, transport, sanitization, disposal, documentation, and the review and maintenance of the policy and procedures it supports. Workforce members, designated transport custodians, [Human Resources], and vendors such as [Approved Shredding Vendor] and [Media Sanitization Vendor] participate in individual steps under IT Asset Management's direction; the Chief Information Officer or designated representative approves written marking exemptions, and [Exception Approving Official] reviews and approves any exception to this procedure.
+
+## Related Standard
+
+Media Handling & Disposal Standard — this Standard is the source of the full requirement text and the rationale for each control step above.

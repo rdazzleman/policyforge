@@ -1,0 +1,328 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.006332
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 1c05e5b3bc612c69
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Network & Boundary Protection Operational Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions for the Network Security team to implement the network, boundary, information flow, transmission security, and system isolation requirements defined in the Example Org Information Security Standard: Network & Boundary Protection. Executing this procedure produces the evidence artifacts — the Firewall and segmentation rule review and the External attack-surface scan — that demonstrate continuous compliance with the Standard.
+
+## Scope
+
+This procedure is performed by the Network Security team, on a continuous basis, across all of Example Org's network boundary devices, firewalls, proxies, gateways, internal network segments, name/address resolution services, and all systems connected to them. Other teams (System Owners, Human Resources, the Privacy Officer, privileged administrators) participate in individual steps, but Network Security owns the process and its handoffs end to end.
+
+## Prerequisites
+
+- Administrative access to the [Firewall Management Console], [Proxy Management Console], [VPN Gateway], [Load Balancer], [DNS Service], [Email Gateway], [SIEM], and [Network Monitoring Tools]
+- Access to the [Ticketing System] for change requests, exception records, and interconnection documentation
+- Access to the [Identity Provider] for identity, session, and privileged access configuration
+- Access to the [Vulnerability Scanning Tool] for compliance checks and the External attack-surface scan
+- The current Example Org System Security and Privacy Plan (SSPP) and approved security and privacy architecture diagrams
+- The organization-defined information flow control policies, security and privacy attribute definitions, and PII processing rules referenced by the Standard
+- Written authorization from the CIO or designated representative where the Standard requires it (e.g., collaborative computing exceptions, interconnection termination orders)
+- The current system and communications protection policy and procedures, and the HIPAA documentation repository
+
+## Procedure Steps
+
+### Enforce Information Flow Control Policies [NIST AC-4 Moderate, High | ARC-AMPE AC-4]
+
+1. Maintain the organization-defined information flow control policies in the SSPP, and translate each policy into enforceable rules on the [Firewall Management Console], [Proxy Management Console], and [Load Balancer].
+1. Configure deny-by-default rules at every managed interface so that information flows within the system and between connected systems occur only where an approved authorization exists.
+1. Map each approved authorization to a named rule or policy object, and record the mapping in the [Ticketing System] so every permitted flow is traceable to an approval.
+1. Include the resulting rule set and its approval mappings in the Firewall and segmentation rule review artifact.
+
+### Document Authority to Terminate or Suspend Interconnections [ARC-AMPE AC-4]
+
+1. Record, in the System Security and Privacy Plan, the authority to order immediate termination or suspension of any interconnection.
+1. When an interconnection presents unacceptable risk, escalate to the Authorizing Official, who makes the risk-informed decision in consultation with the system owner.
+1. Upon an order from the Authorizing Official, Network Security immediately disables the interconnection at the managed interface via the [Firewall Management Console] and records the action, decision, and rationale in the [Ticketing System].
+
+### Enforce Attribute-Based, Domain-Based, and Dynamic Flow Controls [NIST AC-4(1) | NIST AC-4(2) | NIST AC-4(3)]
+
+1. Configure the organization-defined security and privacy attributes on information, source, and destination objects in the [Identity Provider] and [Firewall Management Console], and write flow control rules that evaluate those attributes as the basis for flow decisions. [NIST AC-4(1)]
+1. Define protected processing domains in the network architecture and enforce flow control policies at the boundaries between those domains using the [Firewall Management Console] and segmentation controls. [NIST AC-4(2)]
+1. Implement the organization-defined dynamic information flow control policies using [Network Monitoring Tools] and policy engines capable of adjusting flow decisions based on current conditions, and verify dynamic behavior during each Firewall and segmentation rule review. [NIST AC-4(3)]
+
+### Prevent Encrypted Traffic from Bypassing Flow Control Mechanisms [NIST AC-4(4) High]
+
+1. Configure the [Proxy Management Console] or [Load Balancer] to decrypt TLS traffic at the boundary so flow control mechanisms can inspect it, per the organization-defined method.
+1. Where decryption is not organization-defined for a flow, configure the boundary device to block the flow or terminate the communications session attempting to pass encrypted information through uninspected.
+1. Log every block or termination event to the [SIEM].
+
+### Enforce Data Type Embedding Limits and Metadata-Based Flow Control [NIST AC-4(5) | NIST AC-4(6)]
+
+1. Configure the organization-defined limitations on embedding data types within other data types (e.g., blocking archive-in-archive or script-in-document nesting) on the [Content Filtering Solution] at the boundary. [NIST AC-4(5)]
+1. Configure flow control enforcement based on the organization-defined metadata (e.g., classification labels, data type tags) so that flows carrying disallowed metadata are denied at the managed interface. [NIST AC-4(6)]
+
+### Enforce One-Way Information Flows via Hardware Mechanisms [NIST AC-4(7)]
+
+1. Identify flows the organization defines as one-way, and implement them using hardware-based flow control mechanisms (e.g., data diodes) rather than software-only controls.
+1. Verify during each Firewall and segmentation rule review that no software path bypasses the hardware enforcement point.
+
+### Operate Security and Privacy Policy Filters [NIST AC-4(8) | NIST AC-4(9) | NIST AC-4(10) | NIST AC-4(11)]
+
+1. Deploy the organization-defined security or privacy policy filters for the organization-defined information flows on the [Content Filtering Solution] and [Email Gateway]. [NIST AC-4(8)]
+1. Configure each filter's failure action — block, strip, modify, or quarantine — in accordance with the organization-defined security or privacy policy, and verify the failure action fires correctly during testing. [NIST AC-4(8)]
+1. Implement the human review workflow for the organization-defined information flows under the organization-defined conditions: route flagged items to a designated Network Security reviewer via the [Ticketing System], and require documented reviewer disposition before release. [NIST AC-4(9)]
+1. Grant privileged administrators the capability to enable and disable policy filters under the organization-defined conditions, restricted to the privileged administrator role in the [Identity Provider]. [NIST AC-4(10)]
+1. Grant privileged administrators the capability to configure policy filters to support different security or privacy policies, with each policy variant stored as a distinct, named configuration. [NIST AC-4(11)]
+
+### Validate, Decompose, and Restrict Cross-Domain Transfers [NIST AC-4(12) | NIST AC-4(13) | NIST AC-4(14) | NIST AC-4(15) | NIST AC-4(19)]
+
+1. Configure the organization-defined data type identifiers on the cross-domain transfer solution and validate data essential for information flow decisions against them before transfer. [NIST AC-4(12)]
+1. Decompose transferred information into the organization-defined policy-relevant subcomponents and submit each subcomponent to the applicable policy enforcement mechanism. [NIST AC-4(13)]
+1. Implement policy filters requiring fully enumerated formats that restrict data structure and content on each cross-domain transfer path. [NIST AC-4(14)]
+1. Examine transferred information for the organization-defined unsanctioned information and prohibit its transfer in accordance with the organization-defined security or privacy policy. [NIST AC-4(15)]
+1. Implement the organization-defined security or privacy policy filters on metadata for cross-domain transfers. [NIST AC-4(19)]
+
+### Uniquely Identify and Authenticate Transfer Endpoints [NIST AC-4(17)]
+
+1. Configure the [Identity Provider], [VPN Gateway], and boundary devices to uniquely identify and authenticate each source and destination point — by organization, system, application, service, or individual — before permitting information transfer.
+1. Reject transfers from unauthenticated endpoints and log the rejection to the [SIEM].
+
+### Control Flows Across Security Domains Using Approved Solutions [NIST AC-4(20)]
+
+1. Maintain the list of organization-defined approved solutions for controlling information flow across security domains in the SSPP.
+1. Deploy each approved solution only in its approved configuration, and verify configurations against the approved baseline during each Firewall and segmentation rule review.
+
+### Separate Information Flows and Restrict Multi-Domain Access [NIST AC-4(21) | NIST AC-4(22)]
+
+1. Implement the organization-defined logical or physical separation mechanisms and techniques to accomplish the organization-defined required separations between information flows. [NIST AC-4(21)]
+1. Where single-device access to platforms, applications, or data in multiple security domains is required, configure the access solution to prevent information flow between those domains, and validate the prevention controls before granting access. [NIST AC-4(22)]
+
+### Modify, Normalize, and Sanitize Cross-Domain Content [NIST AC-4(23) | NIST AC-4(24) | NIST AC-4(25)]
+
+1. Configure the cross-domain solution to modify non-releasable information using the organization-defined modification action before transfer between security domains. [NIST AC-4(23)]
+1. Configure the cross-domain solution to parse incoming data into an internal normalized format and regenerate it consistent with its intended specification. [NIST AC-4(24)]
+1. Configure sanitization of transferred data to minimize delivery of malicious content, command and control of malicious code, malicious code augmentation, steganography-encoded data, and spillage of sensitive information, in accordance with the organization-defined policy. [NIST AC-4(25)]
+
+### Operate the Content Filter Pipeline [NIST AC-4(26) | NIST AC-4(27) | NIST AC-4(28) | NIST AC-4(29) | NIST AC-4(30) | NIST AC-4(31) | NIST AC-4(32)]
+
+1. Configure the [Content Filtering Solution] to record and audit all content filtering actions and results for transfers between security domains, forwarding records to the [SIEM]. [NIST AC-4(26)]
+1. Implement redundant and independent filtering mechanisms for each data type, and document the independence of mechanisms in the architecture diagrams. [NIST AC-4(27)]
+1. Implement a linear content filter pipeline enforced with discretionary and mandatory access controls, and document the pipeline order. [NIST AC-4(28)]
+1. Configure monitoring to ensure content filtering mechanisms complete execution without errors and that filtering actions occur in the documented order and comply with organization-defined policy; alert on out-of-order or failed execution via the [SIEM]. [NIST AC-4(29)]
+1. Implement content filtering mechanisms using multiple processes as organization-defined. [NIST AC-4(30)]
+1. Configure the pipeline to prevent transfer of failed content to the receiving domain. [NIST AC-4(31)]
+1. For message-based transfers, configure the pipeline so message content is not filtered at the metadata stage, filtering metadata is validated, content is confirmed to have successfully completed filtering, and content is then transferred to the destination filter pipeline. [NIST AC-4(32)]
+
+### Manage Workforce Access to Electronic Protected Health Information [HIPAA 164.308(a)(3)(i) | HIPAA 164.308(a)(3)(ii)(A) Addressable | HIPAA 164.308(a)(3)(ii)(B) Addressable | HIPAA 164.308(a)(3)(ii)(C) Addressable]
+
+1. Implement the access policies in the [Identity Provider] so that all workforce members have appropriate access to electronic protected health information (ePHI) and workforce members without access under those policies cannot obtain it. [HIPAA 164.308(a)(3)(i)]
+1. Maintain the authorization and supervision procedures for workforce members who work with ePHI or in locations where ePHI might be accessed, coordinated with Human Resources and the Privacy Officer. [HIPAA 164.308(a)(3)(ii)(A)]
+1. Execute the determination procedure confirming each workforce member's access to ePHI is appropriate, using role reviews in the [Identity Provider]. [HIPAA 164.308(a)(3)(ii)(B)]
+1. On notification from Human Resources that employment or another arrangement has ended, or upon a clearance determination requiring it, disable the workforce member's access to ePHI in the [Identity Provider] and confirm removal of network paths to ePHI systems. [HIPAA 164.308(a)(3)(ii)(C)]
+
+### Authorize and Govern Access to ePHI Systems and Workstations [HIPAA 164.308(a)(4)(i) | HIPAA 164.308(a)(4)(ii)(A) Required | HIPAA 164.308(a)(4)(ii)(B) Addressable | HIPAA 164.308(a)(4)(ii)(C) Addressable | HIPAA 164.310(b)]
+
+1. Maintain the policies and procedures for authorizing access to ePHI consistent with applicable subpart E requirements. [HIPAA 164.308(a)(4)(i)]
+1. If a health care clearinghouse is part of a larger organization, implement segmentation and access controls protecting the clearinghouse's ePHI from unauthorized access by the larger organization, and include the segmentation rules in the Firewall and segmentation rule review. [HIPAA 164.308(a)(4)(ii)(A)]
+1. Implement the procedures for granting access to ePHI — through access to a workstation, transaction, program, process, or other mechanism — via the [Identity Provider] and [Ticketing System]. [HIPAA 164.308(a)(4)(ii)(B)]
+1. Establish, document, review, and modify each user's right of access to a workstation, transaction, program, or process based on the entity's access authorization policies, recording each grant and modification in the [Ticketing System]. [HIPAA 164.308(a)(4)(ii)(C)]
+1. Document the proper functions to be performed, the manner of their performance, and the physical attributes of the surroundings of workstations (or workstation classes) that can access ePHI, and enforce the corresponding network access rules. [HIPAA 164.310(b)]
+
+### Authorize and Manage Internal Connections [NIST CA-9 | ARC-AMPE CA-9 | NIST CA-9(1)]
+
+1. Require a documented authorization, recorded in the [Ticketing System], before connecting any organization-defined system component — or class of components with common characteristics or configurations — to the system.
+1. For each internal connection, document the interface characteristics, security and privacy requirements, and the nature of the information communicated, and attach the documentation to the authorization record.
+1. Perform security and privacy compliance checks on constituent system components using the [Vulnerability Scanning Tool] prior to establishing the internal connection; do not enable the connection until checks pass. [NIST CA-9(1)]
+1. Review the continued need for each internal connection at least every one (1) year, and terminate connections that no longer support organizational missions or business functions.
+1. Terminate internal system connections after the organization-defined conditions — including issuance of an order by the Chief Information Officer, Chief Information Security Officer, or senior privacy official — by disabling the connection at the managed interface and recording the termination in the [Ticketing System].
+
+### Develop and Maintain the System and Communications Protection Policy [NIST SC-1 | ARC-AMPE SC-1]
+
+1. Develop, document, and disseminate the system and communications protection policy — at the organization level per ARC-AMPE — addressing purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Develop and disseminate the procedures (including this document) that facilitate implementation of the policy and its associated controls.
+1. The designated official named in the appropriate security and privacy documents manages the development, documentation, and dissemination of the policy and procedures.
+1. Review and update the policy and procedures at least every one (1) year and following organization-defined events, including assessment or audit findings, security or privacy incidents, and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Actively monitor for changes to applicable privacy laws, regulations, and overarching policy affecting system and communications protection, and review the policies at least every one (1) year to ensure they remain effective throughout the system's life cycle.
+
+### Maintain and Retain Compliance Documentation [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) Required | HIPAA 164.316(b)(2)(ii) Required | HIPAA 164.316(b)(2)(iii) Required]
+
+1. Maintain the policies and procedures implemented for compliance in written (electronic permitted) form, and maintain a written record of any required action, activity, or assessment — including the Firewall and segmentation rule review and the External attack-surface scan. [HIPAA 164.316(b)(1)]
+1. Retain required documentation for 6 years from the date of its creation or the date it was last in effect, whichever is later. [HIPAA 164.316(b)(2)(i)]
+1. Make documentation available to the persons responsible for implementing the procedures to which it pertains, via the documentation repository. [HIPAA 164.316(b)(2)(ii)]
+1. Review documentation periodically and update it as needed in response to environmental or operational changes affecting the security of ePHI. [HIPAA 164.316(b)(2)(iii)]
+
+### Separate User and System Management Functionality [NIST SC-2 Moderate, High | ARC-AMPE SC-2 | NIST SC-2(1) | NIST SC-2(2)]
+
+1. Separate user functionality, including user interface services, from system management functionality using physical or logical methods — different computers, operating system instances, CPUs, or network addresses, virtualization, separate authentication for web administrative interfaces, or isolating administrative interfaces on different domains with additional access controls.
+1. Configure administrative interfaces so system management functionality is withheld entirely from non-privileged users — not merely greyed out — and is presented only after a session is established with administrator privileges. [NIST SC-2(1)]
+1. Configure applications to store state information separately from other application and software data. [NIST SC-2(2)]
+
+### Isolate Security Functions [NIST SC-3 High | NIST SC-3(1) | NIST SC-3(2) | NIST SC-3(3) | NIST SC-3(4) | NIST SC-3(5)]
+
+1. Isolate security functions from nonsecurity functions by means of an isolation boundary implemented via partitions and domains that controls access to and protects the integrity of the hardware, software, and firmware performing security functions.
+1. Employ hardware separation mechanisms to implement security function isolation. [NIST SC-3(1)]
+1. Isolate the security functions enforcing access and information flow control from nonsecurity functions and from other security functions. [NIST SC-3(2)]
+1. Minimize the number of nonsecurity functions included within the isolation boundary containing security functions, and document the boundary contents. [NIST SC-3(3)]
+1. When developing or procuring security functions, require implementation as largely independent modules that maximize internal cohesiveness and minimize coupling between modules. [NIST SC-3(4)]
+1. Require security functions to be implemented as a layered structure that minimizes interactions between layers and avoids lower-layer dependence on the functionality or correctness of higher layers. [NIST SC-3(5)]
+
+### Protect Shared System Resources [NIST SC-4 Moderate, High | ARC-AMPE SC-4 | NIST SC-4(2)]
+
+1. Configure systems to prevent unauthorized and unintended information transfer via shared system resources, so information produced by prior users, roles, or processes acting on their behalf is not available to current users or processes that obtain access to those resources after release.
+1. When system processing explicitly switches between different information classification levels or security categories, apply the organization-defined procedures to prevent unauthorized information transfer via shared resources, including clearing or reassigning shared buffers, memory, and storage between processing runs.
+
+### Defend Against Denial-of-Service Events [NIST SC-5 | ARC-AMPE SC-5 | NIST SC-5(1) | ARC-AMPE SC-5(1) | NIST SC-5(2) | ARC-AMPE SC-5(2) | NIST SC-5(3) | ARC-AMPE SC-5(3)]
+
+1. Deploy controls protecting against — and, per NIST, optionally limiting — the organization-defined types of denial-of-service events, which per ARC-AMPE must include at minimum ICMP flood, SYN flood, slowloris, buffer overflow attack, and volume attack, informed by the latest published NIST SP 800-61 and applicable threat resources.
+1. Employ the organization-defined controls, by type of denial-of-service event, to achieve the denial-of-service objective, configuring rate limiting, SYN cookies, and request timeouts on the [Load Balancer] and boundary devices.
+1. Restrict the ability of individuals to launch the organization-defined denial-of-service attacks against other systems: make commonly used attack mechanisms unavailable and prohibit egress to potential target systems on specific systems or boundary devices. [NIST SC-5(1)]
+1. Manage capacity, bandwidth, or other redundancy — through usage priorities, quotas, partitioning, or load balancing — to limit the effects of information flooding denial-of-service attacks. [NIST SC-5(2)]
+1. Employ the organization-defined monitoring tools, informed by the latest published NIST SP 800-61, to detect indicators of denial-of-service attacks against or launched from the system, and monitor the organization-defined system resources to determine whether sufficient resources exist to prevent effective denial-of-service attacks; alert through the [SIEM]. [NIST SC-5(3)]
+
+### Monitor and Control Managed Interfaces [NIST SC-7 | FedRAMP SC-7 | ARC-AMPE SC-7]
+
+1. Monitor and control communications at the external managed interfaces to the system and at the key internal managed interfaces within the system, using the [Firewall Management Console] and [Network Monitoring Tools] on a continuous basis.
+1. Implement subnetworks for publicly accessible system components that are logically separated from internal organizational networks, ensuring traffic cannot traverse unrestricted from publicly accessible components to internal networks without inspection and authorization.
+1. Connect to external networks or systems only through managed interfaces consisting of boundary protection devices arranged in accordance with the organizational security and privacy architecture.
+1. Deny access to all proxies except for hosts, ports, and services that are explicitly required, and record each allowed proxy path.
+1. Utilize stateful inspection/application firewall hardware and software, and use firewalls from at least two (2) or more different vendors at various levels within the network to reduce the possibility of compromising the entire network.
+1. For systems with an outward-facing public web or email presence, implement and support a technical capability to detect malware in web traffic traversing the organizational boundary, including monitoring assets without deployed software agents (zero client footprint), dynamically generating actionable malware intelligence, detecting and stopping web-based and email attacks, and sending alert data to the [SIEM] as applicable.
+1. Ensure aggregated boundary protection device information is searchable across boundary protection systems, appliances, devices, services, and applications via the [SIEM].
+1. Run the External attack-surface scan against the external managed interfaces on a continuous basis and retain the results as an evidence artifact.
+
+### Limit and Govern External Network Connections [NIST SC-7(3) Moderate, High | ARC-AMPE SC-7(3) | NIST SC-7(4) Moderate, High | ARC-AMPE SC-7(4)]
+
+1. Limit the number of external network connections to the system to facilitate more comprehensive monitoring of inbound and outbound communications traffic, and document each connection in the SSPP.
+1. Implement a managed interface for each external telecommunication service, establish a traffic flow policy for each interface, and protect the confidentiality and integrity of information transmitted across each interface.
+1. Document each traffic flow policy exception with its supporting mission or business need and duration in the [Ticketing System]; review exceptions within every one (1) year or whenever a change in the threat environment warrants review, and remove exceptions no longer supported by an explicit mission or business need.
+1. Prevent unauthorized exchange of control plane traffic with external networks; publish information enabling remote networks to detect unauthorized control plane traffic from internal networks; and filter unauthorized control plane traffic from external networks at the boundary devices.
+
+### Enforce Deny-By-Default at Managed Interfaces [NIST SC-7(5) Moderate, High | ARC-AMPE SC-7(5)]
+
+1. Configure all managed interfaces to deny network communications traffic by default and allow it by exception, for both inbound and outbound traffic, as documented in the applicable System Security and Privacy Plan.
+1. Record each allow exception with its justification in the [Ticketing System] and include the full rule set in the Firewall and segmentation rule review artifact.
+
+### Prevent Split Tunneling and Route Through Authenticated Proxies [NIST SC-7(7) Moderate, High | ARC-AMPE SC-7(7) | NIST SC-7(8) Moderate, High | ARC-AMPE SC-7(8)]
+
+1. Configure the [VPN Gateway] to prevent split tunneling for remote devices connecting to organizational systems, unless the split tunnel is securely provisioned using the organization-defined safeguards, such as sufficiently provisioned VPNs for remote connections. [NIST SC-7(7)]
+1. Route the organization-defined internal communications traffic — including traffic bound for any untrusted external network or any network outside organizational control or the authorization boundary — through authenticated proxy servers at managed interfaces. [NIST SC-7(8)]
+1. Document the man-in-the-middle risk introduced by the proxy implementation and the effect on VPN use in the architecture documentation. [NIST SC-7(8)]
+
+### Detect and Block Threatening Outbound Traffic and Exfiltration [NIST SC-7(9) | NIST SC-7(10)]
+
+1. Configure boundary devices to detect and deny outgoing communications traffic posing a threat to external systems, and audit the identity of internal users associated with denied communications by correlating [Identity Provider] and [SIEM] records. [NIST SC-7(9)]
+1. Deploy the [DLP Solution] to prevent the exfiltration of information at the managed interfaces, and conduct exfiltration tests at the organization-defined frequency, retaining test results as evidence. [NIST SC-7(10)]
+
+### Restrict Communications to Authorized Sources and Destinations [NIST SC-7(11)]
+
+1. Configure managed interfaces so only incoming communications from the organization-defined authorized sources are routed to the organization-defined authorized destinations.
+1. Reject and log all other source-destination pairs to the [SIEM].
+
+### Deploy Host-Based Protections and Isolate Security Tools [NIST SC-7(12) | ARC-AMPE SC-7(12) | NIST SC-7(13) | NIST SC-7(14)]
+
+1. Implement host-based boundary protection mechanisms — at minimum a host-based firewall, or HIPS/HIDS per ARC-AMPE — at the organization-defined system components, including all components capable of supporting them such as servers, workstations, and devices operating outside the organizational boundary (e.g., laptops and mobile devices). [NIST SC-7(12)]
+1. Isolate the organization-defined information security tools, mechanisms, and support components from other internal system components by implementing physically separate subnetworks with managed interfaces. [NIST SC-7(13)]
+1. Protect against unauthorized physical connections at the organization-defined managed interfaces, including port security and physical inspection of termination points. [NIST SC-7(14)]
+
+### Control Privileged Access Paths and Protocol Compliance [NIST SC-7(15) | NIST SC-7(16) | NIST SC-7(17) | NIST SC-7(18) High | ARC-AMPE SC-7(18) | NIST SC-7(19)]
+
+1. Route networked, privileged accesses through a dedicated, managed interface for purposes of access control and auditing. [NIST SC-7(15)]
+1. Configure the boundary to prevent the discovery of specific system components that represent a managed interface (e.g., suppress responses to discovery scans from untrusted sources). [NIST SC-7(16)]
+1. Enforce adherence to protocol formats at the managed interfaces, dropping nonconforming traffic. [NIST SC-7(17)]
+1. Configure boundary protection devices to fail in a manner that prevents systems from entering unsecure states — where system objects can be accessed in an unauthorized manner — in the event of an operational failure, and test the failure behavior. [NIST SC-7(18)]
+1. Block inbound and outbound communications traffic between the organization-defined communication clients that are independently configured by end users and external service providers. [NIST SC-7(19)]
+
+### Isolate Components and Separate Domain Addressing [NIST SC-7(20) | NIST SC-7(21) High | NIST SC-7(22) | NIST SC-7(23)]
+
+1. Provide the capability to dynamically isolate the organization-defined system components from other system components, executable on demand by Network Security via the [Firewall Management Console] or [Network Monitoring Tools]. [NIST SC-7(20)]
+1. Employ boundary protection mechanisms to isolate the organization-defined system components supporting the organization-defined missions and/or business functions. [NIST SC-7(21)]
+1. Implement separate network addresses to connect to systems in different security domains. [NIST SC-7(22)]
+1. Disable feedback to senders on protocol format validation failure. [NIST SC-7(23)]
+
+### Apply PII Processing Rules at Boundaries [NIST SC-7(24) | ARC-AMPE SC-7(24)]
+
+1. For systems processing personally identifiable information, apply the organization-defined PII processing rules — per ARC-AMPE, rules ensuring compliance with the ACA, Privacy Act, and other applicable PII processing laws and regulations — at the external interfaces and key internal boundaries.
+1. Monitor for permitted processing at those interfaces using the [DLP Solution] and [SIEM].
+1. Document each processing exception in the [Ticketing System], and review and remove exceptions no longer supported.
+
+### Prohibit Direct Connections to External and Public Networks [NIST SC-7(25) | NIST SC-7(26) | NIST SC-7(27) | NIST SC-7(28)]
+
+1. Prohibit the direct connection of the organization-defined unclassified national security system to an external network without the use of the organization-defined boundary protection device. [NIST SC-7(25)]
+1. Prohibit the direct connection of a classified national security system to an external network without the use of the organization-defined boundary protection device. [NIST SC-7(26)]
+1. Prohibit the direct connection of the organization-defined unclassified, non-national security system to an external network without the use of the organization-defined boundary protection device. [NIST SC-7(27)]
+1. Prohibit the direct connection of the organization-defined system to a public network. [NIST SC-7(28)]
+1. Verify compliance with these prohibitions during each External attack-surface scan and Firewall and segmentation rule review.
+
+### Isolate Critical Components in Separate Subnetworks [NIST SC-7(29) | ARC-AMPE SC-7(29)]
+
+1. Implement physically or logically separate subnetworks to isolate the organization-defined critical system components and functions from noncritical components and functions, reducing susceptibility to catastrophic or debilitating breach or compromise resulting in system failure.
+1. Document the critical/noncritical segmentation in the architecture diagrams and validate it in the Firewall and segmentation rule review.
+
+### Encrypt Information in Transit [NIST SC-8 Moderate, High | ARC-AMPE SC-8 | HIPAA 164.312(e)(1) | NIST SC-8(1) Moderate, High | ARC-AMPE SC-8(1) | NIST SC-8(2) | ARC-AMPE SC-8(2) | NIST SC-8(3) | NIST SC-8(4) | NIST SC-8(5)]
+
+1. Protect the confidentiality and integrity of transmitted information across internal and external networks and all system components capable of transmitting information, using physical or logical means; per ARC-AMPE, encrypt any transmitted data containing sensitive information (e.g., PII, proprietary, financial, legal) using the latest published FIPS 140-compliant encryption standards. [NIST SC-8]
+1. Implement technical security measures to guard against unauthorized access to ePHI being transmitted over an electronic communications network. [HIPAA 164.312(e)(1)]
+1. Place all sensitive information in an encrypted attachment prior to sending electronic email, and encrypt email and attachments containing sensitive information transmitted outside the organization using the latest published FIPS 140-compliant encryption standards via the [Email Gateway].
+1. Do not include the password or encryption key in the same email containing sensitive information or in a separate email; provide it to the recipient separately via text message, verbally, or another out-of-band solution, and do not use password protection of files in lieu of encryption solutions.
+1. Implement cryptographic mechanisms to prevent unauthorized disclosure of information and detect changes to information during transmission; per ARC-AMPE, use the latest published FIPS 140-compliant encryption standards or protected distribution systems to protect PII in transit. [NIST SC-8(1)]
+1. Maintain the confidentiality and integrity of information during preparation for transmission and during reception. [NIST SC-8(2)]
+1. Implement cryptographic mechanisms to protect message externals unless otherwise protected by the organization-defined alternative physical controls. [NIST SC-8(3)]
+1. Implement cryptographic mechanisms to conceal or randomize communication patterns unless otherwise protected by the organization-defined alternative physical controls. [NIST SC-8(4)]
+1. Implement the organization-defined protected distribution system to prevent unauthorized disclosure of or detect changes to information during transmission. [NIST SC-8(5)]
+
+### Protect Integrity of ePHI in Storage and Transit [HIPAA 164.312(c)(1) | HIPAA 164.312(c)(2) Addressable | HIPAA 164.312(e)(2)(i) Addressable | HIPAA 164.312(e)(2)(ii) Addressable]
+
+1. Implement policies and procedures to protect ePHI from improper alteration or destruction. [HIPAA 164.312(c)(1)]
+1. Implement electronic mechanisms to corroborate that ePHI has not been altered or destroyed in an unauthorized manner. [HIPAA 164.312(c)(2)]
+1. Implement security measures to ensure electronically transmitted ePHI is not improperly modified without detection until disposed of. [HIPAA 164.312(e)(2)(i)]
+1. Implement a mechanism to encrypt ePHI whenever deemed appropriate, per the encryption decisions documented in the SSPP. [HIPAA 164.312(e)(2)(ii)]
+
+### Terminate Sessions and Interconnections [NIST SC-10 Moderate, High | ARC-AMPE SC-10]
+
+1. Configure the [Identity Provider], [VPN Gateway], and application gateways to terminate the network connection associated with a communications session at the end of the session or after the defined period of inactivity: after thirty (30) minutes for privileged sessions and no longer than sixty (60) minutes for general user sessions.
+1. Authorized management or senior security officials may terminate or suspend system-to-system interconnections; record each such action in the [Ticketing System].
+
+### Control Collaborative Computing Devices [NIST SC-15 | ARC-AMPE SC-15 | NIST SC-15(1) | NIST SC-15(3) | NIST SC-15(4)]
+
+1. Prohibit remote activation of collaborative computing devices and applications (e.g., remote meeting tools, networked white boards, cameras, microphones), with no exceptions per ARC-AMPE unless explicitly authorized in writing by the CIO or designated representative, with any authorization specifically identifying the allowed mechanisms, purpose, and the information system on which they may be used.
+1. Configure collaborative computing devices to provide an explicit indication of use to users physically present at the devices when the devices or applications are activated.
+1. Provide physical or logical disconnect of collaborative computing devices in a manner that supports ease of use. [NIST SC-15(1)]
+1. Disable or remove collaborative computing devices and applications from the organization-defined systems or system components in the organization-defined secure work areas. [NIST SC-15(3)]
+1. Configure online meeting and teleconferencing tools to provide an explicit indication of current participants. [NIST SC-15(4)]
+
+### Secure Name/Address Resolution Services [NIST SC-20 | ARC-AMPE SC-20 | NIST SC-20(2) | NIST SC-21 | ARC-AMPE SC-21 | NIST SC-22 | ARC-AMPE SC-22]
+
+1. Configure the [DNS Service] to provide additional data origin authentication and integrity verification artifacts, such as DNSSEC digital signatures and cryptographic keys, along with the authoritative name resolution data returned in response to external name/address resolution queries. [NIST SC-20]
+1. When operating as part of a distributed, hierarchical namespace, provide the means to indicate the security status of child zones and, if the child supports secure resolution services, enable verification of a chain of trust among parent and child domains. [NIST SC-20]
+1. Provide data origin and integrity protection artifacts for internal name/address resolution queries. [NIST SC-20(2)]
+1. Configure resolving systems to request and perform data origin authentication and data integrity verification on name/address resolution responses received from authoritative sources. [NIST SC-21]
+1. Ensure the systems that collectively provide name/address resolution service for the organization are fault-tolerant and implement internal and external role separation. [NIST SC-22]
+
+### Protect Communications Session Authenticity [NIST SC-23 Moderate, High | ARC-AMPE SC-23 | NIST SC-23(1) | NIST SC-23(3) | NIST SC-23(5)]
+
+1. Protect the authenticity of communications sessions, including protection against man-in-the-middle attacks, session hijacking, and insertion of false information into sessions, using TLS configuration baselines enforced at the [Load Balancer] and application gateways.
+1. Invalidate session identifiers upon user logout or other session termination. [NIST SC-23(1)]
+1. Generate a unique session identifier for each session meeting the organization-defined randomness requirements, and configure applications to recognize only system-generated session identifiers. [NIST SC-23(3)]
+1. Only allow the use of the organization-defined certificate authorities for verification of the establishment of protected sessions, enforced via the trusted certificate store. [NIST SC-23(5)]
+
+### Fail to Known Safe States [NIST SC-24 High]
+
+1. For the organization-defined types of failures on the indicated components, configure systems to fail to the organization-defined known system state, preserving the organization-defined system state information to facilitate restart and return to operational mode.
+1. Verify that failure behavior prevents loss of confidentiality, integrity, or availability and does not fail to a state that could cause injury or property destruction, and test the failure behavior before production deployment.
+
+### Isolate Executing Processes and Threads [NIST SC-39 | ARC-AMPE SC-39 | NIST SC-39(1) | NIST SC-39(2)]
+
+1. Maintain a separate execution domain for each executing system process — for example, by assigning each process a separate address space — so inter-process communication is controlled through the security functions and one process cannot modify another's executing code.
+1. Implement hardware separation mechanisms to facilitate process isolation. [NIST SC-39(1)]
+1. Maintain a separate execution domain for each thread in the organization-defined multi-threaded processing. [NIST SC-39(2)]
+
+## Roles & Responsibilities
+
+The Network Security team is accountable for this procedure end to end, including execution of all boundary, flow control, monitoring, and review steps and production of the Firewall and segmentation rule review and External attack-surface scan artifacts. System Owners, Human Resources, the Privacy Officer, the Authorizing Official, the CIO, the CISO, the senior privacy official, and privileged administrators participate in the specific steps that name them; exceptions to any step in this procedure require review and approval by the Network Security team lead in consultation with the CISO.
+
+## Related Standard
+
+Example Org Information Security Standard: Network & Boundary Protection

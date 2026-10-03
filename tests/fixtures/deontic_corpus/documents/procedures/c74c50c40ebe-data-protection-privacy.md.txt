@@ -1,0 +1,110 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001777
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - dd8746c5610b1e17
+  provider: litellm
+  provider_class: third-party
+---
+
+# PII Processing, Transparency, and Documentation Management Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions for developing, disseminating, maintaining, and reviewing Example Org's PII processing and transparency policy and supporting documentation, and for determining, documenting, and enforcing the authority under which PII is processed. Executing it produces and maintains the Data inventory and classification register and the Retention schedule as evidence of compliance.
+
+## Scope
+
+Data Governance performs this procedure on Example Org's policy and documentation repositories and on all systems and processes that handle personally identifiable information (PII), including electronic protected health information (ePHI). Other teams participate as contributors and implementers, but Data Governance owns the process and its handoffs end to end.
+
+## Prerequisites
+
+- Access to the [Document Management System] where policies, procedures, and HIPAA documentation are authored, published, and versioned.
+- A designated PII processing and transparency policy official (see Procedure Steps) named in the appropriate security and privacy documents.
+- Engagement with [Legal Counsel] or [Compliance] for review of applicable laws, regulations, and directives.
+- The current Data inventory and classification register, maintained by Data Governance.
+- The current Retention schedule, maintained by Data Governance.
+- Access to the [Ticketing System] for tracking review tasks, updates, and event-triggered reviews.
+- Access to the [Identity Provider] to verify role assignments for dissemination targets.
+
+## Procedure Steps
+
+### Develop and Disseminate the PII Processing and Transparency Policy [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+1. Data Governance drafts the organization-level PII processing and transparency policy in the [Document Management System], addressing purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance.
+1. Data Governance engages [Legal Counsel] to confirm the policy is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines, and records the confirmation in the document's review history.
+1. Data Governance submits the draft policy to the designated policy official (see below) and executive management for approval, recording the approval date and approver in the [Document Management System].
+1. Upon approval, Data Governance publishes the policy in the [Document Management System] and disseminates it to the organization-defined personnel and roles listed in the policy's distribution section, verifying delivery through the [Ticketing System] or [Document Management System] acknowledgment tracking.
+1. Data Governance records the published policy version and distribution list as evidence alongside the Data inventory and classification register.
+
+### Develop and Disseminate Supporting Procedures [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+1. Data Governance develops and documents procedures that facilitate implementation of the PII processing and transparency policy and its associated controls, including this procedure, in the [Document Management System].
+1. Data Governance maps each procedure to the policy section and control it implements, recording the mapping in the document header.
+1. Data Governance submits the procedures for the same approval path as the policy (designated official and executive management) and records approvals in the [Document Management System].
+1. Data Governance disseminates the approved procedures to the personnel and roles responsible for implementing them, using the distribution mechanism in the [Document Management System], and confirms receipt.
+
+### Designate the PII Policy Official [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+1. Executive management, coordinated by Data Governance, designates an official to manage the development, documentation, and dissemination of the PII processing and transparency policy and procedures.
+1. Data Governance records the designated official's name, title, and designation date in the policy document and in the appropriate security and privacy documents in the [Document Management System].
+1. Data Governance updates the designation record whenever the official changes, re-publishing the affected documents and re-notifying the distribution list.
+
+### Review and Update the Policy and Procedures [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+1. Data Governance reviews the PII processing and transparency policy and its supporting procedures at least every one (1) year, opening a review task in the [Ticketing System] to initiate the review.
+1. Data Governance also initiates a review following organization-defined events, including assessment or audit findings, breaches or security/privacy incidents, and changes to applicable laws (including privacy laws), executive orders, directives, regulations, policies, standards, and guidelines.
+1. Data Governance actively monitors for changes to applicable privacy laws, regulations, and policies affecting PII processing and transparency, using [Legal Counsel] or [Regulatory Monitoring Service] alerts, and logs monitored changes in the [Ticketing System].
+1. When updates are required, Data Governance revises the documents, obtains approval from the designated official and executive management, and publishes the new version in the [Document Management System].
+1. Data Governance records each review — whether or not it produced changes — including date, reviewer, trigger, and outcome, and retains that record per the Retention schedule.
+
+### Maintain HIPAA Documentation in Written Form [HIPAA Security Rule 164.316(b)(1)]
+
+1. Data Governance maintains all policies, procedures, and any record of an action, activity, or assessment required to comply with the HIPAA Security Rule in written (electronic or paper) form in the [Document Management System].
+1. Data Governance ensures every required action, activity, or assessment is documented at the time it is performed, filing the record against the relevant HIPAA control in the [Document Management System].
+1. Data Governance verifies during the annual review that no required documentation exists only in ephemeral form (e.g., verbal decisions, unexported tickets) and migrates any such records into the [Document Management System].
+
+### Retain HIPAA Documentation for Six Years [HIPAA Security Rule 164.316(b)(2)(i) | ARC-AMPE SI-12]
+
+1. Data Governance applies a six-year retention period to all HIPAA documentation, calculated from the date of its creation or the date when it was last in effect, whichever is later.
+1. Data Governance records each HIPAA document's creation date and last-in-effect date in the Retention schedule.
+1. Data Governance configures the [Document Management System] retention rules to prevent deletion of HIPAA documentation before its calculated retention date expires.
+1. Data Governance verifies during the annual review that the Retention schedule entries match the actual documents and retention rules in the [Document Management System].
+
+### Make HIPAA Documentation Available to Responsible Personnel [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+1. Data Governance grants access in the [Document Management System] to the persons responsible for implementing the procedures to which the documentation pertains, based on the role assignments in the [Identity Provider].
+1. Data Governance reviews the access list whenever responsibilities change and updates permissions so responsible personnel always have current access.
+1. Data Governance confirms availability during the annual review by verifying that each responsible role can retrieve its applicable documentation.
+
+### Periodically Review and Update HIPAA Documentation [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+1. Data Governance reviews HIPAA documentation annually to determine whether environmental or operational changes affecting the security of electronic protected health information require updates.
+1. When such changes are identified, Data Governance updates the affected documentation, obtains approval from the designated official, and publishes the revised version in the [Document Management System].
+1. Data Governance records each periodic review and update in the document history and updates the Retention schedule's last-in-effect dates accordingly.
+
+### Determine and Document PII Processing Authority [NIST 800-53 PT-2 | ARC-AMPE PT-2 AE Mandatory]
+
+1. Data Governance identifies and documents the organization-defined authority (e.g., statute, regulation, contract, or consent) that permits each defined processing of PII, drawing on the Data inventory and classification register to enumerate processing activities.
+1. Data Governance engages [Legal Counsel] to validate that each cited authority actually permits the processing described.
+1. Data Governance records the authority for each processing activity in the Data inventory and classification register, linking each entry to its supporting legal or contractual source in the [Document Management System].
+1. Data Governance reviews the documented authorities during the annual policy review and whenever monitoring identifies changes to applicable privacy laws, updating the register as needed.
+
+### Restrict PII Processing to Authorized Purposes [NIST 800-53 PT-2 | ARC-AMPE PT-2 AE Mandatory]
+
+1. Data Governance compares active PII processing activities — as enumerated in the Data inventory and classification register — against the documented authorities to identify any processing not covered by an authority.
+1. When unauthorized processing is identified, Data Governance opens a remediation item in the [Ticketing System], notifies the owning system or business process team, and directs that the unauthorized processing be stopped or brought within an authorized basis.
+1. Data Governance verifies with the owning team that the unauthorized processing has been stopped or authorized, and records the resolution in the [Ticketing System] and the Data inventory and classification register.
+1. Data Governance reports unresolved unauthorized processing to the designated policy official and executive management for escalation.
+
+## Roles & Responsibilities
+
+Data Governance is authorized and accountable for executing every step of this procedure, including authoring, disseminating, reviewing, and retaining all policy, procedure, and HIPAA documentation, and for maintaining the Data inventory and classification register and the Retention schedule. Executive management approves the policy and designates the policy official; [Legal Counsel] validates legal authorities; and exceptions to any step of this procedure require review and approval by the designated policy official in consultation with Data Governance.
+
+## Related Standard
+
+This procedure operationalizes the **Example Org Data Protection and Privacy Standard**, which contains the full requirement text and the rationale for each control implemented above.

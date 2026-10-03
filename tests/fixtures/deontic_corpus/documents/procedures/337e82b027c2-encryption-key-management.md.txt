@@ -1,0 +1,143 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002128
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - f4b65ff730da2e10
+  provider: litellm
+  provider_class: third-party
+---
+
+# Encryption & Key Management Operational Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions Platform Security follows to establish, control, distribute, store, rotate, and destroy cryptographic keys, and to encrypt sensitive information in transit and at rest, in execution of the Encryption & Key Management Standard. Executing this procedure produces the Key inventory and rotation log and the Encryption-at-rest and in-transit configuration as evidence of compliance.
+
+## Scope
+
+This procedure is performed by Platform Security on all Example Org systems, services, and media that employ cryptography or store or transmit sensitive information, including systems operated on Example Org's behalf by external service providers. It applies to symmetric and asymmetric key material, public key certificates, trust stores, and all encryption configurations for data at rest and in transit.
+
+## Prerequisites
+
+- Administrative access to the organization's [Key Management System] and [Hardware Security Module], provisioned through the [Access Request System].
+- Access to the [Ticketing System] for recording key lifecycle actions and change requests.
+- Access to the [Certificate Authority] or the approved certificate service provider account.
+- A current Cryptographic Module Use register maintained by Platform Security, mapping each cryptographic use to its required cryptography type.
+- An approved external service provider inventory identifying providers that store Example Org information encrypted on Example Org's behalf.
+- The current Key inventory and rotation log and Encryption-at-rest and in-transit configuration records.
+- Approval from Platform Security leadership for any exception to the steps below, documented in the [Ticketing System].
+
+## Procedure Steps
+
+### Establish and Manage Cryptographic Keys Across Their Lifecycle [NIST 800-53 SC-12 Low, Moderate, High | ARC-AMPE SC-12 AE Mandatory]
+
+1. When any new system, service, or feature employs cryptography, Platform Security creates an entry for each key in the Key inventory and rotation log, recording the key's purpose, owner, algorithm, storage location, and lifecycle state.
+1. Platform Security defines, in the key entry, how each of the following is performed for that key: generation, distribution, storage, access, and destruction, in accordance with the organization's key management requirements.
+1. Platform Security generates keys only within the [Hardware Security Module] or the [Key Management System]; keys are never generated on general-purpose endpoints or pasted into tickets, chat, or email.
+1. Platform Security records every lifecycle action (generation, distribution, storage change, access grant, rotation, destruction) against the key's entry in the Key inventory and rotation log at the time the action is performed.
+1. Platform Security reviews the Key inventory and rotation log annually to confirm every key has a defined lifecycle, an owner, and a complete action history, and remediates gaps by the [Remediation Deadline] recorded in the [Ticketing System].
+1. When a key is retired, Platform Security destroys it in the [Key Management System] or [Hardware Security Module] using the system's native destroy/evict function, then updates the Key inventory and rotation log to record the destruction date and method.
+
+### Maintain Information Availability Upon User Key Loss [NIST 800-53 SC-12(1) High]
+
+1. Platform Security configures the [Key Management System] recovery mechanism (for example, key escrow or recovery-agent functionality) for all user-held keys whose loss would render stored information unreadable.
+1. Platform Security documents the recovery procedure for each such key type in the Key inventory and rotation log entry, including who holds recovery authority and how recovery is authenticated.
+1. When a user reports loss of a cryptographic key via the [Ticketing System], Platform Security verifies the requester's identity through the [Identity Provider] before performing any recovery action.
+1. Platform Security executes the documented recovery procedure to restore the user's access to the affected information, then records the recovery event in the Key inventory and rotation log.
+1. Platform Security tests the recovery mechanism annually by performing a recovery for a designated test key and recording the test result in the Key inventory and rotation log.
+
+### Produce, Control, and Distribute Symmetric Keys Using Validated Key Management Technology [NIST 800-53 SC-12(2)]
+
+1. Platform Security produces all symmetric keys using [Selection: NIST FIPS-validated; NSA-approved] key management technology — the [Key Management System] integrated with the [Hardware Security Module] — and no other generation path.
+1. Platform Security controls distribution of symmetric keys by delivering them only through the [Key Management System]'s managed distribution mechanism (envelope encryption or direct grant to authorized service identities), never through manual transfer.
+1. Platform Security restricts access to each symmetric key in the [Key Management System] using access policies that name the specific service identities and roles permitted to use the key, and reviews those policies annually.
+1. Platform Security records each production and distribution event for symmetric keys in the Key inventory and rotation log.
+
+### Produce, Control, and Distribute Asymmetric Keys Using Approved Technology and Processes [NIST 800-53 SC-12(3)]
+
+1. Platform Security produces asymmetric key pairs using [Selection: NSA-approved key management technology and processes; prepositioned keying material; DoD-approved or DoD-issued Medium Assurance PKI certificates; DoD-approved or DoD-issued Medium Hardware Assurance PKI certificates and hardware security tokens that protect the user's private key; certificates issued in accordance with organization-defined requirements], selecting the option applicable to the key's use and recording the selection in the Key inventory and rotation log.
+1. Where hardware security tokens are the selected option, Platform Security issues tokens only after recording the token serial number, assigned user, and issuance date in the Key inventory and rotation log.
+1. Platform Security ensures private keys are generated and remain within the [Hardware Security Module], the hardware token, or the [Key Management System], and are never exported in plaintext.
+1. Platform Security distributes public keys and certificates through the [Certificate Authority] or approved service provider and records each distribution in the Key inventory and rotation log.
+
+### Maintain Physical Control of Keys Held by External Service Providers [NIST 800-53 SC-12(6)]
+
+1. Platform Security identifies, from the external service provider inventory, every provider that encrypts stored Example Org information on Example Org's behalf.
+1. For each such provider, Platform Security determines whether Example Org retains control of the key material (for example, through customer-managed keys in the [Key Management System]) and records the control model in the Key inventory and rotation log.
+1. Where Example Org does not retain key control, Platform Security engages the provider to migrate to a customer-managed key arrangement or documents an approved exception in the [Ticketing System] with an owner and a [Remediation Deadline].
+1. Platform Security reviews the external service provider key-control records annually and updates the Key inventory and rotation log to reflect any change in provider or control model.
+
+### Use CMVP-Validated Encryption Products [ARC-AMPE SC-12 AE Mandatory]
+
+1. Before approving any encryption product or module for use, Platform Security checks the product against the current CMVP validated-modules list and confirms it holds a valid FIPS 140 validation for the latest published standard it claims.
+1. Platform Security records the validation certificate number and expiry in the Cryptographic Module Use register.
+1. Platform Security re-verifies the validation status of all registered encryption products annually and flags any product whose validation has lapsed in the [Ticketing System] with a [Remediation Deadline].
+1. Platform Security removes any product from the register whose validation is not restored by its [Remediation Deadline] and directs dependent systems to a validated replacement.
+
+### Determine Cryptographic Uses and Implement Required Cryptography [NIST 800-53 SC-13 Low, Moderate, High | FedRAMP SC-13]
+
+1. Platform Security maintains the Cryptographic Module Use register, enumerating each organization-defined cryptographic use (for example, data-in-transit TLS, data-at-rest volume encryption, signing, and hashing) and the type of cryptography required for each.
+1. Platform Security implements the cryptography type specified for each use in the register, configuring the relevant systems accordingly.
+1. Platform Security ensures every implemented cryptographic module is, at a minimum, the latest published FIPS 140-compliant cryptography, noting that FIPS 140-2 modules may remain active until September 21, 2026, and records the module version in the register.
+1. Platform Security verifies each cryptographic configuration against the FedRAMP Cryptographic Module Use rules before approving it for production, and records the verification in the register.
+1. Platform Security reviews the register annually, updates it for new cryptographic uses, and remediates any use implemented with non-compliant cryptography by its [Remediation Deadline].
+
+### Encrypt All Sensitive Information Wherever It Resides [ARC-AMPE SC-13 AE Mandatory | ARC-AMPE SC-28 AE Mandatory | ARC-AMPE SC-28(1) AE Mandatory]
+
+1. Platform Security identifies all data stores, databases, object storage, file shares, backups, and endpoints that contain sensitive information — including PII, proprietary, financial, and legal information — and records each in the Encryption-at-rest and in-transit configuration record.
+1. Platform Security enables encryption at rest on each identified store using the latest published FIPS 140-compliant encryption standards, applying the setting in the storage platform's native encryption configuration.
+1. Platform Security enables encryption in transit for every channel carrying sensitive information, using the latest published FIPS 140-compliant encryption standards, and records the protocol, version, and cipher configuration in the Encryption-at-rest and in-transit configuration record.
+1. Platform Security verifies the encryption settings by inspecting each store's configuration and, where available, reading a sample object to confirm ciphertext, then records the verification result and date.
+1. Platform Security re-verifies the encryption configuration of all recorded stores annually and remediates any unencrypted store by its [Remediation Deadline].
+
+### Protect ePHI Transmitted Over Electronic Communications Networks [HIPAA 164.312(e)(1) | HIPAA 164.312(e)(2)(i) Addressable | HIPAA 164.312(e)(2)(ii) Addressable | HIPAA 164.312(a)(2)(iv) Addressable]
+
+1. Platform Security implements technical security measures — FIPS 140-compliant transport encryption — on every electronic communications network channel that carries ePHI, and records each channel in the Encryption-at-rest and in-transit configuration record.
+1. Platform Security implements integrity protection (for example, authenticated encryption or message integrity checks) on those channels so that improperly modified ePHI is detected until disposal, and records the mechanism used.
+1. Platform Security implements a mechanism to encrypt ePHI whenever deemed appropriate for the transmission channel, documenting the appropriateness determination for each channel in the configuration record.
+1. Platform Security implements and maintains the encrypt/decrypt mechanism for ePHI at rest and in transit through the [Key Management System], confirming annually that both operations function for each ePHI store and channel.
+1. Platform Security records all ePHI protection mechanisms and their verification results in the Encryption-at-rest and in-transit configuration record.
+
+### Issue Public Key Certificates and Manage Trust Anchors [NIST 800-53 SC-17 Moderate, High | ARC-AMPE SC-17 AE Mandatory]
+
+1. Platform Security issues public key certificates under the organization-defined certificate policy via the [Certificate Authority], or obtains them from the approved certificate service provider, and records the issuing path for each certificate in the Key inventory and rotation log.
+1. Platform Security validates each certificate request against the certificate policy (requester identity, key strength, and intended use) before issuance.
+1. Platform Security builds and maintains the organization's trust stores to contain only approved trust anchors, removing any anchor not on the approved list.
+1. Platform Security reviews all trust stores and certificate stores annually against the approved trust anchor list, removes unapproved entries, and records the review outcome in the Key inventory and rotation log.
+
+### Protect the Confidentiality and Integrity of Information at Rest [NIST 800-53 SC-28 Moderate, High | ARC-AMPE SC-28 AE Mandatory]
+
+1. Platform Security identifies the [Assignment: organization-defined information at rest] on each system component and medium, per the ARC-AMPE requirement to protect the confidentiality and integrity of all information at rest.
+1. Platform Security implements cryptographic mechanisms to protect the identified information at rest, and records the mechanism and scope per system in the Encryption-at-rest and in-transit configuration record.
+1. Platform Security verifies the protections annually by inspecting configurations and sampling stored data, and remediates gaps by the [Remediation Deadline].
+
+### Prevent Unauthorized Disclosure and Modification of Information at Rest [NIST 800-53 SC-28(1) Moderate, High | ARC-AMPE SC-28(1) AE Mandatory]
+
+1. Platform Security implements cryptographic mechanisms on [Assignment: organization-defined system components or media] that prevent both unauthorized disclosure and unauthorized modification of the information at rest they hold.
+1. Platform Security ensures the protected set includes, but is not limited to, PII and proprietary, financial, and legal information, encrypted using the latest published FIPS 140-compliant encryption standards.
+1. Platform Security records each protected component or medium, the cryptographic mechanism applied, and the verification date in the Encryption-at-rest and in-transit configuration record.
+
+### Remove Designated Information from Online Storage [NIST 800-53 SC-28(2)]
+
+1. Platform Security identifies the [Assignment: organization-defined information] designated for offline storage and the systems where it currently resides online.
+1. Platform Security removes the designated information from online storage and transfers it to offline media using an approved, FIPS 140-compliant encryption mechanism.
+1. Platform Security stores the offline media in a secure location with access restricted to authorized Platform Security personnel, recording the media identifiers, contents summary, and storage location in the Key inventory and rotation log.
+1. Platform Security verifies annually that the designated information remains offline and that online copies have not reappeared, remediating any recurrence by the [Remediation Deadline].
+
+### Provide Protected Storage for Cryptographic Keys [NIST 800-53 SC-28(3)]
+
+1. Platform Security stores all cryptographic keys in [Selection: organization-defined safeguards; hardware-protected key store] — the [Hardware Security Module] or the [Key Management System]'s hardware-backed key store — and never in plaintext files, source code, or configuration repositories.
+1. Platform Security configures access controls on the key store so that only authorized service identities and Platform Security personnel can retrieve or use keys, with all access logged.
+1. Platform Security verifies annually that every key in the Key inventory and rotation log resides in the protected key store and that no key material exists outside it, remediating any exception by the [Remediation Deadline].
+
+## Roles & Responsibilities
+
+Platform Security is authorized and accountable to perform every step of this procedure end to end, including key lifecycle management, encryption configuration, verification, and evidence production. System-owning teams participate by granting access and applying configuration changes under Platform Security's direction; any exception to this procedure requires review and approval by Platform Security leadership, documented in the [Ticketing System].
+
+## Related Standard
+
+This procedure operationalizes the **Encryption & Key Management Standard**, which contains the full requirement text, control selections, and the rationale for each obligation executed above.

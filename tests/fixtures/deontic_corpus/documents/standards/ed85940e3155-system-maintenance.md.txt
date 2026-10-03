@@ -1,0 +1,64 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001053
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - f3de05e54cd49b11
+  provider: litellm
+  provider_class: third-party
+---
+
+# System Maintenance Standard
+
+**Organization:** Example Org
+**Owning Team:** Infrastructure Security
+**Status:** Enforceable standard
+**Cadence:** Continuous, with formal review at least every one (1) year
+
+## 1. Purpose
+
+This standard establishes Example Org's maintenance policy at the organization level, as required at the organization, mission/business process, and/or system level by the governing frameworks, with ARC-AMPE requiring organization-level coverage. It addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and it is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+## 2. Scope
+
+This standard applies to all applicable personnel and roles at Example Org and to all organizational systems subject to the maintenance policy. It is maintained at the organization level by Infrastructure Security. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+## 3. Roles and Responsibilities
+
+Infrastructure Security is accountable for this standard and the system maintenance process it governs, end to end. Infrastructure Security owns each step described in this document, the handoffs between steps, and the outcome of the process. Other teams may participate in individual steps as contributors, but accountability rests with Infrastructure Security. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+Infrastructure Security shall designate an organization-defined official to manage the development, documentation, and dissemination of the maintenance policy and procedures. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+## 4. Management Commitment
+
+Example Org management commits to the maintenance policy set out in this standard and to resourcing its implementation, development, documentation, and dissemination by Infrastructure Security. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+## 5. Coordination Among Organizational Entities
+
+Infrastructure Security shall coordinate with other organizational entities involved in system maintenance — including teams performing, authorizing, or overseeing maintenance activity — in the development, documentation, dissemination, and review of this policy and its associated procedures. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+## 6. Compliance
+
+Personnel and roles within the scope of this standard must comply with the maintenance policy and the procedures that implement it. Infrastructure Security is responsible for verifying compliance and answering for the compliance outcome. Noncompliance is handled under Example Org's applicable policies. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+## 7. Maintenance Procedures
+
+Infrastructure Security shall develop, document, and disseminate procedures to facilitate implementation of the maintenance policy and the associated maintenance controls. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+## 8. Policy and Procedure Review and Update
+
+Infrastructure Security manages this standard and its procedures on a continuous basis. Infrastructure Security shall review and update the maintenance policy and procedures at a defined frequency — at least every one (1) year per ARC-AMPE — and following organization-defined events, including assessment or audit findings; security or privacy incidents; and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. Documentation must also be reviewed periodically and updated as needed in response to environmental or operational changes affecting security. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+## 9. Evidence and Records
+
+Implementation of this standard produces the following evidence artifacts, for which Infrastructure Security is accountable:
+
+| Artifact                               | Description                                                                |
+| -------------------------------------- | -------------------------------------------------------------------------- |
+| Maintenance records with authorization | Records of maintenance activity together with the associated authorization |
+| Remote maintenance session logs        | Logs capturing remote maintenance sessions                                 |
+
+These artifacts are referenced wherever this document describes what is recorded or retained as part of the maintenance process.

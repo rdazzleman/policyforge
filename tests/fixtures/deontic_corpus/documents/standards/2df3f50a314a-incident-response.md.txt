@@ -1,0 +1,84 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001155
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 6afd9641a7482909
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Information Security Standard: Incident Response
+
+**Standard Owner:** Security Operations
+**Standard Cadence:** Continuous
+**Classification:** Internal
+
+## 1. Purpose
+
+This Standard establishes the requirements for the development, documentation, dissemination, and maintenance of Example Org's incident response policy and supporting procedures. It ensures that Example Org can detect, respond to, and recover from security incidents in a manner consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+
+Security Operations is accountable for this Standard and for the incident response process it governs, end to end, on a continuous basis.
+
+## 2. Incident Response Policy Requirements
+
+Security Operations shall develop, document, and disseminate an incident response policy to all applicable personnel or roles. The incident response policy shall address:
+
+- Purpose;
+- Scope;
+- Roles and responsibilities;
+- Management commitment;
+- Coordination among organizational entities; and
+- Compliance.
+
+The incident response policy must be consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST IR-1 Low/Moderate/High | FedRAMP IR-1 | ARC-AMPE IR-1 AE Mandatory | HIPAA 164.308(a)(6)(i)]
+
+## 3. Policy Level
+
+The incident response policy may be established at the organization level, mission/business process level, or system level. Example Org shall establish the incident response policy at the organization level, as required by ARC-AMPE. [NIST IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1 AE Mandatory]
+
+## 4. Incident Response Procedures
+
+Security Operations shall develop procedures to facilitate the implementation of the incident response policy and the associated incident response controls. [NIST IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1 AE Mandatory]
+
+## 5. Designated Official
+
+An official shall be designated to manage the development, documentation, and dissemination of the incident response policy and procedures. The designated official shall be a named member of Security Operations and shall be identified in the appropriate security and privacy documents as `[Name/Title of Designated Official]`, as required by ARC-AMPE. [NIST IR-1 | FedRAMP IR-1 | ARC-AMPE IR-1 AE Mandatory]
+
+Security Operations remains accountable for the outcome of the policy development, documentation, and dissemination activities regardless of which individual is designated.
+
+## 6. Review and Update
+
+### 6.1 Review Triggers
+
+Security Operations shall review and update the incident response policy and procedures at the frequency defined by the organization and following the events defined by the organization. [NIST IR-1 | FedRAMP IR-1]
+
+### 6.2 Minimum Annual Review
+
+Security Operations shall review and update the incident response policy and procedures at least every one (1) year and following the following organization-defined events:
+
+- Assessment or audit findings;
+- Security or privacy incidents; and
+- Changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [ARC-AMPE IR-1 AE Mandatory]
+
+### 6.3 Continuous Privacy Law Monitoring
+
+Security Operations shall actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect incident response policies, on a continuous basis. Security Operations shall review the incident response policies and procedures at least every one (1) year to ensure they remain effective. [ARC-AMPE IR-1 AE Mandatory]
+
+## 7. Privacy Integration
+
+Security Operations shall ensure the incident response policy and procedures incorporate guidance from the privacy office for handling incidents involving Personally Identifiable Information (PII) and support [remainder of this requirement was truncated in the source input and must be completed before publication]. [ARC-AMPE IR-1 AE Mandatory — continuation pending]
+
+## 8. Process Records and Evidence
+
+The incident response process owned by Security Operations shall produce and retain the following evidence artifacts:
+
+| Artifact                        | Description                                                                                                                  |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Incident tickets with timelines | Incident tickets recorded in `[Ticketing System]`, capturing the timeline of each incident from detection through resolution |
+| Tabletop exercise report        | Report documenting the execution and findings of incident response tabletop exercises conducted under this Standard          |
+
+These artifacts serve as the audit evidence that Example Org's incident response process is operating as required by this Standard.

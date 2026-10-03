@@ -1,0 +1,352 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.005359
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 415b9e0355bd56fd
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Logging, Monitoring & Alerting Standard
+
+**Document Owner:** Detection & Response
+**Applies to:** All Example Org information systems and personnel
+**Status:** In force
+
+## 1. Purpose and Scope
+
+This Standard defines Example Org's requirements for audit logging, audit record review and analysis, system monitoring, and alerting. It applies to all information systems that contain or use electronic protected health information (ePHI) and to all systems within scope of Example Org's security program. The Detection & Response team is accountable for this process end to end, including its handoffs to other teams.
+
+## 2. Roles and Responsibilities
+
+- **Detection & Response** owns the logging, monitoring, and alerting process, including audit record review and analysis, alert generation and tuning, coverage tracking, and escalation to incident response.
+- **System Owners** approve and accept audit record types for their systems and document required content in the applicable System Security and Privacy Plan.
+- The **Authorizing Official** approves audited events for cloud environments.
+- The [Designated Audit and Accountability Official] manages the development, documentation, and dissemination of the audit and accountability policy and procedures, and is documented in the organization's System Security and Privacy Policy. [NIST AU-1 | ARC-AMPE AU-1]
+
+## 3. Audit and Accountability Policy and Procedures
+
+### 3.1 Policy Development and Dissemination
+
+Example Org must develop, document, and disseminate to [Assignment: organization-defined personnel or roles] an audit and accountability policy (at the organization level, mission/business process level, and/or system level) that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. Example Org must also develop, document, and disseminate procedures to facilitate implementation of the audit and accountability policy and associated controls. [NIST AU-1 | ARC-AMPE AU-1]
+
+### 3.2 Review and Update
+
+Detection & Response must review and update the audit and accountability policy and procedures at an organization-defined frequency and following organization-defined events (such as assessment or audit findings, security incidents or breaches, or changes in applicable laws, regulations, or standards). [NIST AU-1]
+
+The audit and accountability policy and procedures must be reviewed and updated at least every one (1) year and following organization-defined events, and Example Org must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect audit and accountability policies to ensure they remain effective. [ARC-AMPE AU-1]
+
+### 3.3 Privacy Alignment
+
+Audit and accountability policies must support privacy to the greatest extent feasible throughout the system's life cycle. Access control policies and procedures must be developed, disseminated, and reviewed/updated to limit unnecessary or inappropriate access to PII. [ARC-AMPE AU-1]
+
+## 4. HIPAA Documentation and Risk Management
+
+### 4.1 Activity Recording Mechanisms
+
+Example Org must implement hardware, software, and/or procedural mechanisms that record and examine activity in information systems that contain or use electronic protected health information. [HIPAA 164.312(b)]
+
+### 4.2 Written Documentation and Retention
+
+Example Org must maintain the policies and procedures implemented to comply with the Security Rule in written (which may be electronic) form, and must maintain a written (which may be electronic) record of any action, activity, or assessment required to be documented. [HIPAA 164.316(b)(1)] Required documentation must be retained for 6 years from the date of its creation or the date it was last in effect, whichever is later. [HIPAA 164.316(b)(2)(i)] Documentation must be made available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii)] Documentation must be reviewed periodically and updated as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii)]
+
+### 4.3 Security Violations and Risk Analysis
+
+Example Org must implement policies and procedures to prevent, detect, contain, and correct security violations. [HIPAA 164.308(a)(1)(i)] Example Org must conduct an accurate and thorough assessment of the potential risks and vulnerabilities to the confidentiality, integrity, and availability of electronic protected health information [HIPAA 164.308(a)(1)(ii)(A)] and implement security measures sufficient to reduce risks and vulnerabilities to a reasonable and appropriate level. [HIPAA 164.308(a)(1)(ii)(B)] Appropriate sanctions must be applied against workforce members who fail to comply with the security policies and procedures of Example Org. [HIPAA 164.308(a)(1)(ii)(C)]
+
+### 4.4 Information System Activity Review
+
+Procedures must be implemented to regularly review records of information system activity, such as audit logs, access reports, and security incident tracking reports. Detection & Response performs this review as described in Section 8. [HIPAA 164.308(a)(1)(ii)(D)]
+
+## 5. Auditable Event Definition
+
+### 5.1 Event Identification and Coordination
+
+Example Org must identify the types of events the system is capable of logging in support of the audit function ([Assignment: organization-defined event types]; per ARC-AMPE, based on a risk assessment of organization-defined mission/business needs). [NIST AU-2 | ARC-AMPE AU-2] Detection & Response must coordinate the event logging function with other organizational entities requiring audit-related information to guide and inform the selection criteria for events to be logged. [NIST AU-2 | ARC-AMPE AU-2]
+
+### 5.2 Event Selection and Rationale
+
+Detection & Response must specify the event types to be logged within the system ([Assignment: organization-defined event types], a subset of those identified in Section 5.1) along with the frequency of (or situation requiring) logging for each; the frequency or situation must be documented in the System Security and Privacy Plan. [NIST AU-2 | ARC-AMPE AU-2] Detection & Response must provide a rationale for why the event types selected for logging are deemed adequate to support after-the-fact investigations of incidents. [NIST AU-2 | ARC-AMPE AU-2]
+
+Example Org must include at minimum the following event types for logging within the system: user log-on and log-off (successful or unsuccessful); configuration changes; application alerts and error messages; all system administration (including privileged user) activities; modification of privileges and access; account creation, modification, or deletion; concurrent log-on from different work stations; and override of access control mechanisms. [ARC-AMPE AU-2]
+
+### 5.3 Risk Assessment Event Set
+
+At minimum, the risk assessment must include the following auditable events: server events and error messages; user log-on and log-off (successful or unsuccessful); all system administration (including privileged user) activities; modification of privileges and access; start up and shut down; application modifications; application alerts and error messages; configuration changes; account creation, modification, or deletion; file access, creation, modification, or deletion; read access to sensitive information; modification to sensitive information; printing sensitive information; anomalous (e.g., non-attributable) activity; data required for privacy monitoring controls; concurrent log-on from different work stations; override of access control mechanisms; and process creation. [ARC-AMPE AU-2]
+
+### 5.4 Review of Event Types
+
+Detection & Response must review and update the event types selected for logging at an [Assignment: organization-defined frequency]. [NIST AU-2] The event types selected for logging must be reviewed and updated at least every one (1) year and whenever there is a significant system modification or change in the system environment. [ARC-AMPE AU-2]
+
+### 5.5 Cloud Environments
+
+For cloud environments, Example Org defines the events to be audited, and those events are accepted and approved by the Authorizing Official. [ARC-AMPE AU-2]
+
+## 6. Audit Record Content
+
+### 6.1 Required Content
+
+Audit records must contain information establishing: what type of event occurred; when the event occurred; where the event occurred; the source of the event; the outcome of the event; and the identity of any individuals, subjects, or objects/entities associated with the event. [NIST AU-3 | ARC-AMPE AU-3]
+
+Disclosures of sensitive information, including Protected Health Information and financial information, must be recorded, logging the information type, date, time, receiving party, and releasing party. [ARC-AMPE AU-3]
+
+### 6.2 Additional Content
+
+Audit records must be generated containing the following additional information: [Assignment: organization-defined additional information]. [NIST AU-3(1) Moderate, High]
+
+Audit records must contain the following additional information and event details explicitly needed for audit requirements: session, connection, transaction, or activity duration; for client-server transactions, the number of bytes received and sent; additional informational messages to diagnose or identify the event; characteristics that describe or identify the object or resource being acted upon; individual identities of group account users; and full-text of privileged commands. Example Org defines the audit record types, and the System Owner approves and accepts them. [ARC-AMPE AU-3(1) AE Mandatory]
+
+### 6.3 PII Limitation
+
+Personally identifiable information contained in audit records must be limited to the elements identified in the privacy risk assessment ([Assignment: organization-defined elements]; per ARC-AMPE, system-defined elements in the Privacy Impact Assessment). [NIST AU-3(3) | ARC-AMPE AU-3(3) AE Mandatory] Example Org must identify the minimum PII elements that are relevant and necessary to accomplish the purpose of collection, ensure that any collection of PII requiring legal authorization is legally authorized, and document in the audit policy the justification for inclusion of PII in audit logs. [ARC-AMPE AU-3(3)]
+
+## 7. Audit Log Storage Capacity
+
+Example Org must allocate audit log storage capacity to accommodate [Assignment: organization-defined audit log retention requirements]. [NIST AU-4] Audit log storage capacity must be allocated of, at a minimum, ninety (90) days plus any other organization-defined audit log retention requirements, with capacity sufficient to handle audit records during peak performance times (e.g., open enrollment). [ARC-AMPE AU-4]
+
+## 8. Audit Processing Failure Response
+
+### 8.1 Failure Alerts and Actions
+
+Example Org must alert [Assignment: organization-defined personnel or roles] within [Assignment: organization-defined time period] in the event of an audit logging process failure, and take [Assignment: organization-defined additional actions] (such as overwriting the oldest audit records, shutting down the system, or stopping the generation of audit records). [NIST AU-5]
+
+Detection & Response and the personnel or roles defined in the applicable System Security and Privacy Plan (e.g., the system administrator or ISSO) must be alerted in near real-time in the event of an audit logging process failure. The system must either shut down or halt processing immediately, or systems that do not support automatic shutdown must be shut down within one (1) hour of the audit processing failure. [ARC-AMPE AU-5]
+
+### 8.2 Storage Warnings
+
+A warning must be provided to [Assignment: organization-defined personnel, roles, and/or locations] within [Assignment: organization-defined time period] when allocated audit log storage volume reaches [Assignment: organization-defined percentage] of the repository's maximum audit log storage capacity. [NIST AU-5(1) High]
+
+### 8.3 Real-Time Alerts
+
+An alert must be provided within [Assignment: organization-defined real-time period] to [Assignment: organization-defined personnel, roles, and/or locations] when the following audit failure events occur: [Assignment: organization-defined audit logging failure events requiring real-time alerts]. [NIST AU-5(2) High]
+
+### 8.4 Traffic Thresholds
+
+Example Org must enforce configurable network communications traffic volume thresholds reflecting limits on audit log storage capacity and [Selection (one or more): reject; delay] network traffic above those thresholds. [NIST AU-5(3)]
+
+### 8.5 Shutdown and Alternate Capability
+
+Example Org must invoke a [Selection (one or more): full system shutdown; partial system shutdown; degraded operational mode with limited mission or business functionality available] in the event of [Assignment: organization-defined audit logging failures], unless an alternate audit logging capability exists. [NIST AU-5(4)] An alternate audit logging capability must be provided in the event of a failure in the primary audit logging capability that implements [Assignment: organization-defined alternate audit logging functionality]. [NIST AU-5(5)]
+
+## 9. Audit Record Review, Analysis, and Reporting
+
+### 9.1 Review Requirements
+
+Example Org must review and analyze system audit records at an [Assignment: organization-defined frequency] for indications of [Assignment: organization-defined inappropriate or unusual activity] and the potential impact of that activity; report findings to [Assignment: organization-defined personnel or roles]; and adjust the level of audit record review, analysis, and reporting when there is a change in risk based on law enforcement information, intelligence information, or other credible sources. [NIST AU-6 | FedRAMP AU-6 | ARC-AMPE AU-6]
+
+Detection & Response must review and analyze system audit records no less often than weekly (every seven [7] days) for indications of inappropriate or unusual activity, which includes (but is not limited to) initialization sequences; logons (successful and unsuccessful); errors; system processes; security software; applications; performance; system resource utilization; network traffic; bandwidth utilization rates; alert notifications; border defense devices; and creation of unauthorized administrator, system, and privileged application accounts. [ARC-AMPE AU-6]
+
+Detection & Response must investigate suspicious activity or suspected violations on the information system, report findings to appropriate officials, and take appropriate action. [ARC-AMPE AU-6]
+
+### 9.2 Cloud and Multi-Tenant Coordination
+
+For cloud environments, the coordination between the service provider and Example Org must be documented and accepted; in multi-tenant environments, the capability and means for providing review, analysis, and reporting to Example Org for data pertaining to the consumer must be documented. [ARC-AMPE AU-6]
+
+### 9.3 Relationship to Vulnerability Detection
+
+Audit record review, analysis, and reporting is considered vulnerability detection and is subject to the Vulnerability Detection and Response rules. [FedRAMP AU-6]
+
+### 9.4 Integration and Automation
+
+Audit record review, analysis, and reporting processes must be integrated using [Assignment: organization-defined automated mechanisms]. [NIST AU-6(1) Moderate, High] These processes must be integrated using automated mechanisms to the fullest extent possible; the processes used must support organizational investigation and response to suspicious activities, integrated audit records from automated information security capabilities and service tools must be searchable, audit record sources include systems, appliances, devices, services, and applications (including databases), and automated mechanisms may include SIEM products and/or CDM tools. [ARC-AMPE AU-6(1) AE Mandatory]
+
+Detection & Response must analyze and correlate audit records across different repositories (including systems, appliances, devices, services, and applications, including databases) to gain organization-wide situational awareness. [NIST AU-6(3) Moderate, High | ARC-AMPE AU-6(3) AE Mandatory]
+
+Example Org must provide and implement the capability to centrally review and analyze audit records from multiple components within the system. [NIST AU-6(4)]
+
+Analysis of audit records must be integrated with analysis of \[Selection (one or more): vulnerability scanning information; performance data; system monitoring information; [Assignment: organization-defined data/information collected from other sources]\] to further enhance the ability to identify inappropriate or unusual activity; per FedRAMP, this activity is considered vulnerability detection and is subject to the Vulnerability Detection and Response rules. [NIST AU-6(5) High | FedRAMP AU-6(5)]
+
+Information from audit records must be correlated with information obtained from monitoring physical access to further enhance the ability to identify suspicious, inappropriate, unusual, or malevolent activity. [NIST AU-6(6) High]
+
+Information from nontechnical sources must be correlated with audit record information to enhance organization-wide situational awareness. [NIST AU-6(9)]
+
+### 9.5 Permitted Actions and Privileged Command Analysis
+
+Example Org must specify the permitted actions for each [Selection (one or more): system process; role; user] associated with the review, analysis, and reporting of audit record information. [NIST AU-6(7)]
+
+A full text analysis of logged privileged commands must be performed in a physically distinct component or subsystem of the system, or other system dedicated to that analysis. [NIST AU-6(8)]
+
+## 10. Audit Reduction and Report Generation
+
+Example Org must provide and implement an audit record reduction and report generation capability that supports on-demand audit record review, analysis, and reporting requirements and after-the-fact investigations of incidents, and that does not alter the original content or time ordering of audit records. [NIST AU-7 Moderate, High | ARC-AMPE AU-7 AE Mandatory]
+
+Example Org must provide and implement the capability to process, sort, and search audit records for events of interest based on [Assignment: organization-defined fields within audit records]; ARC-AMPE specifies organization-defined selectable event criteria and fields within audit records. [NIST AU-7(1) Moderate, High | ARC-AMPE AU-7(1) AE Mandatory]
+
+## 11. Time Stamps
+
+### 11.1 Internal Clocks
+
+Example Org must use internal system clocks to generate time stamps for audit records. [NIST AU-8 | ARC-AMPE AU-8]
+
+### 11.2 Time Stamp Format and Accuracy
+
+Time stamps for audit records must be recorded that meet [Assignment: organization-defined granularity of time measurement] and that use Coordinated Universal Time, have a fixed local time offset from UTC, or include the local time offset as part of the time stamp. [NIST AU-8] Time stamps for audit records must be recorded that can be mapped to Coordinated Universal Time (UTC) or Greenwich Mean Time (GMT) and are accurate to within one hundred (100) milliseconds. [ARC-AMPE AU-8]
+
+## 12. Protection of Audit Information
+
+### 12.1 Access, Modification, and Deletion Protection
+
+Example Org must protect audit information and audit logging tools from unauthorized access, modification, and deletion; and alert [Assignment: organization-defined personnel or roles] upon detection of unauthorized access, modification, or deletion of audit information (per ARC-AMPE, personnel or roles may include the system administrator or the ISSO as defined in the SSPP). [NIST AU-9 | ARC-AMPE AU-9]
+
+### 12.2 Storage Isolation and Integrity
+
+Audit trails must be written to hardware-enforced, write-once media. [NIST AU-9(1)] Audit records must be stored [Assignment: organization-defined frequency] in a repository that is part of a physically different system or system component than the system or component being audited. [NIST AU-9(2) High] Cryptographic mechanisms must be implemented to protect the integrity of audit information and audit tools. [NIST AU-9(3) High] Audit information must be stored on a component running a different operating system than the system or component being audited. [NIST AU-9(7)]
+
+### 12.3 Access Authorization
+
+Access to management of audit logging functionality must be authorized to only [Assignment: organization-defined subset of privileged users or roles]. [NIST AU-9(4) Moderate, High] Access to management of audit logging functionality must be authorized to only an organization-defined subset of privileged users or roles, which should be individuals or roles who are not subject to audit by that system and are defined in the applicable System Security and Privacy Plan. [ARC-AMPE AU-9(4) AE Mandatory] Dual authorization must be enforced for [Selection (one or more): movement; deletion] of [Assignment: organization-defined audit information]. [NIST AU-9(5)] Read-only access to audit information must be authorized to [Assignment: organization-defined subset of privileged users or roles]. [NIST AU-9(6)]
+
+## 13. Non-Repudiation
+
+### 13.1 Irrefutable Evidence
+
+Example Org must provide irrefutable evidence that an individual (or process acting on behalf of an individual) has performed [Assignment: organization-defined actions]. [NIST AU-10 High] This evidence must cover at least actions including the addition, modification, deletion, approval, sending, or receiving of data. [FedRAMP AU-10] Covered actions must include organization-defined actions to be covered by non-repudiation, which must include ACA eligibility and enrollment functions including, but not limited to, applying for advance payments of the Advance Premium Tax Credit and Cost-sharing Reductions; applying for enrollment in Qualified Health Plans; completing enrollment in Qualified Health Plans; and providing related Customer Service, with the covered actions defined in the applicable System Security and Privacy Plan. [ARC-AMPE AU-10]
+
+### 13.2 Identity Binding
+
+The identity of the information producer must be bound with the information to [Assignment: organization-defined strength of binding], and the means for authorized individuals to determine the identity of the producer of the information must be provided. [NIST AU-10(1)] The binding of the information producer identity to the information must be validated at [Assignment: organization-defined frequency], and [Assignment: organization-defined actions] must be performed in the event of a validation error. [NIST AU-10(2)] Reviewer or releaser credentials must be maintained within the established chain of custody for information reviewed or released. [NIST AU-10(3)] The binding of the information reviewer identity to the information must be validated at the transfer or release points prior to release or transfer between [Assignment: organization-defined security domains], and [Assignment: organization-defined actions] must be performed in the event of a validation error. [NIST AU-10(4)]
+
+## 14. Audit Record Retention
+
+### 14.1 Retention Periods
+
+Audit records must be retained for [Assignment: organization-defined time period] to provide support for after-the-fact investigations of incidents and to meet regulatory and organizational information retention requirements. [NIST AU-11]
+
+Audit records must be retained for ninety (90) days and archived for ten (10) years consistent with records retention policy (per the ACA retention rule, 45 CFR §155.1210); when subject to a legal investigation (e.g., Insider Threat), audit records must be maintained until released by the investigating authority; and audit inspection reports, including a record of corrective actions, must be retained for a minimum of three (3) years from the date the inspection was completed. [ARC-AMPE AU-11]
+
+### 14.2 Long-Term Retrieval
+
+Example Org must employ [Assignment: organization-defined measures] to ensure that long-term audit records generated by the system can be retrieved; ARC-AMPE measures include converting records to newer formats, retaining equipment capable of reading the records, and retaining the necessary documentation to help personnel understand how to interpret the records. [NIST AU-11(1) | ARC-AMPE AU-11(1) AE Mandatory]
+
+## 15. Audit Record Generation
+
+### 15.1 Generation Coverage
+
+Example Org must provide audit record generation capability for the event types the system is capable of auditing as defined in Section 5.1 on [Assignment: organization-defined system components]. [NIST AU-12] Audit record generation capability must be provided for the event types the system is capable of auditing as defined in Section 5.1 on at least all information system and network components where audit capability is deployed/available. [FedRAMP AU-12 | ARC-AMPE AU-12]
+
+Detection & Response must maintain a Log source inventory and coverage report identifying all log sources and confirming generation coverage across components.
+
+### 15.2 Event Selection and Record Content
+
+[Assignment: organization-defined personnel or roles] must be allowed to select the event types that are to be logged by specific components of the system. [NIST AU-12 | FedRAMP AU-12 | ARC-AMPE AU-12] Audit records for the event types defined in Section 5.2 must be generated that include the audit record content defined in Section 6.1. [NIST AU-12 | FedRAMP AU-12 | ARC-AMPE AU-12]
+
+### 15.3 Compilation and Formatting
+
+Audit records from [Assignment: organization-defined system components] must be compiled into a system-wide (logical or physical) audit trail that is time-correlated to within [Assignment: organization-defined level of tolerance]. [NIST AU-12(1) High] A system-wide (logical or physical) audit trail composed of audit records in a standardized format must be produced. [NIST AU-12(2)]
+
+### 15.4 Dynamic Logging
+
+The capability must be provided and implemented for [Assignment: organization-defined individuals or roles] to change the logging to be performed on [Assignment: organization-defined system components] based on [Assignment: organization-defined selectable event criteria] within [Assignment: organization-defined time thresholds]. [NIST AU-12(3) High]
+
+### 15.5 PII Query Auditing
+
+The capability for auditing the parameters of user query events for data sets containing personally identifiable information must be provided and implemented. [NIST AU-12(4)]
+
+## 16. System Monitoring
+
+### 16.1 Monitoring Objectives
+
+Example Org must monitor the system to detect: (1) attacks and indicators of potential attacks in accordance with the following monitoring objectives: [Assignment: organization-defined monitoring objectives] (per ARC-AMPE, the organization's incident response policy and procedures, per IR-1); and (2) unauthorized local, network, and remote connections. [NIST SI-4 | FedRAMP SI-4 | ARC-AMPE SI-4]
+
+Unauthorized use of the system must be identified through [Assignment: organization-defined techniques and methods], documented per ARC-AMPE in the applicable System Security and Privacy Plan. [NIST SI-4 | FedRAMP SI-4 | ARC-AMPE SI-4]
+
+### 16.2 Monitoring Deployment and Analysis
+
+Internal monitoring capabilities must be invoked or monitoring devices deployed strategically within the system to collect organization-determined essential information, and at ad hoc locations within the system to track specific types of transactions of interest to the organization. [NIST SI-4 | FedRAMP SI-4 | ARC-AMPE SI-4] Detected events and anomalies must be analyzed by Detection & Response. [NIST SI-4 | FedRAMP SI-4 | ARC-AMPE SI-4]
+
+Detection & Response must adjust the level of system monitoring activity when there is a change in risk to organizational operations and assets, individuals, other organizations, or the Nation. [NIST SI-4 | FedRAMP SI-4 | ARC-AMPE SI-4] Alert tuning and review records must be produced as evidence of this activity.
+
+### 16.3 Legal and Reporting Requirements
+
+A legal opinion regarding system monitoring activities must be obtained. [NIST SI-4 | FedRAMP SI-4 | ARC-AMPE SI-4]
+
+[Assignment: organization-defined system monitoring information] must be provided to [Assignment: organization-defined personnel or roles] \[Selection (one or more): as needed; [Assignment: organization-defined frequency]\]; ARC-AMPE specifies as needed and consistent with the organization-defined frequency documented in the applicable System Security and Privacy Plan. [NIST SI-4 | FedRAMP SI-4 | ARC-AMPE SI-4]
+
+### 16.4 IDS/IPS Requirements
+
+A centrally managed IDS/IPS capability must be implemented to monitor network communications on all networks and subnets, using centrally managed IDS/IPS devices at network perimeter points (including between zones) and/or centrally managed host-based IDS/IPS sensor agents in information technology components for which such agents are available; where communications are encrypted within a zone, mechanisms capable of either decrypting content for analysis or analyzing content before transmission/after receipt must be used; components that do not support host-based IDS/IPS sensors must be documented in the applicable risk assessment and SSPP; support for sharing of threat awareness information in a format that meets CMS requirements must be provided; and unauthorized remote connections must be monitored for continuously in real time, taking appropriate action if an unauthorized connection is discovered. [ARC-AMPE SI-4]
+
+All applicable rules within the Vulnerability Detection and Response and Incident Communication Procedure guidance must be followed. [FedRAMP SI-4]
+
+### 16.5 Intrusion Detection Integration
+
+Individual intrusion detection tools must be connected and configured into a system-wide intrusion detection system; ARC-AMPE requires that raw intrusion detection information be available in an unaltered format; FedRAMP requires following the Vulnerability Detection and Response and Vulnerability Evaluation and Reporting rules. [NIST SI-4(1) | FedRAMP SI-4(1) | ARC-AMPE SI-4(1) AE Mandatory]
+
+Automated tools and mechanisms must be employed to support near real-time analysis of events; ARC-AMPE requires that aggregated intrusion detection information be searchable, provided in a format compliant with organization-defined requirements, sourced from all network- and host-based IDS/IPS capabilities on all networks and subnets, with organization-directed collection rules/requests implemented within the timeframe specified, and that raw intrusion detection information be available in an unaltered format; FedRAMP requires following the Vulnerability Detection and Response and Vulnerability Evaluation and Reporting rules. [NIST SI-4(2) Moderate, High | FedRAMP SI-4(2) | ARC-AMPE SI-4(2) AE Mandatory]
+
+Automated tools and mechanisms must be employed to integrate intrusion detection tools and mechanisms into access control and flow control mechanisms. [NIST SI-4(3)]
+
+### 16.6 Traffic Monitoring Criteria
+
+Criteria for unusual or unauthorized activities or conditions for inbound and outbound communications traffic must be determined, and inbound and outbound communications traffic must be monitored [Assignment: organization-defined frequency] for those activities or conditions; ARC-AMPE specifies continuous monitoring; FedRAMP requires following the Vulnerability Detection and Response and Vulnerability Evaluation and Reporting rules. [NIST SI-4(4) Moderate, High | FedRAMP SI-4(4) | ARC-AMPE SI-4(4) AE Mandatory]
+
+[Assignment: organization-defined personnel or roles] must be alerted when the following system-generated indications of compromise or potential compromise occur: [Assignment: organization-defined compromise indicators]; ARC-AMPE specifies malicious code, unauthorized export of information, signaling to an external information system, or potential intrusions, with the alerted personnel documented in the SSPP and the malicious code response consistent with SI-3; FedRAMP requires following the Vulnerability Detection and Response and Vulnerability Evaluation and Reporting rules. [NIST SI-4(5) Moderate, High | FedRAMP SI-4(5) | ARC-AMPE SI-4(5) AE Mandatory]
+
+[Assignment: organization-defined incident response personnel] must be notified of detected suspicious events, and [Assignment: organization-defined least-disruptive actions] must be taken upon detection. [NIST SI-4(7)]
+
+Intrusion-monitoring tools and mechanisms must be tested [Assignment: organization-defined frequency]. [NIST SI-4(9)]
+
+Provisions must be made so that [Assignment: organization-defined encrypted communications traffic] is visible to [Assignment: organization-defined system monitoring tools and mechanisms]. [NIST SI-4(10) High]
+
+### 16.7 Outbound Traffic and Alerting
+
+Outbound communications traffic must be analyzed at the external interfaces to the system and selected [Assignment: organization-defined interior points] to discover anomalies. [NIST SI-4(11) | ARC-AMPE SI-4(11) AE Mandatory]
+
+[Assignment: organization-defined personnel or roles] must be alerted using [Assignment: organization-defined automated mechanisms] when the following indications of inappropriate or unusual activities with security or privacy implications occur: [Assignment: organization-defined activities that trigger alerts]. [NIST SI-4(12) High]
+
+Communications traffic and event patterns for the system must be analyzed, profiles representing common traffic and event patterns must be developed, and those profiles must be used in tuning system-monitoring devices. [NIST SI-4(13)]
+
+Outbound communications traffic must be analyzed at external interfaces to the system and at [Assignment: organization-defined interior points] to detect covert exfiltration of information. [NIST SI-4(18)]
+
+### 16.8 Wireless Monitoring
+
+A wireless intrusion detection system must be employed to identify rogue wireless devices and to detect attack attempts and potential compromises or breaches to the system, including both external monitoring (events at system boundaries) and internal monitoring (events within the system). [NIST SI-4(14) High | ARC-AMPE SI-4(14) AE Mandatory]
+
+An intrusion detection system must be employed to monitor wireless communications traffic as the traffic passes from wireless to wireline networks. [NIST SI-4(15)]
+
+### 16.9 Correlation and Enhanced Monitoring
+
+Information from monitoring tools and mechanisms employed throughout the system must be correlated. [NIST SI-4(16)] Information from monitoring physical, cyber, and supply chain activities must be correlated to achieve integrated, organization-wide situational awareness. [NIST SI-4(17)]
+
+[Assignment: organization-defined additional monitoring] must be implemented of individuals who have been identified by [Assignment: organization-defined sources] as posing an increased level of risk. [NIST SI-4(19)] [Assignment: organization-defined additional monitoring] must be implemented of privileged users. [NIST SI-4(20) High] [Assignment: organization-defined additional monitoring] must be implemented of individuals during [Assignment: organization-defined probationary period]. [NIST SI-4(21)]
+
+Network services that have not been authorized or approved by [Assignment: organization-defined authorization or approval processes] must be detected, and \[Selection (one or more): audit; alert [Assignment: organization-defined personnel or roles]\] must occur when detected. [NIST SI-4(22) High]
+
+Host-based monitoring mechanisms — specifically IDS/IPS per ARC-AMPE — must be implemented at [Assignment: organization-defined system components] (per ARC-AMPE, including, but not limited to, systems, appliances, devices, services, and applications), documenting devices and appliances that do not support a host-based IDS/IPS sensor capability in the applicable information system risk assessment and SSPP. [NIST SI-4(23) | ARC-AMPE SI-4(23) AE Mandatory]
+
+Indicators of compromise provided by [Assignment: organization-defined sources] must be discovered, collected, and distributed to [Assignment: organization-defined personnel or roles]. [NIST SI-4(24)]
+
+Visibility into network traffic at external and key internal system interfaces must be provided to optimize the effectiveness of monitoring devices. [NIST SI-4(25)]
+
+## 17. HIPAA Operational Security Procedures
+
+### 17.1 Security Reminders
+
+Periodic security updates (security reminders) must be implemented. [HIPAA 164.308(a)(5)(ii)(A)]
+
+### 17.2 Malicious Software
+
+Procedures must be implemented for guarding against, detecting, and reporting malicious software. [HIPAA 164.308(a)(5)(ii)(B)]
+
+### 17.3 Log-In Monitoring
+
+Procedures must be implemented for monitoring log-in attempts and reporting discrepancies. [HIPAA 164.308(a)(5)(ii)(C)]
+
+### 17.4 Password Management
+
+Procedures must be implemented for creating, changing, and safeguarding passwords. [HIPAA 164.308(a)(5)(ii)(D)]
+
+## 18. Evidence and Records
+
+This process is expected to produce and retain, at minimum, the following evidence artifacts, owned by Detection & Response:
+
+| Artifact                                 | Description                                                                       | Referenced Sections     |
+| ---------------------------------------- | --------------------------------------------------------------------------------- | ----------------------- |
+| Log source inventory and coverage report | Inventory of all log sources and confirmation of audit record generation coverage | Section 15.1, Section 5 |
+| Alert tuning and review records          | Records of alert tuning decisions and monitoring adjustments                      | Section 16.2, Section 9 |
+
+All documentation produced under this Standard is subject to the written-form and retention requirements in Section 4.2.

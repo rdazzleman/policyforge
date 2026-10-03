@@ -1,0 +1,124 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001487
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - b57d05645039bc03
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Physical & Environmental Security Standard
+
+## 1. Purpose and Scope
+
+This Standard establishes the requirements for protecting Example Org's facilities, electronic information systems, and the equipment therein from unauthorized physical access, tampering, theft, and environmental hazards. It applies to all Example Org facilities that house electronic information systems, to all personnel and visitors granted physical access to those facilities, and to all physical and environmental protection documentation created or maintained under this Standard.
+
+Facilities / Physical Security is accountable for this process end to end, including its execution, review, evidence production, and handoffs to other participating teams.
+
+## 2. Physical and Environmental Protection Policy and Procedures
+
+### 2.1 Policy Development and Dissemination
+
+Facilities / Physical Security must develop, document, and disseminate to applicable personnel or roles an organization-level physical and environmental protection policy that:
+
+1. Addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; and
+1. Is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 PE-1 Low/Moderate/High | ARC-AMPE PE-1]
+
+Facilities / Physical Security must develop, document, and disseminate procedures to facilitate implementation of the physical and environmental protection policy and the associated physical and environmental protection controls. [NIST 800-53 PE-1 Low/Moderate/High | ARC-AMPE PE-1]
+
+### 2.2 Designated Official
+
+Example Org must designate an official to manage the development, documentation, and dissemination of the physical and environmental protection policy and procedures. Facilities / Physical Security must identify and record the designated official. [NIST 800-53 PE-1 Low/Moderate/High | ARC-AMPE PE-1]
+
+### 2.3 Policy and Procedure Review and Update
+
+Facilities / Physical Security must review and update the physical and environmental protection policy and procedures at least every one (1) year and following the following events:
+
+- Assessment or audit findings;
+- Security or privacy incidents;
+- Changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 PE-1 Low/Moderate/High | ARC-AMPE PE-1]
+
+### 2.4 Regulatory and Privacy Monitoring
+
+Facilities / Physical Security must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect physical and environmental protection policies, and must review the policies at least every one (1) year to ensure they remain effective. [ARC-AMPE PE-1]
+
+### 2.5 Privacy Support
+
+Facilities / Physical Security must ensure the physical and environmental protection policy and associated controls support privacy to the greatest extent feasible throughout the system life cycle and limit unnecessary or inappropriate access to Personally Identifiable Information (PII). [ARC-AMPE PE-1]
+
+## 3. Physical Access Authorization and Control
+
+### 3.1 Limiting Physical Access
+
+Policies and procedures must be implemented to limit physical access to electronic information systems and the facilities in which they are housed, while ensuring properly authorized access is allowed. Facilities / Physical Security owns these policies and procedures. [HIPAA 164.310(a)(1)]
+
+### 3.2 Role-Based Access Authorization
+
+Facilities / Physical Security must control and validate a person's access to facilities based on their role or function, authorizing physical access to the facility where the system resides based on position or role. This control includes visitor control and control of access to software programs for testing and revision. [NIST 800-53 PE-2(1) | HIPAA 164.310(a)(2)(iii) Addressable]
+
+### 3.3 Authorized Access List
+
+Facilities / Physical Security must develop, approve, and maintain a list of individuals with authorized access to the facility where the system resides. [NIST 800-53 PE-2 Low/Moderate/High | ARC-AMPE PE-2]
+
+Facilities / Physical Security must review the access list detailing authorized facility access by individuals at least every six (6) months. The output of this review is the Badge access review. [NIST 800-53 PE-2 Low/Moderate/High | ARC-AMPE PE-2]
+
+Facilities / Physical Security must remove individuals from the facility access list when access is no longer required. [NIST 800-53 PE-2 Low/Moderate/High | ARC-AMPE PE-2]
+
+### 3.4 Authorization Credentials
+
+Facilities / Physical Security must issue authorization credentials for facility access. [NIST 800-53 PE-2 Low/Moderate/High | ARC-AMPE PE-2]
+
+### 3.5 Two Forms of Identification
+
+Facilities / Physical Security must require two forms of identification from an organization-defined list of acceptable forms of identification. [Source tag not supplied in input requirements]
+
+## 4. Facility Safeguards and Emergency Access
+
+### 4.1 Safeguarding the Facility and Equipment
+
+Policies and procedures must be implemented to safeguard the facility and the equipment therein from unauthorized physical access, tampering, and theft. Facilities / Physical Security owns these policies and procedures. [HIPAA 164.310(a)(2)(ii) Addressable]
+
+### 4.2 Emergency Facility Access
+
+Facilities / Physical Security must establish (and implement as needed) procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan in the event of an emergency. [HIPAA 164.310(a)(2)(i) Addressable]
+
+## 5. Facility Repairs and Modifications
+
+Policies and procedures must be implemented to document repairs and modifications to the physical components of a facility related to security (for example, hardware, walls, doors, and locks). Facilities / Physical Security owns these policies and procedures and the resulting records. [HIPAA 164.310(a)(2)(iv) Addressable]
+
+## 6. Documentation Requirements
+
+### 6.1 Written Form
+
+Facilities / Physical Security must maintain policies, procedures, and any required documentation of actions, activities, or assessments in written (which may be electronic) form. [HIPAA 164.316(b)(1)]
+
+### 6.2 Retention
+
+Required documentation must be retained for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA 164.316(b)(2)(i) Required]
+
+### 6.3 Availability
+
+Documentation must be made available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii) Required]
+
+### 6.4 Periodic Review and Update
+
+Facilities / Physical Security must review documentation quarterly and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii) Required]
+
+## 7. Evidence and Records
+
+The following artifacts constitute the evidence of operation for this Standard and must be produced and retained in accordance with Section 6:
+
+| Artifact                                     | Produced by                    | Associated requirement                                            |
+| -------------------------------------------- | ------------------------------ | ----------------------------------------------------------------- |
+| Badge access review                          | Facilities / Physical Security | Facility access list review (Section 3.3)                         |
+| Data centre environmental monitoring records | Facilities / Physical Security | Physical and environmental protection controls (Sections 2 and 4) |
+
+Facilities / Physical Security is responsible for retaining these artifacts and making them available to personnel responsible for implementing the procedures to which they pertain, and to auditors on request.
+
+## 8. Compliance and Exceptions
+
+Facilities / Physical Security is accountable for compliance with this Standard end to end. Exceptions must be documented, including the requirement excepted, the justification, and the compensating measures, and retained in accordance with Section 6. Deviations identified through assessments, audits, or incidents must trigger review and update of this Standard in accordance with Section 2.3.

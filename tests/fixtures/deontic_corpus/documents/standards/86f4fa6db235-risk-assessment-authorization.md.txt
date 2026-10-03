@@ -1,0 +1,216 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.00545
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 72359d259bd9c050
+  provider: litellm
+  provider_class: third-party
+---
+
+# Risk Assessment and Authorization Standard
+
+**Document Owner:** Security Program / GRC
+**Applies To:** All personnel and systems within the Example Org security boundary
+**Review Cadence:** Annual
+
+## 1. Purpose and Scope
+
+This Standard establishes the requirements for risk assessment, security categorization, risk response, control assessment, authorization, continuous monitoring, and penetration testing at Example Org. It is issued and maintained by the Security Program / GRC team, which is accountable for this process end to end. It applies to all systems that process, store, or transmit organizational data, including electronic protected health information (ePHI) where HIPAA applies.
+
+## 2. Policy Development and Maintenance
+
+### 2.1 Risk Assessment Policy and Procedures
+
+- Example Org shall develop, document, and disseminate to organization-defined personnel or roles an organization-level risk assessment policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. The policy shall be maintained at the organization level. `[NIST RA-1 Low, Moderate, High | ARC-AMPE RA-1 AE Mandatory]`
+- Example Org shall develop, document, and disseminate procedures to facilitate implementation of the risk assessment policy and the associated risk assessment controls. `[NIST RA-1 | ARC-AMPE RA-1]`
+- The Security Program / GRC team shall designate an organization-defined official to manage the development, documentation, and dissemination of the risk assessment policy and procedures. These officials shall be named in the appropriate security and privacy documents. `[NIST RA-1 | ARC-AMPE RA-1]`
+- The Security Program / GRC team shall review and update the risk assessment policy and the procedures following organization-defined events (including assessment or audit findings; security or privacy incidents; and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines) at least every one (1) year. `[NIST RA-1 | ARC-AMPE RA-1]`
+- The Security Program / GRC team shall actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect risk assessment policies, and shall review at least every one (1) year to ensure the organization and mission/business/system risk assessment policies remain effective. `[ARC-AMPE RA-1]`
+- Risk assessment policies and procedures shall support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and for the information on that system. `[ARC-AMPE RA-1]`
+
+### 2.2 Assessment, Authorization, and Monitoring Policy and Procedures
+
+- Example Org shall develop, document, and disseminate to organization-defined personnel and roles an organization-level assessment, authorization, and monitoring policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. The policy shall be maintained at the organization level. `[NIST CA-1 Low, Moderate, High | ARC-AMPE CA-1 AE Mandatory]`
+- Example Org shall develop, document, and disseminate procedures to facilitate implementation of the assessment, authorization, and monitoring policy and the associated controls. `[NIST CA-1 | ARC-AMPE CA-1]`
+- The Security Program / GRC team shall designate an organization-defined official to manage the development, documentation, and dissemination of the assessment, authorization, and monitoring policy and procedures. These officials shall be named in the appropriate security and privacy documents. `[NIST CA-1 | ARC-AMPE CA-1]`
+- The Security Program / GRC team shall review and update the assessment, authorization, and monitoring policy and the procedures following organization-defined events (including assessment or audit findings; security or privacy incidents; and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines) at least every one (1) year. `[NIST CA-1 | ARC-AMPE CA-1]`
+- The Security Program / GRC team shall actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect assessment, authorization, and monitoring policies, and shall review at least every one (1) year to ensure the organization and mission/business/system policies remain effective. `[ARC-AMPE CA-1]`
+- Assessment, authorization, and monitoring policies and procedures shall support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and for the information on that system. `[ARC-AMPE CA-1]`
+
+### 2.3 General Policy and Security Violation Requirements
+
+- Example Org shall implement policies and procedures to prevent, detect, contain, and correct security violations. `[HIPAA 164.308(a)(1)(i)]`
+- Example Org shall implement reasonable and appropriate policies and procedures to comply with the standards, implementation specifications, and other requirements of the HIPAA Security Rule. Policies and procedures may be changed at any time, provided the changes are documented and implemented in accordance with the Rule. `[HIPAA 164.316(a)]`
+- Example Org shall identify the security official responsible for the development and implementation of the policies and procedures required by the HIPAA Security Rule; this official shall be named in the appropriate security documentation. `[HIPAA 164.308(a)(2)]`
+
+## 3. Security Categorization
+
+- The Security Program / GRC team shall categorize each system and the information it processes, stores, and transmits; shall document the security categorization results, including supporting rationale, in the security plan for the system; and shall verify that the authorizing official or the authorizing official's designated representative reviews and approves the security categorization decision. `[NIST RA-2 Low, Moderate, High | ARC-AMPE RA-2 AE Mandatory]`
+- The senior official for privacy, or their designee, shall be involved when conducting the security categorization process. `[ARC-AMPE RA-2]`
+- The Security Program / GRC team shall conduct an impact-level prioritization of organizational systems to obtain additional granularity on system impact levels. `[NIST RA-2(1)]`
+
+## 4. Risk Assessment
+
+### 4.1 Risk Analysis
+
+- Example Org shall conduct an accurate and thorough assessment (risk analysis) of the potential risks and vulnerabilities to the confidentiality, integrity, and availability of electronic protected health information held by the covered entity or business associate. `[HIPAA 164.308(a)(1)(ii)(A)]`
+- The Security Program / GRC team shall conduct a risk assessment that identifies threats to and vulnerabilities in the system; determines the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and determines the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information. `[NIST RA-3 Low, Moderate, High | ARC-AMPE RA-3 AE Mandatory]`
+
+### 4.2 Risk Management Process
+
+- The Security Program / GRC team shall implement a risk assessment process executed annually, integrating risk assessment results and risk management decisions from the organization and mission or business process perspectives with system-level risk assessments. `[NIST RA-3 | ARC-AMPE RA-3]`
+- The Security Program / GRC team shall document risk assessment results in security and privacy plans, a risk assessment report, the Risk Register, and/or an organization-defined document. `[NIST RA-3 | ARC-AMPE RA-3]`
+- Risk assessment results shall be reviewed at least every one (1) year or when a significant change occurs. `[NIST RA-3 | ARC-AMPE RA-3]`
+- The risk assessment shall be updated at least every three (3) years at a minimum (for internal, organization-specific authorizations), before issuing a new internal organization-specific authorization, or upon significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system. `[NIST RA-3 | ARC-AMPE RA-3]`
+- Risk assessment results shall be disseminated to organization-defined personnel or roles. `[NIST RA-3 | ARC-AMPE RA-3]`
+- The Security Program / GRC team shall document and implement a privacy risk management process that assesses privacy risk to individuals resulting from the collection, sharing, storing, transmitting, use, and disposal of personally identifiable information. `[ARC-AMPE RA-3]`
+
+### 4.3 Extended Risk Assessment Requirements
+
+- The Security Program / GRC team shall assess supply chain risks associated with [Assignment: organization-defined systems, system components, and system services], and shall update the supply chain risk assessment [Assignment: organization-defined frequency], when there are significant changes to the relevant supply chain, or when changes to the system, environments of operation, or other conditions may necessitate a change in the supply chain. `[NIST RA-3(1) Low, Moderate, High]`
+- Example Org shall use all-source intelligence to assist in the analysis of risk, including publicly available or open-source information, to inform engineering, acquisition, and risk management decisions, including analysis of intentional and unintentional vulnerabilities from development, manufacturing, delivery processes, people, and the environment. `[NIST RA-3(2) | ARC-AMPE RA-3(2) AE Mandatory]`
+- Example Org shall determine the current cyber threat environment on an ongoing basis using [Assignment: organization-defined means]. `[NIST RA-3(3)]`
+- Example Org shall employ [Assignment: organization-defined advanced automation and analytics capabilities] to predict and identify risks to [Assignment: organization-defined systems or system components]. `[NIST RA-3(4)]`
+
+## 5. Risk Reduction, Violation Handling, and Activity Review
+
+- Example Org shall implement security measures sufficient to reduce risks and vulnerabilities to a reasonable and appropriate level. `[HIPAA 164.308(a)(1)(ii)(B)]`
+- Example Org shall apply appropriate sanctions against workforce members who fail to comply with the security policies and procedures of the covered entity or business associate. `[HIPAA 164.308(a)(1)(ii)(C)]`
+- Example Org shall implement procedures to regularly review records of information system activity, such as audit logs, access reports, and security incident tracking reports. `[HIPAA 164.308(a)(1)(ii)(D)]`
+
+## 6. Contingency Requirements
+
+- Example Org shall establish and implement, as needed, policies and procedures for responding to an emergency or other occurrence (for example, fire, vandalism, system failure, and natural disaster) that damages systems containing electronic protected health information. `[HIPAA 164.308(a)(7)(i)]`
+- Example Org shall establish and implement procedures to create and maintain retrievable exact copies of electronic protected health information (data backup plan). `[HIPAA 164.308(a)(7)(ii)(A)]`
+- Example Org shall establish and implement, as needed, procedures to restore any loss of data (disaster recovery plan). `[HIPAA 164.308(a)(7)(ii)(B)]`
+- Example Org shall establish and implement, as needed, procedures to enable continuation of critical business processes for protection of the security of electronic protected health information while operating in emergency mode. `[HIPAA 164.308(a)(7)(ii)(C)]`
+- Example Org shall implement procedures for periodic testing and revision of contingency plans (addressable). `[HIPAA 164.308(a)(7)(ii)(D)]`
+- Example Org shall assess the relative criticality of specific applications and data in support of other contingency plan components (addressable). `[HIPAA 164.308(a)(7)(ii)(E)]`
+
+## 7. Risk Response
+
+- Example Org shall respond to findings from security and privacy assessments, monitoring, and audits in accordance with organizational risk tolerance. Response options include mitigating risk, accepting risk with appropriate justification, sharing or transferring risk, or avoiding risk. `[NIST RA-7 Low, Moderate, High | FedRAMP RA-7 | ARC-AMPE RA-7 AE Mandatory]`
+- Example Org shall follow the FedRAMP Vulnerability Detection and Response and Vulnerability Evaluation and Reporting rules when responding to findings. `[FedRAMP RA-7]`
+- Risk acceptance shall be discussed with CMS prior to actual acceptance to ensure CMS agrees with the approach and mitigations. Risk-accepted findings shall be documented and tracked in the Plan of Action & Milestones (POA&M) with full detail captured in the risk acceptance form. `[ARC-AMPE RA-7]`
+
+## 8. Criticality Analysis
+
+- The Security Program / GRC team shall identify critical system components and functions by performing a criticality analysis for [Assignment: organization-defined systems, system components, or system services] at organization-defined decision points in the system development life cycle. `[NIST RA-9 Moderate, High | ARC-AMPE RA-9 AE Mandatory]`
+- All system components within the CMS Authority to Connect (ATC)/Request to Connect (RTC) boundary shall be treated as critical. `[ARC-AMPE RA-9]`
+
+## 9. Control Assessments
+
+### 9.1 Evaluation Requirements
+
+- Example Org shall perform a periodic technical and nontechnical evaluation, based initially upon the standards implemented under the HIPAA Security Rule and subsequently in response to environmental or operational changes affecting the security of electronic protected health information, that establishes the extent to which the covered entity's or business associate's security policies and procedures meet the requirements of the Rule. `[HIPAA 164.308(a)(8)]`
+
+### 9.2 Assessment Planning and Execution
+
+- The Security Program / GRC team shall select the appropriate assessor or assessment team for the type of assessment to be conducted. `[NIST CA-2 Low, Moderate, High | FedRAMP CA-2 | ARC-AMPE CA-2 AE Mandatory]`
+- The Security Program / GRC team shall develop a control assessment plan describing the scope of the assessment, including the controls and control enhancements under assessment, the assessment procedures to be used to determine control effectiveness, and the assessment environment, assessment team, and assessment roles and responsibilities. `[NIST CA-2 | FedRAMP CA-2 | ARC-AMPE CA-2]`
+- The control assessment plan shall be reviewed and approved by the authorizing official or designated representative prior to conducting the assessment. `[NIST CA-2 | FedRAMP CA-2 | ARC-AMPE CA-2]`
+- The controls in the system and its environment of operation shall be assessed at [Assignment: organization-defined assessment frequency] (ARC-AMPE: as specified in the supplemental control requirements and guidance) to determine the extent to which the controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting established security and privacy requirements. `[NIST CA-2 | FedRAMP CA-2 | ARC-AMPE CA-2]`
+- The Security Program / GRC team shall produce a control assessment report that documents the results of the assessment. `[NIST CA-2 | FedRAMP CA-2 | ARC-AMPE CA-2]`
+- The results of the control assessment shall be provided to [Assignment: organization-defined individuals or roles], which FedRAMP defines to include FedRAMP and agency customers; per ARC-AMPE, results shall be provided to the Business Owner responsible for the system and the personnel responsible for reviewing assessment documentation, in writing, within thirty (30) days after completion. `[NIST CA-2 | FedRAMP CA-2 | ARC-AMPE CA-2]`
+
+### 9.3 Independent Assessment
+
+- An independent assessment of all security and privacy controls shall be completed before the Authorizing Official issues authority to operate for any newly implemented or significantly changed system. `[ARC-AMPE CA-2]`
+- A complete independent assessment of all security and privacy controls shall be conducted over a three (3) year period, either via a full controls assessment at the end of the Authority to Connect lifespan (final ATC package delivered no less than ninety (90) days prior to expiration), via independent assessments of the annually required controls designated by CMS so all controls are assessed within the three-year period (final ATC package delivered no less than ninety (90) days prior to expiration), or per CMS guidance on required documentation and testing for each significant system change. `[ARC-AMPE CA-2 AE Mandatory]`
+- Relevant security and privacy documentation shall be updated to reflect any changes to the system within thirty (30) days of the changes or within thirty (30) days of the control assessment results, and CMS shall be notified within thirty (30) days whenever updates are made to system security and privacy authorization artifacts or when significant role changes occur. `[ARC-AMPE CA-2]`
+- Independent assessors or assessment teams shall be employed to conduct control assessments; per ARC-AMPE, assessments shall follow the CMS Framework for Independent Assessment of Security and Privacy Controls provided for the program. `[NIST CA-2(1) Moderate, High | ARC-AMPE CA-2(1) AE Mandatory]`
+- As part of control assessments, at [Assignment: organization-defined specialized assessment frequency] on an [Selection: announced; unannounced] basis, Example Org shall conduct \[Selection (one or more): in-depth monitoring; security instrumentation; automated security test cases; vulnerability scanning; malicious user testing; insider threat assessment; performance and load testing; data leakage or data loss assessment; [Assignment: organization-defined other forms of assessment]\]. `[NIST CA-2(2) High]`
+- The results of control assessments performed by [Assignment: organization-defined external organization(s)] on [Assignment: organization-defined system] shall be leveraged when the assessment meets [Assignment: organization-defined requirements] (FedRAMP defines the external organization as any FedRAMP Recognized independent assessment service). `[NIST CA-2(3) | FedRAMP CA-2(3)]`
+
+## 10. Plan of Action and Milestones
+
+- The Security Program / GRC team shall develop a plan of action and milestones (POA&M) for the system to document planned remediation actions to correct weaknesses or deficiencies noted during control assessments and to reduce or eliminate known vulnerabilities in the system. `[NIST CA-5 Low, Moderate, High | ARC-AMPE CA-5 AE Mandatory]`
+- The existing POA&M shall be updated at [Assignment: organization-defined frequency] (ARC-AMPE: in accordance with the frequency documented in the organization's Information Security Continuous Monitoring strategy) based on findings from control assessments, independent audits or reviews, and continuous monitoring activities. `[NIST CA-5 | ARC-AMPE CA-5]`
+- The POA&M shall be established and maintained throughout the system life cycle starting with development, including scheduled completion dates, milestones with dates, appropriate risk levels, and weakness descriptions with as much detail as possible. All findings shall be included, whether self-discovered or identified through assessments or testing (e.g., security control assessments, penetration tests, automated configuration and vulnerability scans). The POA&M shall follow the CMS Standard for POA&M Management and Reporting and the CMS-provided template, and entries shall be remediated consistent with SI-2. `[ARC-AMPE CA-5]`
+- A fully updated and accurate POA&M shall be delivered to CMS quarterly on 31 January, 30 April, 31 July, and 31 October. `[ARC-AMPE CA-5 AE Mandatory]`
+- The accuracy, currency, and availability of the plan of action and milestones for the system shall be ensured using [Assignment: organization-defined automated mechanisms]. `[NIST CA-5(1)]`
+
+## 11. Authorization
+
+### 11.1 Authorizing Official Roles
+
+- Example Org shall assign a senior official as the authorizing official for the system and a senior official as the authorizing official for common controls available for inheritance by organizational systems. `[NIST CA-6 Low, Moderate, High | ARC-AMPE CA-6 AE Mandatory]`
+- Before commencing operations, the authorizing official for the system shall accept the use of common controls inherited by the system and shall authorize the system to operate; the authorizing official for common controls shall authorize the use of those controls for inheritance by organizational systems. `[NIST CA-6 | ARC-AMPE CA-6]`
+
+### 11.2 Authorization Decisions and Updates
+
+- Each authorization decision shall be recorded in the Authorization Decision Record, maintained by the Security Program / GRC team.
+- Authorizations shall be updated at least every three (3) years (Direct Enrollment Technology Providers must update at least every one (1) year), when significant security breaches occur, whenever there is a significant change to the system or its operating environment, and prior to expiration of the current authorization. `[NIST CA-6 | ARC-AMPE CA-6]`
+- CMS shall be notified of significant or major changes to architecture, security and privacy posture, or other items that could cause degradation or unexpected results in security and privacy monitoring, detection, response, and mitigation activities prior to making the change. `[ARC-AMPE CA-6]`
+
+### 11.3 Joint Authorization
+
+- Example Org shall employ a joint authorization process for the system that includes multiple authorizing officials from the same organization conducting the authorization. `[NIST CA-6(1)]`
+- Example Org shall employ a joint authorization process for the system that includes multiple authorizing officials with at least one authorizing official from an organization external to the organization conducting the authorization. `[NIST CA-6(2)]`
+
+## 12. Continuous Monitoring
+
+### 12.1 Strategy and Metrics
+
+- The Security Program / GRC team shall develop a system-level continuous monitoring strategy (ARC-AMPE: developed by the CIO and CISO, with the organization as the responsible implementation agent) and shall implement continuous monitoring in accordance with the organization-level continuous monitoring strategy. `[ARC-AMPE CA-7 AE Mandatory; NIST CA-7; FedRAMP CA-7]`
+- [Assignment: organization-defined system-level metrics] shall be established to be monitored (ARC-AMPE: based on organization security and privacy goals and in accordance with the organization's ISCM strategy). `[NIST CA-7 Low, Moderate, High | FedRAMP CA-7 | ARC-AMPE CA-7]`
+- [Assignment: organization-defined frequencies] shall be established for monitoring and [Assignment: organization-defined frequencies] for assessment of control effectiveness; per ARC-AMPE, monitoring shall include at least once-a-month scans of operating systems, databases, and web applications, and assessment of control effectiveness shall occur no less than at least every one (1) year. `[NIST CA-7 | FedRAMP CA-7 | ARC-AMPE CA-7]`
+
+### 12.2 Ongoing Assessment and Analysis
+
+- Ongoing control assessments shall be conducted in accordance with the continuous monitoring strategy. `[NIST CA-7 | FedRAMP CA-7 | ARC-AMPE CA-7]`
+- Ongoing monitoring of system and organization-defined metrics shall be conducted in accordance with the continuous monitoring strategy. `[NIST CA-7 | FedRAMP CA-7 | ARC-AMPE CA-7]`
+- Information generated by control assessments and monitoring shall be correlated and analyzed. `[NIST CA-7 | FedRAMP CA-7 | ARC-AMPE CA-7]`
+- Response actions shall be taken to address results of the analysis of control assessment and monitoring information. `[NIST CA-7 | FedRAMP CA-7 | ARC-AMPE CA-7]`
+- The security and privacy status of the system shall be reported to [Assignment: organization-defined personnel or roles] at [Assignment: organization-defined frequency]; per ARC-AMPE, reporting shall occur at least every thirty (30) days (monthly). `[NIST CA-7 | FedRAMP CA-7 | ARC-AMPE CA-7]`
+
+### 12.3 Extended Monitoring Requirements
+
+- Continuous monitoring records shall be maintained until released by the investigating authority when subject to a legal investigation (e.g., of an insider threat). Systems, appliances, devices, and applications (including databases) shall be monitored, and oversight of information security and privacy, including Security Information and Event Management (SIEM) as applicable, shall be provided for each system. `[ARC-AMPE CA-7]`
+- Example Org shall follow the FedRAMP Continuous Collaborative Monitoring, Significant Change Notification, Vulnerability Detection and Response, and Vulnerability Evaluation and Reporting rules. `[FedRAMP CA-7]`
+- Independent assessors or assessment teams shall be employed to monitor the controls in the system on an ongoing basis; per ARC-AMPE, monitoring shall follow the CMS Framework for Independent Assessment of Security and Privacy Controls provided for the program. `[NIST CA-7(1) Moderate, High | ARC-AMPE CA-7(1) AE Mandatory]`
+- Trend analyses shall be employed to determine if control implementations, the frequency of continuous monitoring activities, and the types of activities used in the continuous monitoring process need to be modified based on empirical data. `[NIST CA-7(3) | FedRAMP CA-7(3)]`
+- Risk monitoring shall be included as an integral part of the continuous monitoring strategy, covering effectiveness monitoring, compliance monitoring, and change monitoring; per ARC-AMPE, the continuous monitoring strategy shall document the processes and guidance for what is considered effectiveness, compliance, and change monitoring as part of a holistic risk monitoring strategy. `[NIST CA-7(4) Low, Moderate, High | ARC-AMPE CA-7(4) AE Mandatory]`
+- Example Org shall employ [Assignment: organization-defined actions] to validate that policies are established and implemented controls are operating in a consistent manner. `[NIST CA-7(5) | FedRAMP CA-7(5)]`
+- The accuracy, currency, and availability of monitoring results for the system shall be ensured using [Assignment: organization-defined automated mechanisms]. `[NIST CA-7(6) | FedRAMP CA-7(6)]`
+
+## 13. Penetration Testing
+
+### 13.1 Penetration Testing Requirements
+
+- Example Org shall conduct penetration testing at [Assignment: organization-defined frequency] on [Assignment: organization-defined systems or system components]; per ARC-AMPE, testing shall be conducted at least every one (1) year to maintain authorization. `[NIST CA-8 High | FedRAMP CA-8 | ARC-AMPE CA-8 AE Mandatory]`
+- Penetration testing shall be conducted on the documented system and its full boundary as documented in the System Security and Privacy Plan, and shall be performed when new risks and threats potentially affecting the system or applications are identified and reported or upon request from CMS. `[ARC-AMPE CA-8]`
+- The Rules of Engagement shall be agreed to before commencing penetration testing, with the rules co-signed by the system Authorizing Official and the penetration testing organization official; the Rules of Engagement should include the scope of systems or components to be tested and any exclusions. `[NIST CA-8 | ARC-AMPE CA-8]`
+- Penetration test scanning shall include evaluation of embedded structures (e.g., content that can be changed without reloading the anchor content) and interactive content, and shall cover information sources including systems, appliances, devices, services, and applications (including databases). `[ARC-AMPE CA-8]`
+- Penetration test scanning results shall be searchable by the organization and in a format compliant with CMS requirements, and organization-directed penetration test information collection rules/requests (e.g., sources, queries, data calls) shall be implemented or provided within the timeframe specified in the request. `[ARC-AMPE CA-8]`
+- Penetration testing shall be conducted on production systems in a manner that minimizes risk of information corruption or service outage. `[ARC-AMPE CA-8]`
+- Penetration testing reports shall be provided to CMS that summarize the findings, articulate the significance, impact, and risk of the findings, provide remediation plans, and include the underlying raw security information/results in unaltered format. `[ARC-AMPE CA-8]`
+- Penetration testing is part of vulnerability detection and is subject to the FedRAMP Vulnerability Detection and Response rules. `[FedRAMP CA-8]`
+
+### 13.2 Independent and Specialized Testing
+
+- An independent penetration testing agent or team shall be employed to perform penetration testing on the system or system components; per ARC-AMPE, the independent penetration agent or team shall be approved by the organization's Chief Information Security Officer (CISO) or equivalent. `[NIST CA-8(1) High | ARC-AMPE CA-8(1) AE Mandatory]`
+- Example Org shall employ [Assignment: organization-defined red team exercises] to simulate attempts by adversaries to compromise organizational systems in accordance with applicable rules of engagement. `[NIST CA-8(2)]`
+- Example Org shall employ a penetration testing process that includes [Assignment: organization-defined frequency] [Selection (one or more): announced; unannounced] attempts to bypass or circumvent controls associated with physical access points to the facility. `[NIST CA-8(3)]`
+
+## 14. Documentation, Retention, and Availability
+
+- The policies and procedures implemented to comply with the HIPAA Security Rule shall be maintained in written (which may be electronic) form, and a written (which may be electronic) record of any action, activity, or assessment required by the Rule to be documented shall be maintained. `[HIPAA 164.316(b)(1)]`
+- HIPAA Security Rule documentation shall be retained for 6 years from the date of its creation or the date when it last was in effect, whichever is later. `[HIPAA 164.316(b)(2)(i)]`
+- HIPAA Security Rule documentation shall be made available to those persons responsible for implementing the procedures to which the documentation pertains. `[HIPAA 164.316(b)(2)(ii)]`
+- HIPAA Security Rule documentation shall be reviewed periodically and updated as needed in response to environmental or operational changes affecting the security of electronic protected health information. `[HIPAA 164.316(b)(2)(iii)]`
+
+## 15. Evidence and Artifacts
+
+The Security Program / GRC team is accountable for producing and retaining the following evidence of compliance with this Standard:
+
+| Artifact                      | Where Produced                                                                                      | Owning Team            |
+| ----------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------- |
+| Risk Register                 | Risk assessment results, risk response decisions, and risk-accepted findings (Section 4, Section 7) | Security Program / GRC |
+| Authorization Decision Record | Authorization decisions and updates (Section 11)                                                    | Security Program / GRC |
+
+In addition, the control assessment reports, POA&Ms, penetration testing reports, continuous monitoring records, and HIPAA Security Rule documentation produced under Sections 9 through 14 shall be retained per the retention requirements in Section 14.

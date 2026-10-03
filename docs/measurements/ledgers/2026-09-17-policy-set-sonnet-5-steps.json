@@ -1,0 +1,132 @@
+{
+ "model": "openrouter/anthropic/claude-sonnet-5",
+ "topics": 5,
+ "steps": [
+  {
+   "step": "map",
+   "ok": true,
+   "seconds": 0.2
+  },
+  {
+   "topic": "Security Program Governance",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 239.7
+  },
+  {
+   "topic": "Security Program Governance",
+   "step": "standard",
+   "ok": true,
+   "seconds": 87.3
+  },
+  {
+   "topic": "Security Program Governance",
+   "step": "policy",
+   "ok": true,
+   "seconds": 19.2
+  },
+  {
+   "topic": "Security Program Governance",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 214.0
+  },
+  {
+   "topic": "Risk Assessment & Authorization",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 61.4
+  },
+  {
+   "topic": "Risk Assessment & Authorization",
+   "step": "standard",
+   "ok": true,
+   "seconds": 361.4
+  },
+  {
+   "topic": "Risk Assessment & Authorization",
+   "step": "policy",
+   "ok": true,
+   "seconds": 19.6
+  },
+  {
+   "topic": "Risk Assessment & Authorization",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 115.8
+  },
+  {
+   "topic": "Identity Lifecycle & Access Review",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 177.9
+  },
+  {
+   "topic": "Identity Lifecycle & Access Review",
+   "step": "standard",
+   "ok": true,
+   "seconds": 81.5
+  },
+  {
+   "topic": "Identity Lifecycle & Access Review",
+   "step": "policy",
+   "ok": true,
+   "seconds": 18.5
+  },
+  {
+   "topic": "Identity Lifecycle & Access Review",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 234.7
+  },
+  {
+   "topic": "Authentication & Credential Management",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 85.9
+  },
+  {
+   "topic": "Authentication & Credential Management",
+   "step": "standard",
+   "ok": true,
+   "seconds": 135.0
+  },
+  {
+   "topic": "Authentication & Credential Management",
+   "step": "policy",
+   "ok": true,
+   "seconds": 18.9
+  },
+  {
+   "topic": "Authentication & Credential Management",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 142.2
+  },
+  {
+   "topic": "Remote & Third-Party Access",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 78.9
+  },
+  {
+   "topic": "Remote & Third-Party Access",
+   "step": "standard",
+   "ok": true,
+   "seconds": 47.6
+  },
+  {
+   "topic": "Remote & Third-Party Access",
+   "step": "policy",
+   "ok": true,
+   "seconds": 16.9
+  },
+  {
+   "topic": "Remote & Third-Party Access",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 78.2
+  }
+ ],
+ "wall_seconds": 2234.7
+}

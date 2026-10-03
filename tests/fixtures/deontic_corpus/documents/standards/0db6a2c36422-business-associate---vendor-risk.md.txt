@@ -1,0 +1,247 @@
+# Information Exchange and Supply Chain Risk Management Standard
+
+## 1. Purpose and Scope
+
+This standard establishes requirements for managing information exchange agreements, business associate relationships, external service providers, and supply chain risks for Acme Health systems and information assets. This standard applies to all personnel, contractors, and third parties involved in the exchange of information, provision of external services, or participation in the supply chain for Acme Health systems.
+
+## 2. Information Exchange Agreements
+
+### 2.1 Agreement Establishment and Management
+
+Acme Health must approve and manage the exchange of information between systems using interconnection security agreements, information exchange security agreements, memoranda of understanding or agreement, service level agreements, user agreements, non-disclosure agreements, or other organization-defined agreement types. [NIST 800-53 CA-3 | ARC-AMPE CA-3]
+
+Acme Health must have appropriate information exchange agreements approved and in place prior to any information sharing. [ARC-AMPE CA-3]
+
+### 2.2 Agreement Content
+
+Acme Health must document in each exchange agreement the interface characteristics, security and privacy requirements, controls, responsibilities for each system, and the impact level of the information communicated. [NIST 800-53 CA-3 | ARC-AMPE CA-3]
+
+### 2.3 Agreement Review and Updates
+
+Acme Health must review and update information exchange agreements [Assignment: organization-defined frequency]. [NIST 800-53 CA-3]
+
+Acme Health must review and update information exchange agreements at least every one (1) year. [ARC-AMPE CA-3]
+
+Acme Health must update interconnection agreements following significant changes to the system, organizations, or the nature of electronic information sharing that could impact the validity or security postures of the agreement. [ARC-AMPE CA-3]
+
+### 2.4 Personally Identifiable Information Exchange Agreements
+
+Acme Health must enter into memoranda of understanding, memoranda of agreement, letters of intent, computer matching agreements, information exchange agreements, or similar agreements with parties that specifically describe the Personally Identifiable Information covered and enumerate the purposes for which the PII may be used. [ARC-AMPE CA-3]
+
+Acme Health must ensure any PII sharing is compatible with the purpose for which it was collected, and obtain additional notice and consent from individuals before sharing for incompatible purposes. [ARC-AMPE CA-3]
+
+### 2.5 Interconnection Termination Authority
+
+Acme Health must grant the Authorizing Official or other senior leadership the authority to order immediate termination or suspension of any interconnection that presents an unacceptable level of risk. [ARC-AMPE CA-3]
+
+### 2.6 Data Transfer Authorization Verification
+
+Acme Health must verify that individuals or systems transferring data between interconnecting systems have the requisite authorizations (i.e., write permissions or privileges) prior to accepting such data. [NIST 800-53 CA-3(6) High]
+
+### 2.7 Transitive Information Exchanges
+
+Acme Health must identify transitive (downstream) information exchanges with other systems through the systems identified in information exchange agreements, and take measures to ensure that transitive information exchanges cease when the controls on identified transitive systems cannot be verified or validated. [NIST 800-53 CA-3(7)]
+
+## 3. Business Associate Agreements
+
+### 3.1 Business Associate Requirements
+
+Acme Health must permit business associates to create, receive, maintain, or transmit electronic protected health information only if the covered entity obtains satisfactory assurances that the business associate will appropriately safeguard the information. [HIPAA Security Rule 164.308(b)(1)]
+
+Acme Health must permit business associates to use subcontractors to create, receive, maintain, or transmit electronic protected health information only if the business associate obtains satisfactory assurances that the subcontractor will appropriately safeguard the information. [HIPAA Security Rule 164.308(b)(1)]
+
+### 3.2 Business Associate Contract Documentation
+
+Acme Health must document satisfactory assurances from business associates through a written contract or other arrangement that meets the applicable requirements of § 164.314(a). [HIPAA Security Rule 164.308(b)(3)]
+
+### 3.3 Business Associate Contract Content
+
+Acme Health must ensure business associate contracts provide that the business associate will comply with applicable security requirements, ensure subcontractors comply with applicable requirements, and report any security incident including breaches of unsecured protected health information. [HIPAA Security Rule 164.314(a)(2)(i)]
+
+Acme Health must apply the same contract requirements to business associate-subcontractor arrangements as apply to covered entity-business associate arrangements. [HIPAA Security Rule 164.314(a)(2)(iii)]
+
+### 3.4 Group Health Plan Requirements
+
+For group health plans, Acme Health must ensure plan documents provide that the plan sponsor will reasonably and appropriately safeguard electronic protected health information, implement administrative, physical, and technical safeguards, ensure adequate separation with security measures, ensure agents implement security measures, and report security incidents. [HIPAA Security Rule 164.314(b)(1) | HIPAA Security Rule 164.314(b)(2)]
+
+## 4. External Service Provider Requirements
+
+### 4.1 Security and Privacy Compliance
+
+Acme Health must require providers of external system services to comply with organizational security and privacy requirements and employ [Assignment: organization-defined controls]. [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+Acme Health must base organization-defined controls for external service providers on the ARC-AMPE security and privacy controls or equivalent. [ARC-AMPE SA-9]
+
+### 4.2 Contract Requirements for PII Protection
+
+Acme Health must ensure contracts and other acquisition-related documents provide enforceable means to ensure privacy and security controls are implemented for Personally Identifiable Information shared with or disclosed to recipients outside the organization. [ARC-AMPE SA-9]
+
+Acme Health must include in service contracts or agreements language requiring the provider to be subject to U.S. Federal laws and regulations protecting PII. [ARC-AMPE SA-9]
+
+Acme Health must include in service contracts or agreements language requiring adherence to the security and privacy policies and standards set by the organization consistent with 45 CFR §155.260(b), and define security and privacy roles and responsibilities. [ARC-AMPE SA-9]
+
+### 4.3 Roles and Responsibilities
+
+Acme Health must define and document organizational oversight and user roles and responsibilities with regard to external system services. [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+### 4.4 Monitoring External Service Providers
+
+Acme Health must employ [Assignment: organization-defined processes, methods, and techniques] to monitor control compliance by external service providers on an ongoing basis. [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+### 4.5 Risk Assessment for Security Services
+
+Acme Health must conduct an organizational assessment of risk prior to the acquisition or outsourcing of information security services, and verify that the acquisition or outsourcing of dedicated information security services is approved by [Assignment: organization-defined personnel or roles]. [NIST 800-53 SA-9(1) | ARC-AMPE SA-9(1)]
+
+### 4.6 Service Function Identification
+
+Acme Health must require providers of [Assignment: organization-defined external system services] to identify the functions, ports, protocols, and other services required for the use of such services. [NIST 800-53 SA-9(2) Moderate, High | ARC-AMPE SA-9(2)]
+
+Acme Health must require providers of all external systems where federal customer data is processed or stored to identify the functions, ports, protocols, and other services required for the use of such services. [FedRAMP SA-9(2)]
+
+### 4.7 Trust Relationships with External Providers
+
+Acme Health must establish, document, and maintain trust relationships with external service providers based on [Assignment: organization-defined security and privacy requirements, properties, factors, or conditions defining acceptable trust relationships]. [NIST 800-53 SA-9(3)]
+
+### 4.8 Consistency of Provider Interests
+
+Acme Health must take [Assignment: organization-defined actions] to verify that the interests of [Assignment: organization-defined external service providers] are consistent with and reflect organizational interests. [NIST 800-53 SA-9(4)]
+
+### 4.9 Service Location Restrictions
+
+Acme Health must restrict the location of [Selection (one or more): information processing; information or data; system services] to [Assignment: organization-defined locations] based on [Assignment: organization-defined requirements or conditions]. [NIST 800-53 SA-9(5) | ARC-AMPE SA-9(5)]
+
+For Certification Classes C and D, Acme Health must restrict the location of information processing, information or data, AND system services for all federal customer data. [FedRAMP SA-9(5)]
+
+For Certification Class D, Acme Health must restrict the location of information processing and data to the U.S./U.S. Territories or geographic locations where there is U.S. jurisdiction. [FedRAMP SA-9(5)]
+
+Acme Health must process and store Personally Identifiable Information of the system within the continental U.S., Hawaii, or U.S. Territories, and weigh the risk if support, development, and information technology services are off-shored. [ARC-AMPE SA-9(5)]
+
+For ACA Administering Entities, Acme Health must notify CMS at least sixty (60) days prior to commitment of outsourcing information system services outside of the U.S. [ARC-AMPE SA-9(5)]
+
+Acme Health must ensure the safeguards afforded to sensitive information are no less than the safeguards mandated by state regulation, federal law, Executive Order, or other authoritative direction. [ARC-AMPE SA-9(5)]
+
+### 4.10 Cryptographic Key Control
+
+Acme Health must maintain exclusive control of cryptographic keys for encrypted material stored or transmitted through an external system. [NIST 800-53 SA-9(6)]
+
+### 4.11 Data Integrity Verification
+
+Acme Health must provide the capability to check the integrity of information while it resides in the external system. [NIST 800-53 SA-9(7)]
+
+### 4.12 Geographic Restrictions and Notifications
+
+Acme Health must restrict the geographic location of information processing and data storage to facilities located within the legal jurisdictional boundary of the United States. [NIST 800-53 SA-9(8) | ARC-AMPE SA-9(8)]
+
+For organizations that process Federal Tax Information, Acme Health must adhere to IRS Publication 1075. [ARC-AMPE SA-9(8)]
+
+Acme Health must notify CMS at least sixty (60) days prior to transmitting data into an external information service environment per the requirements in the Change Notification guidance. [ARC-AMPE SA-9(8)]
+
+## 5. Supply Chain Risk Management Policy
+
+### 5.1 Policy Development and Dissemination
+
+Acme Health must develop, document, and disseminate to [Assignment: organization-defined personnel or roles] a supply chain risk management policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+Acme Health must develop, document, and disseminate procedures to facilitate the implementation of the supply chain risk management policy and associated controls. [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+### 5.2 Policy Management Designation
+
+Acme Health must designate an [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the supply chain risk management policy and procedures. [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+### 5.3 Policy Review and Updates
+
+Acme Health must review and update the supply chain risk management policy [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 SR-1]
+
+Acme Health must review and update the supply chain risk management policy at least every one (1) year and following organization-defined events. [ARC-AMPE SR-1]
+
+Acme Health must review and update supply chain risk management procedures [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 SR-1]
+
+Acme Health must review and update supply chain risk management procedures at least every one (1) year and following organization-defined events. [ARC-AMPE SR-1]
+
+### 5.4 Policy Monitoring
+
+Acme Health must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect supply chain risk management policies. [ARC-AMPE SR-1]
+
+### 5.5 Life Cycle Support
+
+Acme Health must ensure supply chain risk management policies and procedures support cybersecurity and privacy safeguards throughout the system's life cycle. [ARC-AMPE SR-1]
+
+## 6. Supply Chain Risk Management Planning
+
+### 6.1 Plan Development
+
+Acme Health must develop a plan for managing supply chain risks associated with the research and development, design, manufacturing, acquisition, delivery, integration, operations and maintenance, and disposal of [Assignment: organization-defined systems, system components, or system services]. [NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+### 6.2 Plan Content
+
+Acme Health must include in the supply chain risk management plan an expression of supply chain risk tolerance, acceptable risk mitigation strategies or controls, a process for consistently evaluating and monitoring supply chain risk, approaches for implementing and communicating the plan, a description and justification for risk mitigation measures taken, and associated roles and responsibilities. [NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+Acme Health must address in the supply chain risk management plan requirements for developing trustworthy, secure, privacy-protective, and resilient system components and systems, including the application of security design principles implemented as part of life cycle-based systems security engineering processes. [NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+Acme Health must address in the supply chain risk management plan the managing, implementing, and monitoring of supply chain risk management controls identified as applicable and any added tailored controls based on the organization's risk assessment of its system development life cycle management process. [ARC-AMPE SR-2]
+
+### 6.3 Plan Review and Updates
+
+Acme Health must review and update the supply chain risk management plan [Assignment: organization-defined frequency] or as required to address threat, organizational, or environmental changes. [NIST 800-53 SR-2]
+
+Acme Health must review and update the supply chain risk management plan at least every one (1) year or as required to address threat, organizational, or environmental changes. [ARC-AMPE SR-2]
+
+### 6.4 Plan Protection
+
+Acme Health must protect the supply chain risk management plan from unauthorized disclosure and modification. [NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+### 6.5 Supply Chain Risk Management Team
+
+Acme Health must establish a supply chain risk management team consisting of [Assignment: organization-defined personnel, roles and responsibilities] to lead and support [Assignment: organization-defined supply chain risk management activities]. [NIST 800-53 SR-2(1) Low, Moderate, High | ARC-AMPE SR-2(1)]
+
+Acme Health must ensure the supply chain risk management team consists of organizational personnel with diverse roles and responsibilities including risk executive, information technology, contracting, information security, privacy, mission or business, legal, supply chain and logistics, acquisition, business continuity, and other relevant functions, with collective awareness of acquisition processes, legal practices, vulnerabilities, threats, attack vectors, and technical aspects and dependencies of systems. [ARC-AMPE SR-2(1)]
+
+### 6.6 Guidance References
+
+Acme Health must consult NIST publications including NIST SP 800-161 and NISTIR 8276 for guidance on supply chain risk management activities. [ARC-AMPE SR-2(1)]
+
+## 7. Supply Chain Risk Assessment
+
+### 7.1 Supplier Risk Assessment
+
+Acme Health must assess and review the supply chain-related risks associated with suppliers or contractors and the system, system component, or system service they provide [Assignment: organization-defined frequency]. [NIST 800-53 SR-6 Moderate, High]
+
+### 7.2 Assessment Methods
+
+Acme Health must employ [Selection (one or more): organizational analysis; independent third-party analysis; organizational testing; independent third-party testing] of [Assignment: organization-defined supply chain elements, processes, and actors] associated with the system, system component, or system service. [NIST 800-53 SR-6(1)]
+
+## 8. Supply Chain Notification
+
+### 8.1 Notification Agreements and Procedures
+
+Acme Health must establish agreements and procedures with entities involved in the supply chain for the [Selection (one or more): notification of supply chain compromises; [Assignment: organization-defined results of assessments or audits]]. [NIST 800-53 SR-8 | FedRAMP SR-8]
+
+Acme Health must establish agreements and procedures with entities involved in the supply chain for the notification of supply chain compromises, results of assessments or audits, and organization information. [ARC-AMPE SR-8]
+
+### 8.2 FedRAMP Incident Communication
+
+Acme Health must follow the FedRAMP Incident Evaluation and Communication rules when establishing notification agreements for supply chain entities. [FedRAMP SR-8]
+
+### 8.3 Consistency with Incident Handling
+
+Acme Health must ensure notifications of supply chain incidents are consistent with organizational incident handling and incident reporting processes. [ARC-AMPE SR-8]
+
+## 9. Documentation and Retention
+
+### 9.1 Written Policies and Procedures
+
+Acme Health must maintain policies and procedures implemented to comply with HIPAA Security Rule requirements in written (which may be electronic) form. [HIPAA Security Rule 164.316(b)(1)]
+
+Acme Health must maintain a written (which may be electronic) record of any action, activity, or assessment required by the HIPAA Security Rule to be documented. [HIPAA Security Rule 164.316(b)(1)]
+
+### 9.2 Retention Period
+
+Acme Health must retain documentation required by HIPAA Security Rule for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+
+### 9.3 Documentation Availability
+
+Acme Health must make documentation available to persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+### 9.4 Documentation Review and Updates
+
+Acme Health must review documentation periodically, and update as needed, in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]

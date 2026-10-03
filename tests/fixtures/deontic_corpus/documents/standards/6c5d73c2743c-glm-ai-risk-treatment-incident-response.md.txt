@@ -1,0 +1,95 @@
+# Acme Health Information Security Standard: AI Risk Treatment & Incident Response
+
+## 1. Purpose and Scope
+
+This Standard establishes Acme Health's requirements for treating identified AI risks and for responding to, recovering from, and communicating AI-related incidents and errors. It applies to all Acme Health personnel and systems involved in the development, deployment, operation, monitoring, and decommissioning of AI systems.
+
+The **AI Risk / Incident Response** team is accountable for this process end to end, including all handoffs between risk treatment, monitoring, incident response, and recovery activities described in this document.
+
+## 2. Roles and Responsibilities
+
+| Activity | Accountable Team | Participants |
+| --- | --- | --- |
+| AI risk prioritization and treatment decisions | AI Risk / Incident Response | Relevant AI actors, system owners |
+| High-priority risk response planning | AI Risk / Incident Response | Relevant AI actors, system owners |
+| Residual risk documentation and disclosure | AI Risk / Incident Response | Downstream acquirers, end users |
+| Post-deployment monitoring and decommissioning | AI Risk / Incident Response | System owners, relevant AI actors |
+| Incident tracking, response, recovery, and communication | AI Risk / Incident Response | Affected communities, relevant AI actors |
+
+## 3. AI Risk Prioritization and Treatment
+
+### 3.1 Risk Management and Treatment Determinations
+
+Acme Health must ensure that AI risks identified through assessments and other analytical output from the MAP and MEASURE functions are prioritized, responded to, and managed. [NIST AI RMF Manage 1]
+
+The AI Risk / Incident Response team shall make a determination as to whether the AI system achieves its intended purposes and stated objectives, and whether its development or deployment should proceed. [NIST AI RMF Manage 1.1]
+
+Treatment of documented AI risks must be prioritized based on impact, likelihood, and available resources or methods. [NIST AI RMF Manage 1.2]
+
+The AI Risk / Incident Response team shall ensure that responses to AI risks deemed high priority, as identified by the MAP function, are developed, planned, and documented; risk response options can include mitigating, transferring, avoiding, or accepting. [NIST AI RMF Manage 1.3]
+
+Negative residual risks (the sum of all unmitigated risks) to both downstream acquirers of AI systems and end users must be documented. [NIST AI RMF Manage 1.4]
+
+NIST suggests, among its 5 actions for Manage 1.1, considering trustworthiness characteristics when evaluating AI systems' negative risks and benefits [NIST AI RMF Playbook Manage 1.1 Action 1], utilizing TEVV outputs from the MAP and MEASURE functions when considering risk treatment [NIST AI RMF Playbook Manage 1.1 Action 2], regularly tracking and monitoring negative risks and benefits throughout the AI system lifecycle, including in post-deployment monitoring [NIST AI RMF Playbook Manage 1.1 Action 3], regularly assessing and documenting system performance relative to trustworthiness characteristics and tradeoffs between negative risks and opportunities [NIST AI RMF Playbook Manage 1.1 Action 4], and evaluating tradeoffs in connection with real-world use cases and impacts and as enumerated in MAP function outcomes [NIST AI RMF Playbook Manage 1.1 Action 5].
+
+NIST suggests, among its 3 actions for Manage 1.2, assigning risk management resources relative to established risk tolerance so that AI systems with lower risk tolerances receive greater oversight, mitigation, and management resources [NIST AI RMF Playbook Manage 1.2 Action 1], documenting AI risk tolerance determination practices and resource decisions [NIST AI RMF Playbook Manage 1.2 Action 2], and regularly reviewing risk tolerances and re-calibrating, as needed, in accordance with information from AI system monitoring and assessment [NIST AI RMF Playbook Manage 1.2 Action 3].
+
+NIST suggests, among its 5 actions for Manage 1.3, observing regulatory and established organizational, sector, discipline, or professional standards and requirements for applying risk tolerances within the organization [NIST AI RMF Playbook Manage 1.3 Action 1], documenting procedures for acting on AI system risks related to trustworthiness characteristics [NIST AI RMF Playbook Manage 1.3 Action 2], prioritizing risks involving physical safety, legal liabilities, regulatory compliance, and negative impacts on individuals, groups, or society [NIST AI RMF Playbook Manage 1.3 Action 3], identifying risk response plans and resources and organizational teams for carrying out response functions [NIST AI RMF Playbook Manage 1.3 Action 4], and storing risk management and system documentation in an organized, secure repository that is accessible by relevant AI actors and appropriate personnel [NIST AI RMF Playbook Manage 1.3 Action 5].
+
+Acme Health adopts NIST's suggested repository action as its own requirement: the AI Risk / Incident Response team shall store AI risk management and system documentation in an organized, secure [Document Repository] that is accessible by relevant AI actors and appropriate personnel.
+
+NIST suggests, among its 3 actions for Manage 1.4, documenting residual risks within risk response plans, denoting risks that have been accepted, transferred, or subject to minimal mitigation [NIST AI RMF Playbook Manage 1.4 Action 1], establishing procedures for disclosing residual risks to relevant downstream AI actors [NIST AI RMF Playbook Manage 1.4 Action 2], and informing relevant downstream AI actors of requirements for safe operation, known limitations, and suggested warning labels as identified in MAP 3.4 [NIST AI RMF Playbook Manage 1.4 Action 3].
+
+## 4. Managing Deployed AI Systems and Unknown Risks
+
+### 4.1 Benefit Maximization and Impact Reduction
+
+Acme Health must ensure that strategies to maximize AI benefits and minimize negative impacts are planned, prepared, implemented, and documented, informed by input from relevant AI actors. [NIST AI RMF Manage 2]
+
+Resources required to manage AI risks must be taken into account — along with viable non-AI alternative systems, approaches, or methods — to reduce the magnitude or likelihood of potential impacts. [NIST AI RMF Manage 2.1]
+
+Mechanisms must be in place and applied to sustain the value of deployed AI systems. [NIST AI RMF Manage 2.2]
+
+NIST suggests, among its 6 actions for Manage 2.1, planning and implementing risk management practices in accordance with established organizational risk tolerances [NIST AI RMF Playbook Manage 2.1 Action 1], verifying that risk management teams are resourced to carry out their functions, including establishing processes for considering methods that are not automated, semi-automated, or other procedural alternatives for AI functions, enhancing AI system transparency mechanisms for AI teams, enabling exploration of AI system limitations by AI teams, and identifying, assessing, and cataloging past failed designs and negative impacts or outcomes to avoid known failure modes [NIST AI RMF Playbook Manage 2.1 Action 2], identifying resource allocation approaches for managing risks in systems deemed high-risk, that self-update (adaptive, online, reinforcement self-supervised learning or similar), that are trained without access to ground truth (unsupervised, semi-supervised learning or similar), or with high uncertainty or where risk management is insufficient [NIST AI RMF Playbook Manage 2.1 Action 3], regularly seeking and integrating external expertise and perspectives to supplement organizational diversity (e.g., demographic, disciplinary), equity, inclusion, and accessibility where internal capacity is lacking [NIST AI RMF Playbook Manage 2.1 Action 4], enabling and encouraging regular, open communication and feedback among AI actors and internal or external stakeholders related to system design or deployment decisions [NIST AI RMF Playbook Manage 2.1 Action 5], and preparing and documenting plans for continuous monitoring and feedback mechanisms [NIST AI RMF Playbook Manage 2.1 Action 6].
+
+NIST suggests, among its 4 actions for Manage 2.2, establishing risk controls considering trustworthiness characteristics, including data management, quality, and privacy controls (e.g., minimization, rectification or deletion requests) as part of organizational data governance policies; machine learning and end-point security countermeasures (e.g., robust models, differential privacy, authentication, throttling); business rules that augment, limit, or restrict AI system outputs within certain contexts; utilization of domain expertise related to the deployment context for continuous improvement and TEVV across the AI lifecycle; development and regular tracking of human-AI teaming configurations; model assessment and test, evaluation, validation, and verification (TEVV) protocols; use of standardized documentation and transparency mechanisms; software quality assurance practices across the AI lifecycle; and mechanisms to explore system limitations and avoid past failed designs or deployments [NIST AI RMF Playbook Manage 2.2 Action 1], establishing mechanisms to capture feedback from system end users and potentially impacted groups while the system is in deployment, including feedback about how changes in system deployment (e.g., introducing new technology, decommissioning algorithms and models, adapting the system, model, or algorithm) may create negative impacts that are not visible along the AI lifecycle [NIST AI RMF Playbook Manage 2.2 Action 2], reviewing insurance policies, warranties, or contracts for legal or oversight requirements for risk transfer procedures [NIST AI RMF Playbook Manage 2.2 Action 3], and documenting risk tolerance decisions and risk acceptance procedures [NIST AI RMF Playbook Manage 2.2 Action 4].
+
+### 4.2 Response to Previously Unknown Risks
+
+Procedures must be followed to respond to and recover from a previously unknown risk when it is identified. The AI Risk / Incident Response team owns these procedures and directs the response and recovery effort. [NIST AI RMF Manage 2.3]
+
+NIST suggests, among its 7 actions for Manage 2.3, maintaining protocols, resources, and metrics for continual monitoring of AI systems' performance, trustworthiness, and alignment with contextual norms and values [NIST AI RMF Playbook Manage 2.3 Action 1], establishing and regularly reviewing treatment and response plans for incidents, negative impacts, or outcomes [NIST AI RMF Playbook Manage 2.3 Action 2], establishing and maintaining procedures to regularly monitor system components for drift, decontextualization, or other AI system behavior factors [NIST AI RMF Playbook Manage 2.3 Action 3], establishing and maintaining procedures for capturing feedback about negative impacts [NIST AI RMF Playbook Manage 2.3 Action 4], verifying contingency processes to handle any negative impacts associated with mission-critical AI systems and to deactivate systems [NIST AI RMF Playbook Manage 2.3 Action 5], enabling preventive and post-hoc exploration of AI system limitations by relevant AI actor groups [NIST AI RMF Playbook Manage 2.3 Action 6], and decommissioning systems that exceed risk tolerances [NIST AI RMF Playbook Manage 2.3 Action 7].
+
+### 4.3 Superseding, Disengaging, or Deactivating AI Systems
+
+Mechanisms must be in place and applied, and responsibilities must be assigned and understood, to supersede, disengage, or deactivate AI systems that demonstrate performance or outcomes inconsistent with intended use. The AI Risk / Incident Response team is responsible for these mechanisms and assigns the associated responsibilities. [NIST AI RMF Manage 2.4]
+
+NIST suggests, among its 8 actions for Manage 2.4, regularly reviewing established procedures for AI system bypass actions, including plans for redundant or backup systems to ensure continuity of operational and/or business functionality [NIST AI RMF Playbook Manage 2.4 Action 1], regularly reviewing and identifying system incident thresholds for activating bypass or deactivation responses [NIST AI RMF Playbook Manage 2.4 Action 2], applying change management processes to understand the upstream and downstream consequences of bypassing or deactivating an AI system or AI system components [NIST AI RMF Playbook Manage 2.4 Action 3], applying protocols, resources, and metrics for decisions to supersede, bypass, or deactivate AI systems or AI system components [NIST AI RMF Playbook Manage 2.4 Action 4], preserving materials for forensic, regulatory, and legal review [NIST AI RMF Playbook Manage 2.4 Action 5], conducting internal root cause analysis and process reviews of bypass or deactivation events [NIST AI RMF Playbook Manage 2.4 Action 6], decommissioning and preserving system components that cannot be updated to meet criteria for redeployment [NIST AI RMF Playbook Manage 2.4 Action 7], and establishing criteria for redeploying updated system components, in consideration of trustworthiness characteristics [NIST AI RMF Playbook Manage 2.4 Action 8].
+
+Acme Health adopts NIST's suggested preservation action as its own requirement: the AI Risk / Incident Response team shall preserve materials from bypass, deactivation, and incident events for forensic, regulatory, and legal review.
+
+## 5. Post-Deployment Monitoring and Continual Improvement
+
+### 5.1 Risk Treatment Documentation and Monitoring
+
+Risk treatments for identified and measured AI risks — including response and recovery and communication plans — must be documented and monitored regularly. The AI Risk / Incident Response team owns this documentation and monitoring. [NIST AI RMF Manage 4]
+
+### 5.2 Post-Deployment Monitoring Plans
+
+Post-deployment AI system monitoring plans must be implemented, including mechanisms for capturing and evaluating input from users and other relevant AI actors, appeal and override, decommissioning, incident response, recovery, and change management. [NIST AI RMF Manage 4.1]
+
+NIST suggests, among its 9 actions for Manage 4.1, establishing and maintaining procedures to monitor AI system performance for risks and negative and positive impacts associated with trustworthiness characteristics [NIST AI RMF Playbook Manage 4.1 Action 1], performing post-deployment TEVV tasks to evaluate AI system validity and reliability, bias and fairness, privacy, and security and resilience [NIST AI RMF Playbook Manage 4.1 Action 2], evaluating AI system trustworthiness in conditions similar to the deployment context of use, and prior to deployment [NIST AI RMF Playbook Manage 4.1 Action 3], establishing and implementing red-teaming exercises at a prescribed cadence and evaluating their efficacy [NIST AI RMF Playbook Manage 4.1 Action 4], establishing procedures for tracking dataset modifications such as data deletion or rectification requests [NIST AI RMF Playbook Manage 4.1 Action 5], establishing mechanisms for regular communication and feedback between relevant AI actors and internal or external stakeholders to capture information about system performance, trustworthiness, and impact [NIST AI RMF Playbook Manage 4.1 Action 6], sharing information about errors, near-misses, and attack patterns with incident databases, other organizations with similar systems, and system users and stakeholders [NIST AI RMF Playbook Manage 4.1 Action 7], responding to and documenting detected or reported negative impacts or issues in AI system performance and trustworthiness [NIST AI RMF Playbook Manage 4.1 Action 8], and decommissioning systems that exceed established risk tolerances [NIST AI RMF Playbook Manage 4.1 Action 9].
+
+### 5.3 Continual Improvement
+
+Measurable activities for continual improvement must be integrated into AI system updates and include regular engagement with interested parties, including relevant AI actors. [NIST AI RMF Manage 4.2]
+
+NIST suggests, among its 5 actions for Manage 4.2, integrating trustworthiness characteristics into protocols and metrics used for continual improvement [NIST AI RMF Playbook Manage 4.2 Action 1], establishing processes for evaluating and integrating feedback into AI system improvements [NIST AI RMF Playbook Manage 4.2 Action 2], assessing and evaluating the alignment of proposed improvements with relevant regulatory and legal frameworks [NIST AI RMF Playbook Manage 4.2 Action 3], assessing and evaluating the alignment of proposed improvements connected to the values and norms within the context of use [NIST AI RMF Playbook Manage 4.2 Action 4], and documenting the basis for decisions made relative to tradeoffs between trustworthiness characteristics, system risks, and system opportunities [NIST AI RMF Playbook Manage 4.2 Action 5].
+
+## 6. Incident and Error Communication, Tracking, and Recovery
+
+Incidents and errors must be communicated to relevant AI actors, including affected communities, and processes for tracking, responding to, and recovering from incidents and errors must be followed and documented. The AI Risk / Incident Response team owns these communication, tracking, response, and recovery processes end to end. [NIST AI RMF Manage 4.3]
+
+NIST suggests, among its 5 actions for Manage 4.3, establishing procedures to regularly share information about errors, incidents, and negative impacts with relevant stakeholders, operators, practitioners and users, and impacted parties [NIST AI RMF Playbook Manage 4.3 Action 1], maintaining a database of reported errors, near-misses, incidents, and negative impacts including date reported, number of reports, assessment of impact and severity, and responses [NIST AI RMF Playbook Manage 4.3 Action 2], maintaining a database of system changes, reason for change, and details of how the change was made, tested, and deployed [NIST AI RMF Playbook Manage 4.3 Action 3], maintaining version history information and metadata to enable continuous improvement processes [NIST AI RMF Playbook Manage 4.3 Action 4], and verifying that relevant AI actors responsible for identifying complex or emergent risks are properly resourced and empowered [NIST AI RMF Playbook Manage 4.3 Action 5].
+
+Acme Health adopts NIST's suggested database actions as its own requirements: the AI Risk / Incident Response team shall maintain a database of reported errors, near-misses, incidents, and negative impacts — including date reported, number of reports, assessment of impact and severity, and responses — in the [Ticketing System], and shall maintain a database of system changes, the reason for change, and details of how the change was made, tested, and deployed in the [Ticketing System].

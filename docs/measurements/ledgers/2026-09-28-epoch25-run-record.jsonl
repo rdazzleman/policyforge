@@ -1,0 +1,111 @@
+{"start": "2026-09-28T15:33:37.678552", "commit": "d2a2cc0838ab8cc82343dd5b2ac431858a3935e1", "cap": 19.0, "confirmed": "Approve the cost (the user, directly to b5 in b5's session, 2026-09-28, answering b5's request to confirm #4 Stage 1 at a hard stop of $19 and #3 with the Opus arm at $4.50)", "catalogs": ["nist-800-53-r5", "fedramp", "arc-ampe", "hipaa-security-rule", "nist-ai-rmf"]}
+{"model": "glm", "step": "eval routing x3", "spent_before": 0.0, "spent_after": 0.0059546925000000025, "reserve": 0.019419187499999997}
+{"start": "2026-09-28T15:36:36.023719", "commit": "d2a2cc0838ab8cc82343dd5b2ac431858a3935e1", "cap": 19.0, "confirmed": "Approve the cost (the user, directly to b5 in b5's session, 2026-09-28, answering b5's request to confirm #4 Stage 1 at a hard stop of $19 and #3 with the Opus arm at $4.50); resumed after the escalation-cost guard fix", "catalogs": ["nist-800-53-r5", "fedramp", "arc-ampe", "hipaa-security-rule", "nist-ai-rmf"]}
+{"model": "glm", "step": "eval chaining x3", "spent_before": 0.007950462500000002, "spent_after": 0.02404406649999998, "reserve": 0.15349108499999997}
+{"model": "glm", "step": "eval resolution x3", "spent_before": 0.02404406649999998, "spent_after": 0.02759998899999998, "reserve": 0.008592255}
+{"model": "glm", "step": "eval expansion x3", "spent_before": 0.02759998899999998, "spent_after": 0.02861617899999998, "reserve": 0.00256959}
+{"model": "glm", "step": "eval answering x3", "spent_before": 0.02861617899999998, "spent_after": 0.039304447999999985, "reserve": 0.0659362275}
+{"model": "glm", "step": "eval conversation x3", "spent_before": 0.039304447999999985, "spent_after": 0.06315107549999996, "reserve": 0.031366665}
+{"model": "glm", "step": "eval edit_plan x3", "spent_before": 0.06315107549999996, "spent_after": 0.06949936799999994, "reserve": 0.010728314999999999}
+{"model": "glm", "step": "eval edit_apply x3", "spent_before": 0.06949936799999994, "spent_after": 0.0717774929999999, "reserve": 0.009950737499999997}
+{"model": "glm", "step": "eval generation x3", "spent_before": 0.0717774929999999, "spent_after": 0.0799613629999999, "reserve": 0.022774500000000003}
+{"model": "glm", "step": "eval synthesis x3", "spent_before": 0.0799613629999999, "spent_after": 0.11194985799999989, "reserve": 0.006650369999999999}
+{"model": "glm", "step": "eval crosswalk x3", "spent_before": 0.11194985799999989, "spent_after": 0.1168264794999999, "reserve": 0.0346761}
+{"model": "glm", "step": "eval paraphrase x3", "spent_before": 0.1168264794999999, "spent_after": 0.1290898545, "reserve": 0.06984247499999999}
+{"model": "glm", "step": "eval answer_paraphrase x3", "spent_before": 0.1290898545, "spent_after": 0.1392267534999998, "reserve": 0.02657907}
+{"model": "glm", "step": "pipeline Security Program Governance", "spent_before": 0.1392267534999998, "spent_after": 0.18163542599999974, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Risk Assessment & Authorization", "spent_before": 0.18163542599999974, "spent_after": 0.19832104849999999, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Identity Lifecycle & Access Review", "spent_before": 0.19832104849999999, "spent_after": 0.21999144849999996, "reserve": 0.0363}
+{"start": "2026-09-28T17:09:33.931019", "commit": "d2a2cc0838ab8cc82343dd5b2ac431858a3935e1", "cap": 19.0, "confirmed": "Approve the cost (the user, directly to b5 in b5's session, 2026-09-28, answering b5's request to confirm #4 Stage 1 at a hard stop of $19 and #3 with the Opus arm at $4.50); resumed with Opus first, a reorder within the approval", "catalogs": ["nist-800-53-r5", "fedramp", "arc-ampe", "hipaa-security-rule", "nist-ai-rmf"]}
+{"model": "opus", "step": "pipeline Security Program Governance", "spent_before": 0.21999144849999996, "spent_after": 3.0612514484999997, "reserve": 2.8005}
+{"model": "opus", "step": "pipeline Risk Assessment & Authorization", "spent_before": 3.0612514484999997, "spent_after": 5.4388074485, "reserve": 2.8005}
+{"model": "opus", "step": "pipeline Identity Lifecycle & Access Review", "spent_before": 5.4388074485, "spent_after": 8.444971448499999, "reserve": 2.8005}
+{"model": "opus", "step": "pipeline Authentication & Credential Management", "spent_before": 8.444971448499999, "spent_after": 10.5121834485, "reserve": 2.8005}
+{"model": "opus", "step": "pipeline Remote & Third-Party Access", "spent_before": 10.5121834485, "spent_after": 11.8285554485, "reserve": 2.8005}
+{"model": "opus", "step": "eval routing x1", "spent_before": 11.8285554485, "spent_after": 11.946147448499998, "reserve": 0.23541}
+{"model": "opus", "step": "eval chaining x1", "spent_before": 11.946147448499998, "spent_after": 12.133115448499998, "reserve": 2.286324}
+{"model": "opus", "step": "eval resolution x1", "spent_before": 12.133115448499998, "spent_after": 12.1538194485, "reserve": 0.120372}
+{"model": "opus", "step": "eval expansion x1", "spent_before": 12.1538194485, "spent_after": 12.162795448499999, "reserve": 0.036936}
+{"model": "opus", "step": "eval answering x1", "spent_before": 12.162795448499999, "spent_after": 12.471395448500006, "reserve": 0.889866}
+{"model": "opus", "step": "eval conversation x1", "spent_before": 12.471395448500006, "spent_after": 12.8211954485, "reserve": 0.430716}
+{"model": "opus", "step": "eval edit_plan x1", "spent_before": 12.8211954485, "spent_after": 12.9082394485, "reserve": 0.146916}
+{"model": "opus", "step": "eval edit_apply x1", "spent_before": 12.9082394485, "spent_after": 12.9450674485, "reserve": 0.14096999999999998}
+{"model": "opus", "step": "eval generation x1", "spent_before": 12.9450674485, "spent_after": 13.290643448500001, "reserve": 0.32472}
+{"model": "opus", "step": "eval synthesis x1", "spent_before": 13.290643448500001, "spent_after": 13.700547448500004, "reserve": 0.092088}
+{"model": "opus", "step": "eval crosswalk x1", "spent_before": 13.700547448500004, "spent_after": 13.931291448500005, "reserve": 0.44784}
+{"model": "opus", "step": "eval paraphrase x1", "spent_before": 13.931291448500005, "spent_after": 14.374059448500002, "reserve": 0.8401799999999999}
+{"model": "opus", "step": "eval answer_paraphrase x1", "spent_before": 14.374059448500002, "spent_after": 14.610147448500001, "reserve": 0.305928}
+{"model": "glm", "step": "pipeline Authentication & Credential Management", "spent_before": 14.610147448500001, "spent_after": 14.661356793500001, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Remote & Third-Party Access", "spent_before": 14.661356793500001, "spent_after": 14.670922653500002, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Network & Boundary Protection", "spent_before": 14.670922653500002, "spent_after": 14.692528603500001, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Encryption & Key Management", "spent_before": 14.692528603500001, "spent_after": 14.699123261000002, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Logging, Monitoring & Alerting", "spent_before": 14.699123261000002, "spent_after": 14.7143023715, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Incident Response", "spent_before": 14.7143023715, "spent_after": 14.728554521500001, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Vulnerability & Patch Management", "spent_before": 14.728554521500001, "spent_after": 14.742669411500001, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Endpoint Protection & Device Controls", "spent_before": 14.742669411500001, "spent_after": 14.751124901500003, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Change & Configuration Management", "spent_before": 14.751124901500003, "spent_after": 14.773388831500002, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Secure Development Lifecycle", "spent_before": 14.773388831500002, "spent_after": 14.837267611500002, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Backup, Restore & Contingency", "spent_before": 14.837267611500002, "spent_after": 14.896094161500002, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Media Handling & Disposal", "spent_before": 14.896094161500002, "spent_after": 14.909368911500001, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Physical & Environmental Security", "spent_before": 14.909368911500001, "spent_after": 14.927687111500001, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline System Maintenance", "spent_before": 14.927687111500001, "spent_after": 14.949133361500001, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Business Associate & Vendor Risk", "spent_before": 14.949133361500001, "spent_after": 14.960975464000002, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Workforce Security Training", "spent_before": 14.960975464000002, "spent_after": 14.976411964, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Data Protection & Privacy", "spent_before": 14.976411964, "spent_after": 14.989723264, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline AI Governance & Accountability", "spent_before": 14.989723264, "spent_after": 14.996542414, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline AI System Inventory & Impact Assessment", "spent_before": 14.996542414, "spent_after": 15.001409064, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline AI Evaluation & Measurement", "spent_before": 15.001409064, "spent_after": 15.007047164, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline AI Risk Treatment & Incident Response", "spent_before": 15.007047164, "spent_after": 15.011822114, "reserve": 0.0363}
+{"model": "glm", "step": "pipeline Third-Party AI & Data Supply Chain", "spent_before": 15.011822114, "spent_after": 15.017149164, "reserve": 0.0363}
+{"model": "deepseek", "step": "eval routing x3", "spent_before": 15.017149164, "spent_after": 15.0228213542, "reserve": 0.007950303}
+{"model": "deepseek", "step": "eval chaining x3", "spent_before": 15.0228213542, "spent_after": 15.061679192058, "reserve": 0.066212991}
+{"model": "deepseek", "step": "eval resolution x3", "spent_before": 15.061679192058, "spent_after": 15.064410330058, "reserve": 0.0036461880000000003}
+{"model": "deepseek", "step": "eval expansion x3", "spent_before": 15.064410330058, "spent_after": 15.065494264058, "reserve": 0.001097856}
+{"model": "deepseek", "step": "eval answering x3", "spent_before": 15.065494264058, "spent_after": 15.085614856211999, "reserve": 0.027712205999999996}
+{"model": "deepseek", "step": "eval conversation x3", "spent_before": 15.085614856211999, "spent_after": 15.10560141387, "reserve": 0.013241646000000003}
+{"model": "deepseek", "step": "eval edit_plan x3", "spent_before": 15.10560141387, "spent_after": 15.116064093239999, "reserve": 0.004525848}
+{"model": "deepseek", "step": "eval edit_apply x3", "spent_before": 15.116064093239999, "spent_after": 15.129863680614, "reserve": 0.0042350849999999995}
+{"model": "deepseek", "step": "eval generation x3", "spent_before": 15.129863680614, "spent_after": 15.181311031089999, "reserve": 0.009709416000000002}
+{"model": "deepseek", "step": "eval synthesis x3", "spent_before": 15.181311031089999, "spent_after": 15.27070690809, "reserve": 0.00281358}
+{"model": "deepseek", "step": "eval crosswalk x3", "spent_before": 15.27070690809, "spent_after": 15.409350908566001, "reserve": 0.01441431}
+{"model": "deepseek", "step": "eval paraphrase x3", "spent_before": 15.409350908566001, "spent_after": 15.429965498416403, "reserve": 0.028542402}
+{"model": "deepseek", "step": "eval answer_paraphrase x3", "spent_before": 15.429965498416403, "spent_after": 15.440547984452401, "reserve": 0.010752588}
+{"model": "deepseek", "step": "pipeline Security Program Governance", "spent_before": 15.440547984452401, "spent_after": 15.489229665052402, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Risk Assessment & Authorization", "spent_before": 15.489229665052402, "spent_after": 15.5726545691764, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Identity Lifecycle & Access Review", "spent_before": 15.5726545691764, "spent_after": 15.7501673431764, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Authentication & Credential Management", "spent_before": 15.7501673431764, "spent_after": 15.8314383663924, "reserve": 0.0165}
+{"start": "2026-09-29T05:05:19.047654", "commit": "d2a2cc0838ab8cc82343dd5b2ac431858a3935e1", "cap": 19.0, "confirmed": "Approve the cost (the user, directly to b5 in b5's session, 2026-09-28, answering b5's request to confirm #4 Stage 1 at a hard stop of $19 and #3 with the Opus arm at $4.50); resumed on a private copy of the shared venv (pip freeze identical), paused between steps at 05:04 CDT 2026-09-29 for #44's re-sync window", "catalogs": ["nist-800-53-r5", "fedramp", "arc-ampe", "hipaa-security-rule", "nist-ai-rmf"]}
+{"model": "deepseek", "step": "pipeline Remote & Third-Party Access", "spent_before": 15.8314383663924, "spent_after": 15.9216261013924, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Network & Boundary Protection", "spent_before": 15.9216261013924, "spent_after": 15.949947851448401, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Encryption & Key Management", "spent_before": 15.949947851448401, "spent_after": 15.9764618102484, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Logging, Monitoring & Alerting", "spent_before": 15.9764618102484, "spent_after": 16.110698098248402, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Incident Response", "spent_before": 16.110698098248402, "spent_after": 16.266861174248408, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Vulnerability & Patch Management", "spent_before": 16.266861174248408, "spent_after": 16.290119448848408, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Endpoint Protection & Device Controls", "spent_before": 16.290119448848408, "spent_after": 16.31441451344841, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Change & Configuration Management", "spent_before": 16.31441451344841, "spent_after": 16.346332858548408, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Secure Development Lifecycle", "spent_before": 16.346332858548408, "spent_after": 16.39473748912841, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Backup, Restore & Contingency", "spent_before": 16.39473748912841, "spent_after": 16.413669766128404, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Media Handling & Disposal", "spent_before": 16.413669766128404, "spent_after": 16.420584075068405, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Physical & Environmental Security", "spent_before": 16.420584075068405, "spent_after": 16.439838000068406, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline System Maintenance", "spent_before": 16.439838000068406, "spent_after": 16.447096888068405, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Business Associate & Vendor Risk", "spent_before": 16.447096888068405, "spent_after": 16.4524529168684, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Workforce Security Training", "spent_before": 16.4524529168684, "spent_after": 16.4587024731884, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Data Protection & Privacy", "spent_before": 16.4587024731884, "spent_after": 16.488165695788403, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline AI Governance & Accountability", "spent_before": 16.488165695788403, "spent_after": 16.518437237388408, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline AI System Inventory & Impact Assessment", "spent_before": 16.518437237388408, "spent_after": 16.59557877098841, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline AI Evaluation & Measurement", "spent_before": 16.59557877098841, "spent_after": 16.678285850588413, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline AI Risk Treatment & Incident Response", "spent_before": 16.678285850588413, "spent_after": 16.687398744888416, "reserve": 0.0165}
+{"model": "deepseek", "step": "pipeline Third-Party AI & Data Supply Chain", "spent_before": 16.687398744888416, "spent_after": 16.724200771288416, "reserve": 0.0165}
+{"model": "sonnet", "step": "eval routing x1", "spent_before": 16.724200771288416, "spent_after": 16.78426077128842, "reserve": 0.117705}
+{"model": "sonnet", "step": "eval chaining x1", "spent_before": 16.78426077128842, "spent_after": 16.889044771288418, "reserve": 1.143162}
+{"model": "sonnet", "step": "eval resolution x1", "spent_before": 16.889044771288418, "spent_after": 16.89975877128842, "reserve": 0.060186}
+{"model": "sonnet", "step": "eval expansion x1", "spent_before": 16.89975877128842, "spent_after": 16.90441077128842, "reserve": 0.018468}
+{"model": "sonnet", "step": "eval answering x1", "spent_before": 16.90441077128842, "spent_after": 17.01778877128842, "reserve": 0.444933}
+{"model": "sonnet", "step": "eval conversation x1", "spent_before": 17.01778877128842, "spent_after": 17.16191077128843, "reserve": 0.215358}
+{"model": "sonnet", "step": "eval edit_plan x1", "spent_before": 17.16191077128843, "spent_after": 17.204964771288424, "reserve": 0.073458}
+{"model": "sonnet", "step": "eval edit_apply x1", "spent_before": 17.204964771288424, "spent_after": 17.22488677128842, "reserve": 0.07048499999999999}
+{"model": "sonnet", "step": "eval generation x1", "spent_before": 17.22488677128842, "spent_after": 17.33767277128842, "reserve": 0.16236}
+{"model": "sonnet", "step": "eval synthesis x1", "spent_before": 17.33767277128842, "spent_after": 17.58177877128842, "reserve": 0.046044}
+{"model": "sonnet", "step": "eval crosswalk x1", "spent_before": 17.58177877128842, "spent_after": 17.69978077128842, "reserve": 0.22392}
+{"model": "sonnet", "step": "eval paraphrase x1", "spent_before": 17.69978077128842, "spent_after": 17.923694771288424, "reserve": 0.42008999999999996}
+{"model": "sonnet", "step": "eval answer_paraphrase x1", "spent_before": 17.923694771288424, "spent_after": 18.009640771288428, "reserve": 0.152964}

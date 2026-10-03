@@ -1,0 +1,80 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002713
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 720d461cc1435d26
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Data Protection and Privacy Standard
+
+**Document Owner:** Data Governance
+**Review Cadence:** Annual
+
+This Standard establishes Example Org's requirements for the processing and transparency of personally identifiable information (PII) and for the documentation obligations arising under the HIPAA Security Rule. The Data Governance team is accountable for this process end to end, including all handoffs to participating teams. This Standard applies to all personnel and roles designated by Data Governance.
+
+## 1. PII Processing and Transparency Policy
+
+Data Governance must develop, document, and disseminate to organization-defined personnel and roles an organization-level personally identifiable information (PII) processing and transparency policy. NIST also permits mission/business process-level and system-level policies. The policy must address purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and must be consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+## 2. PII Processing and Transparency Procedures
+
+Data Governance must develop, document, and disseminate procedures to facilitate implementation of the PII processing and transparency policy and its associated controls. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+## 3. Designation of Responsible Official
+
+Data Governance is designated as the official responsible for managing the development, documentation, and dissemination of the PII processing and transparency policy and procedures. Data Governance must be named as the responsible official in the appropriate security and privacy documents. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+## 4. Review and Update of Policy and Procedures
+
+Data Governance must review and update the PII processing and transparency policy and procedures at least every one (1) year, and following organization-defined events, including:
+
+- Assessment or audit findings;
+- Breaches or security/privacy incidents; and
+- Changes to applicable laws (including privacy laws), executive orders, directives, regulations, policies, standards, and guidelines.
+
+Data Governance must actively monitor for changes to applicable privacy laws, regulations, and policies affecting PII processing and transparency. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+## 5. HIPAA Security Rule Documentation
+
+### 5.1 Written Form
+
+Data Governance must maintain the policies and procedures implemented to comply with the HIPAA Security Rule, and any record of an action, activity, or assessment required to be documented, in written (which may be electronic) form. [HIPAA Security Rule 164.316(b)(1)]
+
+### 5.2 Retention
+
+Data Governance must retain HIPAA documentation for 6 years from the date of its creation or the date when it was last in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i) | ARC-AMPE SI-12]
+
+### 5.3 Availability
+
+Data Governance must make HIPAA documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+### 5.4 Periodic Review and Update
+
+Data Governance must review HIPAA documentation periodically — at least annually — and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+## 6. Authority for and Restriction of PII Processing
+
+### 6.1 Documented Authority
+
+Data Governance must determine and document the organization-defined authority that permits the organization-defined processing of personally identifiable information (PII). [NIST 800-53 PT-2 | ARC-AMPE PT-2 AE Mandatory]
+
+### 6.2 Restriction to Authorized Processing
+
+The processing of PII must be restricted to only that which is authorized. [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+## 7. Evidence and Records
+
+Data Governance must maintain the following artifacts as evidence of this process:
+
+| Artifact                                   | Description                                                                                                                                                 | Owner           |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| Data inventory and classification register | Records the organization's PII processing, including the documented authority permitting each defined processing activity (Section 6.1)                     | Data Governance |
+| Retention schedule                         | Records the retention obligations for documentation maintained under this Standard, including the 6-year HIPAA documentation retention period (Section 5.2) | Data Governance |
+
+Data Governance is responsible for keeping these artifacts current as part of the annual review cycle defined in Section 4 and in response to the review triggers and update obligations defined in Sections 4 and 5.4.

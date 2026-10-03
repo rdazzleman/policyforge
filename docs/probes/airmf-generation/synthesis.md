@@ -1,0 +1,7 @@
+- Legal and regulatory requirements involving AI are understood, managed, and documented. [NIST AI RMF GOVERN-1.1]
+- The characteristics of trustworthy AI are integrated into organizational policies, processes, procedures, and practices. [NIST AI RMF GOVERN-1.2]
+- Processes, procedures, and practices are in place to determine the needed level of risk management activities based on the organization's risk tolerance. [NIST AI RMF GOVERN-1.3]
+- The risk management process and its outcomes are established through transparent policies, procedures, and other controls based on organizational risk priorities. [NIST AI RMF GOVERN-1.4]
+- Ongoing monitoring and periodic review of the risk management process and its outcomes are planned, with organizational roles and responsibilities clearly defined, including determining the frequency of periodic review. [NIST AI RMF GOVERN-1.5]
+- Mechanisms are in place to inventory AI systems and are resourced according to organizational risk priorities. [NIST AI RMF GOVERN-1.6]
+- Processes and procedures are in place for decommissioning and phasing out AI systems safely and in a manner that does not increase risks or decrease the organization’s trustworthiness. [NIST AI RMF GOVERN-1.7]

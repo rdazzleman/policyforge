@@ -1,0 +1,385 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.006005
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 0a52fc6ecd5ad469
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Information Security Standard: Security Program Governance
+
+**Standard ID:** STD-GOV-001
+**Owning Team:** Security Program / GRC
+**Review Cadence:** Annual
+**Evidence Artifacts:** Approved policy set with review dates; Program plan and org chart
+
+## 1. Purpose and Scope
+
+This Standard establishes the governance requirements for Example Org's organization-wide information security program. It defines how the program is planned, documented, staffed, reviewed, and enforced, and how security and privacy risk is managed across organizational systems and the information they process. This Standard applies to all organizational systems, workforce members, facilities, and external providers that create, receive, maintain, or transmit organizational information, including electronic protected health information (ePHI) and personally identifiable information (PII).
+
+The Security Program / GRC team is accountable for this process end to end, including all reviews, approvals, dissemination, and record-keeping described herein.
+
+## 2. Roles and Responsibilities
+
+### 2.1 Senior Information Security Officer
+
+Example Org must appoint a senior information security officer (e.g., senior agency information security officer or chief information security officer) with the mission and resources to coordinate, develop, implement, and maintain an organization-wide information security program. [NIST PM-2 | ARC-AMPE PM-2 AE Mandatory]
+
+Example Org must identify the security official responsible for the development and implementation of the required policies and procedures for the covered entity or business associate. [HIPAA 164.308(a)(2)]
+
+### 2.2 Designated Officials
+
+The Security Program / GRC team must ensure that officials are designated for each of the following responsibilities, and that these officials are named in the appropriate security and privacy documents:
+
+- Development of system-level information security program plans. [ARC-AMPE PM-1 AE Mandatory]
+- Management of planning controls for systems. [ARC-AMPE PL-1 AE Mandatory]
+- Management of personnel security for systems. [ARC-AMPE PS-1 AE Mandatory]
+- Management of system acquisition. [ARC-AMPE SA-1 AE Mandatory]
+
+The Security Program / GRC team must designate an organization-defined official to manage the development, documentation, and dissemination of each organization-level policy and procedure set required by this Standard, including the planning policy and procedures, [NIST PL-1 Low, Moderate, High | ARC-AMPE PL-1 AE Mandatory] the personnel security policy and procedures, [NIST PS-1 Low, Moderate, High | ARC-AMPE PS-1 AE Mandatory] and the system and services acquisition policy and procedures. [NIST SA-1 Low, Moderate, High | ARC-AMPE SA-1 AE Mandatory]
+
+## 3. Organization-Wide Information Security Program Plan
+
+### 3.1 Development and Content
+
+The Security Program / GRC team must develop and disseminate an organization-wide information security program plan that provides an overview of the requirements for the security program and describes the security program management controls and common controls in place or planned for meeting those requirements. [NIST PM-1 | ARC-AMPE PM-1 AE Mandatory]
+
+The information security program plan must include the identification and assignment of roles and responsibilities, management commitment, coordination among organizational entities, and compliance, and must reflect coordination among the organizational entities responsible for information security. [NIST PM-1 | ARC-AMPE PM-1 AE Mandatory]
+
+The program plan and org chart constitute the evidence artifacts for this section and must be maintained by the Security Program / GRC team.
+
+### 3.2 Approval
+
+The information security program plan must be approved by a senior official with responsibility and accountability for the risk being incurred to organizational operations (including mission, functions, image, and reputation), organizational assets, individuals, other organizations, and the Nation. [NIST PM-1 | ARC-AMPE PM-1 AE Mandatory]
+
+### 3.3 Review and Update
+
+The Security Program / GRC team must review and update the organization-wide information security program plan at an organization-defined frequency and following organization-defined events. [NIST PM-1] The plan must be reviewed and updated at least every one (1) year and following organization-defined events, including system architectural or design changes; assessment or audit findings; security or privacy incidents; and changes to applicable laws (to include privacy laws), Executive Orders, directives, regulations, policies, standards, and guidelines. [ARC-AMPE PM-1 AE Mandatory]
+
+### 3.4 Protection
+
+The Security Program / GRC team must protect the information security program plan from unauthorized disclosure and modification. [NIST PM-1 | ARC-AMPE PM-1 AE Mandatory]
+
+### 3.5 Monitoring and Effectiveness
+
+The Security Program / GRC team must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect information security program plans, and must review the plans at least every one (1) year to ensure they remain effective. [ARC-AMPE PM-1 AE Mandatory]
+
+The Security Program / GRC team must ensure the information security program plan supports cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and for the information on that system. [ARC-AMPE PM-1 AE Mandatory]
+
+## 4. Risk Management Strategy
+
+The Security Program / GRC team must develop a comprehensive strategy to manage security risk to organizational operations and assets, individuals, other organizations, and the Nation associated with the operation and use of organizational systems, and privacy risk to individuals resulting from the authorized processing of personally identifiable information. [NIST PM-9 | ARC-AMPE PM-9 AE Mandatory]
+
+The risk management strategy must be implemented consistently across the organization. [NIST PM-9 | ARC-AMPE PM-9 AE Mandatory]
+
+The Security Program / GRC team must review and update the risk management strategy at an organization-defined frequency or as required, to address organizational changes. [NIST PM-9] The strategy must be reviewed and updated at least every one (1) year or as required, to address organizational changes. [ARC-AMPE PM-9 AE Mandatory]
+
+## 5. Organization-Level Planning Policy and Procedures
+
+### 5.1 Development
+
+The Security Program / GRC team must develop, document, and disseminate to organization-defined personnel or roles an organization-level planning policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines. [NIST PL-1 Low, Moderate, High | ARC-AMPE PL-1 AE Mandatory]
+
+The Security Program / GRC team must develop procedures to facilitate the implementation of the planning policy and the associated planning controls. [NIST PL-1 Low, Moderate, High | ARC-AMPE PL-1 AE Mandatory]
+
+### 5.2 Review and Update
+
+The Security Program / GRC team must review and update the planning policy and procedures at an organization-defined frequency and following organization-defined events. [NIST PL-1 Low, Moderate, High] The planning policy and procedures must be reviewed and updated at least every one (1) year and following organization-defined events, including assessment or audit findings; security or privacy incidents; and changes to applicable laws (to include privacy laws), Executive Orders, directives, regulations, policies, standards, and guidelines. [ARC-AMPE PL-1 AE Mandatory]
+
+### 5.3 Monitoring and Effectiveness
+
+The Security Program / GRC team must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect planning policies, and must review them at least every one (1) year to ensure the planning policies remain effective. [ARC-AMPE PL-1 AE Mandatory]
+
+The Security Program / GRC team must ensure planning policies and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and for the information on that system. [ARC-AMPE PL-1 AE Mandatory]
+
+## 6. Documentation Management
+
+### 6.1 Written Form and Record
+
+The Security Program / GRC team must maintain the policies and procedures implemented to comply with the rule in written (electronic permitted) form, and must maintain a written record of any action, activity, or assessment required by the rule to be documented. [HIPAA 164.316(b)(1)]
+
+### 6.2 Retention
+
+The Security Program / GRC team must retain the required documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA 164.316(b)(2)(i)]
+
+### 6.3 Availability
+
+The Security Program / GRC team must make the documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii)]
+
+### 6.4 Periodic Review
+
+The Security Program / GRC team must periodically review the documentation and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii)]
+
+### 6.5 Policy Changes
+
+Example Org must implement reasonable and appropriate policies and procedures to comply with the standards, implementation specifications, and other requirements of the rule; policies and procedures may be changed at any time, provided the changes are documented and implemented in accordance with the rule. [HIPAA 164.316(a)]
+
+The approved policy set with review dates is the evidence artifact for this section and must be maintained by the Security Program / GRC team.
+
+## 7. System Security and Privacy Plans
+
+### 7.1 Plan Content
+
+The Security Program / GRC team must ensure that security and privacy plans are developed for each system that:
+
+- Are consistent with the organization's enterprise architecture;
+- Explicitly define the constituent system components;
+- Describe the operational context in terms of mission and business processes;
+- Identify the individuals fulfilling system roles and responsibilities;
+- Identify the information types processed, stored, and transmitted;
+- Provide the security categorization with supporting rationale;
+- Describe specific threats of concern;
+- Provide the results of a privacy risk assessment for systems processing PII;
+- Describe the operational environment and any dependencies on or connections to other systems;
+- Provide an overview of the security and privacy requirements;
+- Identify any relevant control baselines or overlays;
+- Describe the controls in place or planned (including rationale for tailoring decisions);
+- Include risk determinations for security and privacy architecture and design decisions; and
+- Include security- and privacy-related activities requiring planning and coordination with organization-defined individuals or groups.
+
+[NIST PL-2 Low, Moderate, High | ARC-AMPE PL-2 AE Mandatory]
+
+The System Security and Privacy Plan (SSPP) must be consistent with the ARC-AMPE SSPP template. [ARC-AMPE PL-2 AE Mandatory]
+
+### 7.2 Approval and Distribution
+
+System security and privacy plans must be reviewed and approved by the authorizing official or designated representative prior to plan implementation. [NIST PL-2 Low, Moderate, High | ARC-AMPE PL-2 AE Mandatory]
+
+The Security Program / GRC team must distribute copies of the system security and privacy plans and communicate subsequent changes to the plans to organization-defined personnel, roles, or stakeholders. [NIST PL-2 Low, Moderate, High | ARC-AMPE PL-2 AE Mandatory]
+
+### 7.3 Review and Update
+
+The Security Program / GRC team must review the system security and privacy plans at an organization-defined frequency. [NIST PL-2 Low, Moderate, High] The plans must be reviewed at least every one (1) year or following significant changes. [ARC-AMPE PL-2 AE Mandatory]
+
+The Security Program / GRC team must update the system security and privacy plans to address changes to the system and environment of operation or problems identified during plan implementation or control assessments. [NIST PL-2 Low, Moderate, High | ARC-AMPE PL-2 AE Mandatory]
+
+### 7.4 Protection
+
+The Security Program / GRC team must protect the system security and privacy plans from unauthorized disclosure and modification. [NIST PL-2 Low, Moderate, High | ARC-AMPE PL-2 AE Mandatory]
+
+## 8. Rules of Behavior
+
+### 8.1 Establishment and Acknowledgment
+
+The Security Program / GRC team must establish and provide to all individuals requiring access to the system (including contractors) the rules that describe their responsibilities and expected behavior for information and system usage, security, and privacy. [NIST PL-4 Low, Moderate, High | ARC-AMPE PL-4 AE Mandatory]
+
+Example Org must receive a documented acknowledgment (such as an electronic or physical signature, or an electronic agreement check box) from individuals, indicating they have read, understand, and agree to abide by the rules of behavior, before authorizing access to information and the system. [NIST PL-4 Low, Moderate, High | ARC-AMPE PL-4 AE Mandatory]
+
+### 8.2 Review and Re-Acknowledgment
+
+The Security Program / GRC team must review and update the rules of behavior at an organization-defined frequency. [NIST PL-4 Low, Moderate, High] The rules of behavior must be reviewed and updated at least every one (1) year. [ARC-AMPE PL-4 AE Mandatory]
+
+Example Org must require individuals who have acknowledged a previous version of the rules of behavior to read and re-acknowledge when the rules are revised or updated. [NIST PL-4 Low, Moderate, High | ARC-AMPE PL-4 AE Mandatory]
+
+### 8.3 Required Restrictions
+
+The rules of behavior must include restrictions on: use of social media, social networking sites, and external sites/applications; posting organizational information on public websites; and use of organization-provided identifiers (e.g., email addresses) and authentication secrets (e.g., passwords) for creating accounts on external sites/applications. [NIST PL-4(1) Low, Moderate, High | ARC-AMPE PL-4(1) AE Mandatory]
+
+## 9. Workstation Use and Facility Access
+
+### 9.1 Workstation Use
+
+Example Org must implement policies and procedures that specify the proper functions to be performed, the manner in which those functions are to be performed, and the physical attributes of the surroundings of a specific workstation or class of workstation that can access electronic protected health information. [HIPAA 164.310(b)]
+
+### 9.2 Facility Access Controls
+
+Example Org must implement policies and procedures to limit physical access to electronic information systems and the facilities in which they are housed, while ensuring properly authorized access is allowed. [HIPAA 164.310(a)(1)]
+
+Example Org must establish (and implement as needed) procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan in the event of an emergency. [HIPAA 164.310(a)(2)(i)]
+
+Example Org must implement policies and procedures to safeguard the facility and the equipment therein from unauthorized physical access, tampering, and theft. [HIPAA 164.310(a)(2)(ii)]
+
+Example Org must implement procedures to control and validate a person's access to facilities based on their role or function, including visitor control, and control of access to software programs for testing and revision. [HIPAA 164.310(a)(2)(iii)]
+
+Example Org must implement policies and procedures to document repairs and modifications to the physical components of a facility that are related to security (for example, hardware, walls, doors, and locks). [HIPAA 164.310(a)(2)(iv)]
+
+## 10. Security and Privacy Architecture
+
+### 10.1 Architecture Development
+
+The Security Program / GRC team must develop security and privacy architectures for the system that describe:
+
+- The requirements and approach for protecting the confidentiality, integrity, and availability of organizational information;
+- The requirements and approach for processing PII to minimize privacy risk to individuals;
+- How the architectures are integrated into and support the enterprise architecture; and
+- Any assumptions about, and dependencies on, external systems and services.
+
+[NIST PL-8 Moderate, High | ARC-AMPE PL-8 AE Mandatory]
+
+### 10.2 Review and Update
+
+The Security Program / GRC team must review and update the security and privacy architectures at an organization-defined frequency to reflect changes in the enterprise architecture. [NIST PL-8 Moderate, High] The architectures must be reviewed and updated at least every one (1) year or following a significant change (which can include system architectural or design changes; assessment or audit findings; security or privacy incidents; or changes in applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines) to reflect changes in the enterprise architecture. [ARC-AMPE PL-8 AE Mandatory]
+
+### 10.3 Propagation of Architecture Changes
+
+The Security Program / GRC team must reflect planned architecture changes in security and privacy plans, Concept of Operations (CONOPS), criticality analysis, organizational procedures, and procurements and acquisitions. [NIST PL-8 Moderate, High | ARC-AMPE PL-8 AE Mandatory]
+
+## 11. Control Baseline Selection and Tailoring
+
+### 11.1 Baseline Selection
+
+Example Org must select a control baseline for the system. [NIST PL-10 Low, Moderate, High]
+
+### 11.2 Tailoring
+
+Example Org must tailor the selected control baseline by applying specified tailoring actions. [NIST PL-11 Low, Moderate, High | ARC-AMPE PL-11 AE Mandatory]
+
+Example Org must not remove or reduce any of the controls included within the ARC-AMPE baseline; AC 2(8) is prohibited from being added to the control baseline because access to PII may only be granted to officers and employees with a need for the information in performance of their duties, and dynamic account creation may not support independent verification of that need. [ARC-AMPE PL-11 AE Mandatory]
+
+Controls may be added to the ARC-AMPE baseline, provided they do not conflict with or create less stringent standards than the baseline; any added controls should result from a risk-informed decision based on mission and business functions, environments of operation, threats, vulnerabilities, and other conditions affecting the organization. [ARC-AMPE PL-11 AE Mandatory]
+
+Parameter values that do not start with "organization-defined" are considered minimum parameter values and may only be modified to create more stringent standards; parameter values that start with "organization-defined" are the responsibility of the organization to assign, considering applicable regulations, statutes, administrative rules, and similar guidance for safeguarding systems and information. [ARC-AMPE PL-11 AE Mandatory]
+
+## 12. Personnel Security
+
+### 12.1 Personnel Security Policy and Procedures
+
+The Security Program / GRC team must develop, document, and disseminate to organization-defined personnel or roles an organization-level personnel security policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines. [NIST PS-1 Low, Moderate, High | ARC-AMPE PS-1 AE Mandatory]
+
+The Security Program / GRC team must develop procedures to facilitate the implementation of the personnel security policy and the associated personnel security controls. [NIST PS-1 Low, Moderate, High | ARC-AMPE PS-1 AE Mandatory]
+
+The Security Program / GRC team must review and update the personnel security policy and procedures at an organization-defined frequency and following organization-defined events. [NIST PS-1 Low, Moderate, High] The personnel security policy and procedures must be reviewed and updated at least every one (1) year and following organization-defined events, including assessment or audit findings; security or privacy incidents; and changes to applicable laws (to include privacy laws), Executive Orders, directives, regulations, policies, standards, and guidelines. [ARC-AMPE PS-1 AE Mandatory]
+
+The Security Program / GRC team must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect personnel security policies, and must review them at least every one (1) year to ensure the personnel security policies remain effective. [ARC-AMPE PS-1 AE Mandatory]
+
+The Security Program / GRC team must ensure personnel security policies and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and for the information on that system. [ARC-AMPE PS-1 AE Mandatory]
+
+### 12.2 Workforce Access to ePHI
+
+Example Org must implement policies and procedures to ensure all members of the workforce have appropriate access to electronic protected health information and to prevent workforce members who do not have such access from obtaining it. [HIPAA 164.308(a)(3)(i)]
+
+Example Org must implement procedures for the authorization and/or supervision of workforce members who work with electronic protected health information or in locations where it might be accessed. [HIPAA 164.308(a)(3)(ii)(A)]
+
+Example Org must implement procedures to determine that a workforce member's access to electronic protected health information is appropriate. [HIPAA 164.308(a)(3)(ii)(B)]
+
+Example Org must implement procedures for terminating access to electronic protected health information when a workforce member's employment or other arrangement ends, or as required by clearance determinations. [HIPAA 164.308(a)(3)(ii)(C)]
+
+### 12.3 Access Agreements
+
+The Security Program / GRC team must develop and document access agreements (including access authorization requests, nondisclosure agreements, acceptable use agreements, privacy training and awareness, and rules of behavior) for organizational systems. [NIST PS-6 Low, Moderate, High | ARC-AMPE PS-6 AE Mandatory]
+
+The Security Program / GRC team must review and update access agreements at an organization-defined frequency. [NIST PS-6 Low, Moderate, High] Access agreements must be reviewed and updated as part of the system security authorization or when a contract is renewed or extended, but at a minimum at least every one (1) year. [ARC-AMPE PS-6 AE Mandatory]
+
+Example Org must verify that individuals requiring access to organizational information and systems sign appropriate access agreements (paper or electronic) prior to being granted access. [NIST PS-6 Low, Moderate, High | ARC-AMPE PS-6 AE Mandatory]
+
+Example Org must require individuals to re-sign access agreements to maintain access when the agreements have been updated or at an organization-defined frequency. [NIST PS-6 Low, Moderate, High] Individuals must re-sign access agreements to maintain access when the agreements have been updated or at least every one (1) year. [ARC-AMPE PS-6 AE Mandatory]
+
+Access agreements must contain provisions consistent with the ACA and the requirements of 45 CFR § 155.260 – Privacy and security of personally identifiable information, paragraphs (b)(2) and (c). [ARC-AMPE PS-6 AE Mandatory]
+
+### 12.4 Special Access Requirements
+
+For classified information requiring special protection, Example Org must verify individuals have a valid access authorization demonstrated by assigned official government duties, satisfy associated personnel security criteria, and have read, understood, and signed a nondisclosure agreement. [NIST PS-6(2)]
+
+Example Org must notify individuals of applicable, legally binding post-employment requirements for protection of organizational information and must require individuals to sign an acknowledgment of these requirements, if applicable, as part of granting initial access to covered information. [NIST PS-6(3)]
+
+### 12.5 Access Authorization to ePHI
+
+Example Org must implement policies and procedures for authorizing access to electronic protected health information that are consistent with the applicable requirements of subpart E. [HIPAA 164.308(a)(4)(i)]
+
+If a health care clearinghouse is part of a larger organization, Example Org must implement policies and procedures that protect the clearinghouse's electronic protected health information from unauthorized access by the larger organization. [HIPAA 164.308(a)(4)(ii)(A)]
+
+Example Org must implement policies and procedures for granting access to electronic protected health information, for example, through access to a workstation, transaction, program, process, or other mechanism. [HIPAA 164.308(a)(4)(ii)(B)]
+
+Example Org must implement policies and procedures that, based on the entity's access authorization policies, establish, document, review, and modify a user's right of access to a workstation, transaction, program, or process. [HIPAA 164.308(a)(4)(ii)(C)]
+
+### 12.6 Hardware and Electronic Media Controls
+
+Example Org must implement policies and procedures that govern the receipt and removal of hardware and electronic media containing electronic protected health information into and out of a facility, and the movement of these items within the facility. [HIPAA 164.310(d)(1)]
+
+Example Org must implement policies and procedures to address the final disposition of electronic protected health information, and/or the hardware or electronic media on which it is stored. [HIPAA 164.310(d)(2)(i)]
+
+Example Org must implement procedures for removal of electronic protected health information from electronic media before the media are made available for re-use. [HIPAA 164.310(d)(2)(ii)]
+
+Example Org must maintain a record of the movements of hardware and electronic media and any person responsible for them. [HIPAA 164.310(d)(2)(iii)]
+
+Example Org must create a retrievable, exact copy of electronic protected health information, when needed, before movement of equipment. [HIPAA 164.310(d)(2)(iv)]
+
+## 13. External Providers and Business Associates
+
+### 13.1 Personnel Security Requirements for External Providers
+
+Example Org must establish personnel security requirements, including security roles and responsibilities, for external providers. [NIST PS-7 Low, Moderate, High | FedRAMP PS-7 | ARC-AMPE PS-7 AE Mandatory]
+
+Example Org must require external providers to comply with the personnel security policies and procedures established by the organization. [NIST PS-7 Low, Moderate, High | FedRAMP PS-7 | ARC-AMPE PS-7 AE Mandatory]
+
+The Security Program / GRC team must document the personnel security requirements for external providers. [NIST PS-7 Low, Moderate, High | FedRAMP PS-7 | ARC-AMPE PS-7 AE Mandatory]
+
+Example Org must require external providers to notify organization-defined personnel or roles of any personnel transfers or terminations of external personnel who possess organizational credentials and/or badges, or who have system privileges, within an organization-defined time period. [NIST PS-7 Low, Moderate, High | FedRAMP PS-7] External providers must notify organization-defined personnel or roles (which may include the security manager, Contracting Officers, or Contracting Officer's Representatives via the roster of contractor personnel) of any personnel transfers or terminations of external personnel who possess organizational credentials and/or badges, or who have system privileges, within twenty-four (24) hours. [ARC-AMPE PS-7 AE Mandatory]
+
+The Security Program / GRC team must monitor provider compliance with personnel security requirements. [NIST PS-7 Low, Moderate, High | FedRAMP PS-7 | ARC-AMPE PS-7 AE Mandatory]
+
+Example Org must clearly document any nationality requirements for any account type within the platform; if none exist, this must also be explicitly stated. [FedRAMP PS-7]
+
+### 13.2 Business Associate Assurances
+
+Example Org must obtain satisfactory assurances, documented through a written contract or other arrangement, that a business associate will appropriately safeguard electronic protected health information before permitting the business associate to create, receive, maintain, or transmit the information on the entity's behalf; a business associate must obtain the same satisfactory assurances from its subcontractors. [HIPAA 164.308(b)(1) | HIPAA 164.308(b)(3)]
+
+Business associate contracts must require the business associate to comply with the applicable requirements of the rule; must ensure that any subcontractors that create, receive, maintain, or transmit electronic protected health information on its behalf agree to comply with those requirements by entering into a compliant contract or other arrangement; and must require the business associate to report to the covered entity any security incident of which it becomes aware, including breaches of unsecured protected health information as required by § 164.410. [HIPAA 164.314(a)(2)(i)]
+
+Compliance with the business associate contract requirement may be achieved through another arrangement in place that meets the requirements of § 164.504(e)(3). [HIPAA 164.314(a)(2)(ii)]
+
+The contract or other arrangement requirements apply in the same manner to the arrangement between a business associate and a subcontractor as they do to contracts between covered entities and business associates. [HIPAA 164.314(a)(2)(iii)]
+
+Except where only permitted disclosures apply, a group health plan must ensure its plan documents require the plan sponsor to implement administrative, physical, and technical safeguards that reasonably and appropriately protect the electronic protected health information it creates, receives, maintains, or transmits on the plan's behalf; must ensure the adequate separation required by § 164.504(f)(2)(iii) is supported by reasonable and appropriate security measures; must ensure any agent to whom it provides the information agrees to implement reasonable and appropriate security measures; and must require the plan sponsor to report to the group health plan any security incident of which it becomes aware. [HIPAA 164.314(b)(1) | HIPAA 164.314(b)(2)]
+
+## 14. Sanctions and Enforcement
+
+### 14.1 Security Violations
+
+Example Org must implement policies and procedures to prevent, detect, contain, and correct security violations. [HIPAA 164.308(a)(1)(i)]
+
+### 14.2 Formal Sanctions Process
+
+Example Org must employ a formal sanctions process and must apply appropriate sanctions against individuals and workforce members who fail to comply with established information security and privacy policies and procedures. [NIST PS-8 Low, Moderate, High | ARC-AMPE PS-8 AE Mandatory | HIPAA 164.308(a)(1)(ii)(C)]
+
+Example Org must notify organization-defined personnel or roles when a formal employee sanctions process is initiated, identifying the individual sanctioned and the reason for the sanction, within an organization-defined time period. [NIST PS-8 Low, Moderate, High] Organization-defined personnel or roles (which may include Human Resources, Managers, Supervisors, Contracting Officer's Representatives, Physical Security personnel, Information System Security Officers, or similar roles as defined in the SSPP) must be notified within twenty-four (24) hours when a formal employee sanctions process is initiated, identifying the individual sanctioned and the reason for the sanction. [ARC-AMPE PS-8 AE Mandatory]
+
+### 14.3 Privacy Incident Handling in Sanctions
+
+When personnel sanctions are associated with the loss, theft, or compromise of PII, Example Org must take additional care to prevent further privacy incidents by not providing the PII involved in the incident to anyone without an explicit need to know; instead, Example Org must provide a characterization of the type(s) of PII breached (e.g., "Full Name" rather than the individual's actual name). [ARC-AMPE PS-8 AE Mandatory]
+
+## 15. Risk Assessment and Risk Reduction
+
+Example Org must conduct an accurate and thorough assessment of the potential risks and vulnerabilities to the confidentiality, integrity, and availability of electronic protected health information held by the covered entity or business associate. [HIPAA 164.308(a)(1)(ii)(A)]
+
+Example Org must implement security measures sufficient to reduce risks and vulnerabilities to a reasonable and appropriate level. [HIPAA 164.308(a)(1)(ii)(B)]
+
+Example Org must implement procedures to regularly review records of information system activity, such as audit logs, access reports, and security incident tracking reports. [HIPAA 164.308(a)(1)(ii)(D)]
+
+## 16. System and Services Acquisition
+
+### 16.1 Acquisition Policy and Procedures
+
+The Security Program / GRC team must develop, document, and disseminate to organization-defined personnel and roles an organization-level system and services acquisition policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines. [NIST SA-1 Low, Moderate, High | ARC-AMPE SA-1 AE Mandatory]
+
+The Security Program / GRC team must develop procedures to facilitate the implementation of the system and services acquisition policy and the associated acquisition controls. [NIST SA-1 Low, Moderate, High | ARC-AMPE SA-1 AE Mandatory]
+
+The Security Program / GRC team must review and update the system and services acquisition policy and procedures at an organization-defined frequency and following organization-defined events. [NIST SA-1 Low, Moderate, High] The acquisition policy and procedures must be reviewed and updated at least every one (1) year and following organization-defined events, including assessment or audit findings; security or privacy incidents; and changes to applicable laws (to include privacy laws), Executive Orders, directives, regulations, policies, standards, and guidelines. [ARC-AMPE SA-1 AE Mandatory]
+
+The Security Program / GRC team must actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect system and services acquisition policies, and must review them at least every one (1) year to ensure the acquisition policies remain effective. [ARC-AMPE SA-1 AE Mandatory]
+
+The Security Program / GRC team must ensure system and services acquisition policies and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and for the information on that system. [ARC-AMPE SA-1 AE Mandatory]
+
+### 16.2 Security and Privacy Requirements in Planning
+
+Example Org must determine the high-level information security and privacy requirements for the system or system service in mission and business process planning. [NIST SA-2 Low, Moderate, High | ARC-AMPE SA-2 AE Mandatory]
+
+### 16.3 Resource Allocation
+
+Example Org must determine, document, and allocate the resources required to protect the system or system service — including the information in the system, to include PII — as part of the organizational capital planning and investment control process. [NIST SA-2 Low, Moderate, High | ARC-AMPE SA-2 AE Mandatory]
+
+Example Org must establish a discrete line item for information security and privacy in organizational programming and budgeting documentation. [NIST SA-2 Low, Moderate, High | ARC-AMPE SA-2 AE Mandatory]
+
+## 17. Records and Evidence
+
+The Security Program / GRC team is responsible for producing and retaining the evidence of compliance with this Standard, including:
+
+- The approved policy set with review dates, reflecting the annual review cycle required by this Standard; and
+- The program plan and org chart, reflecting the roles, responsibilities, and coordination requirements in Sections 2 and 3.
+
+All records produced under this Standard are subject to the retention and availability requirements of Section 6.

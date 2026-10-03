@@ -1,0 +1,101 @@
+# Cryptography and Encryption Standard
+
+## 1. Purpose and Scope
+
+This Standard establishes requirements for the use of cryptography and encryption to protect Acme Health information systems and data. This Standard applies to all systems, applications, and services that process, store, or transmit Acme Health information.
+
+## 2. Cryptographic Key Management
+
+### 2.1 Key Lifecycle Management
+
+The organization shall establish and manage cryptographic keys when cryptography is employed within the system in accordance with [Assignment: organization-defined requirements], including requirements for key generation, distribution, storage, access, and destruction. [NIST 800-53 SC-12 Low | NIST 800-53 SC-12 Moderate | NIST 800-53 SC-12 High | ARC-AMPE SC-12 AE Mandatory]
+
+The organization shall maintain availability of information in the event of the loss of cryptographic keys by users. [NIST 800-53 SC-12(1) High]
+
+### 2.2 Symmetric Key Management
+
+The organization shall produce, control, and distribute symmetric cryptographic keys using [Selection: NIST FIPS-validated; NSA-approved] key management technology and processes. [NIST 800-53 SC-12(2)]
+
+### 2.3 Asymmetric Key Management
+
+The organization shall produce, control, and distribute asymmetric cryptographic keys using [Selection: NSA-approved key management technology and processes; prepositioned keying material; DoD-approved or DoD-issued Medium Assurance PKI certificates; DoD-approved or DoD-issued Medium Hardware Assurance PKI certificates and hardware security tokens that protect the user's private key; certificates issued in accordance with organization-defined requirements]. [NIST 800-53 SC-12(3)]
+
+### 2.4 External Service Provider Key Control
+
+The organization shall maintain physical control of cryptographic keys when stored information is encrypted by external service providers. [NIST 800-53 SC-12(6)]
+
+### 2.5 Key Storage Protection
+
+The organization shall provide protected storage for cryptographic keys [Selection: [Assignment: organization-defined safeguards]; hardware-protected key store]. [NIST 800-53 SC-28(3)]
+
+## 3. Cryptographic Module and Algorithm Standards
+
+### 3.1 FIPS Validation Requirements
+
+The organization shall use encryption products that have been validated under the Cryptographic Module Validation Program to confirm compliance with the latest published FIPS 140-compliant encryption standards in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards. [ARC-AMPE SC-12 AE Mandatory | ARC-AMPE SC-13 AE Mandatory]
+
+FIPS 140-2 modules can remain active until September 21, 2026. [ARC-AMPE SC-13 AE Mandatory]
+
+### 3.2 Cryptographic Use Determination
+
+The organization shall determine the [Assignment: organization-defined cryptographic uses]. [NIST 800-53 SC-13 Low | NIST 800-53 SC-13 Moderate | NIST 800-53 SC-13 High | FedRAMP SC-13 | ARC-AMPE SC-13 AE Mandatory]
+
+### 3.3 Cryptography Implementation
+
+The organization shall implement the following types of cryptography required for each specified cryptographic use: [Assignment: organization-defined types of cryptography]. [NIST 800-53 SC-13 Low | NIST 800-53 SC-13 Moderate | NIST 800-53 SC-13 High | FedRAMP SC-13]
+
+The organization shall implement the following types of cryptography required for each specified cryptographic use: at a minimum, the latest published FIPS 140-compliant cryptography. [ARC-AMPE SC-13 AE Mandatory]
+
+The organization shall follow the FedRAMP Cryptographic Module Use rules. [FedRAMP SC-13]
+
+The organization shall implement cryptography in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards. [NIST 800-53 SC-13 Low | NIST 800-53 SC-13 Moderate | NIST 800-53 SC-13 High | FedRAMP SC-13 | ARC-AMPE SC-13 AE Mandatory]
+
+### 3.4 Sensitive Data Encryption
+
+The organization shall encrypt all data containing sensitive information (e.g., Personally Identifiable Information [PII], proprietary, financial, and legal), wherever it resides in the system, using the latest published FIPS 140-compliant encryption standards. [ARC-AMPE SC-13 AE Mandatory]
+
+## 4. Public Key Infrastructure
+
+### 4.1 Public Key Certificates
+
+The organization shall issue public key certificates under an [Assignment: organization-defined certificate policy] or obtain public key certificates from an approved service provider. [NIST 800-53 SC-17 Moderate | NIST 800-53 SC-17 High | ARC-AMPE SC-17 AE Mandatory]
+
+### 4.2 Trust Anchors
+
+The organization shall include only approved trust anchors in trust stores or certificate stores managed by the organization. [NIST 800-53 SC-12 Low | NIST 800-53 SC-12 Moderate | NIST 800-53 SC-12 High | NIST 800-53 SC-17 Moderate | NIST 800-53 SC-17 High | ARC-AMPE SC-17 AE Mandatory]
+
+## 5. Protection of Information at Rest
+
+### 5.1 General Protection Requirements
+
+The organization shall protect the [Selection (one or more): confidentiality; integrity] of the following information at rest: [Assignment: organization-defined information at rest]. [NIST 800-53 SC-28 Moderate | NIST 800-53 SC-28 High]
+
+The organization shall protect the confidentiality and integrity of all information at rest. [ARC-AMPE SC-28 AE Mandatory]
+
+The organization shall encrypt all information at rest containing sensitive information (e.g., Personally Identifiable Information [PII], proprietary, financial, and legal) using the latest published FIPS 140-compliant encryption standards. [ARC-AMPE SC-28 AE Mandatory]
+
+### 5.2 Cryptographic Protection for Information at Rest
+
+The organization shall implement cryptographic mechanisms to prevent unauthorized disclosure and modification of the following information at rest on [Assignment: organization-defined system components or media]: [Assignment: organization-defined information]. [NIST 800-53 SC-28(1) Moderate | NIST 800-53 SC-28(1) High]
+
+The organization shall implement cryptographic mechanisms to prevent unauthorized disclosure and modification of all organization-defined information at rest, where organizational-defined information that must be protected using the latest published FIPS 140-compliant encryption standards includes, but is not limited to, Personally Identifiable Information (PII); and proprietary, financial, and legal information in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards. [ARC-AMPE SC-28(1) AE Mandatory]
+
+### 5.3 Offline Storage
+
+The organization shall remove the following information from online storage and store offline in a secure location: [Assignment: organization-defined information]. [NIST 800-53 SC-28(2)]
+
+## 6. HIPAA Transmission Security and Encryption
+
+### 6.1 Transmission Security
+
+The organization shall implement technical security measures to guard against unauthorized access to electronic protected health information that is being transmitted over an electronic communications network. [HIPAA Security Rule 164.312(e)(1)]
+
+### 6.2 Integrity Controls
+
+The organization shall implement security measures to ensure that electronically transmitted electronic protected health information is not improperly modified without detection until disposed of. [HIPAA Security Rule 164.312(e)(2)(i)]
+
+### 6.3 Encryption of Electronic Protected Health Information
+
+The organization shall implement a mechanism to encrypt electronic protected health information whenever deemed appropriate. [HIPAA Security Rule 164.312(e)(2)(ii)]
+
+The organization shall implement a mechanism to encrypt and decrypt electronic protected health information. [HIPAA Security Rule 164.312(a)(2)(iv)]

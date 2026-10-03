@@ -1,0 +1,231 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002047
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - bf39949782dea15b
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Remote & Third-Party Access Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions for establishing, authorizing, monitoring, and terminating remote access, wireless access, mobile device access, and third-party/external system access to Example Org systems. Executing it ensures every remote and third-party connection path is documented, cryptographically protected, routed through managed control points, and revocable on demand, in accordance with the Example Org Information Security Standard: Remote & Third-Party Access.
+
+## Scope
+
+This procedure is performed by the Network Security team on all Example Org remote access solutions (VPN, MPLS, wireless, mobile, and vendor/third-party connections) and applies to all users, devices, and external systems that connect to Example Org networks or systems. It covers government furnished equipment (GFE), contractor furnished equipment (CFE), personally owned devices, vendor accounts, and external information systems.
+
+## Prerequisites
+
+- Network Security team membership with administrative access to the [VPN Gateway], [Firewall Management Console], [Network Access Control System], [Wireless LAN Controller], [Mobile Device Management (MDM) System], [Identity Provider], and [SIEM].
+- A current Third-party access register and the approved VPN and remote-access configuration baseline.
+- Written authorization from the Authorizing Official (AO) or designated representative for any exception-based access (e.g., personally owned devices, portable storage on external systems).
+- System Security and Privacy Plans (SSPPs) for each system supporting remote access, including documented definitions of compelling operational need.
+- Executed system connection or processing agreements (per CA-3/SA-9) for each external system in scope.
+- A [Ticketing System] for recording access requests, authorizations, and disconnect orders.
+
+## Procedure Steps
+
+### Document and authorize each type of remote access [NIST AC-17 | ARC-AMPE AC-17]
+
+1. Network Security enumerates every type of remote access permitted to Example Org systems (e.g., VPN, MPLS, vendor logon, wireless, mobile) and records each type, its usage restrictions, configuration requirements, connection requirements, and implementation guidance in the VPN and remote-access configuration baseline.
+1. For each documented type, Network Security obtains authorization from the [Authorizing Official] prior to enabling any connections of that type.
+1. Network Security records the authorization decision and date in the VPN and remote-access configuration baseline and updates the baseline whenever a new remote access type is proposed.
+1. No remote access type is enabled until steps 1–3 are complete; requests for new types are submitted via the [Ticketing System] to Network Security.
+
+### Require callback with re-authentication when MPLS cannot be used [ARC-AMPE AC-17]
+
+1. Network Security identifies all connections that cannot traverse the MPLS service network and flags them in the VPN and remote-access configuration baseline.
+1. For each such connection, Network Security configures the [VPN Gateway] or [Remote Access Gateway] to require callback to a pre-registered, authorized location before the session is established.
+1. Network Security configures the callback flow to require full re-authentication of the user after the callback is completed, using the standard authentication process.
+1. Network Security verifies callback and re-authentication behavior with a test connection for each flagged path and records the test result in the VPN and remote-access configuration baseline.
+
+### Assign and recertify vendor User IDs for application and turnkey systems [ARC-AMPE AC-17]
+
+1. Network Security assigns each vendor requiring logon to an application or turnkey system a unique User ID and password — never a shared account — via the [Identity Provider].
+1. Network Security configures the vendor account so that logon is only possible through the standard authentication process, with access to the target system authorized and logged.
+1. Network Security enables logging of all vendor session activity to the [SIEM] and records the vendor account, owning system, and authorization in the Third-party access register.
+1. Network Security recertifies every vendor-assigned User ID every one (1) year: it reviews each account in the Third-party access register, confirms with the System Business Owner that the vendor still requires access, and disables or deletes accounts that fail recertification.
+1. Network Security records the recertification outcome and date for each account in the Third-party access register.
+
+### Follow NIST SP 800-63 for remote access e-authentication [ARC-AMPE AC-17]
+
+1. Network Security reviews the latest published NIST SP 800-63 and maps its authenticator assurance requirements to the Example Org remote access authentication configuration.
+1. Network Security configures the [Identity Provider] and [VPN Gateway] to meet the applicable SP 800-63 assurance level for each remote access type documented in the VPN and remote-access configuration baseline.
+1. Network Security re-checks the configuration against the latest published SP 800-63 each quarter and records the review outcome in the VPN and remote-access configuration baseline.
+
+### Securely configure all devices requiring network access [ARC-AMPE AC-17]
+
+1. Network Security defines, in the VPN and remote-access configuration baseline, the minimum secure configuration for any device — GFE, CFE, or personal — that requires network access: up-to-date system patches; current anti-virus software; a host-based intrusion detection system; automatic execution of code disabled; and the latest published FIPS 140-compliant encryption standards.
+1. Before granting network access, Network Security verifies each device against this baseline using the [Network Access Control System] posture checks; devices that fail are quarantined until remediated.
+1. For CFE and personal devices, Network Security records the verification result and device owner in the Third-party access register.
+1. Network Security re-verifies device compliance each quarter and revokes network access for devices that cannot meet the baseline.
+
+### Define telework and remote access policies per NIST SP 800-46 [ARC-AMPE AC-17]
+
+1. Network Security reviews the latest published NIST SP 800-46 and confirms the Example Org remote access policies define: the forms of permitted remote access; the types of devices permissible for remote access; the types of access granted to remote users; and the handling of remote user account provisioning.
+1. Network Security updates the VPN and remote-access configuration baseline to reflect any gaps found, and routes policy changes to the [Authorizing Official] for approval.
+1. Network Security applies the provisioning rules in step 1 when creating, modifying, or deprovisioning remote user accounts via the [Identity Provider].
+
+### Employ automated mechanisms to monitor and control remote access [NIST AC-17(1) Moderate, High | ARC-AMPE AC-17(1)]
+
+1. Network Security configures the [SIEM] to ingest session, authentication, and configuration logs from the [VPN Gateway], [Wireless LAN Controller], [MDM System], and [Identity Provider].
+1. Network Security creates automated alerts in the [SIEM] for unauthorized remote access methods, connections from unapproved locations, and configuration drift from the VPN and remote-access configuration baseline.
+1. Network Security configures the [Network Access Control System] to automatically block non-compliant remote connections.
+1. Network Security reviews automated monitoring output each quarter and records the review in the VPN and remote-access configuration baseline.
+
+### Encrypt all remote access sessions [NIST AC-17(2) Moderate, High | ARC-AMPE AC-17(2)]
+
+1. Network Security configures the [VPN Gateway] and all remote access endpoints to require the latest published FIPS 140-compliant cryptographic mechanisms for every remote session, protecting confidentiality and integrity of information in transit.
+1. Network Security disables any remote access protocol or cipher suite that does not meet the FIPS 140 requirement.
+1. Network Security verifies session encryption during the quarterly configuration review and records the verified cipher configuration in the VPN and remote-access configuration baseline.
+
+### Route remote access through authorized network access control points [NIST AC-17(3) Moderate, High | ARC-AMPE AC-17(3)]
+
+1. Network Security designates the [VPN Gateway] and [Network Access Control System] as the authorized network access control points for all remote access.
+1. Network Security configures the perimeter [Firewall Management Console] rules so that remote access traffic is only accepted at these control points and is denied at all other ingress paths.
+1. Network Security monitors the [SIEM] for connection attempts bypassing the control points and blocks the offending source.
+1. Network Security confirms the routing configuration each quarter as part of the VPN and remote-access configuration review.
+
+### Restrict and document remote execution of privileged commands [NIST AC-17(4) Moderate, High | ARC-AMPE AC-17(4) | ARC-AMPE AC-17(4) — compelling need definition]
+
+1. Network Security works with each System Business Owner to define, in the applicable System Security and Privacy Plan (SSPP), what constitutes a compelling operational need for remote execution of privileged commands and for remote access to security-relevant information.
+1. Network Security configures privileged remote access so that each execution is performed in a format that provides assessable evidence — commands and sessions logged to the [SIEM] with user, command, target, and timestamp.
+1. Before granting a privileged remote access request, Network Security confirms a compelling operational need as defined in the SSPP exists and records the justification in the [Ticketing System].
+1. Network Security documents the rationale for permitting remote execution of privileged commands in the security plan for the affected system and updates the SSPP whenever the definition of compelling operational need changes.
+
+### Protect information about remote access mechanisms [NIST AC-17(6)]
+
+1. Network Security restricts access to remote access mechanism details — gateway addresses, configuration, ports, authentication parameters — to Network Security personnel and explicitly authorized recipients, enforced via the [Identity Provider].
+1. Network Security stores the VPN and remote-access configuration baseline and related mechanism documentation in [Restricted Document Repository] with access controls and encryption.
+1. Network Security reviews access permissions to this documentation each quarter and removes any unauthorized access.
+
+### Provide disconnect capability within one hour [NIST AC-17(9) | ARC-AMPE AC-17(9) | ARC-AMPE AC-17(9) — connection termination]
+
+1. Network Security configures the [VPN Gateway], [Network Access Control System], and [Identity Provider] so that any remote access session or account can be disconnected or disabled on demand, and validates that the capability operates within one (1) hour of a disconnect order.
+1. Upon issuance of a disconnect or disable order by an organization-defined official, Network Security executes the disconnect via the [VPN Gateway] or [Identity Provider] and confirms termination within one (1) hour.
+1. Upon issuance of an order by organization-defined officials to terminate or suspend a system-to-system network interconnection, Network Security disables the connection at the [Firewall Management Console] and confirms termination within one (1) hour.
+1. Network Security records each disconnect or termination order, the time of issuance, and the time of confirmed termination in the [Ticketing System].
+
+### Authenticate remote commands [NIST AC-17(10)]
+
+1. Network Security implements the organization-defined mechanism — via the [Identity Provider] and [Remote Command Gateway] — to authenticate all remote commands before execution.
+1. Network Security rejects any remote command that fails authentication and logs the rejection to the [SIEM].
+1. Network Security tests the remote command authentication mechanism each quarter and records the result in the VPN and remote-access configuration baseline.
+
+### Define workstation functions and surroundings for ePHI access [HIPAA 164.310(b)]
+
+1. Network Security documents, for each workstation or class of workstation that can access electronic protected health information (ePHI), the proper functions to be performed, the manner in which those functions are to be performed, and the physical attributes of the permitted surroundings.
+1. Network Security records these workstation specifications in the VPN and remote-access configuration baseline and enforces them through the [Network Access Control System] and physical access controls at [Workstation Locations].
+1. Network Security reviews the workstation specifications each quarter and updates them when ePHI-accessing workstations or their surroundings change.
+
+### Establish and authorize each type of wireless access [NIST AC-18 | ARC-AMPE AC-18]
+
+1. Network Security documents, for each type of wireless access, the configuration requirements, connection requirements, and implementation guidance in the VPN and remote-access configuration baseline.
+1. Network Security obtains authorization from the [Authorizing Official] for each wireless access type prior to allowing any connections of that type.
+1. Network Security enables the wireless access type only after authorization is recorded and blocks all unauthorized wireless types at the [Wireless LAN Controller].
+
+### Implement wireless restrictions and access controls [ARC-AMPE AC-18]
+
+1. Network Security disables SSID broadcasting on all approved wireless access points via the [Wireless LAN Controller].
+1. Network Security enforces the following controls on each approved wireless network: encryption protection enabled; access points placed in secure areas; access points shut down when not in use (e.g., nights, weekends); a stateful inspection firewall between the wireless network and the wired infrastructure; MAC address authentication; static IP addresses (not DHCP); personal firewalls on all wireless clients; file sharing disabled on all wireless clients; intrusion detection agents deployed on the wireless side of the firewall; and adherence to the latest published IEEE 802.11 WLAN standard.
+1. Network Security monitors and records wireless activity via the [Wireless IDS] and reviews the records on a regular basis as defined in the applicable security/privacy plans ([Review Frequency]).
+1. Network Security verifies each control in step 2 each quarter and records the verification in the VPN and remote-access configuration baseline.
+
+### Authenticate and encrypt wireless access [NIST AC-18(1) Moderate, High | ARC-AMPE AC-18(1) | ARC-AMPE AC-18(1) — FIPS 140]
+
+1. Network Security configures the [Wireless LAN Controller] to require authentication of both users and devices before granting wireless access to the system.
+1. Network Security enables the latest published FIPS 140-compliant encryption for all communications via the wireless access device.
+1. Network Security disables any wireless authentication or encryption configuration that does not meet these requirements and verifies compliance each quarter.
+
+### Disable unused embedded wireless capabilities before deployment [NIST AC-18(3) Moderate, High | ARC-AMPE AC-18(3)]
+
+1. Before issuance and deployment of any system component with embedded wireless networking capabilities, Network Security determines whether the wireless capability is intended for use.
+1. If not intended for use, Network Security disables the embedded wireless capability via the [Endpoint Management System] and records the disablement in the device's configuration record.
+1. Network Security verifies during the quarterly configuration review that disabled wireless capabilities remain off.
+
+### Authorize users who may configure wireless networking [NIST AC-18(4) High]
+
+1. Network Security identifies and explicitly authorizes, by name, the users allowed to independently configure wireless networking capabilities, and records the list in the VPN and remote-access configuration baseline.
+1. Network Security grants the corresponding configuration privileges in the [Wireless LAN Controller] and [Identity Provider] only to users on the authorized list.
+1. Network Security reviews the authorized list each quarter and revokes privileges for users no longer authorized.
+
+### Calibrate wireless antennas and transmission power [NIST AC-18(5) High]
+
+1. Network Security selects radio antennas and calibrates transmission power levels on each wireless access point to reduce the probability that signals are receivable outside organization-controlled boundaries.
+1. Network Security performs a signal perimeter survey after each calibration and records the measured boundary in the VPN and remote-access configuration baseline.
+1. Network Security repeats the survey each quarter and re-calibrates any access point whose signal extends beyond the controlled boundary.
+
+### Establish and authorize mobile device connection requirements [NIST AC-19 | ARC-AMPE AC-19 | ARC-AMPE AC-19 — Business Owner authorization]
+
+1. Network Security documents configuration requirements, connection requirements, and implementation guidance for organization-controlled mobile devices — including requirements applicable when devices are outside controlled areas — in the VPN and remote-access configuration baseline.
+1. Network Security obtains authorization from the System Business Owner for the use of mobile devices before enrolling any device in the [MDM System].
+1. Network Security authorizes the connection of each mobile device to organizational systems only after steps 1–2 are complete, and records the device, owner, and authorization in the Third-party access register.
+
+### Restrict PII to organization-owned mobile devices [ARC-AMPE AC-19]
+
+1. Network Security configures the [MDM System] so that only organization-owned mobile devices and organization-approved software may process, access, or store Personally Identifiable Information (PII).
+1. Network Security blocks PII access from any device not enrolled as organization-owned and reviews enrolled devices each quarter to confirm ownership status.
+
+### Configure mobile device protection and virus scanning [ARC-AMPE AC-19]
+
+1. Network Security configures each organization-controlled mobile device via the [MDM System] to protect the storage and transmission of information on the device (device passcode, transmission encryption, storage protection).
+1. Network Security installs and enables a virus protection application on each mobile device and configures scheduled scanning.
+1. Network Security verifies the protection configuration and scan status each quarter via the [MDM System] console and remediates non-compliant devices.
+
+### Encrypt information on mobile devices [NIST AC-19(5) Moderate, High | ARC-AMPE AC-19(5) | ARC-AMPE AC-19(5) — FIPS 140 | ARC-AMPE AC-19(5) — PII]
+
+1. Network Security enables full-device encryption or container-based encryption on all approved mobile devices via the [MDM System].
+1. Network Security confirms the encryption implementation uses the latest published FIPS 140-compliant encryption standards.
+1. For any mobile device that contains PII, Network Security verifies encryption of the information on the device is enabled before PII access is granted.
+1. Network Security verifies encryption status for all enrolled devices each quarter and blocks access for devices failing verification.
+
+### Establish terms and conditions for external systems [NIST AC-20 | FedRAMP AC-20 | ARC-AMPE AC-20 | ARC-AMPE AC-20 — minimum terms]
+
+1. Network Security either establishes organization-defined terms and conditions — identifying the controls asserted to be implemented on external systems, consistent with the trust relationships with the organizations owning, operating, or maintaining those systems, allowing authorized individuals to (1) access the system from external systems and (2) process, store, or transmit organization-controlled information using external systems — or prohibits the organization-defined prohibited types of external systems.
+1. Network Security ensures the terms and conditions address, at a minimum: the types of applications that can be accessed from external information systems; the maximum FIPS 199 security category of information that can be processed, stored, and transmitted; how other users of the external information system will be prevented from accessing federal information; the use of VPN and stateful inspection firewall technologies; the use of and protection against the vulnerabilities of wireless technologies; the maintenance of adequate physical security controls; the use of virus and spyware protection software; and how often the security capabilities of installed software are to be updated.
+1. Network Security records the executed terms and conditions (or the prohibition decision) in the Third-party access register and reviews them each quarter.
+
+### Differentiate AC-20, CA-3, and SA-9 responsibilities [FedRAMP AC-20]
+
+1. Network Security applies AC-20 to govern system access to and from external systems.
+1. When data is exchanged between a CSO and an external system, Network Security ensures the respective system owners document an agreement per CA-3.
+1. Network Security ensures the responsibilities of external system owners (per SA-9) are captured in the agreement required by CA-3, and records the agreement reference in the Third-party access register.
+
+### Permit external system use only after verification or agreement [NIST AC-20(1) Moderate, High | FedRAMP AC-20(1) | ARC-AMPE AC-20(1)]
+
+1. Before permitting any authorized individual to use an external system to access the system or to process, store, or transmit organization-controlled information, Network Security either verifies implementation of the controls on the external system as specified in the organization's security and privacy policies and plans, or confirms retention of an approved system connection or processing agreement with the organizational entity hosting the external system.
+1. Network Security records the verification or agreement reference in the Third-party access register and denies access requests lacking either.
+1. Network Security re-verifies each external system each quarter and suspends access for systems whose verification or agreement has lapsed.
+
+### Restrict organization-controlled portable storage on external systems [NIST AC-20(2) Moderate, High | ARC-AMPE AC-20(2) | ARC-AMPE AC-20(2) — conditions]
+
+1. Network Security defines the restrictions on the use of organization-controlled portable storage devices on external systems and documents them in the applicable system security and privacy plans.
+1. Network Security permits such use only when: the use is documented within the appropriate security/privacy plans; the use is explicitly authorized, in writing, by the Authorizing Official (AO) or designated representative; any personally owned devices to which the portable storage devices are to be attached comply with organization policies and directives on use of personally owned systems and components; and security and privacy safeguards appropriate for the sensitivity of the data are employed.
+1. Network Security enforces the restrictions via the [Endpoint Management System] device control policy and records each written AO authorization in the Third-party access register.
+
+### Restrict non-organizationally owned systems [NIST AC-20(3) | ARC-AMPE AC-20(3) | ARC-AMPE AC-20(3) — discourage personal devices]
+
+1. Network Security restricts the use of non-organizationally owned systems or system components to process, store, or transmit organizational information using the organization-defined restrictions, unless: the use of contractor-owned devices is documented within the contract and appropriate security and privacy plans and explicitly authorized, in writing, by the Authorizing Official (AO) or designated representative; the use of personally owned devices complies with organizational policies and directives on use of personally-owned systems and components; security and privacy safeguards appropriate for the sensitivity of the data are employed; and either full-device or virtual container encryption is implemented to reduce the vulnerability of sensitive information processed, stored, or transmitted by the non-organizationally owned system or component.
+1. Network Security communicates the strong discouragement of personally owned device use to all users and enforces the restrictions above via the [Network Access Control System] and [Endpoint Management System].
+1. Network Security records each written AO authorization for contractor-owned device use in the Third-party access register and reviews all non-organizationally owned system usage each quarter.
+
+### Require binding PII safeguard agreements for remote device users [ARC-AMPE AC-19 — user agreement]
+
+1. Before device users are provided access to PII on remote devices, Network Security requires each user to acknowledge, through a binding agreement, their responsibilities to safeguard the PII accessible from the device and their awareness of the applicable handling requirements.
+1. Network Security collects the signed agreement via [Agreement/Attestation System] and records the acknowledgment in the Third-party access register before provisioning PII access.
+1. Network Security blocks PII access for any remote device user without a recorded acknowledgment and re-verifies acknowledgments during the quarterly review.
+
+## Roles & Responsibilities
+
+The Network Security team is accountable for this procedure end to end: it executes the configuration, authorization, monitoring, recertification, and disconnect steps, and maintains the VPN and remote-access configuration baseline and the Third-party access register as evidence. System Business Owners, the Authorizing Official (or designated representative), vendors, and external system owners participate as named in individual steps; the Authorizing Official (or designated representative) reviews and approves all exceptions, including personally owned device use, portable storage on external systems, and contractor-owned device use.
+
+## Related Standard
+
+Example Org Information Security Standard: Remote & Third-Party Access

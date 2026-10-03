@@ -1,0 +1,199 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002794
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 3a2354b572766d96
+  provider: litellm
+  provider_class: third-party
+---
+
+# Business Associate & Vendor Risk Standard
+
+**Organization:** Example Org
+**Owning Team:** Third-Party Risk
+**Review Cadence:** Annual
+**Evidence Artifacts:** Executed business associate agreements; Vendor security review records
+
+## 1. Purpose
+
+This Standard establishes the requirements under which Example Org approves, manages, and monitors the exchange of information with other systems, engages business associates and external system service providers, and manages supply chain risk. It applies the requirements of NIST SP 800-53, ARC-AMPE, FedRAMP, and the HIPAA Security Rule as tagged inline throughout this document.
+
+## 2. Scope
+
+This Standard applies to all agreements, contracts, and arrangements under which information — including electronic protected health information (ePHI) and personally identifiable information (PII) — is exchanged between Example Org systems and other systems, and to all suppliers, contractors, business associates, subcontractors, and providers of external system services acting on Example Org's behalf.
+
+The Third-Party Risk team is accountable for this process end to end, including all review, approval, monitoring, documentation, and evidence-retention steps described below. Other teams named in individual sections participate in those steps; Third-Party Risk owns the process and its handoffs.
+
+## 3. Information Exchange Agreements
+
+### 3.1 Agreement Types and Approval
+
+Example Org must approve and manage the exchange of information between its systems and other systems using agreements such as interconnection security agreements, information exchange security agreements, memoranda of understanding or agreement, service level agreements, user agreements, non-disclosure agreements, or other organization-defined agreement types. Third-Party Risk is responsible for approving and managing these agreements. [NIST 800-53 CA-3 | ARC-AMPE CA-3]
+
+Agreements must be approved and in place prior to any information sharing. [ARC-AMPE CA-3]
+
+### 3.2 Agreement Content
+
+Each information exchange agreement must document, as part of the agreement, the interface characteristics, security and privacy requirements, controls, and responsibilities for each system, and the impact level of the information communicated. [NIST 800-53 CA-3 | ARC-AMPE CA-3]
+
+### 3.3 Review and Update
+
+Third-Party Risk must review and update information exchange agreements at least annually, as ARC-AMPE requires. Updates must also follow significant changes to the system, the organizations, or the nature of the information sharing that could affect the agreement's validity or security posture. [NIST 800-53 CA-3 | ARC-AMPE CA-3]
+
+### 3.4 Agreements Covering Personally Identifiable Information
+
+Example Org must enter into MOUs, MOAs, Letters of Intent, Computer Matching Agreements, Information Exchange Agreements, or similar agreements with internal and external parties that specifically describe the PII covered and enumerate the purposes for which the PII may be used. Sharing of PII must be compatible with the purpose for which it was collected. Any subsequent incompatible sharing may not occur until additional notice is provided to the individual, their consent is obtained, and relevant documents are updated or published. [ARC-AMPE CA-3]
+
+### 3.5 Termination and Suspension of Interconnections
+
+The Authorizing Official or other senior leadership is authorized to order the immediate termination and/or suspension of any interconnection that, in the judgment of and informed by senior cybersecurity or privacy officials, presents an unacceptable level of risk to the organization. [ARC-AMPE CA-3]
+
+### 3.6 Verification of Transfer Authorization
+
+Example Org must verify that individuals or systems transferring data between interconnecting systems have the requisite authorizations (e.g., write permissions or privileges) prior to accepting such data. [NIST 800-53 CA-3(6) High]
+
+### 3.7 Transitive (Downstream) Exchanges
+
+Third-Party Risk must identify transitive (downstream) information exchanges with other systems through the systems identified in the approved exchange agreements, and must take measures to ensure that transitive exchanges cease when the controls on the identified downstream systems cannot be verified or validated. [NIST 800-53 CA-3(7)]
+
+## 4. Business Associate Requirements (HIPAA)
+
+### 4.1 Access Authorization Policies
+
+Example Org must implement policies and procedures for authorizing access to electronic protected health information that are consistent with the applicable requirements of subpart E of part 164. [HIPAA 164.308(a)(4)(i)]
+
+If a health care clearinghouse is part of a larger organization, Example Org must implement policies and procedures that protect the clearinghouse's electronic protected health information from unauthorized access by the larger organization. [HIPAA 164.308(a)(4)(ii)(A) Required]
+
+Example Org must implement policies and procedures for granting access to electronic protected health information, for example through access to a workstation, transaction, program, process, or other mechanism. [HIPAA 164.308(a)(4)(ii)(B) Addressable]
+
+Example Org must implement policies and procedures that, based on the covered entity's or business associate's access authorization policies, establish, document, review, and modify a user's right of access to a workstation, transaction, program, or process. [HIPAA 164.308(a)(4)(ii)(C) Addressable]
+
+### 4.2 Satisfactory Assurances
+
+Example Org must permit a business associate to create, receive, maintain, or transmit electronic protected health information on Example Org's behalf only if Example Org obtains satisfactory assurances, in accordance with § 164.314(a), that the business associate will appropriately safeguard the information. A business associate may permit a subcontractor to handle ePHI on its behalf only if the business associate obtains the same satisfactory assurances from the subcontractor. [HIPAA 164.308(b)(1)]
+
+### 4.3 Business Associate Agreements
+
+Example Org must document the satisfactory assurances provided by business associates (and subcontractors) through a written contract or other arrangement that meets the applicable requirements of § 164.314(a). The resulting executed business associate agreements are the evidence of compliance with this section and must be retained by Third-Party Risk. [HIPAA 164.308(b)(3) Required | HIPAA 164.314(a)(1)]
+
+Business associate contracts must provide that the business associate will:
+
+1. Comply with the applicable requirements of the HIPAA Security Rule subpart;
+1. Ensure that any subcontractors that create, receive, maintain, or transmit ePHI on its behalf agree to comply by entering into a contract or other arrangement that complies with § 164.314; and
+1. Report to Example Org any security incident of which it becomes aware, including breaches of unsecured protected health information as required by § 164.410.
+
+[HIPAA 164.314(a)(2)(i) Required]
+
+The same contract requirements that apply between a covered entity and a business associate apply in the same manner to contracts or other arrangements between a business associate and its subcontractors. [HIPAA 164.314(a)(2)(iii) Required]
+
+Example Org may satisfy the business associate contract requirement through another arrangement in place that meets the requirements of § 164.504(e)(3). [HIPAA 164.314(a)(2)(ii)]
+
+### 4.4 Group Health Plan Requirements
+
+Except where limited exceptions apply, a group health plan must ensure its plan documents require the plan sponsor to reasonably and appropriately safeguard ePHI created, received, maintained, or transmitted on the plan's behalf. The plan documents must be amended to require the plan sponsor to implement administrative, physical, and technical safeguards protecting the ePHI's confidentiality, integrity, and availability. The group health plan must ensure the adequate separation required by § 164.504(f)(2)(iii) is supported by reasonable and appropriate security measures; ensure any agent to whom it provides the information agrees to implement reasonable and appropriate security measures; and report to the group health plan any security incident of which it becomes aware. [HIPAA 164.314(b)(1) | HIPAA 164.314(b)(2) Required]
+
+## 5. External System Services
+
+### 5.1 Provider Compliance Requirements
+
+Example Org must require that providers of external system services comply with organizational security and privacy requirements and employ the organization-defined controls. [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+Third-Party Risk must define and document organizational oversight and user roles and responsibilities with regard to external system services. [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+Third-Party Risk must employ defined processes, methods, and techniques to monitor control compliance by external service providers on an ongoing basis. Vendor security review records are the evidence of this monitoring and must be produced and retained by Third-Party Risk. [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+### 5.2 Required Contract Language
+
+Service contracts or agreements must include language requiring the provider to be subject to U.S. federal laws and regulations protecting PII, requiring adherence to Example Org's security and privacy policies and standards consistent with 45 CFR § 155.260(b), and defining security and privacy roles and responsibilities. Third-Party Risk must consult legal counsel, the senior privacy officer, and contracting officers about applicable laws, directives, policies, or regulations affecting implementation. [ARC-AMPE SA-9]
+
+### 5.3 Risk Assessment and Approval Prior to Acquisition or Outsourcing
+
+Example Org must conduct an organizational assessment of risk prior to the acquisition or outsourcing of information security services, and must verify that the acquisition or outsourcing of dedicated information security services is approved by organization-defined personnel or roles. [NIST 800-53 SA-9(1) | ARC-AMPE SA-9(1)]
+
+### 5.4 Service Technical Requirements
+
+Example Org must require providers of external system services to identify the functions, ports, protocols, and other services required for the use of such services. Per FedRAMP, this applies to all external systems where federal customer data is processed or stored. [NIST 800-53 SA-9(2) Moderate, High | FedRAMP SA-9 | ARC-AMPE SA-9(2)]
+
+### 5.5 Location Restrictions
+
+Example Org must restrict the location of information processing, information or data, and system services to organization-defined locations based on organization-defined requirements. Per FedRAMP, for Certification Classes C and D this applies to information processing, information or data, and system services for all federal customer data, and for Certification Class D locations must be within the U.S. or U.S. Territories or geographic locations under U.S. jurisdiction. [NIST 800-53 SA-9(5) | FedRAMP SA-9 | ARC-AMPE SA-9(5)]
+
+In no case may the safeguards afforded to sensitive information be less than those mandated by state regulation, federal law, Executive Order, or other authoritative direction. PII of the system must be processed and stored within the continental U.S., Hawaii, or U.S. Territories. Support, development, and IT services may be off-shored, but Example Org must weigh that risk. ARC-AMPE Administering Entities must notify CMS at least sixty (60) days prior to committing to outsourcing information system services outside the U.S., such as by contract award or services purchase. [ARC-AMPE SA-9(5)]
+
+### 5.6 Cryptographic Key Control
+
+Example Org must maintain exclusive control of cryptographic keys for encrypted material stored or transmitted through an external system. [NIST 800-53 SA-9(6)]
+
+### 5.7 Integrity Verification
+
+Example Org must provide the capability to check the integrity of information while it resides in the external system. [NIST 800-53 SA-9(7)]
+
+### 5.8 Geographic Location of Processing and Storage
+
+Example Org must restrict the geographic location of information processing and data storage to facilities located within the legal jurisdictional boundary of the United States. PII must be processed and stored within the continental U.S., Hawaii, or U.S. Territories. Organizations processing Federal Tax Information must adhere to IRS Publication 1075. Example Org must notify CMS at least sixty (60) days prior to transmitting data into an external information service environment per Change Notification guidance. [NIST 800-53 SA-9(8) | ARC-AMPE SA-9(8)]
+
+## 6. Supply Chain Risk Management
+
+### 6.1 Policy and Procedures
+
+Example Org must develop, document, and disseminate to organization-defined personnel or roles a supply chain risk management policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. Example Org must also develop procedures to facilitate implementation of the policy and the associated SCRM controls. Third-Party Risk is responsible for the development, documentation, and dissemination of this policy and its procedures. [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+Example Org must designate organization-defined official(s) to manage the development, documentation, and dissemination of the supply chain risk management policy and procedures, and these officials must be named in the appropriate security and privacy documents. [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+Third-Party Risk must review and update the supply chain risk management policy and procedures at least annually, as ARC-AMPE requires, and following organization-defined events (such as assessment or audit findings, security or privacy incidents, and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines). ARC-AMPE additionally requires active monitoring for changes to applicable privacy laws. [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+Example Org's supply chain risk management policies and procedures must support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and for the information on that system. [ARC-AMPE SR-1]
+
+### 6.2 Supply Chain Risk Management Plan
+
+Example Org must develop a plan for managing supply chain risks associated with the research and development, design, manufacturing, acquisition, delivery, integration, operations and maintenance, and disposal of organization-defined systems, system components, or system services. The plan must address:
+
+- Risk tolerance;
+- Acceptable mitigation strategies or controls;
+- A process for consistently evaluating and monitoring supply chain risk;
+- Approaches for implementing and communicating the plan;
+- Justification for mitigation measures;
+- Associated roles and responsibilities; and
+- Requirements for developing trustworthy, secure, privacy-protective, and resilient components and systems.
+
+[NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+Third-Party Risk must review and update the supply chain risk management plan at least annually, as ARC-AMPE requires, or as required, to address threat, organizational, or environmental changes. [NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+Example Org must protect the supply chain risk management plan from unauthorized disclosure and modification. [NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+### 6.3 Supply Chain Risk Management Team
+
+Example Org must establish a supply chain risk management team consisting of organization-defined personnel, roles, and responsibilities to lead and support organization-defined SCRM activities. Per ARC-AMPE, the team should include diverse functions such as risk executive, information technology, contracting, information security, privacy, mission or business, legal, supply chain and logistics, acquisition, and business continuity. Organizations should refer to NIST SP 800-161 and NISTIR 8276 for SCRM activity guidance. [NIST 800-53 SR-2(1) | ARC-AMPE SR-2(1)]
+
+### 6.4 Supplier Risk Assessments
+
+Example Org must assess and review the supply chain-related risks associated with suppliers or contractors and the system, system component, or system service they provide — including security and SCRM processes, foreign ownership, control or influence, and the supplier's ability to assess subordinate second- and third-tier suppliers. Third-Party Risk must perform this assessment and review at least annually, and the resulting vendor security review records are the evidence of compliance. [NIST 800-53 SR-6 Moderate, High]
+
+Example Org must employ organizational or independent third-party analysis and/or testing of organization-defined supply chain elements, processes, and actors associated with the system, system component, or system service. [NIST 800-53 SR-6(1)]
+
+### 6.5 Supply Chain Compromise Notification
+
+Example Org must establish agreements and procedures with entities involved in the supply chain for the system, system component, or system service for notification of supply chain compromises and the results of assessments or audits. [NIST 800-53 SR-8 | FedRAMP SR-8 | ARC-AMPE SR-8]
+
+Example Org must follow the FedRAMP Incident Evaluation and Communication rules for supply chain notifications. [FedRAMP SR-8]
+
+Notifications of supply chain incidents must be consistent with Example Org's incident handling and incident reporting procedures. [ARC-AMPE SR-8]
+
+## 7. Documentation and Recordkeeping
+
+Example Org must maintain the policies and procedures implemented to comply with the HIPAA Security Rule in written (which may be electronic) form, and must maintain a written (which may be electronic) record of any action, activity, or assessment required by the rule to be documented. [HIPAA 164.316(b)(1)]
+
+Example Org must retain HIPAA documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA 164.316(b)(2)(i) Required]
+
+Example Org must make HIPAA documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii) Required]
+
+Example Org must review HIPAA documentation periodically and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii) Required]
+
+## 8. Standard Review
+
+Third-Party Risk must review this Standard annually and update it to reflect changes in applicable laws, regulations, framework requirements, or the organization's risk posture.

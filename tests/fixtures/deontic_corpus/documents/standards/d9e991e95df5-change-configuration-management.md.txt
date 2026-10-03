@@ -1,0 +1,117 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001523
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 80e0491aef289f67
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Information Security Standard: Change & Configuration Management
+
+**Standard ID:** STD-CM-001
+**Owner (accountable end to end):** Platform Engineering
+**Cadence:** Continuous
+**Primary evidence artifacts:** Change tickets with approvals; baseline configuration and drift report
+
+## 1. Purpose and Scope
+
+This standard establishes the mandatory requirements for configuration management policy, baseline configuration, and configuration change control at Example Org. It applies to all systems, devices, appliances, and applications owned or operated by Example Org, throughout the system life cycle. Platform Engineering is accountable for this process and its handoffs end to end; other teams named in this document participate in individual steps but do not own the process.
+
+## 2. Roles and Responsibilities
+
+- **Platform Engineering** owns the change and configuration management process end to end, including baseline maintenance, change review and approval workflow, drift monitoring, and evidence production.
+- **The Change Control Board**, convened and chaired by Platform Engineering, reviews and decides configuration-controlled changes. It must include security and privacy representatives, which may include Information System Security Officers, Chief Information Security Officers, and/or the Senior Official for Privacy. [NIST 800-53 CM-3(4) Moderate, High | ARC-AMPE CM-3(4)]
+- **The designated official** for configuration management policy is designated by Platform Engineering and named in the appropriate security and privacy documents. [NIST 800-53 CM-1 | FedRAMP CM-1 | ARC-AMPE CM-1]
+- **System owners and business owners** participate as required by the change coordination and communication requirements in Section 5.
+
+## 3. Configuration Management Policy and Procedures (CM-1 / HIPAA 164.316)
+
+### 3.1 Policy Development and Dissemination
+
+- Platform Engineering shall develop, document, and disseminate a configuration management policy to organization-defined personnel or roles at the organization level (as required by ARC-AMPE) and/or the mission/business process and system levels. The policy shall address purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and shall be consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 CM-1 | FedRAMP CM-1 | ARC-AMPE CM-1]
+- Platform Engineering shall develop, document, and disseminate procedures that facilitate implementation of the configuration management policy and the associated configuration management controls. [NIST 800-53 CM-1 | FedRAMP CM-1 | ARC-AMPE CM-1]
+- The configuration management policy and procedures shall support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and for the information on the system. [ARC-AMPE CM-1]
+- Example Org shall follow the FedRAMP Significant Change Notification rules for configuration management policy and procedures. [FedRAMP CM-1]
+
+### 3.2 Policy Review and Update
+
+- Platform Engineering shall review and update the configuration management policy and procedures at least every one (1) year, and following organization-defined trigger events. [NIST 800-53 CM-1 | FedRAMP CM-1 | ARC-AMPE CM-1]
+- Trigger events include, per ARC-AMPE: assessment or audit findings; security or privacy incidents; and changes to applicable laws (including privacy laws), executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 CM-1 | ARC-AMPE CM-1]
+- Example Org shall actively monitor for changes to applicable privacy laws and regulations that affect configuration management policies. [NIST 800-53 CM-1 | ARC-AMPE CM-1]
+
+### 3.3 HIPAA Documentation Requirements
+
+- The policies and procedures implemented to comply with the HIPAA Security Rule, and any written (which may be electronic) record of an action, activity, or assessment required to be documented, shall be maintained in written (which may be electronic) form. [HIPAA 164.316(b)(1)]
+- That documentation shall be retained for 6 years from the date of its creation or the date it was last in effect, whichever is later. [HIPAA 164.316(b)(2)(i)]
+- The documentation shall be made available to those persons responsible for implementing the procedures to which it pertains. [HIPAA 164.316(b)(2)(ii)]
+- The documentation shall be reviewed periodically and updated as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii)]
+
+## 4. Baseline Configuration (CM-2)
+
+### 4.1 Baseline Development and Maintenance
+
+- Platform Engineering shall develop, document, and maintain under configuration control a current baseline configuration of the system, applicable to all systems, devices, appliances, and applications and including security updates. [NIST 800-53 CM-2 | ARC-AMPE CM-2]
+- Platform Engineering shall review and update the baseline configuration at least every one (1) year; when required due to major system changes/upgrades, critical security patches, and/or emergency changes (e.g., unscheduled changes, system crashes, replacement of critical hardware components); and when system components are installed or upgraded. [NIST 800-53 CM-2 | ARC-AMPE CM-2]
+- Platform Engineering shall maintain the currency, completeness, accuracy, and availability of the baseline configuration using organization-defined automated mechanisms. Access controls shall be configured so the automation has the information it needs, and the automated mechanisms shall run as part of the Continuous Monitoring Program. Examples of such mechanisms include hardware asset management systems, software asset management systems, and centralized configuration management software. [NIST 800-53 CM-2(2) Moderate, High | ARC-AMPE CM-2(2)]
+- Platform Engineering shall retain at least one (1) previous version of baseline configurations — the most recent older generation — to support situations such as emergency rollback; additional previous versions may be retained based on risk tolerance. [NIST 800-53 CM-2(3) Moderate, High | ARC-AMPE CM-2(3)]
+
+### 4.2 Separate Development and Test Environments
+
+- Platform Engineering shall maintain a baseline configuration for system development and test environments that is managed separately from the operational baseline configuration, and shall provide separate environments for system development and testing to minimize risk to operational systems. [NIST 800-53 CM-2(6) | ARC-AMPE CM-2(6)]
+
+### 4.3 Travel to Significant-Risk Locations
+
+- Example Org shall issue organization-defined systems or system components with organization-defined configurations to individuals traveling to locations the organization deems to be of significant risk, and shall apply organization-defined controls to those systems or components when the individuals return from travel. Issued systems and components shall carry stringent configurations (e.g., latest published FIPS 140-compliant encryption); return safeguards may include detailed inspection for physical tampering, purging, or reimaging the hard disk drive/removable media. [NIST 800-53 CM-2(7) Moderate, High | ARC-AMPE CM-2(7)]
+
+## 5. Configuration Change Control (CM-3)
+
+### 5.1 Change Control Process
+
+The configuration change control process operates on a continuous basis. Platform Engineering shall:
+
+- Determine and document the types of changes to the system that are configuration-controlled. [NIST 800-53 CM-3 | ARC-AMPE CM-3]
+- Review proposed configuration-controlled changes and approve or disapprove them with explicit consideration for security and privacy impact analyses. [NIST 800-53 CM-3 | ARC-AMPE CM-3]
+- Document configuration change decisions associated with the system. [NIST 800-53 CM-3 | ARC-AMPE CM-3]
+- Implement approved configuration-controlled changes to the system. [NIST 800-53 CM-3 | ARC-AMPE CM-3]
+- Retain records of configuration-controlled changes for no less than one (1) year after the change. [NIST 800-53 CM-3 | ARC-AMPE CM-3]
+- Monitor and review activities associated with configuration-controlled changes to the system. [NIST 800-53 CM-3 | ARC-AMPE CM-3]
+
+### 5.2 Change Control Element and Coordination
+
+- Platform Engineering shall coordinate and provide oversight for configuration change control activities through the Change Control Board, which convenes sufficiently frequently to accommodate proposed change requests. Change requests shall be submitted on change request forms approved by the Change Control Board, and the requirements of other appropriate organization officials shall be satisfied when configuration change control activities occur. [NIST 800-53 CM-3 | ARC-AMPE CM-3]
+- Security and privacy representatives (which may include Information System Security Officers, Chief Information Security Officers, and/or the Senior Official for Privacy) shall be members of the Change Control Board. [NIST 800-53 CM-3(4) Moderate, High | ARC-AMPE CM-3(4)]
+
+### 5.3 Change Testing and Baseline Deployment
+
+- Platform Engineering shall test, validate, and document changes to the system before finalizing the implementation of the changes. [NIST 800-53 CM-3(2) Moderate, High | ARC-AMPE CM-3(2)]
+- Platform Engineering shall implement changes to the current system baseline and deploy the updated baseline across the installed base using organization-defined automated mechanisms. [NIST 800-53 CM-3(3)]
+
+### 5.4 Automated Change Control Mechanisms
+
+- Proposed changes shall be documented in the [Ticketing System], which shall be used to notify approval authorities and request approval, highlight proposed changes not approved or disapproved within [Approval Time Period], prohibit changes until designated approvals are received, document all changes, and notify organization-defined personnel when approved changes are completed. Each change ticket must capture its approvals; these change tickets with approvals constitute required evidence of the process. [NIST 800-53 CM-3(1) High]
+
+### 5.5 Unauthorized Change Response and Cryptographic Mechanisms
+
+- Platform Engineering shall implement organization-defined security responses automatically if baseline configurations are changed in an unauthorized manner. Platform Engineering shall produce and retain a baseline configuration and drift report as evidence of baseline monitoring and unauthorized-change detection. [NIST 800-53 CM-3(5)]
+- Cryptographic mechanisms used to provide organization-defined controls shall be under configuration management. [NIST 800-53 CM-3(6) High]
+- Platform Engineering shall review changes to the system at the organization-defined frequency or when organization-defined circumstances occur to determine whether unauthorized changes have occurred. [NIST 800-53 CM-3]
+
+### 5.6 Communication of Significant Changes
+
+- Platform Engineering shall establish a means of communicating significant changes to or developments in the information system or environment of operations that may affect business agreements/contracts with CMS and business partners and services to the business owner and associated service consumers (e.g., electronic bulletin board or web status page). The means of communication shall be approved and accepted by the system owner. Example Org shall follow CMS change reporting procedures and utilize the CMS change notification form for the specific entity type. [ARC-AMPE CM-3]
+
+## 6. Evidence and Records
+
+The following artifacts constitute the evidence of record for this standard and shall be produced and retained as specified:
+
+| Artifact                                                | Produced by                                      | Retention                                                         | Source                               |
+| ------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------ |
+| Change tickets with approvals                           | Platform Engineering, via the [Ticketing System] | No less than one (1) year after the change                        | \[NIST 800-53 CM-3                   |
+| Baseline configuration and drift report                 | Platform Engineering                             | Per Section 3.3 HIPAA documentation requirements where applicable | \[NIST 800-53 CM-2                   |
+| Configuration management policy and procedures          | Platform Engineering                             | 6 years from creation or last in effect, whichever is later       | [HIPAA 164.316(b)(2)(i)]             |
+| Previous baseline configuration versions (at least one) | Platform Engineering                             | Until superseded by a newer retained generation                   | \[NIST 800-53 CM-2(3) Moderate, High |

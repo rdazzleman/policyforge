@@ -1,0 +1,131 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001917
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 4cc34ebffb430576
+  provider: litellm
+  provider_class: third-party
+---
+
+# Security Program Governance Procedure
+
+## Purpose
+
+This procedure defines the step-by-step actions for developing, approving, disseminating, reviewing, and protecting Example Org's information security program plan, planning policies, risk management strategy, system security and privacy plans, and HIPAA Security Rule documentation. Executing it keeps the security program's governing documents current, approved, traceable to their framework requirements, and available to the personnel who must implement them.
+
+## Scope
+
+This procedure is performed by the Security Program / GRC team for all organization-wide security program governance documents, system-level security and privacy plans, and HIPAA Security Rule documentation covering Example Org systems and electronic protected health information. Other teams participate as reviewers, contributors, or approvers at the steps noted below.
+
+## Prerequisites
+
+- Access to the organization's [Document Repository] for storing and controlling governance documentation
+- Access to the organization's [Ticketing System] for tracking reviews, approvals, and event-driven updates
+- Identification of the senior official accountable for organizational risk (see Procedure Step 8)
+- The current organization chart and list of organizational entities responsible for information security
+- The [GRC Platform] for tracking review dates and evidence artifacts
+- The current [ARC-AMPE SSPP template]
+
+## Procedure Steps
+
+### Develop and Disseminate the Organization-Wide Security Program Plan `[NIST 800-53 PM-1 | ARC-AMPE PM-1]`
+
+1. The Security Program / GRC team drafts the organization-wide information security program plan containing an overview of security program requirements and a description of the program management controls and common controls in place or planned to meet them.
+1. In the plan, identify and assign security roles and responsibilities, document management commitment, describe coordination among organizational entities, and state compliance obligations.
+1. Circulate the draft plan to each organizational entity responsible for information security and incorporate their coordination feedback before finalization.
+1. Submit the plan to the senior official accountable for the risk being incurred to organizational operations (including mission, functions, image, and reputation), organizational assets, individuals, other organizations, and the Nation, and obtain that official's documented approval.
+1. Record the approval date and the next scheduled review date in the approved policy set with review dates retained as evidence in the [GRC Platform].
+1. Disseminate the approved plan to organization-defined personnel and roles via the [Document Repository], and store the current version as the program plan artifact retained as evidence.
+
+### Review and Update the Program Plan Annually and After Defined Events `[NIST 800-53 PM-1 | ARC-AMPE PM-1]`
+
+1. The Security Program / GRC team opens a review task in the [Ticketing System] on the annual review date recorded in the [GRC Platform].
+1. Review the program plan against current organizational structure, controls, and requirements, and update it as needed.
+1. In addition to the annual review, trigger an out-of-cycle review following any of these organization-defined events: system architectural or design changes, organization-wide assessment or audit findings, security or privacy incidents or breaches, and changes to applicable laws (including privacy laws), executive orders, directives, regulations, policies, standards, and guidelines.
+1. Submit each updated plan for senior official approval using the same approval path as the initial plan, and update the review date in the approved policy set with review dates.
+
+### Protect the Program Plan from Unauthorized Disclosure and Modification `[NIST 800-53 PM-1 | ARC-AMPE PM-1]`
+
+1. Store the program plan in the [Document Repository] with access controls limiting read access to organization-defined personnel and roles, and write/administer access to the Security Program / GRC team.
+1. Enable version history in the [Document Repository] so any modification is attributable to an identified user.
+1. Review repository permissions on the plan as part of the annual plan review and remove access for personnel whose roles no longer require it.
+
+### Document Common Controls in the Program Plan Appendix `[NIST 800-53 PM-1]`
+
+1. The Security Program / GRC team maintains an appendix to the organization-wide program plan documenting each common control available for inheritance by organizational systems.
+1. For any common control described in a separate system security plan instead of the appendix, record in the plan which separate security plan contains that control's description.
+1. Verify the appendix and cross-references during each annual program plan review.
+
+### Designate Officials Responsible for System Security Program Plan Development `[ARC-AMPE PM-1]`
+
+1. The Security Program / GRC team designates, by name and role, the officials responsible for the development of system information security program plans.
+1. Record these designations in the appropriate security and privacy documents, including the program plan and the relevant system security and privacy plans.
+1. Update the designations during the annual review or whenever a designated official's role changes.
+
+### Monitor Legal and Regulatory Changes Affecting the Program Plan `[ARC-AMPE PM-1]`
+
+1. The Security Program / GRC team actively monitors for changes to applicable privacy laws, regulations, and overarching policy that affect information security program plans, using [Legal/Regulatory Monitoring Sources] and input from [Legal/Compliance Function].
+1. Log each identified change in the [Ticketing System] and assess whether it requires a program plan update.
+1. During the annual review, confirm the plan remains effective and that it supports cybersecurity and privacy safeguards to the greatest extent feasible throughout each system's life cycle and for the information on that system.
+
+### Maintain HIPAA Security Rule Documentation `[HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i)]`
+
+1. The Security Program / GRC team maintains all policies and procedures implemented to comply with the HIPAA Security Rule in written (electronic permitted) form in the [Document Repository].
+1. Maintain a written (electronic permitted) record of every action, activity, or assessment the Rule requires to be documented, stored alongside the related policy or procedure.
+1. Retain all HIPAA Security Rule documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later; configure [Document Repository] retention rules to enforce this and verify retention settings during annual review.
+
+### Make HIPAA Documentation Available and Review It Periodically `[HIPAA 164.316(b)(2)(ii) | HIPAA 164.316(b)(2)(iii)]`
+
+1. Configure [Document Repository] access so HIPAA Security Rule documentation is available to those persons responsible for implementing the procedures to which the documentation pertains.
+1. The Security Program / GRC team reviews HIPAA Security Rule documentation periodically on the cadence recorded in the [GRC Platform] and updates it as needed in response to environmental or operational changes affecting the security of electronic protected health information.
+
+### Appoint the Senior Information Security Officer and HIPAA Security Official `[NIST 800-53 PM-2 | ARC-AMPE PM-2 | HIPAA 164.308(a)(2)]`
+
+1. Example Org leadership appoints a senior information security officer with the mission and resources to coordinate, develop, implement, and maintain the organization-wide information security program.
+1. Leadership identifies the security official responsible for the development and implementation of the policies and procedures required by the HIPAA Security Rule for the covered entity or business associate.
+1. The Security Program / GRC team records both appointments in the program plan and reflects them in the org chart artifact retained as evidence; update the org chart when appointments change.
+
+### Develop, Implement, and Maintain the Risk Management Strategy `[NIST 800-53 PM-9 | ARC-AMPE PM-9]`
+
+1. The Security Program / GRC team develops a comprehensive strategy to manage security risk to organizational operations and assets, individuals, other organizations, and the Nation associated with the operation and use of organizational systems, and privacy risk to individuals resulting from the authorized processing of personally identifiable information.
+1. Document the strategy, obtain senior official approval, and disseminate it to organization-defined personnel via the [Document Repository].
+1. Implement the strategy consistently across the organization by applying it as the basis for risk decisions in system planning, assessments, and authorizations, with the Security Program / GRC team accountable for consistent application.
+1. Review and update the strategy at least every one (1) year, or as required, to address organizational changes; record each review and its outcome in the approved policy set with review dates.
+
+### Develop, Disseminate, and Maintain Planning Policy and Procedures `[NIST 800-53 PL-1 Low/Moderate/High | ARC-AMPE PL-1]`
+
+1. The Security Program / GRC team develops an organization-level planning policy addressing purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and confirms it is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Develop procedures to facilitate implementation of the planning policy and associated planning controls.
+1. Disseminate the policy and procedures to organization-defined personnel or roles via the [Document Repository].
+1. Record the official designated to manage the development, documentation, and dissemination of the planning policy and procedures in the appropriate security and privacy documents.
+1. Designate officials responsible for the management of planning controls for systems, name them in the appropriate security and privacy documents, and ensure the planning policies and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and the information on that system.
+1. Review and update the planning policy and planning procedures at least every one (1) year and following organization-defined events: assessment or audit findings, security or privacy incidents, and changes to applicable laws (including privacy laws), executive orders, directives, regulations, policies, standards, and guidelines. Update review dates in the approved policy set with review dates.
+
+### Implement and Maintain HIPAA Security Policies and Risk Reduction `[HIPAA 164.316(a) | HIPAA 164.308(a)(1)(i) | HIPAA 164.308(a)(1)(ii)(A)]`
+
+1. The Security Program / GRC team implements reasonable and appropriate policies and procedures to comply with the HIPAA Security Rule standards, implementation specifications, and other requirements.
+1. Document any changes to these policies and procedures and implement each change in accordance with the Rule, recording the change record in the [Document Repository].
+1. Maintain policies and procedures to prevent, detect, contain, and correct security violations, coordinated with [Security Operations Function] for detection and containment activities.
+1. Conduct an accurate and thorough assessment of the potential risks and vulnerabilities to the confidentiality, integrity, and availability of electronic protected health information held by the covered entity or business associate, and record the assessment results in the [GRC Platform].
+1. Implement security measures sufficient to reduce identified risks and vulnerabilities to a reasonable and appropriate level, and track each risk reduction measure to closure in the [Ticketing System].
+
+### Develop, Approve, and Distribute System Security and Privacy Plans `[NIST 800-53 PL-2 Low/Moderate/High | ARC-AMPE PL-2 | HIPAA 164.308(a)(1)(ii)(A)]`
+
+1. For each organizational system, the Security Program / GRC team develops a security and privacy plan using the [ARC-AMPE SSPP template], ensuring the plan is consistent with the organization's enterprise architecture.
+1. Complete the plan so that it explicitly defines the constituent system components; describes the operational context in terms of mission and business processes; identifies the individuals that fulfill system roles and responsibilities; identifies the information types processed, stored, and transmitted; provides the security categorization with supporting rationale; describes specific threats of concern; provides the results of a privacy risk assessment for systems processing PII; describes the operational environment and any dependencies on or connections to other systems or components; provides an overview of the security and privacy requirements; identifies any relevant control baselines or overlays; describes the controls in place or planned, including rationale for tailoring decisions; includes risk determinations for security and privacy architecture and design decisions; and includes security- and privacy-related activities requiring planning and coordination with organization-defined individuals or groups.
+1. Submit the completed plan to the authorizing official or designated representative for review and approval prior to plan implementation; record the approval in the [GRC Platform].
+1. Distribute copies of the approved plan to organization-defined personnel, roles, or stakeholders via the [Document Repository], and communicate all subsequent plan changes to the same distribution list.
+1. Review the plan at least every one (1) year or following significant changes, and update it to address changes to the system and its environment of operation or problems identified during plan implementation or control assessments.
+1. Store the plan in the [Document Repository] with access controls that protect it from unauthorized disclosure and modification, and complete the review dates section of the approved policy set with review dates.
+
+## Roles & Responsibilities
+
+The Security Program / GRC team owns this procedure end to end: it drafts and maintains all governance documents, coordinates reviews, tracks approval dates, and answers for the completeness and currency of the approved policy set with review dates, the program plan, and the org chart. Senior leadership (including the senior information security officer and the authorizing official) provides required approvals, and any exception to this procedure must be approved by the senior official accountable for organizational risk with the concurrence of the Security Program / GRC team.
+
+## Related Standard
+
+This procedure operationalizes the 'Information Security Program Governance Standard', which contains the full requirement text, the framework mappings, and the rationale for each control described above.

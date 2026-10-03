@@ -1,0 +1,286 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.005007
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 865e8135b3296847
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Change & Configuration Management Procedure
+
+## Purpose
+
+Executing this procedure enables Platform Engineering to control changes to Example Org systems, maintain and verify baseline configurations, and detect or prevent unauthorized changes, thereby satisfying the change and configuration management requirements of the Example Org Information Security Standard: Change & Configuration Management. It produces the evidence expected of the process — change tickets with approvals, and baseline configuration and drift reports — as a continuous activity.
+
+## Scope
+
+Platform Engineering performs this procedure end to end on all Example Org systems, system components, software, firmware, and electronic media that process, store, or transmit organizational information, including development and test environments. Other teams (e.g., Security, Privacy, System/Business Owners) participate in specific steps as identified below.
+
+## Prerequisites
+
+- Access to the change ticketing and approval workflow in `[Ticketing System]`.
+- Read/write access to the `[Configuration Management Database (CMDB)]` and the `[Automated Configuration Monitoring Tool]`.
+- Membership in, or a submission path to, the Configuration Change Control Board.
+- An approved Security Impact Analysis (SIA) and/or Privacy Impact Assessment (PIA) template and the current System Security and Privacy Plan (SSPP) for each system in scope.
+- A separate, operationally isolated development/test environment available for pre-deployment change testing.
+- Designated configuration management policy official(s) and named security and privacy representatives (e.g., Information System Security Officer, Chief Information Security Officer, Senior Official for Privacy) for board membership.
+- The current CMS change notification form matching the entity type, where CMS reporting applies.
+
+## Procedure Steps
+
+### Maintain and Disseminate the Configuration Management Policy and Procedures `[NIST 800-53 CM-1 Low/Moderate/High | FedRAMP CM-1 | ARC-AMPE CM-1 AE Mandatory]`
+
+1. Platform Engineering drafts or updates the organization-level configuration management policy, ensuring it addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that it is consistent with applicable laws, regulations, and standards.
+1. The designated configuration management official(s) review and approve the policy and this procedure document.
+1. Disseminate the approved policy and procedures to all personnel or roles defined in the policy using `[Document Distribution Channel]`.
+1. Review and update the policy and procedures at `[Review Frequency]` and following these events: assessment or audit findings; security or privacy incidents; and changes to applicable laws, executive orders, directives, regulations, policies, standards, or guidelines. At minimum, complete a full review at least every one (1) year.
+1. Where a system change qualifies as significant under FedRAMP rules, follow the FedRAMP Significant Change Notification process before implementation.
+
+### Retain and Make Available Policy Documentation `[HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii) | HIPAA 164.316(b)(2)(iii)]`
+
+1. Maintain the configuration management policy and procedures, and all records of actions, activities, and assessments required by this procedure, in written (electronic) form in `[Document Repository]`.
+1. Retain each record for 6 years from the date of its creation or the date when it last was in effect, whichever is later.
+1. Grant access to the documentation to all persons responsible for implementing the procedures to which it pertains.
+1. Review the documentation periodically at `[Documentation Review Frequency]` and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information (ePHI).
+
+### Develop and Maintain the Baseline Configuration `[NIST 800-53 CM-2 Low/Moderate/High | ARC-AMPE CM-2 AE Mandatory]`
+
+1. Document a current baseline configuration for each system in `[Configuration Management Database (CMDB)]`, covering hardware, software, firmware, and configuration settings.
+1. Place the baseline configuration under configuration control; only changes processed through the change control steps in this procedure may alter it.
+1. Review and update the baseline at least every one (1) year, and additionally when major system changes/upgrades occur, critical security patches are applied, emergency changes are made, or system components are installed or upgraded.
+1. Record the result of each review and update in the baseline configuration artifact and produce an updated drift report from `[Automated Configuration Monitoring Tool]`.
+
+### Maintain Baseline Currency Using Automated Mechanisms `[NIST 800-53 CM-2(2) Moderate, High | ARC-AMPE CM-2(2) AE Mandatory]`
+
+1. Configure access controls on `[Automated Configuration Monitoring Tool]` so the automation has the access needed to gather hardware and software configurations across all in-scope systems.
+1. Run the automated mechanism to gather hardware and software configurations as part of the Continuous Monitoring Program, on a continuous cadence.
+1. Use the hardware/software asset management or centralized configuration management capabilities of `[Automated Configuration Monitoring Tool]` as the source for the baseline and drift reports.
+
+### Retain Previous Baseline Versions for Rollback `[NIST 800-53 CM-2(3) Moderate, High | ARC-AMPE CM-2(3) AE Mandatory]`
+
+1. Before deploying any baseline update, archive the current baseline in `[Configuration Management Database (CMDB)]` as a versioned artifact.
+1. Retain at least one (1) previous version — the most recent older generation of the baseline — to support emergency rollback; retain additional versions based on organizational risk tolerance.
+1. Verify the retained version is restorable by test or documented restoration steps before deleting any older version.
+
+### Maintain a Separate Development and Test Baseline `[NIST 800-53 CM-2(6) | ARC-AMPE CM-2(6) AE Mandatory]`
+
+1. Provide and maintain separate environments for development and testing, isolated from operational systems.
+1. Document and maintain a baseline configuration for the development/test environments that is managed separately from the operational baseline.
+1. Apply this procedure's change control steps to the development/test baseline; changes to development/test must not alter the operational baseline without passing through the full change control process.
+
+### Issue and Recover High-Risk Travel Systems `[NIST 800-53 CM-2(7) Moderate, High | ARC-AMPE CM-2(7) AE Mandatory]`
+
+1. When an individual will travel to a location deemed significant risk, issue a system or system component configured to the travel baseline, including the latest published FIPS 140-compliant encryption standards.
+1. Record the issuance and the traveler in the movement log in `[Configuration Management Database (CMDB)]`.
+1. Upon the individual's return, apply the defined safeguards to the returned system: detailed inspection for physical tampering, and purging or reimaging of the hard disk drive and removable media, before returning it to service.
+1. Record the recovery actions taken in the movement log.
+
+### Operate Configuration Change Control `[NIST 800-53 CM-3 Moderate, High | ARC-AMPE CM-3 AE Mandatory]`
+
+1. Determine and document in the configuration management plan the types of changes to the system that are configuration-controlled.
+1. Require every configuration-controlled change to be submitted as a change ticket in `[Ticketing System]` documenting the proposed change.
+1. Notify the approval authorities defined for the change and request approval; the ticket must not be approved until a security and privacy impact analysis (see the SIA subsection) has been considered explicitly.
+1. Highlight in `[Ticketing System]` any proposed change not approved or disapproved within `[Approval Time Period]`; prohibit implementation of the change until designated approvals are received.
+1. Document the approval or disapproval decision on the change ticket.
+1. Implement only approved changes, in the approved sequence, using the documented deployment method.
+1. Test, validate, and document the change before finalizing implementation (see the pre-implementation testing subsection).
+1. Notify the defined personnel when an approved change is completed.
+1. Monitor and review activities associated with configuration-controlled changes; record all decisions and outcomes on the change ticket.
+1. Retain change tickets and change records for no less than one (1) year after the change.
+1. Implement approved changes to the current system baseline and deploy the updated baseline across the installed base using `[Automated Configuration Monitoring Tool]` or `[Automated Deployment Mechanism]`.
+
+### Convene the Configuration Change Control Board `[NIST 800-53 CM-3 Moderate, High | ARC-AMPE CM-3 AE Mandatory]`
+
+1. Operate the Configuration Change Control Board as the configuration change control element; it convenes at `[Board Convening Frequency]` and whenever a configuration change condition defined in the configuration management plan occurs, and at minimum sufficiently frequently to accommodate proposed change requests.
+1. Require a completed change request form, approved by the Board, before any configuration-controlled change proceeds; fulfill any other organizational officials' requirements identified for the change.
+1. Require the organization-defined security and privacy representatives — which may include the Information System Security Officer, Chief Information Security Officer, and/or the Senior Official for Privacy — to be standing members of the Board. `[NIST 800-53 CM-3(4) Moderate, High | ARC-AMPE CM-3(4) AE Mandatory]`
+
+### Communicate Significant Changes to CMS and Business Partners `[ARC-AMPE CM-3 AE Mandatory]`
+
+1. Establish, with approval and acceptance by the system owner, the means of communicating significant changes to or developments in the information system or environment of operations that may affect business agreements or contracts with CMS and business partners and services.
+1. When such a change occurs, communicate it to the business owner and associated service consumers via the approved means.
+1. Follow the CMS change reporting procedures for the entity type: complete the CMS change notification form specific to that entity type and submit it per the entity-type procedures.
+
+### Apply Automated Responses to Unauthorized Baseline Changes and Review for Unauthorized Change `[NIST 800-53 CM-3(5) | NIST 800-53 CM-3(7) | NIST 800-53 CM-3(8)]`
+
+1. Configure `[Automated Configuration Monitoring Tool]` to implement the defined security responses automatically when baseline configurations are changed in an unauthorized manner (e.g., alerting, reverting to baseline).
+1. Review changes to the system at `[Unauthorized Change Review Frequency]` or when `[Unauthorized Change Review Circumstances]` occur, comparing current state against the baseline drift report to determine whether unauthorized changes have occurred.
+1. Prevent or restrict changes to the system configuration under the circumstances defined in `[Change Restriction Circumstances]` (e.g., change freezes), using `[Change Restriction Mechanism]`.
+
+### Keep Cryptographic Mechanisms Under Configuration Management `[NIST 800-53 CM-3(6) High]`
+
+1. Inventory all cryptographic mechanisms used to provide the organization-defined controls as configuration items in `[Configuration Management Database (CMDB)]`.
+1. Route additions, replacements, and configuration changes to these cryptographic mechanisms through the change control process in this procedure.
+
+### Perform Security and Privacy Impact Analysis Before Change `[NIST 800-53 CM-4 Low/Moderate/High | ARC-AMPE CM-4 AE Mandatory]`
+
+1. Analyze every proposed change to the system to determine potential security and privacy impacts prior to implementation.
+1. Review and update the SIA and/or PIA for the affected system; record the identified changes in a Change Notification (CN) form and the SIA.
+1. Refer to the entity-type CMS CN procedures; if appropriate, submit the entity-type CMS CN form and SIA to CMS for evaluation before proceeding.
+
+### Test Changes in a Separate Environment Before Implementation `[NIST 800-53 CM-4(1) High | ARC-AMPE CM-4(1) AE Mandatory]`
+
+1. Deploy the proposed change in the separate test environment, never directly in the operational environment.
+1. Analyze the changed system in the test environment for security and privacy impacts due to flaws, weaknesses, incompatibility, or intentional malice, and record the results on the change ticket.
+
+### Verify Impacted Controls After Change `[NIST 800-53 CM-4(2) Moderate, High | ARC-AMPE CM-4(2) AE Mandatory]`
+
+1. After each system change, verify that the impacted controls are implemented correctly, operating as intended, and producing the desired outcome with regard to security and privacy requirements.
+1. For any system — including development and test — containing or processing sensitive information such as PII, verify the security functions per this control.
+1. Continuously monitor and evaluate the security functions to ensure they operate as intended and that changes do not adversely affect system performance.
+1. Take action to verify that the provisioned security function implementation meets security function requirements and constitutes an approved system configuration.
+1. If a system change is made, review and update the SIA and/or PIA if necessary.
+
+### Enforce Access Restrictions for Changes `[NIST 800-53 CM-5 Low/Moderate/High | ARC-AMPE CM-5 AE Mandatory]`
+
+1. Define, document, approve, and enforce physical and logical access restrictions associated with changes to the system.
+1. Permit access to systems for purposes of initiating changes only to qualified individuals — those with appropriate technical skills and expertise within their job responsibilities — as determined and documented by Platform Engineering.
+1. Enforce these access restrictions using `[Automated Access Enforcement Mechanism]` to the fullest extent possible, and automatically generate audit records of the enforcement actions. `[NIST 800-53 CM-5(1) High | ARC-AMPE CM-5(1) AE Mandatory]`
+1. Enforce dual authorization for implementing changes to the organization-defined system components and system-level information listed in `[Dual Authorization Component List]`, requiring two distinct approvers on the change ticket. `[NIST 800-53 CM-5(4)]`
+
+### Limit and Review Change Privileges `[NIST 800-53 CM-5(5) | ARC-AMPE CM-5(5) AE Mandatory | NIST 800-53 CM-5(6)]`
+
+1. Limit privileges to change system components and system-related information within the production/operational environment to the minimum set of roles required.
+1. Review and reevaluate those privileges at least quarterly, documenting the review outcome in `[Ticketing System]`.
+1. Limit privileges to change software resident within software libraries, enforced through `[Software Library Access Control]`.
+
+### Establish and Enforce Configuration Settings `[NIST 800-53 CM-6 Low/Moderate/High | ARC-AMPE CM-6 AE Mandatory]`
+
+1. Establish and document configuration settings for components employed within the system that reflect the most restrictive mode consistent with operational requirements, using common secure configurations selected per the ARC-AMPE hierarchy: USGCB; NIST National Checklist Program Tier IV, then Tiers III, II, and I in descending order; DISA STIGs. If formal government-authorized checklists do not exist, use commercially accepted practices (e.g., SANS), independent testing results, or vendor/industry group checklists (e.g., CIS).
+1. Verify the selected checklist is SCAP validated, or SCAP Compatible if validated checklists are unavailable, and that the deployed configurations are supported for security updates.
+1. Implement the established configuration settings on all applicable components.
+1. Identify, document, and approve any deviations from the established configuration settings for all configurable system components, based on explicit operational requirements, and record each approved deviation in `[Configuration Management Database (CMDB)]`.
+1. Monitor and control changes to the configuration settings in accordance with this procedure and the configuration management plan.
+
+### Manage Configuration Settings with Automated Mechanisms `[NIST 800-53 CM-6(1) High | ARC-AMPE CM-6(1) AE Mandatory | NIST 800-53 CM-6(2) High]`
+
+1. Manage, apply, and verify configuration settings for Information Technology products and the defined system components using `[Automated Configuration Monitoring Tool]`.
+1. Configure the tool to detect deviations from established settings and to take the organization-defined actions in response to unauthorized changes (e.g., alert, remediate to baseline), generating a drift report for each occurrence.
+
+### Configure for Essential Capabilities Only and Control Prohibited Functions, Ports, and Protocols `[NIST 800-53 CM-7 Low/Moderate/High | ARC-AMPE CM-7 AE Mandatory | NIST 800-53 CM-7(1) Moderate, High | ARC-AMPE CM-7(1) AE Mandatory]`
+
+1. Configure each system to provide only its essential, mission-required capabilities; disable capabilities not required for system or application functionality.
+1. Maintain and document, in the applicable security/privacy plan, a list of specifically needed system services, ports, and network protocols; disable all others.
+1. Establish the prohibited/restricted list of high-risk services, functions, ports, network protocols, and capabilities across network boundaries using CIS guidelines (Level 1), or the organization's own list if USGCB is not available.
+1. Apply the list across configuration review information sources: systems, appliances, devices, services, and applications, including databases.
+1. Review the system to identify unnecessary and/or nonsecure functions, ports, protocols, software, and services when encountering a significant risk, as incidents occur, upon major system/software updates, and at least every one (1) year; disable or remove those deemed unnecessary and/or nonsecure and record the action in a change ticket.
+
+### Control Software and Hardware Program Execution `[NIST 800-53 CM-7(2) Moderate, High | ARC-AMPE CM-7(2) AE Mandatory | NIST 800-53 CM-7(3) | NIST 800-53 CM-7(4) | NIST 800-53 CM-7(5) Moderate, High | ARC-AMPE CM-7(5) AE Mandatory | NIST 800-53 CM-7(6) | NIST 800-53 CM-7(7) | NIST 800-53 CM-7(8)]`
+
+1. Prevent program execution in accordance with organizational policies, rules of behavior, and/or access agreements regarding software usage and restrictions, including that software must be legally licensed, provisioned in approved configurations, and used only by authorized users.
+1. Ensure compliance with the organization's registration requirements defined in `[Software Registration Requirements]`.
+1. Maintain a deny-all, permit-by-exception allowlist of software programs authorized to execute on the system; permit authorized software to be limited to specific versions or to a specific source.
+1. Review and update the list of authorized software at least quarterly or when there is a change; permit automated updates to the list from a trusted source or from authorized software whitelisting information sources (systems, appliances, devices, services, and applications including databases).
+1. Where an allow-all, deny-by-exception policy applies to the defined software programs, prohibit execution of unauthorized software on the system and review and update the list of unauthorized programs at `[Unauthorized Software Review Frequency]`.
+1. Require that the defined user-installed software execute only in a confined physical or virtual machine environment with limited privileges.
+1. Restrict code obtained from sources with limited or no warranty and/or without the provision of source code to execution in protected environments.
+1. Prohibit use of binary or machine-executable code from sources with limited or no warranty or without source code, allowing exceptions only for compelling mission or operational requirements and only with the approval of the Authorizing Official; record each exception in `[Ticketing System]`.
+
+### Maintain the Authorized Hardware List `[NIST 800-53 CM-7(9) | ARC-AMPE CM-7(9) AE Mandatory]`
+
+1. Identify the hardware components authorized for system use and document them in the System Security and Privacy Plan (SSPP).
+1. Prohibit the use or connection of unauthorized hardware components, enforced via `[Endpoint/Network Enforcement Mechanism]`.
+1. Review and update the authorized hardware list at least every one (1) year or when there is a change.
+
+### Maintain the System Component Inventory `[NIST 800-53 CM-8 Low/Moderate/High | FedRAMP CM-8 | ARC-AMPE CM-8 AE Mandatory | NIST 800-53 CM-8(1) Moderate, High | ARC-AMPE CM-8(1) AE Mandatory | NIST 800-53 CM-8(2) High | NIST 800-53 CM-8(4) High | NIST 800-53 CM-8(6) | NIST 800-53 CM-8(7) | NIST 800-53 CM-8(8) | NIST 800-53 CM-8(9)]`
+
+1. Develop and document in the centralized `[Configuration Management Database (CMDB)]` an inventory of system components that accurately reflects the system, includes all components within the system, has no duplicate accounting or components assigned to another system, and is at the granularity needed for tracking and reporting.
+1. Include for each component the accountability information: unique identifier and/or serial number; component type (e.g., server, desktop, application); manufacturer/model; operating system type and version/service pack level; presence of virtual machines; application software version/license information; physical location (e.g., building/room number); logical location (e.g., IP address, position within the information system); MAC address; system/component owner; operational status; and system/component administrators.
+1. Include in the inventory a means of identifying, by name, position, or role, the individuals responsible and accountable for administering each component.
+1. Include assessed component configurations and any approved deviations from current deployed configurations in the inventory.
+1. Review and update the inventory at least every six (6) months, coordinated with the continuous monitoring capability.
+1. Update the inventory as part of every component installation, removal, and system update.
+1. Maintain the currency, completeness, accuracy, and availability of the inventory using `[Automated Inventory Mechanism]`.
+1. Track system components by geographic location using `[Geolocation Tracking Mechanism]`.
+1. Assign each system component to a system and obtain acknowledgement of the assignment from the defined personnel or roles before the component enters service.
+1. Follow the FedRAMP Continuous Collaborative Monitoring, Significant Change Notification, Vulnerability Detection and Response, and Vulnerability Evaluation and Reporting rules for all systems in FedRAMP scope.
+
+### Detect and Respond to Unauthorized Components `[NIST 800-53 CM-8(3) Moderate, High | ARC-AMPE CM-8(3) AE Mandatory]`
+
+1. Run `[Automated Component Detection Tool]` continuously, with a maximum five (5) minute delay, to detect the presence of unauthorized hardware, software, and firmware components within the system, including unauthorized provisioned configurations.
+1. When an unauthorized component is detected, disable its network access, isolate the component, and notify the responsible personnel or roles.
+1. Record the detection and response in `[Ticketing System]` and reconcile the component in the inventory.
+
+### Govern Hardware and Electronic Media Movement `[HIPAA 164.310(d)(1) | HIPAA 164.310(d)(2)(i) | HIPAA 164.310(d)(2)(ii) | HIPAA 164.310(d)(2)(iii) Addressable | HIPAA 164.310(d)(2)(iv) Addressable]`
+
+1. Follow the policies and procedures governing receipt into, removal out of, and movement within the facility for hardware and electronic media containing ePHI.
+1. For final disposition of ePHI or the hardware/electronic media on which it is stored, apply the disposition procedures in `[Disposition Procedure]` and record the disposition.
+1. Before media containing ePHI are made available for re-use, remove the ePHI from the media using `[Sanitization Method]` and record the sanitization.
+1. Maintain a record of all movements of hardware and electronic media and the person responsible for each movement, in `[Configuration Management Database (CMDB)]` or the movement log.
+1. When equipment containing ePHI will be moved, create a retrievable, exact copy of the ePHI beforehand, when needed.
+
+### Develop and Maintain the Configuration Management Plan `[NIST 800-53 CM-9 Moderate, High | ARC-AMPE CM-9 AE Mandatory | NIST 800-53 CM-9(1)]`
+
+1. Develop, document, and implement a configuration management plan for each system that addresses roles, responsibilities, and configuration management processes and procedures.
+1. Assign responsibility for developing the configuration management process to organizational personnel not directly involved in system development.
+1. In the plan, establish the process for identifying configuration items throughout the system development life cycle and for managing their configuration; define the configuration items for the system and place them under configuration management.
+1. Submit the plan for review and approval by the defined personnel or roles — e.g., the Business Owner and System Owner identified in the organization's SSPP.
+1. Protect the configuration management plan from unauthorized disclosure and modification using `[Document Access Control]`.
+
+### Control Software Use and Licensing `[NIST 800-53 CM-10 Low/Moderate/High | ARC-AMPE CM-10 AE Mandatory | NIST 800-53 CM-10(1)]`
+
+1. Use software and associated documentation in accordance with contract agreements and copyright laws.
+1. Track the use of software and associated documentation protected by quantity licenses in `[License Tracking System]` to control copying and distribution.
+1. Control and document the use of peer-to-peer file sharing technology to ensure it is not used for unauthorized distribution, display, performance, or reproduction of copyrighted work.
+1. Establish and enforce the organization's restrictions on the use of open-source software defined in `[Open-Source Software Policy]`.
+
+### Govern User Software Installation `[NIST 800-53 CM-11 Low/Moderate/High | FedRAMP CM-11 | ARC-AMPE CM-11 AE Mandatory | NIST 800-53 CM-11(2) | NIST 800-53 CM-11(3)]`
+
+1. Apply the organization-defined policies governing software installation by users, enforced through the applicable System Security and Privacy Plan (SSPP).
+1. Enforce the software installation policies through `[Software Installation Enforcement Mechanism]` and allow user installation of software only by explicitly privileged users.
+1. Monitor compliance with the software installation policies using `[Automated Compliance Monitoring Mechanism]`, continuously per the FedRAMP-defined parameter (via the CM-7(5) allowlist) and at `[Policy Compliance Review Frequency]` otherwise.
+
+### Identify and Document Information Location and Flows `[NIST 800-53 CM-12 Moderate, High | FedRAMP CM-12 | ARC-AMPE CM-12 AE Mandatory | NIST 800-53 CM-12(1) Moderate, High | ARC-AMPE CM-12(1) AE Mandatory]`
+
+1. Identify and document the location of the defined information types and the specific system components on which the information is processed and stored.
+1. Identify and document information flows of that information to other components where it may be processed and/or stored (e.g., backups).
+1. Identify and document the users who have access to the system and to the system components where the information is processed and stored.
+1. Document any changes to the location (system or system components) where the information is processed and stored, on the corresponding change ticket.
+1. Use `[Automated Data Discovery Tool]` to identify the defined information by information type on the defined system components and confirm controls are in place to protect organizational information and individual privacy.
+1. Follow the FedRAMP Minimum Assessment Scope rules for systems in FedRAMP scope.
+
+### Verify Software, Firmware, and Information Integrity `[NIST 800-53 SI-7 Moderate, High | ARC-AMPE SI-7 AE Mandatory | NIST 800-53 SI-7(1) Moderate, High | ARC-AMPE SI-7(1) AE Mandatory | NIST 800-53 SI-7(2) High | NIST 800-53 SI-7(3) | NIST 800-53 SI-7(6) | NIST 800-53 SI-7(8)]`
+
+1. Employ centrally managed integrity verification tools to detect unauthorized changes to the defined software, firmware, and information; where a comparison value is required, use parity checks, cyclical redundancy checks, or cryptographic hashes.
+1. Perform integrity checks at system startup, at transitional states or security-relevant events, and at least monthly.
+1. Configure the tools to notify the defined personnel or roles upon discovering discrepancies during integrity verification.
+1. Implement cryptographic mechanisms to detect unauthorized changes to software, firmware, and information.
+1. Upon detection of a potential integrity violation, provide the capability to audit the event and initiate the selected actions: generate an audit record, alert the current user, alert the defined personnel or roles, and/or take the other defined actions.
+
+### Respond to and Escalate Integrity Violations `[NIST 800-53 SI-7(5) High | NIST 800-53 SI-7(7) Moderate, High | ARC-AMPE SI-7(7) AE Mandatory]`
+
+1. Automatically shut down the system, restart the system, and/or implement the defined controls when integrity violations are discovered.
+1. Incorporate detection of the defined unauthorized changes into the organizational incident response capability, specifically including unauthorized changes to established organizational configuration settings and unauthorized elevation of system privileges.
+
+### Verify Boot and Firmware Integrity `[NIST 800-53 SI-7(9) | NIST 800-53 SI-7(10)]`
+
+1. Verify the integrity of the boot process of the defined system components using `[Secure Boot Mechanism]`.
+1. Implement the defined mechanisms to protect the integrity of boot firmware in the defined system components.
+
+### Verify and Authenticate Software Before Execution and Installation `[NIST 800-53 SI-7(12) | NIST 800-53 SI-7(15) High | NIST 800-53 SI-7(16) | NIST 800-53 SI-7(17)]`
+
+1. Require that the integrity of the defined user-installed software be verified prior to execution.
+1. Implement cryptographic mechanisms to authenticate the defined software or firmware components prior to installation.
+1. Prohibit processes from executing without supervision for more than `[Unsupervised Process Time Limit]`.
+1. Implement the defined controls for application self-protection at runtime, via `[Runtime Application Self-Protection Mechanism]`.
+
+### Protect ePHI Integrity and Transmission `[HIPAA 164.312(c)(1) | HIPAA 164.312(c)(2) Addressable | HIPAA 164.312(e)(1) | HIPAA 164.312(e)(2)(i) Addressable | HIPAA 164.312(e)(2)(ii) Addressable]`
+
+1. Apply the policies and procedures that protect ePHI from improper alteration or destruction, through the integrity verification steps in this procedure.
+1. Implement electronic mechanisms that corroborate ePHI has not been altered or destroyed in an unauthorized manner.
+1. Implement technical security measures guarding against unauthorized access to ePHI transmitted over an electronic communications network.
+1. Implement security measures ensuring electronically transmitted ePHI is not improperly modified without detection until disposed of.
+1. Implement a mechanism to encrypt ePHI whenever deemed appropriate, using `[Encryption Mechanism]`.
+
+## Roles & Responsibilities
+
+Platform Engineering is accountable for this procedure end to end: it maintains baselines and the component inventory, operates change control and the Configuration Change Control Board workflow, and answers for the resulting change tickets with approvals and the baseline configuration and drift reports. The defined security and privacy representatives (e.g., Information System Security Officer, Chief Information Security Officer, Senior Official for Privacy) review and approve security- and privacy-relevant changes; exceptions, including binary code exceptions and configuration setting deviations, require approval by the Authorizing Official and the Configuration Change Control Board.
+
+## Related Standard
+
+Example Org Information Security Standard: Change & Configuration Management

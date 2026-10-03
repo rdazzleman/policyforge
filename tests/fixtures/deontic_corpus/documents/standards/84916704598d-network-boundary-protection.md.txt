@@ -1,0 +1,24 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.0
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 58410b8b11d7bf54
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Information Security Standard: Network & Boundary Protection
+
+**Document Owner:** Network Security
+**Applicability:** All Example Org systems, networks, personnel, and connected environments
+**Review Cadence:** Continuous monitoring; periodic reviews as specified per requirement
+
+______________________________________________________________________
+
+## 1. Purpose and Scope
+
+This Standard defines the mandatory requirements for protecting Example Org's network boundary, controlling the flow of information within and between systems, isolating system functions, securing communications, and managing internal and external network connections. It applies to all systems, network devices, applications, and personnel that transmit, receive, or control the flow of organizational information, including information transmitted across external and

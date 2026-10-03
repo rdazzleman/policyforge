@@ -1,0 +1,526 @@
+# Access Control and Identity Management Standard
+
+## 1. Purpose and Scope
+
+This Standard establishes requirements for access control, account management, identity management, and related security controls for all information systems operated by or on behalf of Acme Health. This Standard applies to all workforce members, contractors, business associates, and third parties who access, process, store, or transmit electronic protected health information (ePHI) or other sensitive organizational data.
+
+## 2. Policy Development and Maintenance
+
+### 2.1 Access Control Policy
+
+The organization must develop, document, and disseminate an access control policy to [Assignment: organization-defined personnel or roles] that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; the policy must be consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 AC-1 Low, Moderate, High | ARC-AMPE AC-1 AE Mandatory]
+
+The organization must develop and disseminate procedures to facilitate the implementation of the access control policy and associated controls. [NIST 800-53 AC-1 Low, Moderate, High | ARC-AMPE AC-1 AE Mandatory]
+
+### 2.2 Policy Ownership and Management
+
+The organization must designate an [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the access control policy and procedures. [NIST 800-53 AC-1 Low, Moderate, High | ARC-AMPE AC-1 AE Mandatory]
+
+### 2.3 Policy Review and Updates
+
+The organization must review and update the access control policy [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 AC-1 Low, Moderate, High]
+
+The organization must review and update the access control policy at least every one (1) year and following organization-defined events. [ARC-AMPE AC-1 AE Mandatory]
+
+The organization must review and update the access control procedures [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 AC-1 Low, Moderate, High]
+
+The organization must review and update the access control procedures at least every one (1) year and following organization-defined events. [ARC-AMPE AC-1 AE Mandatory]
+
+### 2.4 HIPAA-Specific Policy Requirements
+
+The organization must implement policies and procedures to ensure that all members of the workforce have appropriate access to electronic protected health information and to prevent workforce members who do not have access authorization from obtaining access. [HIPAA Security Rule 164.308(a)(3)(i)]
+
+The organization must implement procedures for the authorization and/or supervision of workforce members who work with electronic protected health information or in locations where it might be accessed. [HIPAA Security Rule 164.308(a)(3)(ii)(A)]
+
+The organization must implement procedures to determine that the access of a workforce member to electronic protected health information is appropriate. [HIPAA Security Rule 164.308(a)(3)(ii)(B)]
+
+The organization must implement procedures for terminating access to electronic protected health information when the employment of, or other arrangement with, a workforce member ends or as required by access appropriateness determinations. [HIPAA Security Rule 164.308(a)(3)(ii)(C)]
+
+The organization must implement policies and procedures for authorizing access to electronic protected health information that are consistent with applicable requirements. [HIPAA Security Rule 164.308(a)(4)(i)]
+
+If a health care clearinghouse is part of a larger organization, the organization must implement policies and procedures that protect the clearinghouse's electronic protected health information from unauthorized access by the larger organization. [HIPAA Security Rule 164.308(a)(4)(ii)(A)]
+
+The organization must implement policies and procedures for granting access to electronic protected health information, for example, through access to a workstation, transaction, program, process, or other mechanism. [HIPAA Security Rule 164.308(a)(4)(ii)(B)]
+
+The organization must implement policies and procedures that, based upon access authorization policies, establish, document, review, and modify a user's right of access to a workstation, transaction, program, or process. [HIPAA Security Rule 164.308(a)(4)(ii)(C)]
+
+## 3. Account Management
+
+### 3.1 Account Types and Authorization
+
+The organization must define and document the types of accounts allowed and specifically prohibited for use within the system. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+The organization must assign account managers. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+The organization must require [Assignment: organization-defined prerequisites and criteria] for group and role membership. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+The organization must specify authorized users of the system, group and role membership, and access authorizations (privileges) and [Assignment: organization-defined attributes (as required)] for each account. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+The organization must require approvals by [Assignment: organization-defined personnel or roles] for requests to create accounts. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+### 3.2 Account Lifecycle Management
+
+The organization must create, enable, modify, disable, and remove accounts in accordance with [Assignment: organization-defined policy, procedures, prerequisites, and criteria]. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+The organization must monitor the use of accounts. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+The organization must authorize access to the system based on a valid access authorization, intended system usage, and [Assignment: organization-defined attributes (as required)]. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+The organization must align account management processes with personnel termination and transfer processes. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+### 3.3 Account Notifications
+
+The organization must notify account managers and [Assignment: organization-defined personnel or roles] within [Assignment: organization-defined time period] when accounts are no longer required. [NIST 800-53 AC-2 Low, Moderate, High]
+
+The organization must notify account managers and organization-defined personnel or roles within twenty-four (24) hours when accounts are no longer required. [ARC-AMPE AC-2 AE Mandatory]
+
+The organization must notify account managers and [Assignment: organization-defined personnel or roles] within [Assignment: organization-defined time period] when users are terminated or transferred. [NIST 800-53 AC-2 Low, Moderate, High]
+
+The organization must notify account managers and organization-defined personnel or roles within eight (8) hours when users are terminated or transferred. [ARC-AMPE AC-2 AE Mandatory]
+
+The organization must notify account managers and [Assignment: organization-defined personnel or roles] within [Assignment: organization-defined time period] when system usage or need-to-know changes for an individual. [NIST 800-53 AC-2 Low, Moderate, High]
+
+The organization must notify account managers and organization-defined personnel or roles within eight (8) hours when system usage or need-to-know changes for an individual. [ARC-AMPE AC-2 AE Mandatory]
+
+### 3.4 Account Reviews and Monitoring
+
+The organization must review accounts for compliance with account management requirements [Assignment: organization-defined frequency]. [NIST 800-53 AC-2 Low, Moderate, High]
+
+The organization must review accounts for compliance with account management requirements at least every ninety (90) days for all systems. [ARC-AMPE AC-2 AE Mandatory]
+
+The organization must monitor system accounts for [Assignment: organization-defined atypical usage] and report atypical usage of system accounts to [Assignment: organization-defined personnel or roles]. [NIST 800-53 AC-2(12) High]
+
+The organization must monitor system accounts for atypical use and report atypical usage of system accounts to organization-defined personnel or roles, and if necessary, any applicable incident response team(s). [ARC-AMPE AC-2(12) AE Mandatory]
+
+### 3.5 Default and System Accounts
+
+The organization must remove or disable default user accounts. [ARC-AMPE AC-2 AE Mandatory]
+
+The organization must rename active default accounts. [ARC-AMPE AC-2 AE Mandatory]
+
+### 3.6 Shared and Group Accounts
+
+The organization must establish and implement a process for changing shared or group account authenticators (if deployed) when individuals are removed from the group. [NIST 800-53 AC-2 Low, Moderate, High | ARC-AMPE AC-2 AE Mandatory]
+
+The organization must only permit the use of shared and group accounts that meet [Assignment: organization-defined conditions]. [NIST 800-53 AC-2(9)]
+
+The organization must only permit the use of shared and group accounts when a business need can be documented and approved in advance by the Authorizing Official (AO), and when the applicable system security plan describes how the accounts are used and includes compensating processes and procedures implemented to provide the ability to uniquely attribute account user activities. [ARC-AMPE AC-2(9) AE Mandatory]
+
+The organization must prohibit use of guest, anonymous, and shared accounts for providing access to Personally Identifiable Information (PII). [ARC-AMPE AC-2 AE Mandatory]
+
+### 3.7 Contractor Access
+
+The organization must implement centralized control of user access administrator functions. [ARC-AMPE AC-2 AE Mandatory]
+
+The organization must regulate the access provided to contractors and define security requirements for contractors. [ARC-AMPE AC-2 AE Mandatory]
+
+The organization must provide contractors with minimal system and physical access and ensure contractors agree to and support organizational security requirements, assessing the contractor's ability to adhere to and support the organization's security policy during contractor selection. [ARC-AMPE AC-6 AE Mandatory]
+
+### 3.8 Personally Identifiable Information Access
+
+The organization must provide access only to the minimum amount of PII necessary for users to perform their duties. [ARC-AMPE AC-2 AE Mandatory]
+
+### 3.9 Automated Account Management
+
+The organization must support the management of system accounts using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 AC-2(1) Moderate, High | ARC-AMPE AC-2(1) AE Mandatory]
+
+The organization must automatically audit account creation, modification, enabling, disabling, and removal actions. [NIST 800-53 AC-2(4) Moderate, High | ARC-AMPE AC-2(4) AE Mandatory]
+
+### 3.10 Temporary and Emergency Accounts
+
+The organization must automatically [Selection: remove; disable] temporary and emergency accounts after [Assignment: organization-defined time period]. [NIST 800-53 AC-2(2) Moderate, High]
+
+The organization must automatically disable temporary and emergency accounts after no more than ninety-six (96) hours from last use. [ARC-AMPE AC-2(2) AE Mandatory]
+
+### 3.11 Account Disabling
+
+The organization must disable accounts that have expired, are no longer associated with a user or individual, are in violation of organizational policy, or have been inactive for [Assignment: organization-defined time period]. [NIST 800-53 AC-2(3) Moderate, High]
+
+The organization must disable non-consumer accounts within twenty-four (24) hours when the accounts have expired, are no longer associated with a user or individual, are in violation of organizational policy, or have been inactive for sixty (60) days. [ARC-AMPE AC-2(3) AE Mandatory]
+
+The organization must disable accounts of individuals within [Assignment: organization-defined time period] of discovery of [Assignment: organization-defined significant risks]. [NIST 800-53 AC-2(13) Moderate, High]
+
+The organization must disable accounts of individuals within one (1) hour of discovery of individual posing as a significant risk. [ARC-AMPE AC-2(13) AE Mandatory]
+
+### 3.12 User Logout Requirements
+
+The organization must require that users log out when [Assignment: organization-defined time period of expected inactivity or description of when to log out]. [NIST 800-53 AC-2(5) Moderate, High]
+
+The organization must require that users log out when the time-period of inactivity will exceed twenty-four (24) hours. [ARC-AMPE AC-2(5) AE Mandatory]
+
+### 3.13 Dynamic Privilege Management
+
+The organization must implement [Assignment: organization-defined dynamic privilege management capabilities]. [NIST 800-53 AC-2(6)]
+
+### 3.14 Privileged Account Management
+
+The organization must establish and administer privileged user accounts in accordance with [Selection: a role-based access scheme; an attribute-based access scheme], monitor privileged role or attribute assignments, monitor changes to roles or attributes, and revoke access when privileged role or attribute assignments are no longer appropriate. [NIST 800-53 AC-2(7)]
+
+The organization must establish and administer privileged user accounts in accordance with a role-based access scheme, monitor privileged role or attribute assignments, monitor changes to roles or attributes, and revoke access when privileged role or attribute assignments are no longer appropriate. [ARC-AMPE AC-2(7) AE Mandatory]
+
+The organization must establish and administer application-specific privileged user accounts in accordance with a role-based access scheme that allows access based on user responsibilities associated with application use. [ARC-AMPE AC-2(7) AE Mandatory]
+
+The organization must inspect administrator groups, root accounts, and other system-related accounts on demand and at least once every fourteen (14) days to ensure that unauthorized accounts have not been created. [ARC-AMPE AC-2(7) AE Mandatory]
+
+The organization must inspect privileged user roles associated with applications every thirty (30) days. [ARC-AMPE AC-2(7) AE Mandatory]
+
+### 3.15 Dynamic Account Management
+
+The organization must create, activate, manage, and deactivate [Assignment: organization-defined system accounts] dynamically. [NIST 800-53 AC-2(8)]
+
+### 3.16 Account Usage Restrictions
+
+The organization must enforce [Assignment: organization-defined circumstances and/or usage conditions] for [Assignment: organization-defined system accounts]. [NIST 800-53 AC-2(11) High]
+
+## 4. Access Control and Enforcement
+
+### 4.1 Access Authorization
+
+The organization must enforce approved authorizations for logical access to information and system resources in accordance with applicable access control policies. [NIST 800-53 AC-3 Low, Moderate, High | ARC-AMPE AC-3 AE Mandatory]
+
+The organization must implement technical policies and procedures for electronic information systems that maintain electronic protected health information to allow access only to those persons or software programs that have been granted access rights. [HIPAA Security Rule 164.312(a)(1)]
+
+### 4.2 User Identification
+
+The organization must assign a unique name and/or number for identifying and tracking user identity. [HIPAA Security Rule 164.312(a)(2)(i)]
+
+The organization must implement procedures to verify that a person or entity seeking access to electronic protected health information is the one claimed. [HIPAA Security Rule 164.312(d)]
+
+### 4.3 Emergency Access
+
+The organization must establish (and implement as needed) procedures for obtaining necessary electronic protected health information during an emergency. [HIPAA Security Rule 164.312(a)(2)(ii)]
+
+### 4.4 Automatic Logoff
+
+The organization must implement electronic procedures that terminate an electronic session after a predetermined time of inactivity. [HIPAA Security Rule 164.312(a)(2)(iii)]
+
+### 4.5 Encryption Requirements
+
+The organization must implement a mechanism to encrypt and decrypt electronic protected health information. [HIPAA Security Rule 164.312(a)(2)(iv)]
+
+If encryption is used as an access control mechanism, it must meet the approved and latest published Federal Information Processing Standards (FIPS) 140-compliant encryption standards. [ARC-AMPE AC-3 AE Mandatory]
+
+The organization must protect data stored in the information system with system access controls and encrypt it when residing in non-secure areas. [ARC-AMPE AC-3 AE Mandatory]
+
+### 4.6 Operating System and File Access Controls
+
+The organization must configure operating system controls to disable public "read" and "write" access to all system-related files, objects, and directories that contain sensitive information. [ARC-AMPE AC-3 AE Mandatory]
+
+The organization must disable all file system access not explicitly required for system, application, and administrator functionality. [ARC-AMPE AC-6 AE Mandatory]
+
+The organization must ensure that only authorized users are permitted to access those files, directories, drives, workstations, servers, network shares, ports, protocols, and services that are expressly required for the performance of job duties. [ARC-AMPE AC-6 AE Mandatory]
+
+### 4.7 Service Provider Isolation
+
+When contracting with external service providers, the organization must isolate Personally Identifiable Information (PII), as well as software and services that receive, process, store, or transmit PII, within the service provider environment to the maximum extent possible so that other service provider customers sharing physical or virtual space cannot gain access to such data or applications. [ARC-AMPE AC-3 AE Mandatory]
+
+### 4.8 Dual Authorization
+
+The organization must enforce dual authorization for [Assignment: organization-defined privileged commands and/or other actions]. [NIST 800-53 AC-3(2)]
+
+### 4.9 Mandatory Access Control
+
+The organization must enforce a mandatory access control policy that is uniformly enforced across covered subjects and objects, constrains subjects from passing information to unauthorized subjects or objects, granting their privileges to other subjects, changing security attributes specified by the policy, choosing security attributes for newly created or modified objects, and changing the rules governing access control; and specifies that [Assignment: organization-defined subjects] may explicitly be granted [Assignment: organization-defined privileges] such that they are not limited by some or all of these constraints. [NIST 800-53 AC-3(3)]
+
+### 4.10 Discretionary Access Control
+
+The organization must enforce a discretionary access control policy allowing subjects to specify and control sharing of objects they control. [NIST 800-53 AC-3(4)]
+
+### 4.11 Security-Relevant Information in Non-Operable States
+
+The organization must prevent access to [Assignment: organization-defined security-relevant information] except during secure, non-operable system states. [NIST 800-53 AC-3(5)]
+
+### 4.12 Role-Based Access Control
+
+The organization must enforce a role-based access control policy over defined subjects and objects and control access based upon [Assignment: organization-defined roles and users authorized to assume such roles]. [NIST 800-53 AC-3(7)]
+
+### 4.13 Revocation of Access
+
+The organization must enforce the revocation of access authorizations resulting from changes to the security attributes of subjects and objects based on [Assignment: organization-defined rules]. [NIST 800-53 AC-3(8)]
+
+The organization must enforce the revocation of access authorizations resulting from changes to the security attributes of subjects and objects based on organization-defined rules governing the timing of revocations of access authorizations. [ARC-AMPE AC-3(8) AE Mandatory]
+
+### 4.14 External Release Controls
+
+The organization must release information outside of the system only if the receiving [Assignment: organization-defined system or system component] provides [Assignment: organization-defined controls] and [Assignment: organization-defined controls] are used to validate the appropriateness of the information designated for release. [NIST 800-53 AC-3(9)]
+
+The organization must release information outside of the system only if the receiving external organization provides information security and privacy safeguards commensurate with those implemented by the organization, and organization-defined controls are used to validate the appropriateness of the information designated for release. [ARC-AMPE AC-3(9) AE Mandatory]
+
+### 4.15 Audited Override
+
+The organization must employ an audited override of automated access control mechanisms under [Assignment: organization-defined conditions] by [Assignment: organization-defined roles]. [NIST 800-53 AC-3(10)]
+
+### 4.16 Data Repository Access Restrictions
+
+The organization must restrict access to data repositories containing [Assignment: organization-defined information types]. [NIST 800-53 AC-3(11)]
+
+### 4.17 Application Access Assertions
+
+The organization must require applications to assert, as part of the installation process, the access needed to [Assignment: organization-defined system applications and functions], provide an enforcement mechanism to prevent unauthorized access, and approve access changes after initial installation of the application. [NIST 800-53 AC-3(12)]
+
+### 4.18 Attribute-Based Access Control
+
+The organization must enforce attribute-based access control policy over defined subjects and objects and control access based upon [Assignment: organization-defined attributes]. [NIST 800-53 AC-3(13)]
+
+### 4.19 Individual Access to PII/PHI
+
+The organization must provide [Assignment: organization-defined mechanisms] to enable individuals to have access to the following elements of their personally identifiable information: [Assignment: organization-defined elements]. [NIST 800-53 AC-3(14)]
+
+The organization must provide organization-defined mechanisms to enable individuals to have access to Personally Identifiable Information (PII) / Protected Health Information (PHI) elements defined in applicable security/privacy plans. [ARC-AMPE AC-3(14) AE Mandatory]
+
+### 4.20 Combined Mandatory and Discretionary Access Control
+
+The organization must enforce [Assignment: organization-defined mandatory access control policy] over the set of covered subjects and objects specified in the policy, and enforce [Assignment: organization-defined discretionary access control policy] over the set of covered subjects and objects specified in the policy. [NIST 800-53 AC-3(15)]
+
+## 5. Separation of Duties
+
+The organization must identify and document [Assignment: organization-defined duties of individuals] requiring separation, and define system access authorizations to support separation of duties. [NIST 800-53 AC-5 Moderate, High | ARC-AMPE AC-5 AE Mandatory]
+
+The organization must separate duties of individuals as necessary to prevent malevolent activity without collusion. [ARC-AMPE AC-5 AE Mandatory]
+
+The organization must ensure audit functions are not performed by security personnel responsible for administering access control. [ARC-AMPE AC-5 AE Mandatory]
+
+The organization must divide critical mission functions and information system support functions among separate individuals. [ARC-AMPE AC-5 AE Mandatory]
+
+The organization must divide information system testing functions (i.e., user acceptance, quality assurance, information security) and production functions among separate individuals or groups. [ARC-AMPE AC-5 AE Mandatory]
+
+The organization must ensure an independent entity, not the Business Owner, Information System Security Officer (ISSO), System Developer(s)/Maintainer(s), or System Administrator(s) responsible for the information system, conducts information security testing of the information system. [ARC-AMPE AC-5 AE Mandatory]
+
+## 6. Least Privilege
+
+### 6.1 General Least Privilege Requirements
+
+The organization must employ the principle of least privilege, allowing only authorized accesses for users (or processes acting on behalf of users) that are necessary to accomplish assigned organizational tasks. [NIST 800-53 AC-6 Moderate, High | FedRAMP AC-6 | ARC-AMPE AC-6 AE Mandatory]
+
+### 6.2 Boot Access Controls
+
+The organization must disable all system and removable media boot access unless it is explicitly authorized by the organization-defined Authorizing Official for compelling operational needs, and password protect boot access if it is authorized. [ARC-AMPE AC-6 AE Mandatory]
+
+### 6.3 Database Access Controls
+
+The organization must restrict the use of database management utilities to only authorized database administrators. [ARC-AMPE AC-6 AE Mandatory]
+
+The organization must prevent users from accessing database data files at the logical data view, field, or field-value level. [ARC-AMPE AC-6 AE Mandatory]
+
+The organization must implement table-level access control for databases. [ARC-AMPE AC-6 AE Mandatory]
+
+### 6.4 Authorization for Security Functions
+
+The organization must authorize access to [Assignment: organization-defined security functions (deployed in hardware, software, and firmware)] and [Assignment: organization-defined security-relevant information]. [NIST 800-53 AC-6(1) Moderate, High]
+
+The organization must authorize access to all functions not publicly accessible and all security-relevant information not publicly available. [FedRAMP AC-6(1)]
+
+The organization must authorize access for organization-defined individuals or roles to organization-defined security functions (deployed in hardware, software, and firmware) and organization-defined security-relevant information, including but not limited to setting/modifying audit logs and auditing behavior, setting/modifying boundary protection system rules, configuring/modifying access authorizations, setting/modifying authentication parameters, and setting/modifying system configurations and parameters. [ARC-AMPE AC-6(1) AE Mandatory]
+
+### 6.5 Non-Privileged Access for Non-Security Functions
+
+The organization must require that users of system accounts (or roles) with access to [Assignment: organization-defined security functions or security-relevant information] use non-privileged accounts or roles when accessing nonsecurity functions. [NIST 800-53 AC-6(2) Moderate, High]
+
+The organization must require that users of system accounts (or roles) with access to all security functions use non-privileged accounts or roles when accessing nonsecurity functions. [FedRAMP AC-6(2)]
+
+The organization must require that users of system accounts (or roles) with access to organization-defined security functions or security-relevant information use non-privileged accounts (or roles) when accessing nonsecurity functions. [ARC-AMPE AC-6(2) AE Mandatory]
+
+### 6.6 Network Access to Privileged Commands
+
+The organization must authorize network access to [Assignment: organization-defined privileged commands] only for [Assignment: organization-defined compelling operational needs] and document the rationale for such access in the security plan for the system. [NIST 800-53 AC-6(3) High]
+
+### 6.7 Separate Processing Domains
+
+The organization must provide separate processing domains to enable finer-grained allocation of user privileges. [NIST 800-53 AC-6(4)]
+
+### 6.8 Privileged Account Restrictions
+
+The organization must restrict privileged accounts on the system to [Assignment: organization-defined personnel or roles]. [NIST 800-53 AC-6(5) Moderate, High | ARC-AMPE AC-6(5) AE Mandatory]
+
+### 6.9 Privileged Access by Non-Organizational Users
+
+The organization must prohibit privileged access to the system by non-organizational users. [NIST 800-53 AC-6(6)]
+
+### 6.10 Privilege Review
+
+The organization must review [Assignment: organization-defined frequency] the privileges assigned to [Assignment: organization-defined roles and classes] to validate the need for such privileges, and reassign or remove privileges if necessary to correctly reflect organizational mission and business needs. [NIST 800-53 AC-6(7) Moderate, High]
+
+The organization must review no less often than every ninety (90) days the privileges assigned to all users with privileges to validate the need for such privileges, and reassign or remove privileges if necessary to correctly reflect organizational mission and business needs. [ARC-AMPE AC-6(7) AE Mandatory]
+
+### 6.11 Privilege Levels for Software Execution
+
+The organization must prevent the following software from executing at higher privilege levels than users executing the software: [Assignment: organization-defined software]. [NIST 800-53 AC-6(8)]
+
+The organization must prevent any software except software explicitly documented from executing at higher privilege levels than users executing the software. [FedRAMP AC-6(8)]
+
+### 6.12 Logging of Privileged Functions
+
+The organization must log the execution of privileged functions. [NIST 800-53 AC-6(9) Moderate, High | ARC-AMPE AC-6(9) AE Mandatory]
+
+### 6.13 Prevention of Non-Privileged Execution of Privileged Functions
+
+The organization must prevent non-privileged users from executing privileged functions. [NIST 800-53 AC-6(10) Moderate, High | ARC-AMPE AC-6(10) AE Mandatory]
+
+## 7. Permitted Actions Without Identification or Authentication
+
+The organization must identify [Assignment: organization-defined user actions] that can be performed on the system without identification or authentication consistent with organizational mission and business functions, and document and provide supporting rationale in the security plan for the system for user actions not requiring identification or authentication. [NIST 800-53 AC-14 Low, Moderate, High | ARC-AMPE AC-14 AE Mandatory]
+
+## 8. Identifier Management
+
+### 8.1 Identifier Assignment and Management
+
+The organization must receive authorization from [Assignment: organization-defined personnel or roles] to assign an individual, group, role, service, or device identifier. [NIST 800-53 IA-4 Low, Moderate, High | FedRAMP IA-4 | ARC-AMPE IA-4 AE Mandatory]
+
+The organization must select an identifier that identifies an individual, group, role, service, or device. [NIST 800-53 IA-4 Low, Moderate, High | FedRAMP IA-4 | ARC-AMPE IA-4 AE Mandatory]
+
+The organization must assign the identifier to the intended individual, group, role, service, or device. [NIST 800-53 IA-4 Low, Moderate, High | FedRAMP IA-4 | ARC-AMPE IA-4 AE Mandatory]
+
+### 8.2 Identifier Reuse
+
+The organization must prevent reuse of identifiers for [Assignment: organization-defined time period]. [NIST 800-53 IA-4 Low, Moderate, High | FedRAMP IA-4]
+
+The organization must prevent reuse of identifiers for two (2) years. [ARC-AMPE IA-4 AE Mandatory]
+
+The organization must ensure previous identifier-based access authorizations are removed from the system before the identifier can be reused. [ARC-AMPE IA-4 AE Mandatory]
+
+### 8.3 Public Identifier Prohibition
+
+The organization must prohibit the use of system account identifiers that are the same as public identifiers for individual accounts. [NIST 800-53 IA-4(1)]
+
+### 8.4 Individual Identifier Management
+
+The organization must manage individual identifiers by uniquely identifying each individual as [Assignment: organization-defined characteristics]. [NIST 800-53 IA-4(4) Moderate, High]
+
+The organization must manage individual identifiers by uniquely identifying each individual as contractors; foreign nationals. [FedRAMP IA-4(4)]
+
+The organization must manage individual identifiers by uniquely identifying each individual using one or more organization-defined characteristics identifying individual status. [ARC-AMPE IA-4(4) AE Mandatory]
+
+### 8.5 Dynamic Identifiers
+
+The organization must manage individual identifiers dynamically in accordance with [Assignment: organization-defined dynamic identifier policy]. [NIST 800-53 IA-4(5)]
+
+### 8.6 Cross-Organization Identifier Management
+
+The organization must coordinate with the following external organizations for cross-organization management of identifiers: [Assignment: organization-defined external organizations]. [NIST 800-53 IA-4(6)]
+
+### 8.7 Pseudonymous Identifiers
+
+The organization must generate pairwise pseudonymous identifiers. [NIST 800-53 IA-4(8)]
+
+### 8.8 Attribute Storage
+
+The organization must maintain the attributes for each uniquely identified individual, device, or service in [Assignment: organization-defined protected central storage]. [NIST 800-53 IA-4(9)]
+
+## 9. Identity Proofing and Verification
+
+### 9.1 Identity Proofing Requirements
+
+The organization must identity proof users that require accounts for logical access to systems based on appropriate identity assurance level requirements as specified in applicable standards and guidelines. [NIST 800-53 IA-12 Moderate, High | ARC-AMPE IA-12 AE Mandatory]
+
+The organization must identity proof all users who require logical access accounts to Identity Assurance Level 2 (IAL-2) or higher. [ARC-AMPE IA-12 AE Mandatory]
+
+The organization must resolve user identities to a unique individual. [NIST 800-53 IA-12 Moderate, High | ARC-AMPE IA-12 AE Mandatory]
+
+The organization must collect, validate, and verify identity evidence. [NIST 800-53 IA-12 Moderate, High | ARC-AMPE IA-12 AE Mandatory]
+
+### 9.2 Supervisor Authorization
+
+The organization must require that the registration process to receive an account for logical access includes supervisor or sponsor authorization. [NIST 800-53 IA-12(1) | ARC-AMPE IA-12(1) AE Mandatory]
+
+### 9.3 Identity Evidence Requirements
+
+The organization must require evidence of individual identification be presented to the registration authority. [NIST 800-53 IA-12(2) Moderate, High | ARC-AMPE IA-12(2) AE Mandatory]
+
+### 9.4 Identity Evidence Validation
+
+The organization must require that the presented identity evidence be validated and verified through [Assignment: organization-defined methods of validation and verification]. [NIST 800-53 IA-12(3) Moderate, High]
+
+The organization must require that the presented identity evidence be validated and verified through organization-approved methods of validation and verification. [ARC-AMPE IA-12(3) AE Mandatory]
+
+### 9.5 In-Person Validation
+
+The organization must require that the validation and verification of identity evidence be conducted in person before a designated registration authority. [NIST 800-53 IA-12(4) High]
+
+### 9.6 Address Verification
+
+The organization must require that a [Selection: registration code; notice of proofing] be delivered through an out-of-band channel to verify the users address (physical or digital) of record. [NIST 800-53 IA-12(5) Moderate, High]
+
+### 9.7 Acceptance of External Proofing
+
+The organization must accept externally-proofed identities at [Assignment: organization-defined identity assurance level]. [NIST 800-53 IA-12(6)]
+
+## 10. Personnel Termination
+
+### 10.1 Access Termination Upon Employment Termination
+
+Upon termination of individual employment, the organization must disable system access within [Assignment: organization-defined time period]. [NIST 800-53 PS-4 Low, Moderate, High]
+
+Upon termination of individual employment, the organization must disable system access within the same day as termination. [ARC-AMPE PS-4 AE Mandatory]
+
+Upon termination of individual employment, the organization must terminate or revoke any authenticators and credentials associated with the individual. [NIST 800-53 PS-4 Low, Moderate, High | ARC-AMPE PS-4 AE Mandatory]
+
+### 10.2 Exit Interviews
+
+Upon termination of individual employment, the organization must conduct exit interviews that include a discussion of [Assignment: organization-defined information security topics]. [NIST 800-53 PS-4 Low, Moderate, High]
+
+Upon termination of individual employment, the organization must conduct exit interviews that include a discussion of non-disclosure of information security and privacy information. [ARC-AMPE PS-4 AE Mandatory]
+
+### 10.3 Property Retrieval and Access Retention
+
+Upon termination of individual employment, the organization must retrieve all security-related organizational system-related property. [NIST 800-53 PS-4 Low, Moderate, High | ARC-AMPE PS-4 AE Mandatory]
+
+Upon termination of individual employment, the organization must retain access to organizational information and systems formerly controlled by the terminated individual. [NIST 800-53 PS-4 Low, Moderate, High | ARC-AMPE PS-4 AE Mandatory]
+
+### 10.4 Post-Employment Requirements
+
+The organization must notify terminated individuals of applicable, legally binding post-employment requirements for the protection of organizational information and require terminated individuals to sign an acknowledgment of post-employment requirements as part of the organizational termination process. [NIST 800-53 PS-4(1)]
+
+### 10.5 Automated Termination Notifications
+
+The organization must use [Assignment: organization-defined automated mechanisms] to [Selection (one or more): notify [Assignment: organization-defined personnel or roles] of individual termination actions; disable access to system resources]. [NIST 800-53 PS-4(2) High]
+
+## 11. Personnel Transfer and Reassignment
+
+### 11.1 Access Review Upon Transfer
+
+The organization must review and confirm ongoing operational need for current logical and physical access authorizations to systems and facilities when individuals are reassigned or transferred to other positions within the organization. [NIST 800-53 PS-5 Low, Moderate, High | ARC-AMPE PS-5 AE Mandatory]
+
+### 11.2 Transfer Actions
+
+The organization must initiate [Assignment: organization-defined transfer or reassignment actions] within [Assignment: organization-defined time period following the formal transfer action]. [NIST 800-53 PS-5 Low, Moderate, High]
+
+The organization must initiate reassignment actions to ensure all system accesses no longer required (e.g., need to know) are removed or disabled within twenty-four (24) hours. [ARC-AMPE PS-5 AE Mandatory]
+
+The organization must modify access authorization as needed to correspond with any changes in operational need due to reassignment or transfer. [NIST 800-53 PS-5 Low, Moderate, High | ARC-AMPE PS-5 AE Mandatory]
+
+### 11.3 Transfer Notifications
+
+The organization must notify [Assignment: organization-defined personnel or roles] within [Assignment: organization-defined time period] when individuals are reassigned or transferred. [NIST 800-53 PS-5 Low, Moderate, High]
+
+The organization must notify organization-defined personnel or roles within twenty-four (24) hours when individuals are reassigned or transferred. [ARC-AMPE PS-5 AE Mandatory]
+
+### 11.4 Sensitive Information Access During Transfer
+
+When personnel are reassigned or transferred, the organization must review their access to sensitive information, such as Personally Identifiable Information (PII), to determine whether and how their access permissions should change. [ARC-AMPE PS-5 AE Mandatory]
+
+## 12. Workstation Use and Physical Access
+
+The organization must implement policies and procedures that specify the proper functions to be performed, the manner in which those functions are to be performed, and the physical attributes of the surroundings of a specific workstation or class of workstation that can access electronic protected health information. [HIPAA Security Rule 164.310(b)]
+
+## 13. Documentation and Records Retention
+
+The organization must maintain policies and procedures implemented to comply with this subpart in written (which may be electronic) form, and maintain a written (which may be electronic) record of any action, activity, or assessment required to be documented. [HIPAA Security Rule 164.316(b)(1)]
+
+The organization must retain documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+
+The organization must make documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+The organization must review documentation periodically, and update as needed, in response to environmental or operational changes affecting the security of the electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+---
+
+**Document Control**
+
+| Attribute | Value |
+|-----------|-------|
+| Document Title | Access Control and Identity Management Standard |
+| Version | 1.0 |
+| Effective Date | [Assignment: organization-defined date] |
+| Review Frequency | Annually and following organization-defined events |
+| Policy Owner | [Assignment: organization-defined official] |
+| Approving Authority | [Assignment: organization-defined authority] |

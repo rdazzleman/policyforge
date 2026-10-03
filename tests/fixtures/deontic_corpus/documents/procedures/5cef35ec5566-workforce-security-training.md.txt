@@ -1,0 +1,161 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002883
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - bf2ddb3f1d5eadbf
+  provider: litellm
+  provider_class: third-party
+---
+
+# Workforce Security Training Procedure
+
+## Purpose
+
+Executing this procedure delivers, maintains, and evidences Example Org's security awareness and training program so that every workforce member — including management, senior executives, and contractors — receives the literacy, role-based, and privacy training required by the Workforce Security Training Standard. It also produces the retained evidence of training delivery and awareness testing, including the Training completion report and Phishing simulation results.
+
+## Scope
+
+The Security Awareness team performs this procedure end to end on behalf of Example Org, covering all employees, managers, senior executives, and contractors who access, use, manage, or develop organizational systems or process PII. Participants include [Human Resources], [Identity Provider] administrators, and people managers, who act on handoffs owned by Security Awareness.
+
+## Prerequisites
+
+- Access to the [Learning Management System] with the ability to assign courses, view completion status, and export reports.
+- Access to the [Phishing Simulation Platform] for creating and launching simulated phishing exercises.
+- Access to the [Documentation Repository] where the awareness and training policy, procedures, and records are maintained.
+- Access to the [Identity Provider] to verify account status and, where required, disable accounts of personnel who have not completed role-based training.
+- Access to the [Human Resources System] to identify new hires, role changes, and contractor onboarding events.
+- A designated [Designated Training Official] responsible for the awareness and training policy and procedures.
+- An active ticketing queue in the [Ticketing System] for tracking training assignments, escalations, and remediation actions.
+
+## Procedure Steps
+
+### 1. Maintain the Security Awareness and Training Policy [NIST AT-1 | ARC-AMPE AT-1]
+
+1. Security Awareness drafts or updates the organization-level security awareness and training policy so that it addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance.
+1. Security Awareness verifies the policy is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines, and that it is written at the organization level as ARC-AMPE requires.
+1. Security Awareness stores the approved policy in the [Documentation Repository] and disseminates it to the organization-defined personnel and roles (management, [Human Resources], system owners, and all workforce members via the [Learning Management System] announcement channel).
+1. Security Awareness records the publication date and distribution list in the [Documentation Repository] as part of the written record required for this activity.
+
+### 2. Maintain the Supporting Awareness and Training Procedures [NIST AT-1 | ARC-AMPE AT-1]
+
+1. Security Awareness documents the step-by-step procedures (this document) that facilitate implementation of the awareness and training policy and the associated awareness and training controls.
+1. Security Awareness publishes the procedures to the [Documentation Repository] and makes them available to every person responsible for implementing them (see Step 5).
+1. Security Awareness records the version, approval date, and dissemination actions for the procedures in the [Documentation Repository].
+
+### 3. Designate the Training Program Official [NIST AT-1 | ARC-AMPE AT-1]
+
+1. Example Org designates the [Designated Training Official] to manage the development, documentation, and dissemination of the awareness and training policy and procedures.
+1. Security Awareness records the designation — the named individual, their role, and the effective date — in the [Documentation Repository].
+1. Security Awareness updates the designation record whenever the official changes, and re-disseminates the policy and procedures under the new official's authority.
+
+### 4. Review and Update the Policy and Procedures; Monitor Regulatory Change [NIST AT-1 | ARC-AMPE AT-1]
+
+1. Security Awareness reviews and updates the awareness and training policy at least annually, and following [Assignment: organization-defined events] (for example, regulatory change, audit findings, or significant incidents).
+1. Security Awareness reviews and updates the awareness and training procedures on the same cycle: at least annually and following [Assignment: organization-defined events].
+1. Security Awareness actively monitors for changes to applicable privacy laws, regulations, and overarching policy that affect the awareness and training policies, using [Regulatory Monitoring Source], and logs each identified change in the [Ticketing System].
+1. For each logged change, Security Awareness assesses whether the policy and procedures still support cybersecurity and privacy safeguards throughout the system life cycle and the life cycle of the information on those systems, and updates the documents accordingly.
+1. Security Awareness additionally reviews the documentation periodically and updates it as needed in response to environmental or operational changes affecting the security of electronic protected health information [HIPAA 164.316(b)(2)(iii)].
+1. Security Awareness records each review — date, reviewer, changes made, or a determination that no changes were needed — in the [Documentation Repository].
+
+### 5. Record, Retain, and Make Available Training Documentation [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii)]
+
+1. Security Awareness maintains all policies and procedures in written (electronic) form in the [Documentation Repository], and maintains a written (electronic permitted) record of every action, activity, or assessment required to be documented under this procedure.
+1. Security Awareness retains each required documentation item — including the Training completion report and Phishing simulation results — for 6 years from the date of its creation or the date it was last in effect, whichever is later.
+1. Security Awareness configures access to the [Documentation Repository] so that persons responsible for implementing the procedures can retrieve the documentation that pertains to their duties.
+
+### 6. Deliver Initial and Annual Security and Privacy Literacy Training [HIPAA 164.308(a)(5)(i) | NIST AT-2 | ARC-AMPE AT-2]
+
+1. Security Awareness operates a security awareness and training program covering all members of the workforce, including management.
+1. When [Human Resources] onboards a new user, Security Awareness assigns the security and privacy literacy training course in the [Learning Management System] as part of initial training; the audience includes managers, senior executives, and contractors.
+1. Security Awareness requires each new user to complete the initial literacy training and tracks completion in the [Learning Management System].
+1. Security Awareness assigns refresher literacy training to all system users at least annually thereafter and tracks completion the same way.
+1. On completion of each training cycle, Security Awareness exports the Training completion report from the [Learning Management System] and files it in the [Documentation Repository] per Step 5.
+
+### 7. Deliver Event-Triggered Training and Incorporate Lessons Learned [NIST AT-2 | ARC-AMPE AT-2]
+
+1. Security Awareness provides additional literacy training when required by system changes or following [Assignment: organization-defined events], including assessment or audit findings, security or privacy incidents, and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Security Awareness updates literacy training and awareness content at least annually and following [Assignment: organization-defined events].
+1. After each internal or external security incident or breach, Security Awareness reviews the incident record in the [Ticketing System], extracts lessons learned, and incorporates them into the literacy training content and awareness techniques.
+1. Security Awareness records each content update — trigger, date, and change summary — in the [Documentation Repository].
+
+### 8. Execute Awareness Techniques Including Phishing Simulations [NIST AT-2 | ARC-AMPE AT-2]
+
+1. Security Awareness employs the organization-defined awareness techniques — including phishing email tests and other [Assignment: organization-defined awareness techniques] — to increase the security and privacy awareness of system users.
+1. Security Awareness builds a simulated phishing campaign in the [Phishing Simulation Platform], targeting the user population defined for the campaign.
+1. Security Awareness launches the campaign, monitors click and reporting behavior in the platform, and identifies users who require remedial coaching.
+1. Security Awareness exports the Phishing simulation results from the [Phishing Simulation Platform] and files them in the [Documentation Repository] per Step 5.
+1. Security Awareness feeds identified weaknesses from the simulation results into the training content update cycle in Step 7.
+
+### 9. Cover Sensitive Information Email Responsibilities in Literacy Training [ARC-AMPE AT-2]
+
+1. Security Awareness includes, within the information security and privacy education and awareness training, the individual's responsibilities associated with sending sensitive information in email.
+1. Security Awareness verifies the course module covering email handling is present in the [Learning Management System] curriculum before each annual training cycle opens.
+
+### 10. Deliver Privacy Training Before Granting Access to PII Systems [ARC-AMPE AT-2]
+
+1. Security Awareness coordinates with [Human Resources] and system owners to identify all systems that collect, maintain, store, use, or disclose Personally Identifiable Information (PII).
+1. For all employees and contractors who require access to those systems, Security Awareness ensures privacy training is completed before access to organizational systems and networks is granted.
+1. Security Awareness confirms with the [Identity Provider] administrators that access provisioning is gated on recorded privacy training completion, and escalates any gap through the [Ticketing System].
+
+### 11. Deliver Threat-Focused Literacy Modules and Practical Exercises [NIST AT-2(1) | NIST AT-2(2) | ARC-AMPE AT-2(2) | NIST AT-2(3) | ARC-AMPE AT-2(3) | NIST AT-2(4) | ARC-AMPE AT-2(4) | NIST AT-2(5) | ARC-AMPE AT-2(5) | NIST AT-2(6)]
+
+1. Security Awareness includes practical exercises in literacy training that simulate events and incidents [NIST AT-2(1)], using the [Phishing Simulation Platform] and [Tabletop Exercise Materials] to reinforce recognition and reporting behaviors.
+1. Security Awareness delivers literacy training on recognizing and reporting potential indicators of insider threat, including how to communicate employee and management concerns about potential insider threat indicators through appropriate organizational channels in accordance with established organizational policies and procedures [NIST AT-2(2) | ARC-AMPE AT-2(2)].
+1. Security Awareness delivers literacy training on recognizing and reporting potential and actual instances of social engineering and social mining, including how to recognize and report — through appropriate organizational and defined channels (e.g., applicable security and privacy plans) — attempts to trick an individual into revealing information or taking an action that can be used to breach, compromise, or otherwise adversely impact a system [NIST AT-2(3) | ARC-AMPE AT-2(3)].
+1. Security Awareness delivers literacy training on recognizing suspicious communications and anomalous behavior in organizational systems using organization-defined indicators of malicious code, covering potentially suspicious email or web communications (e.g., an unexpected email, an email with strange or poor grammar, or an email from an unfamiliar sender appearing to be a known sponsor or contractor) and anomalous behaviors in systems, and how to report them through appropriate organizational and defined channels [NIST AT-2(4) | ARC-AMPE AT-2(4)].
+1. Security Awareness delivers literacy training on the advanced persistent threat (APT), including techniques for recognizing suspicious emails, use of removable systems in non-secure settings, the potential targeting of individuals at home, and the ways APTs can infiltrate the organization (e.g., through websites, emails, advertisement pop-ups, articles, and social engineering) [NIST AT-2(5) | ARC-AMPE AT-2(5)].
+1. Security Awareness delivers literacy training on the cyber threat environment and coordinates with [Threat Intelligence Function] to reflect current cyber threat information in system operations [NIST AT-2(6)].
+1. Security Awareness confirms each module above is present and current in the [Learning Management System] curriculum before each annual training cycle and records the confirmation in the [Documentation Repository].
+
+### 12. Deliver Periodic Security Reminders on Operational Safeguards [HIPAA 164.308(a)(5)(ii)(A) | HIPAA 164.308(a)(5)(ii)(B) | HIPAA 164.308(a)(5)(ii)(C) | HIPAA 164.308(a)(5)(ii)(D)]
+
+1. Security Awareness implements periodic security updates (security reminders) to all workforce members through [Communication Channel], on the cadence defined by the Standard's periodic reminder requirement [HIPAA 164.308(a)(5)(ii)(A)].
+1. Security Awareness includes reminders covering procedures for guarding against, detecting, and reporting malicious software [HIPAA 164.308(a)(5)(ii)(B)].
+1. Security Awareness includes reminders covering procedures for monitoring log-in attempts and reporting discrepancies [HIPAA 164.308(a)(5)(ii)(C)].
+1. Security Awareness includes reminders covering procedures for creating, changing, and safeguarding passwords [HIPAA 164.308(a)(5)(ii)(D)].
+1. Security Awareness retains copies of each reminder and its distribution record in the [Documentation Repository].
+
+### 13. Deliver Role-Based Security and Privacy Training [NIST AT-3 | ARC-AMPE AT-3]
+
+1. Security Awareness identifies, with system owners, the significant information security and privacy roles and responsibilities requiring role-based training.
+1. Before authorizing access to the system or information or performing assigned duties, Security Awareness assigns the applicable role-based training in the [Learning Management System] to personnel in those roles and confirms completion.
+1. Security Awareness assigns role-based refresher training at least annually thereafter.
+1. Security Awareness assigns additional role-based training when required by system changes; when an employee enters a new position that requires additional role-specific training; and when significant information system or system environment changes occur.
+1. Security Awareness updates role-based training content at least annually and following [Assignment: organization-defined events], including significant changes to the system or the system environment.
+1. After each internal or external security incident or breach, Security Awareness incorporates the lessons learned into role-based training content.
+1. Security Awareness exports role-based training completion data into the Training completion report and files it in the [Documentation Repository] per Step 5.
+
+### 14. Enforce Role-Based Training Completion [ARC-AMPE AT-3]
+
+1. Security Awareness monitors role-based training completion in the [Learning Management System] and flags personnel with significant information security and privacy roles who have not completed required training within the mandated timeframes.
+1. Security Awareness notifies the flagged individual and their manager through the [Ticketing System] that completion is required.
+1. If the requirement remains unmet, Security Awareness requests that [Identity Provider] administrators disable the user's account until the role-based training requirement is met.
+1. Security Awareness confirms with [Identity Provider] administrators that the account is re-enabled only after the individual has completed the required training, and records the disablement and re-enablement actions in the [Ticketing System].
+
+### 15. Deliver Environmental, Physical, Transparency, and Privacy Controls Training [NIST AT-3(1) | NIST AT-3(2) | NIST AT-3(3) | NIST AT-3(5) | ARC-AMPE AT-3(5)]
+
+1. Security Awareness provides the organization-defined personnel or roles with initial training — and refresher training at [Assignment: organization-defined frequency] — in the employment and operation of environmental controls [NIST AT-3(1)].
+1. Security Awareness provides the organization-defined personnel or roles with initial training — and refresher training at [Assignment: organization-defined frequency] — in the employment and operation of physical security controls [NIST AT-3(2)].
+1. Security Awareness includes practical exercises in security and privacy training that reinforce training objectives [NIST AT-3(3)].
+1. Security Awareness provides organizational personnel — including vendors, contractors, and employees — with initial training, and refresher training at least annually thereafter, in the employment and operation of personally identifiable information processing and transparency controls [NIST AT-3(5) | ARC-AMPE AT-3(5)].
+
+### 16. Operate the Privacy Education and Awareness Program [ARC-AMPE AT-3(5)]
+
+1. Security Awareness develops and implements a privacy education and awareness training program for all employees and individuals working on behalf of the organization involved in managing, using, and/or processing PII; this program may be integrated with the general cybersecurity training.
+1. Security Awareness includes responsibilities associated with sending PII in email within the privacy education and awareness training.
+1. Security Awareness ensures privacy communications and training are job-specific and commensurate with each employee's responsibilities, tailoring modules by role in the [Learning Management System].
+1. Security Awareness ensures initial training of employees (including managers) on their privacy responsibilities is completed before permitting access to organizational information and systems, with refresher training completed every one (1) year thereafter.
+1. Security Awareness ensures any additional or advanced training provided is commensurate with the individual's responsibilities and level of PII access, and records the tailoring decisions in the [Documentation Repository].
+1. Security Awareness files the privacy program's completion data into the Training completion report per Step 5.
+
+## Roles & Responsibilities
+
+The Security Awareness team owns and executes every step of this procedure end to end, including all handoffs to [Human Resources], [Identity Provider] administrators, system owners, and people managers. Exceptions to any step — including deferrals of training deadlines or hold-open requests for accounts flagged in Step 14 — must be reviewed and approved by [Executive Approver], with the exception record retained per Step 5.
+
+## Related Standard
+
+This procedure operationalizes the **Workforce Security Training Standard**, which contains the full requirement text, the control definitions, and the rationale for each step above.

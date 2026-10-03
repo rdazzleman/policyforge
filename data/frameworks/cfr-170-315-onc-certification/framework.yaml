@@ -1,0 +1,19 @@
+id: cfr-170-315-onc-certification
+name: ONC Certification Criteria (45 CFR 170.315)
+framework_id: cfr-170-315-onc-certification
+licence: public-domain
+source: eCFR public API, via policyforge etl-onc
+notes: A US government work, so freely redistributable. One criterion is one control, cited
+  as 170.315(g)(10). Reserved and expired criteria are excluded and reported by id on every
+  run. The live criteria must EQUAL a set two independent sources agree on (issue 179), because
+  this catalog shipped once with fabricated criteria and was reverted (issues 152 and 163).
+  Declared as "ONC Certification Criteria" rather than "45 CFR 170" because a framework name
+  beginning with a digit is not a legal source tag. Read README.md before citing it.
+source_ref: '2026-09-22'
+source_url: https://www.ecfr.gov/api/versioner/v1/full/2026-09-22/title-45.xml?part=170
+content_sha256: 3739c5269938d12134b1f740dd93dc34e8d2b4c607e6cbde7eab27a9a62de712
+fetched_at: '2026-09-24'
+# The unit the regulation names as a requirement, for document reach (80's
+# ruling on #423): the certification criterion, 170.315(x)(n). A citation of
+# a paragraph inside one (170.315(b)(1)(iii)) reaches it.
+family: criterion

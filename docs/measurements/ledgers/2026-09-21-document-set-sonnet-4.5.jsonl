@@ -1,0 +1,25 @@
+{"topic": "Security Program Governance", "controls": 45, "out_tokens": 19725, "cost": 0.367389, "synthesis_chars": 29228, "document_chars": 34823, "seconds": 263.1, "commit": "6244fb1"}
+{"topic": "Risk Assessment & Authorization", "controls": 32, "out_tokens": 16690, "cost": 0.316899, "synthesis_chars": 21923, "document_chars": 25731, "seconds": 221.5, "commit": "6244fb1"}
+{"topic": "Identity Lifecycle & Access Review", "controls": 28, "out_tokens": 21252, "cost": 0.387921, "synthesis_chars": 33202, "document_chars": 40875, "seconds": 334.2, "commit": "6244fb1"}
+{"topic": "Authentication & Credential Management", "controls": 32, "out_tokens": 17610, "cost": 0.328137, "synthesis_chars": 26319, "document_chars": 31520, "seconds": 267.3, "commit": "6244fb1"}
+{"topic": "Remote & Third-Party Access", "controls": 12, "out_tokens": 10464, "cost": 0.190962, "synthesis_chars": 16130, "document_chars": 19233, "seconds": 127.3, "commit": "6244fb1"}
+{"topic": "Network & Boundary Protection", "controls": 39, "out_tokens": 20417, "cost": 0.379692, "synthesis_chars": 35371, "document_chars": 41365, "seconds": 327.4, "commit": "6244fb1"}
+{"topic": "Encryption & Key Management", "controls": 11, "out_tokens": 9809, "cost": 0.163989, "synthesis_chars": 5948, "document_chars": 7642, "seconds": 89.9, "commit": "6244fb1"}
+{"topic": "Logging, Monitoring & Alerting", "controls": 34, "out_tokens": 21375, "cost": 0.393387, "synthesis_chars": 30991, "document_chars": 37105, "seconds": 338.6, "commit": "6244fb1"}
+{"topic": "Incident Response", "controls": 30, "out_tokens": 13687, "cost": 0.256395, "synthesis_chars": 19450, "document_chars": 23947, "seconds": 176.4, "commit": "6244fb1"}
+{"topic": "Vulnerability & Patch Management", "controls": 13, "out_tokens": 15930, "cost": 0.277062, "synthesis_chars": 12283, "document_chars": 15212, "seconds": 161.6, "commit": "6244fb1"}
+{"topic": "Endpoint Protection & Device Controls", "controls": 13, "out_tokens": 7551, "cost": 0.134985, "synthesis_chars": 8734, "document_chars": 10971, "seconds": 79.5, "commit": "6244fb1"}
+{"topic": "Change & Configuration Management", "controls": 34, "out_tokens": 20610, "cost": 0.380877, "synthesis_chars": 33576, "document_chars": 41924, "seconds": 289.1, "commit": "6244fb1"}
+{"topic": "Secure Development Lifecycle", "controls": 39, "out_tokens": 22632, "cost": 0.42273, "synthesis_chars": 38210, "document_chars": 44706, "seconds": 376.7, "commit": "6244fb1"}
+{"topic": "Backup, Restore & Contingency", "controls": 27, "out_tokens": 20140, "cost": 0.36435, "synthesis_chars": 22667, "document_chars": 25592, "seconds": 253.1, "commit": "6244fb1"}
+{"topic": "Media Handling & Disposal", "controls": 17, "out_tokens": 12859, "cost": 0.22236, "synthesis_chars": 13015, "document_chars": 15037, "seconds": 142.4, "commit": "6244fb1"}
+{"topic": "Physical & Environmental Security", "controls": 38, "out_tokens": 18260, "cost": 0.323238, "synthesis_chars": 24698, "document_chars": 30325, "seconds": 247.6, "commit": "6244fb1"}
+{"topic": "System Maintenance", "controls": 16, "out_tokens": 13594, "cost": 0.244428, "synthesis_chars": 19379, "document_chars": 24960, "seconds": 170.0, "commit": "6244fb1"}
+{"topic": "Business Associate & Vendor Risk", "controls": 21, "out_tokens": 10963, "cost": 0.203937, "synthesis_chars": 15846, "document_chars": 19435, "seconds": 151.1, "commit": "6244fb1"}
+{"topic": "Workforce Security Training", "controls": 18, "out_tokens": 11627, "cost": 0.208791, "synthesis_chars": 16275, "document_chars": 20921, "seconds": 131.3, "commit": "6244fb1"}
+{"topic": "Data Protection & Privacy", "controls": 15, "out_tokens": 9254, "cost": 0.169881, "synthesis_chars": 10102, "document_chars": 11979, "seconds": 97.4, "commit": "6244fb1"}
+{"topic": "AI Governance & Accountability", "controls": 5, "out_tokens": 5098, "cost": 0.085878, "synthesis_chars": 4235, "document_chars": 5655, "seconds": 54.6, "commit": "6244fb1"}
+{"topic": "AI System Inventory & Impact Assessment", "controls": 4, "out_tokens": 4814, "cost": 0.081312, "synthesis_chars": 3673, "document_chars": 6197, "seconds": 54.4, "commit": "6244fb1"}
+{"topic": "AI Evaluation & Measurement", "controls": 4, "out_tokens": 4307, "cost": 0.074718, "synthesis_chars": 4386, "document_chars": 8157, "seconds": 51.7, "commit": "6244fb1"}
+{"topic": "AI Risk Treatment & Incident Response", "controls": 3, "out_tokens": 4668, "cost": 0.077328, "synthesis_chars": 2356, "document_chars": 7300, "seconds": 60.5, "commit": "6244fb1"}
+{"topic": "Third-Party AI & Data Supply Chain", "controls": 3, "out_tokens": 5742, "cost": 0.092037, "synthesis_chars": 1406, "document_chars": 2076, "seconds": 70.1, "commit": "6244fb1"}

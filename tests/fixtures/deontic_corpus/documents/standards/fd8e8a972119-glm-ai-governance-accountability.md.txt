@@ -1,0 +1,149 @@
+# Acme Health Information Security Standard: AI Governance and Accountability
+
+## 1. Purpose, Scope, and Ownership
+
+This standard defines Acme Health's requirements for governing, and being accountable for, the risks of artificial intelligence (AI) systems. As a healthcare organization, Acme Health is subject to legal and regulatory requirements involving AI, and this standard establishes how those obligations are understood, managed, and documented.
+
+This standard applies to all AI systems that Acme Health designs, develops, deploys, evaluates, uses, or procures, including third-party AI systems and currently deployed systems.
+
+AI Risk / GRC is accountable for this standard and for the AI risk management process it defines, end to end. AI Risk / GRC owns every step, review, handoff, and outcome described in this document; other teams named below participate in individual steps as participants.
+
+Statements in this document introduced by "NIST suggests" restate voluntary suggested actions from the NIST AI RMF Playbook. They are suggestions from NIST, not requirements of this standard, and impose no obligation on Acme Health. All other requirement statements are binding on the teams to which they are addressed.
+
+| Field | Value |
+|---|---|
+| Standard owner | AI Risk / GRC |
+| Applies to | All AI systems designed, developed, deployed, evaluated, used, or procured by Acme Health, including third-party and currently deployed systems |
+| Periodic review frequency | [Review Frequency] |
+
+## 2. AI Risk Management Policies, Processes, and Practices
+
+### 2.1 Governing policies and practices
+
+Acme Health shall maintain policies, processes, procedures, and practices related to mapping, measuring, and managing AI risks that are in place, transparent, and implemented effectively across the organization. AI Risk / GRC shall own these policies, processes, procedures, and practices and shall answer for their effectiveness. [NIST AI RMF Govern 1]
+
+### 2.2 Legal and regulatory requirements
+
+Acme Health shall ensure that legal and regulatory requirements involving AI are understood, managed, and documented. AI Risk / GRC shall perform and document this understanding and management, and shall answer for its outcome. [NIST AI RMF Govern 1.1]
+
+NIST suggests, among its 3 actions for Govern 1.1, maintaining awareness of the applicable legal and regulatory considerations and requirements specific to industry, sector, and business purpose, as well as the application context of the deployed AI system [NIST AI RMF Playbook Govern 1.1 Action 1], aligning risk management efforts with applicable legal standards [NIST AI RMF Playbook Govern 1.1 Action 2], and maintaining policies for training (and re-training) organizational staff about necessary legal or regulatory considerations that may impact AI-related design, development, and deployment activities [NIST AI RMF Playbook Govern 1.1 Action 3].
+
+### 2.3 Trustworthy AI characteristics
+
+Acme Health shall integrate the characteristics of trustworthy AI into organizational policies, processes, procedures, and practices. AI Risk / GRC shall own and maintain this integration. [NIST AI RMF Govern 1.2]
+
+NIST suggests, among its 15 actions for Govern 1.2, defining key terms and concepts related to AI systems and the scope of their purposes and intended uses [NIST AI RMF Playbook Govern 1.2 Action 1], connecting AI governance to existing organizational governance and risk controls [NIST AI RMF Playbook Govern 1.2 Action 2], aligning to broader data governance policies and practices, particularly the use of sensitive or otherwise risky data [NIST AI RMF Playbook Govern 1.2 Action 3], detailing standards for experimental design, data quality, and model training [NIST AI RMF Playbook Govern 1.2 Action 4], outlining and documenting risk mapping and measurement processes and standards [NIST AI RMF Playbook Govern 1.2 Action 5], detailing model testing and validation processes [NIST AI RMF Playbook Govern 1.2 Action 6], detailing review processes for legal and risk functions [NIST AI RMF Playbook Govern 1.2 Action 7], establishing the frequency of and detail for monitoring, auditing, and review processes [NIST AI RMF Playbook Govern 1.2 Action 8], outlining change management requirements [NIST AI RMF Playbook Govern 1.2 Action 9], outlining processes for internal and external stakeholder engagement [NIST AI RMF Playbook Govern 1.2 Action 10], establishing whistleblower policies to facilitate reporting of serious AI system concerns [NIST AI RMF Playbook Govern 1.2 Action 11], detailing and testing incident response plans [NIST AI RMF Playbook Govern 1.2 Action 12], verifying that formal AI risk management policies align to existing legal standards and industry best practices and norms [NIST AI RMF Playbook Govern 1.2 Action 13], establishing AI risk management policies that broadly align to AI system trustworthy characteristics [NIST AI RMF Playbook Govern 1.2 Action 14], and verifying that formal AI risk management policies include currently deployed and third-party AI systems [NIST AI RMF Playbook Govern 1.2 Action 15].
+
+### 2.4 Risk tolerance and level of risk management activity
+
+Acme Health shall maintain processes, procedures, and practices to determine the needed level of risk management activities based on the organization's risk tolerance. AI Risk / GRC shall own these processes and shall answer for their outcome. [NIST AI RMF Govern 1.3]
+
+NIST suggests, among its 5 actions for Govern 1.3, establishing policies to define mechanisms for measuring or understanding an AI system's potential impacts, for example via regular impact assessments at key stages in the AI lifecycle, connected to system impacts and frequency of system updates [NIST AI RMF Playbook Govern 1.3 Action 1], establishing policies to define mechanisms for measuring or understanding the likelihood of an AI system's impacts and their magnitude at key stages in the AI lifecycle [NIST AI RMF Playbook Govern 1.3 Action 2], establishing policies that define assessment scales for measuring potential AI system impact, which may be qualitative such as red-amber-green (RAG) or may entail simulations or econometric approaches [NIST AI RMF Playbook Govern 1.3 Action 3], establishing policies for assigning an overall risk measurement approach for an AI system or its important components, for example via multiplication or combination of a mapped risk's impact and likelihood (risk ≈ impact x likelihood) [NIST AI RMF Playbook Govern 1.3 Action 4], and establishing policies to assign systems to uniform risk scales that are valid across the organization's AI portfolio, such as documentation templates, while acknowledging that risk tolerance and risk levels may change over the lifecycle of an AI system [NIST AI RMF Playbook Govern 1.3 Action 5].
+
+### 2.5 Transparent risk management process and controls
+
+The AI risk management process and its outcomes shall be established through transparent policies, procedures, and other controls based on Acme Health's organizational risk priorities. AI Risk / GRC shall own the establishment of these policies, procedures, and controls. [NIST AI RMF Govern 1.4]
+
+NIST suggests, among its 7 actions for Govern 1.4, establishing and regularly reviewing documentation policies that address information related to AI actor contact information, business justification, scope and usages, expected and potential risks and impacts, assumptions and limitations, description and characterization of training data, algorithmic methodology, evaluated alternative approaches, description of output data, testing and validation results including explanatory visualizations and information, down- and up-stream dependencies, plans for deployment, monitoring, and change management, and stakeholder engagement plans [NIST AI RMF Playbook Govern 1.4 Action 1], verifying that documentation policies for AI systems are standardized across the organization and remain current [NIST AI RMF Playbook Govern 1.4 Action 2], establishing policies for a model documentation inventory system and regularly reviewing its completeness, usability, and efficacy [NIST AI RMF Playbook Govern 1.4 Action 3], establishing mechanisms to regularly review the efficacy of risk management processes [NIST AI RMF Playbook Govern 1.4 Action 4], identifying AI actors responsible for evaluating efficacy of risk management processes and approaches and for course-correction based on results [NIST AI RMF Playbook Govern 1.4 Action 5], establishing policies and processes regarding public disclosure of the use of AI and risk management material such as impact assessments, audits, model documentation, and validation and testing results [NIST AI RMF Playbook Govern 1.4 Action 6], and documenting and reviewing the use and efficacy of different types of transparency tools and following industry standards at the time a model is in use [NIST AI RMF Playbook Govern 1.4 Action 7].
+
+### 2.6 Monitoring, periodic review, and defined responsibilities
+
+Ongoing monitoring and periodic review of the AI risk management process and its outcomes shall be planned, organizational roles and responsibilities for these activities shall be clearly defined, and the frequency of periodic review shall be determined and documented ([Review Frequency]). AI Risk / GRC shall own the monitoring and periodic review of this process and its outcomes, and shall answer for the results. [NIST AI RMF Govern 1.5]
+
+NIST suggests, among its 7 actions for Govern 1.5, establishing policies to allocate appropriate resources and capacity for assessing impacts of AI systems on individuals, communities, and society [NIST AI RMF Playbook Govern 1.5 Action 1], establishing policies and procedures for monitoring and addressing AI system performance and trustworthiness, including bias and security problems, across the lifecycle of the system [NIST AI RMF Playbook Govern 1.5 Action 2], establishing policies for AI system incident response, or confirming that existing incident response policies apply to AI systems [NIST AI RMF Playbook Govern 1.5 Action 3], establishing policies to define organizational functions and personnel responsible for AI system monitoring and incident response activities [NIST AI RMF Playbook Govern 1.5 Action 4], establishing mechanisms to enable the sharing of feedback from impacted individuals or communities about negative impacts from AI systems [NIST AI RMF Playbook Govern 1.5 Action 5], establishing mechanisms to provide recourse for impacted individuals or communities to contest problematic AI system outcomes [NIST AI RMF Playbook Govern 1.5 Action 6], and establishing opt-out mechanisms [NIST AI RMF Playbook Govern 1.5 Action 7].
+
+### 2.7 AI system inventory
+
+Acme Health shall maintain mechanisms to inventory AI systems, resourced according to organizational risk priorities. AI Risk / GRC shall own and maintain the AI system inventory and shall answer for its completeness. [NIST AI RMF Govern 1.6]
+
+NIST suggests, among its 4 actions for Govern 1.6, establishing policies that define the creation and maintenance of AI system inventories [NIST AI RMF Playbook Govern 1.6 Action 1], establishing policies that define a specific individual or team that is responsible for maintaining the inventory [NIST AI RMF Playbook Govern 1.6 Action 2], establishing policies that define which models or systems are inventoried, with preference to inventorying all models or systems or, minimally, high-risk models or systems or systems deployed in high-stakes settings [NIST AI RMF Playbook Govern 1.6 Action 3], and establishing policies that define model or system attributes to be inventoried, such as documentation, links to source code, incident response plans, data dictionaries, and AI actor contact information [NIST AI RMF Playbook Govern 1.6 Action 4].
+
+### 2.8 Decommissioning and phase-out of AI systems
+
+AI Risk / GRC shall own processes and procedures for decommissioning and phasing out AI systems safely and in a manner that does not increase risks or decrease Acme Health's trustworthiness, and shall answer for the outcome of every decommissioning and phase-out. [NIST AI RMF Govern 1.7]
+
+NIST suggests, among its 4 actions for Govern 1.7, establishing policies for decommissioning AI systems that typically address user and community concerns and reputational risks, business continuity and financial risks, up- and downstream system dependencies, regulatory requirements such as data retention, potential future legal, regulatory, security, or forensic investigations, and migration to the replacement system if appropriate [NIST AI RMF Playbook Govern 1.7 Action 1], establishing policies that delineate where and for how long decommissioned systems, models, and related artifacts are stored [NIST AI RMF Playbook Govern 1.7 Action 2], establishing practices to track accountability and consider how decommissioning and other adaptations or changes in system deployment contribute to downstream impacts for individuals, groups, and communities [NIST AI RMF Playbook Govern 1.7 Action 3], and establishing policies that address ancillary data or artifacts that must be preserved for fulsome understanding or execution of the decommissioned AI system, such as predictions, explanations, intermediate input feature representations, and usernames and passwords [NIST AI RMF Playbook Govern 1.7 Action 4].
+
+## 3. Accountability, Roles, and Training
+
+### 3.1 Accountability structures
+
+Acme Health shall maintain accountability structures so that the appropriate teams and individuals are empowered, responsible, and trained for mapping, measuring, and managing AI risks. AI Risk / GRC shall own these accountability structures end to end. [NIST AI RMF Govern 2]
+
+### 3.2 Documented roles, responsibilities, and communication
+
+Roles, responsibilities, and lines of communication related to mapping, measuring, and managing AI risks shall be documented and clear to individuals and teams throughout Acme Health. AI Risk / GRC shall own the documentation of these roles, responsibilities, and lines of communication, and shall answer for keeping them clear across the organization. [NIST AI RMF Govern 2.1]
+
+NIST suggests, among its 6 actions for Govern 2.1, establishing policies that define the AI risk management roles and responsibilities for positions directly and indirectly related to AI systems, including but not limited to boards of directors or advisory committees, senior management, AI audit functions, product management, project management, AI design, AI development, human-AI interaction, AI testing and evaluation, AI acquisition and procurement, impact assessment functions, and oversight functions [NIST AI RMF Playbook Govern 2.1 Action 1], establishing policies that promote regular communication among AI actors participating in AI risk management efforts [NIST AI RMF Playbook Govern 2.1 Action 2], establishing policies that separate management of AI system development functions from AI system testing functions to enable independent course-correction of AI systems [NIST AI RMF Playbook Govern 2.1 Action 3], establishing policies to identify, increase the transparency of, and prevent conflicts of interest in AI risk management efforts [NIST AI RMF Playbook Govern 2.1 Action 4], establishing policies to counteract confirmation bias and market incentives that may hinder AI risk management efforts [NIST AI RMF Playbook Govern 2.1 Action 5], and establishing policies that incentivize AI actors to collaborate with existing legal, oversight, compliance, or enterprise risk functions in their AI risk management activities [NIST AI RMF Playbook Govern 2.1 Action 6].
+
+### 3.3 AI risk management training
+
+Acme Health's personnel and partners shall receive AI risk management training to enable them to perform their duties and responsibilities consistent with related policies, procedures, and agreements. AI Risk / GRC shall own this training and shall answer for its outcome. [NIST AI RMF Govern 2.2]
+
+NIST suggests, among its 6 actions for Govern 2.2, establishing policies for personnel addressing ongoing education about applicable laws and regulations for AI systems, potential negative impacts that may arise from AI systems, organizational AI policies, and trustworthy AI characteristics [NIST AI RMF Playbook Govern 2.2 Action 1], ensuring that trainings are suitable across AI actor sub-groups, for AI actors carrying out technical tasks such as developers and operators as compared to AI actors in oversight roles such as legal, compliance, and audit [NIST AI RMF Playbook Govern 2.2 Action 2], ensuring that trainings comprehensively address technical and socio-technical aspects of AI risk management [NIST AI RMF Playbook Govern 2.2 Action 3], verifying that organizational AI policies include mechanisms for internal AI personnel to acknowledge and commit to their roles and responsibilities [NIST AI RMF Playbook Govern 2.2 Action 4], verifying that organizational policies address change management and include mechanisms to communicate and acknowledge substantial AI system changes [NIST AI RMF Playbook Govern 2.2 Action 5], and defining paths along internal and external chains of accountability to escalate risk concerns [NIST AI RMF Playbook Govern 2.2 Action 6].
+
+### 3.4 Executive leadership responsibility
+
+Executive leadership shall take responsibility for decisions about the risks associated with AI system development and deployment. [NIST AI RMF Govern 2.3]
+
+NIST suggests, among its 2 actions for Govern 2.3, that organizational management declare risk tolerances for developing or using AI systems, support AI risk management efforts and play an active role in such efforts, integrate a risk and harm prevention mindset throughout the AI lifecycle as part of organizational culture, support competent risk management executives, and delegate the power, resources, and authorization to perform risk management to each appropriate level throughout the management chain [NIST AI RMF Playbook Govern 2.3 Action 1], and that organizations establish board committees for AI risk management and oversight functions and integrate those functions within the organization's broader enterprise risk management approaches [NIST AI RMF Playbook Govern 2.3 Action 2].
+
+## 4. Diversity, Equity, Inclusion, Accessibility, and Human-AI Oversight
+
+### 4.1 Prioritization of DEIA processes
+
+Acme Health shall prioritize workforce diversity, equity, inclusion, and accessibility processes in the mapping, measuring, and managing of AI risks throughout the AI lifecycle. AI Risk / GRC shall own the integration of these processes into AI risk management. [NIST AI RMF Govern 3]
+
+### 4.2 Diverse decision-making
+
+Decision-making related to mapping, measuring, and managing AI risks throughout the lifecycle shall be informed by a diverse team, including diversity of demographics, disciplines, experience, expertise, and backgrounds. [NIST AI RMF Govern 3.1]
+
+NIST suggests, among its 5 actions for Govern 3.1, defining policies and hiring practices at the outset that promote interdisciplinary roles, competencies, skills, and capacity for AI efforts [NIST AI RMF Playbook Govern 3.1 Action 1], defining policies and hiring practices that lead to demographic and domain expertise diversity, empowering staff with necessary resources and support, and facilitating the contribution of staff feedback and concerns without fear of reprisal [NIST AI RMF Playbook Govern 3.1 Action 2], establishing policies that facilitate inclusivity and the integration of new insights into existing practice [NIST AI RMF Playbook Govern 3.1 Action 3], seeking external expertise to supplement organizational diversity, equity, inclusion, and accessibility where internal expertise is lacking [NIST AI RMF Playbook Govern 3.1 Action 4], and establishing policies that incentivize AI actors to collaborate with existing nondiscrimination, accessibility and accommodation, and human resource functions, employee resource groups (ERGs), and diversity, equity, inclusion, and accessibility (DEIA) initiatives [NIST AI RMF Playbook Govern 3.1 Action 5].
+
+### 4.3 Human-AI configurations and oversight of AI systems
+
+Acme Health shall maintain policies and procedures that define and differentiate roles and responsibilities for human-AI configurations and oversight of AI systems. AI Risk / GRC shall own these policies and procedures. [NIST AI RMF Govern 3.2]
+
+NIST suggests, among its 8 actions for Govern 3.2, establishing policies and procedures that define and differentiate the various human roles and responsibilities when using, interacting with, or monitoring AI systems [NIST AI RMF Playbook Govern 3.2 Action 1], establishing procedures for capturing and tracking risk information related to human-AI configurations and associated outcomes [NIST AI RMF Playbook Govern 3.2 Action 2], establishing policies for the development of proficiency standards for AI actors carrying out system operation tasks and system oversight tasks [NIST AI RMF Playbook Govern 3.2 Action 3], establishing specified risk management training protocols for AI actors carrying out system operation tasks and system oversight tasks [NIST AI RMF Playbook Govern 3.2 Action 4], establishing policies and procedures regarding AI actor roles and responsibilities for human oversight of deployed systems [NIST AI RMF Playbook Govern 3.2 Action 5], establishing policies and procedures defining human-AI configurations (configurations where AI systems are explicitly designated and treated as team members in primarily human teams) in relation to organizational risk tolerances, and associated documentation [NIST AI RMF Playbook Govern 3.2 Action 6], establishing policies to enhance the explanation, interpretation, and overall transparency of AI systems [NIST AI RMF Playbook Govern 3.2 Action 7], and establishing policies for managing risks regarding known difficulties in human-AI configurations, human-AI teaming, and AI system user experience and user interactions (UI/UX) [NIST AI RMF Playbook Govern 3.2 Action 8].
+
+## 5. Culture, Risk Documentation, and Incident Readiness
+
+### 5.1 Risk-aware culture
+
+Acme Health's organizational teams shall maintain a commitment to a culture that considers and communicates AI risk. AI Risk / GRC shall own the cultivation and measurement of this culture. [NIST AI RMF Govern 4]
+
+### 5.2 Critical thinking and safety-first mindset
+
+Acme Health's organizational policies and practices shall foster a critical thinking and safety-first mindset in the design, development, deployment, and uses of AI systems to minimize potential negative impacts. [NIST AI RMF Govern 4.1]
+
+NIST suggests, among its 5 actions for Govern 4.1, establishing policies that require inclusion of oversight functions (legal, compliance, risk management) from the outset of the system design process [NIST AI RMF Playbook Govern 4.1 Action 1], establishing policies that promote effective challenge of AI system design, implementation, and deployment decisions via mechanisms such as the three lines of defense, model audits, or red-teaming to minimize workplace risks such as groupthink [NIST AI RMF Playbook Govern 4.1 Action 2], establishing policies that incentivize safety-first mindset and general critical thinking and review at an organizational and procedural level [NIST AI RMF Playbook Govern 4.1 Action 3], establishing whistleblower protections for insiders who report on perceived serious problems with AI systems [NIST AI RMF Playbook Govern 4.1 Action 4], and establishing policies to integrate a harm and risk prevention mindset throughout the AI lifecycle [NIST AI RMF Playbook Govern 4.1 Action 5].
+
+### 5.3 Documentation and communication of risks and potential impacts
+
+Acme Health's organizational teams shall document the risks and potential impacts of the AI technology they design, develop, deploy, evaluate, and use, and shall communicate about the impacts more broadly. AI Risk / GRC shall own the process for this documentation and communication and shall answer for its outcome. [NIST AI RMF Govern 4.2]
+
+NIST suggests, among its 4 actions for Govern 4.2, establishing impact assessment policies and processes for AI systems used by the organization [NIST AI RMF Playbook Govern 4.2 Action 1], aligning organizational impact assessment activities with relevant regulatory or legal requirements [NIST AI RMF Playbook Govern 4.2 Action 2], verifying that impact assessment activities are appropriate to evaluate the potential negative impact of a system and how quickly a system changes, and that assessments are applied on a regular basis [NIST AI RMF Playbook Govern 4.2 Action 3], and utilizing impact assessments to inform broader evaluations of AI system risk [NIST AI RMF Playbook Govern 4.2 Action 4].
+
+### 5.4 Testing, incident identification, and information sharing
+
+Acme Health shall maintain organizational practices that enable AI testing, identification of incidents, and information sharing. AI Risk / GRC shall own these practices and shall answer for their outcome. [NIST AI RMF Govern 4.3]
+
+NIST suggests, among its 5 actions for Govern 4.3, establishing policies and procedures to facilitate and equip AI system testing [NIST AI RMF Playbook Govern 4.3 Action 1], establishing organizational commitment to identifying AI system limitations and sharing of insights about limitations within appropriate AI actor groups [NIST AI RMF Playbook Govern 4.3 Action 2], establishing policies for reporting and documenting incident response [NIST AI RMF Playbook Govern 4.3 Action 3], establishing policies and processes regarding public disclosure of incidents and information sharing [NIST AI RMF Playbook Govern 4.3 Action 4], and establishing guidelines for incident handling related to AI system risks and performance [NIST AI RMF Playbook Govern 4.3 Action 5].
+
+## 6. Engagement with AI Actors and External Feedback
+
+### 6.1 Robust engagement with relevant AI actors
+
+Acme Health shall maintain processes for robust engagement with relevant AI actors. AI Risk / GRC shall own these engagement processes end to end. [NIST AI RMF Govern 5]
+
+### 6.2 External feedback on individual and societal impacts
+
+Acme Health shall maintain organizational policies and practices to collect, consider, prioritize, and integrate feedback from those external to the team that developed or deployed the AI system regarding the potential individual and societal impacts related to AI risks. AI Risk / GRC shall own these policies and practices and shall answer for their outcome. [NIST AI RMF Govern 5.1]
+
+NIST suggests, among its 3 actions for Govern 5.1, establishing AI risk management policies that explicitly address mechanisms for collecting, evaluating, and incorporating stakeholder and user feedback, which could include recourse mechanisms for faulty AI system outputs, bug bounties, human-centered design, user-interaction and experience research, and participatory stakeholder engagement with individuals and communities that may experience negative impacts [NIST AI RMF Playbook Govern 5.1 Action 1], verifying that stakeholder feedback is considered and addressed, including environmental concerns, and across the entire population of intended users, including historically excluded populations, people with disabilities, older people, and those with limited access to the internet and other basic technologies [NIST AI RMF Playbook Govern 5.1 Action 2], and clarifying the organization's principles as they apply to AI systems, considering those which have been proposed publicly, to inform external stakeholders of the organization's values, and considering publishing or adopting AI principles [NIST AI RMF Playbook Govern 5.1 Action 3].
+
+### 6.3 Incorporation of adjudicated feedback into design and implementation
+
+Acme Health shall establish mechanisms that enable the team that developed or deployed AI systems to regularly incorporate adjudicated feedback from relevant AI actors into system design and implementation. AI Risk / GRC shall own the adjudication of feedback and the handoff of adjudicated feedback to the developing or deploying team, and shall answer for the outcome. [NIST AI RMF Govern 5.2]
+
+NIST suggests, among its 5 actions for Govern 5.2, explicitly acknowledging that AI systems, and the use of AI, present inherent costs and risks along with potential benefits [NIST AI RMF Playbook Govern 5.2 Action 1], defining reasonable risk tolerances for AI systems informed by laws, regulation, best practices, or industry standards [NIST AI RMF Playbook Govern 5.2 Action 2], establishing policies that ensure all relevant AI actors are provided with meaningful opportunities to provide feedback on system design and implementation [NIST AI RMF Playbook Govern 5.2 Action 3], establishing policies that define how to assign AI systems to established risk tolerance levels by combining system impact assessments with the likelihood that an impact occurs, often entailing some combination of econometric evaluations of impacts and impact likelihoods, red-amber-green (RAG) scales for impact severity and likelihood, policies for allocating risk management resources along established risk tolerance levels with higher-risk systems receiving more risk management resources and oversight, and policies for approval, conditional approval, and disapproval of the design, implementation, and deployment of AI systems [NIST AI RMF Playbook Govern 5.2 Action 4], and establishing policies facilitating the early decommissioning of AI systems that surpass an organization's ability to reasonably mitigate risks [NIST AI RMF Playbook Govern 5.2 Action 5].

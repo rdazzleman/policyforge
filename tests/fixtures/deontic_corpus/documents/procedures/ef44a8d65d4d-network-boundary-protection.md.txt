@@ -1,0 +1,181 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002241
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 0231f86876b296c0
+  provider: litellm
+  provider_class: third-party
+---
+
+# Network & Boundary Protection Procedure
+
+## Purpose
+
+This procedure provides the Network Security team with the operational steps required to enforce, monitor, and maintain information flow controls at Example Org's network boundary and internal segmentation points, as required by the Information Security Standard: Network & Boundary Protection. Executing it produces the Firewall and segmentation rule review and the External attack-surface scan as evidence of continuous compliance.
+
+## Scope
+
+This procedure is performed by the Network Security team on all network boundary and internal flow-control enforcement points (firewalls, segmentation controls, cross-domain transfer mechanisms, and interconnection gateways) at Example Org, on a continuous basis. It applies to all information flows within the system and between connected systems.
+
+## Prerequisites
+
+- Administrative access to the [Firewall Management Console] and the [Segmentation Management Platform]
+- Administrative access to the [Cross-Domain Solution] and [Data Diode] management interfaces where deployed
+- Access to the current System Security and Privacy Plan (SSPP) in the [SSPP Repository]
+- Approved change tickets raised in the [Ticketing System] for any rule or filter modification
+- The organization-defined information flow control policies, security and privacy attributes, and policy filters recorded in the SSPP (all `[Assignment: ...]` values below must be resolved there before enforcement)
+- Access to the [External Attack-Surface Scanner] and the [Flow Monitoring / SIEM Platform]
+- Network Security team approval for rule changes; Authorizing Official involvement for interconnection decisions
+
+## Procedure Steps
+
+### Enforce Approved Authorizations for Information Flow `[NIST AC-4 | ARC-AMPE AC-4]`
+
+1. Confirm the information flow control policies defined in the SSPP (`[Assignment: organization-defined information flow control policies]`) are current before making any flow-control change.
+1. Open the [Firewall Management Console] and verify that every allow rule maps to an approved authorization recorded in the [Ticketing System]; deny-by-default must be the baseline posture on all boundary and segmentation enforcement points.
+1. Reject or remove any rule that cannot be traced to an approved authorization; document the removal in the change ticket.
+1. On a continuous basis, monitor flow logs in the [Flow Monitoring / SIEM Platform] for traffic that does not match an authorized flow definition and block it at the enforcement point.
+1. Record the results of each verification as part of the Firewall and segmentation rule review evidence.
+
+### Define Interconnection Termination and Suspension Authority `[ARC-AMPE AC-4]`
+
+1. Verify the SSPP names the authority to order immediate termination and/or suspension of any interconnection; if it does not, escalate to the Authorizing Official to have it defined and recorded.
+1. When an interconnection is assessed as presenting an unacceptable level of risk to the enterprise and/or mission, notify the Authorizing Official and the system owner immediately.
+1. The Authorizing Official makes the risk-informed decision to terminate or suspend the interconnection, in consultation with the system owner; record the decision and its rationale in the [Ticketing System].
+1. On the Authorizing Official's order, the Network Security team disables the interconnection at the [Firewall Management Console] or disconnects it at the [Interconnection Gateway], and confirms the flow is no longer passing.
+1. Retain the decision record and the enforcement confirmation as evidence.
+
+### Enforce Attribute-Based Flow Control `[NIST AC-4(1)]`
+
+1. Confirm the security and privacy attributes (`[Assignment: organization-defined security and privacy attributes]`) and the information, source, and destination objects they attach to (`[Assignment: organization-defined information, source, and destination objects]`) are defined in the SSPP.
+1. Configure the [Segmentation Management Platform] and [Firewall Management Console] rules to evaluate those attributes when making flow control decisions, per the SSPP's information flow control policies.
+1. Test each attribute-based rule with representative allowed and denied flows and record the results in the change ticket.
+
+### Enforce Flow Control Using Protected Processing Domains `[NIST AC-4(2)]`
+
+1. Identify the protected processing domains defined in the SSPP for the systems in scope.
+1. Configure the [Segmentation Management Platform] so that flow control decisions between processing domains are enforced at the domain boundary, per the SSPP's information flow control policies.
+1. Verify that no flow path exists between protected processing domains that bypasses the configured boundary controls, using flow logs from the [Flow Monitoring / SIEM Platform].
+
+### Enforce Information Flow Control Policies Dynamically `[NIST AC-4(3)]`
+
+1. Confirm which information flow control policies the SSPP requires to be enforced dynamically (`[Assignment: organization-defined information flow control policies]`).
+1. Configure the [Flow Monitoring / SIEM Platform] and the enforcement points it integrates with (e.g., [Firewall Management Console], [Segmentation Management Platform]) so that flow decisions are evaluated at the time of the flow, not only from static rules.
+1. Validate dynamic enforcement by simulating a flow that should be permitted under one condition and denied under another, and confirm the enforcement point responds correctly.
+
+### Prevent Encrypted Traffic from Bypassing Flow Controls `[NIST AC-4(4) High]`
+
+1. Determine from the SSPP which method(s) Example Org uses to prevent encrypted information from bypassing flow control mechanisms: `[Selection (one or more): decrypting the information; blocking the flow of the encrypted information; terminating communications sessions attempting to pass encrypted information; [Assignment: organization-defined procedure or method]]`.
+1. Configure the [Inspection/Proxy Gateway] or [Firewall Management Console] to apply the selected method(s) at every boundary enforcement point where encrypted traffic could otherwise bypass inspection.
+1. Verify the configuration by attempting to pass encrypted traffic that would violate a flow control policy, and confirm it is decrypted and inspected, blocked, or its session terminated as selected.
+1. Record the test outcome in the change ticket and retain it with the Firewall and segmentation rule review evidence.
+
+### Enforce Limitations on Embedded Data Types `[NIST AC-4(5)]`
+
+1. Identify the limitations on embedding data types within other data types defined in the SSPP (`[Assignment: organization-defined limitations]`).
+1. Configure the [Content Inspection Gateway] or [Cross-Domain Solution] filters to detect and block or strip data structures that embed prohibited data types within other data types.
+1. Test the filter with a sample payload containing a prohibited embedding and confirm it is handled per the SSPP policy.
+
+### Enforce Metadata-Based Flow Control `[NIST AC-4(6)]`
+
+1. Confirm the metadata used for flow control decisions is defined in the SSPP (`[Assignment: organization-defined metadata]`).
+1. Configure the enforcement points ([Segmentation Management Platform], [Content Inspection Gateway]) to read and evaluate that metadata as a basis for permitting or denying flows.
+1. Verify that flows carrying incorrect or missing required metadata are denied, using a controlled test transfer.
+
+### Enforce One-Way Information Flows Through Hardware-Based Mechanisms `[NIST AC-4(7)]`
+
+1. Identify the information flows the SSPP requires to be one-way.
+1. Deploy or verify a [Data Diode] (hardware-based flow control mechanism) on each one-way flow path; do not implement one-way flows with software-only controls.
+1. Verify the hardware configuration permits flow in only the required direction by attempting a transfer in the prohibited direction and confirming it fails.
+1. Include the diode configuration in the Firewall and segmentation rule review evidence.
+
+### Enforce Security and Privacy Policy Filters with Failure Handling `[NIST AC-4(8)]`
+
+1. Confirm the security or privacy policy filters (`[Assignment: organization-defined security or privacy policy filters]`) and the information flows they apply to (`[Assignment: organization-defined information flows]`) are defined in the SSPP.
+1. Configure the filters on the appropriate enforcement points ([Firewall Management Console], [Content Inspection Gateway], [Cross-Domain Solution]) as the basis for flow control decisions on those flows.
+1. Configure the failure action for each filter per the SSPP: `[Selection (one or more): block; strip; modify; quarantine]` data after a filter processing failure, in accordance with `[Assignment: organization-defined security or privacy policy]`.
+1. Test the failure path by forcing a filter processing failure and confirming the selected action is taken.
+
+### Enforce Human Review of Defined Information Flows `[NIST AC-4(9)]`
+
+1. Identify the information flows and the conditions under which human review is required, per the SSPP (`[Assignment: organization-defined information flows]`, `[Assignment: organization-defined conditions]`).
+1. Configure the [Cross-Domain Solution] or [Content Inspection Gateway] to route flows meeting those conditions to a review queue rather than transferring them automatically.
+1. Assign Network Security personnel to review queued items against the applicable flow control policy; approve and release, or deny and return, each item with the decision recorded in the [Ticketing System].
+
+### Enable Privileged Administrator Control of Policy Filters `[NIST AC-4(10)]`, `[NIST AC-4(11)]`
+
+1. Verify that privileged administrator accounts on the [Firewall Management Console], [Content Inspection Gateway], and [Cross-Domain Solution] have the capability to enable and disable security or privacy policy filters under the conditions defined in the SSPP (`[Assignment: organization-defined conditions]`).
+1. Verify those administrators can configure the filters to support different security or privacy policies as defined in the SSPP.
+1. Restrict these capabilities to privileged administrator roles only, and log every enable, disable, and configuration change to the [Flow Monitoring / SIEM Platform] for review by the Network Security team.
+
+### Validate Data with Data Type Identifiers for Cross-Domain Transfers `[NIST AC-4(12)]`
+
+1. Confirm the data type identifiers used to validate data essential for flow decisions are defined in the SSPP (`[Assignment: organization-defined data type identifiers]`).
+1. Configure the [Cross-Domain Solution] to validate incoming and outgoing transfers against those identifiers before releasing information between different security domains.
+1. Test with a transfer carrying an unrecognized or mismatched data type identifier and confirm the transfer is rejected.
+
+### Decompose Cross-Domain Transfers into Policy-Relevant Subcomponents `[NIST AC-4(13)]`
+
+1. Confirm the policy-relevant subcomponents are defined in the SSPP (`[Assignment: organization-defined policy-relevant subcomponents]`).
+1. Configure the [Cross-Domain Solution] to decompose information transferred between different security domains into those subcomponents before submission to the policy enforcement mechanisms.
+1. Verify each subcomponent is individually evaluated by the policy enforcement mechanism and that no transfer occurs as an un-decomposed whole.
+
+### Restrict Cross-Domain Data Structure and Content to Fully Enumerated Formats `[NIST AC-4(14)]`
+
+1. Confirm the security or privacy policy filters requiring fully enumerated formats are defined in the SSPP.
+1. Configure the [Cross-Domain Solution] filters to restrict data structure and content to the enumerated formats, rejecting anything outside them.
+1. Test with a transfer using a non-enumerated format or unexpected content and confirm it is rejected.
+
+### Examine Cross-Domain Transfers for Unsanctioned Information `[NIST AC-4(15)]`
+
+1. Confirm the definition of unsanctioned information and the governing security or privacy policy in the SSPP (`[Assignment: organization-defined unsanctioned information]`, `[Assignment: organization-defined security or privacy policy]`).
+1. Configure the [Cross-Domain Solution] or [Content Inspection Gateway] to examine all information transferred between different security domains for the presence of unsanctioned information.
+1. Prohibit the transfer of any information found to contain unsanctioned content, per the SSPP policy, and record the blocked transfer in the [Ticketing System].
+
+### Uniquely Identify and Authenticate Information Transfer Endpoints `[NIST AC-4(17)]`
+
+1. Determine from the SSPP the basis for endpoint identification: `[Selection (one or more): organization, system, application, service, individual]`.
+1. Configure the boundary enforcement points ([Firewall Management Console], [Cross-Domain Solution], [Interconnection Gateway]) to uniquely identify and authenticate both the source and the destination of every information transfer on that basis.
+1. Verify that transfers from unauthenticated or unidentified endpoints are denied, using a controlled test from an endpoint without valid credentials.
+
+### Apply Policy Filters to Metadata in Cross-Domain Transfers `[NIST AC-4(19)]`
+
+1. Confirm the security or privacy policy filters that apply to metadata are defined in the SSPP.
+1. Configure the [Cross-Domain Solution] to run those filters against the metadata accompanying transfers between different security domains, not only the payload content.
+1. Test with a transfer whose metadata violates a filter and confirm the transfer is blocked or the metadata is sanitized per the SSPP.
+
+### Control Cross-Domain Flows Using Approved Solutions and Configurations `[NIST AC-4(20)]`
+
+1. Confirm which solutions and approved configurations the SSPP defines for controlling the flow of the designated information across security domains (`[Assignment: organization-defined solutions in approved configurations]`, `[Assignment: organization-defined information]`).
+1. Verify each deployed [Cross-Domain Solution] or [Data Diode] matches its approved configuration before placing it in the flow path; if it deviates, take it out of service and raise a change ticket in the [Ticketing System].
+1. Route the designated information flows only through solutions in approved configurations; deny flows attempting to cross domains by any other path.
+
+### Separate Information Flows Logically or Physically `[NIST AC-4(21)]`
+
+1. Confirm the required separations and the mechanisms and/or techniques to accomplish them are defined in the SSPP (`[Assignment: organization-defined required separations]`, `[Assignment: organization-defined mechanisms and/or techniques]`).
+1. Implement the required separations in the [Segmentation Management Platform] (logical separation, e.g., VLANs, subnets, security zones) or via physical separation (e.g., [Data Diode], dedicated hardware) as the SSPP specifies.
+1. Verify no traffic path exists between flows that the SSPP requires to be separated, using flow logs from the [Flow Monitoring / SIEM Platform], and record the verification in the Firewall and segmentation rule review evidence.
+
+### Provide Single-Device Access Across Multiple Security Domains Without Cross-Domain Flow `[NIST AC-4(22)]`
+
+1. Confirm the security domains and access patterns the SSPP defines for single-device multi-domain access.
+1. Configure the [Multi-Domain Access Solution] so that a single device can reach computing platforms, applications, or data residing in multiple different security domains while information flow between those domains is prevented.
+1. Verify the isolation by attempting to move information from one domain to another through the single-device session and confirming the transfer is blocked.
+
+### Continuously Review Rules and Scan the External Attack Surface
+
+1. On a continuous basis, the Network Security team performs the Firewall and segmentation rule review: verify every rule on the boundary and segmentation enforcement points against current approved authorizations, remove stale or unauthorized rules, and retain the review output as evidence.
+1. On a continuous basis, run the [External Attack-Surface Scanner] against the external boundary, review findings for exposed services or flows not covered by an approved authorization, and remediate or raise a change ticket in the [Ticketing System] for each finding.
+1. Retain the External attack-surface scan output alongside the Firewall and segmentation rule review as the standing evidence artifacts for this procedure.
+
+## Roles & Responsibilities
+
+The Network Security team is accountable for this procedure end to end: it executes every step, performs the continuous Firewall and segmentation rule review and External attack-surface scan, and coordinates with system owners, privileged administrators, and the Authorizing Official as individual steps require. The Authorizing Official approves interconnection termination and suspension decisions, and the Authorizing Official (in consultation with Network Security) reviews and approves any exception to the flow control policies defined in the SSPP.
+
+## Related Standard
+
+Information Security Standard: Network & Boundary Protection

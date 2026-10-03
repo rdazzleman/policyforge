@@ -1,0 +1,190 @@
+{
+  "note": "Every version each registered prompt declared on first-parent main and the release/1.6.1 train since the registry's first commit (2dcdfcf), and the text it had, as a fingerprint. A version missing from that walk is listed in unrecorded_versions with the reason. A version that existed only on a pull request's own commits and left no gap in the numbers would not show. A version keeps one text for life: a change to the text is a new version, added by scripts/prompt_versions.py, and tests/test_prompt_fingerprint_file.py fails when the registry holds a version this file does not, or a version whose text differs from the one recorded here. It cannot see an edit to this file in the same change: rewriting a recorded fingerprint to match a changed text passes it. That this file only grows is held by review of its diff. Walked from 2dcdfcf (the registry's first commit) along first-parent main and the release/1.6.1 train. first_seen is the first commit on that walk to show the entry.",
+  "reused_versions": {
+    "generate.standard 3": "#117 (a193de0) changed the text and kept version 3: two texts under one number.",
+    "generate.procedure 2": "#117 (a193de0) changed the text and kept version 2: two texts under one number."
+  },
+  "unrecorded_versions": {
+    "generate.standard 5": "Declared only on PR 359's own commits (refs/pull/359/head), with two texts: 23ad39e (f65b2d3aea9f) and ea2f886 (1eccb6748fb4). #359 squash-merged at v6, so the walk never saw v5 (9b on #422).",
+    "edit.plan 1": "Never declared in code: the registry's first commit (2dcdfcf) registered edit.plan at v2. One earlier text exists (532fe53, a2ffb890c92a). Measured by 9b on #422.",
+    "zardoz.answer 1": "Never declared: 2dcdfcf registered zardoz.answer at v6. The code before it declares no version and holds three earlier texts of the prompt (a1880b4, 4d051f9, 242e342), so these numbers correspond to no text. Measured by 9b on #422.",
+    "zardoz.answer 2": "Never declared: 2dcdfcf registered zardoz.answer at v6. The code before it declares no version and holds three earlier texts of the prompt (a1880b4, 4d051f9, 242e342), so these numbers correspond to no text. Measured by 9b on #422.",
+    "zardoz.answer 3": "Never declared: 2dcdfcf registered zardoz.answer at v6. The code before it declares no version and holds three earlier texts of the prompt (a1880b4, 4d051f9, 242e342), so these numbers correspond to no text. Measured by 9b on #422.",
+    "zardoz.answer 4": "Never declared: 2dcdfcf registered zardoz.answer at v6. The code before it declares no version and holds three earlier texts of the prompt (a1880b4, 4d051f9, 242e342), so these numbers correspond to no text. Measured by 9b on #422.",
+    "zardoz.answer 5": "Never declared: 2dcdfcf registered zardoz.answer at v6. The code before it declares no version and holds three earlier texts of the prompt (a1880b4, 4d051f9, 242e342), so these numbers correspond to no text. Measured by 9b on #422."
+  },
+  "prompts": {
+    "crosswalk.propose": {
+      "1": [
+        {
+          "fingerprint": "dc1342fdc46a",
+          "first_seen": "f935f8d94c249404cb94067f9ba2c55f16ec5f18"
+        }
+      ]
+    },
+    "edit.apply": {
+      "1": [
+        {
+          "fingerprint": "1bc54ff2e02b",
+          "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ]
+    },
+    "edit.plan": {
+      "2": [
+        {
+          "fingerprint": "49afd7cad918",
+          "first_seen": "2dcdfcf5d25149ce09f72d7a607fc8dc508c525d"
+        }
+      ]
+    },
+    "entail.judge": {
+      "1": [
+        {
+          "fingerprint": "619d6f0d6cec",
+          "first_seen": "2dcdfcf5d25149ce09f72d7a607fc8dc508c525d"
+        }
+      ]
+    },
+    "generate.policy": {
+      "1": [
+        {
+          "fingerprint": "a10e9d1d4f4d",
+          "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ]
+    },
+    "generate.procedure": {
+      "1": [
+        {
+          "fingerprint": "5d50b39c648b",
+          "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ],
+      "2": [
+        {
+          "fingerprint": "b1ff8fad8db1",
+          "first_seen": "be5dcdcba5f90195a0a60a0943dbdc00bd657fbe"
+        },
+        {
+          "fingerprint": "e767e7d15e84",
+          "first_seen": "a193de064804afd93874d9c4c25c0df9275e91c0"
+        }
+      ],
+      "3": [
+        {
+          "fingerprint": "becb0f33c587",
+          "first_seen": "5be6b0e6989576fa65d3dfaf234abbb3ca5088c5"
+        }
+      ]
+    },
+    "generate.standard": {
+      "1": [
+        {
+          "fingerprint": "edfb134f7b28",
+          "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ],
+      "2": [
+        {
+          "fingerprint": "aa61ac12ce2d",
+          "first_seen": "be5dcdcba5f90195a0a60a0943dbdc00bd657fbe"
+        }
+      ],
+      "3": [
+        {
+          "fingerprint": "e1b15e2b94b0",
+          "first_seen": "8d2b472cfe0caede11c6abcba8e72a288037c093"
+        },
+        {
+          "fingerprint": "984bff1c3bf0",
+          "first_seen": "a193de064804afd93874d9c4c25c0df9275e91c0"
+        }
+      ],
+      "4": [
+        {
+          "fingerprint": "636df5f708d5",
+          "first_seen": "5be6b0e6989576fa65d3dfaf234abbb3ca5088c5"
+        }
+      ],
+      "6": [
+        {
+          "fingerprint": "ee664b5a81d2",
+          "first_seen": "b0e15f596802ba318123d2348fed182f9613565a"
+        }
+      ]
+    },
+    "synthesis.merge": {
+      "1": [
+        {
+          "fingerprint": "21158dc4300b",
+          "first_seen": "e735b51cd7abca4a1d533d159df83744958b8cd5"
+        }
+      ]
+    },
+    "zardoz.answer": {
+      "6": [
+        {
+          "fingerprint": "8052fd27359b",
+          "first_seen": "2dcdfcf5d25149ce09f72d7a607fc8dc508c525d"
+        }
+      ]
+    },
+    "zardoz.cluster.json": {
+      "1": [
+        {
+          "fingerprint": "c06e89bdf1b8",
+          "first_seen": "2dcdfcf5d25149ce09f72d7a607fc8dc508c525d"
+        }
+      ]
+    },
+    "zardoz.cluster.lines": {
+      "1": [
+        {
+          "fingerprint": "3f58d07e4945",
+          "first_seen": "2dcdfcf5d25149ce09f72d7a607fc8dc508c525d"
+        }
+      ]
+    },
+    "zardoz.expand": {
+      "1": [
+        {
+          "fingerprint": "98054e760a61",
+          "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ]
+    },
+    "zardoz.resolve": {
+      "1": [
+        {
+          "fingerprint": "6fe729b4c6f6",
+          "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ]
+    },
+    "zardoz.route": {
+      "1": [
+        {
+          "fingerprint": "78f4d56ba1aa",
+          "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ]
+    },
+    "zardoz.route.also": {
+      "1": [
+        {
+          "fingerprint": "7ddf2e6787a9",
+          "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ]
+    },
+    "zardoz.route.arguments": {
+      "1": [
+        {
+          "fingerprint": "b76112165eeb",
+          "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ]
+    }
+  }
+}

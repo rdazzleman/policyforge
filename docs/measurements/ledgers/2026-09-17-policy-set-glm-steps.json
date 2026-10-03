@@ -1,0 +1,493 @@
+{
+ "model": "openrouter/z-ai/glm-5.3-flash",
+ "topics": 20,
+ "steps": [
+  {
+   "step": "map",
+   "ok": true,
+   "seconds": 0.2
+  },
+  {
+   "topic": "Security Program Governance",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 147.3
+  },
+  {
+   "topic": "Security Program Governance",
+   "step": "standard",
+   "ok": true,
+   "seconds": 60.3
+  },
+  {
+   "topic": "Security Program Governance",
+   "step": "policy",
+   "ok": false,
+   "seconds": 69.0,
+   "error": "Topic owner from synthesis frontmatter: Security Program / GRC\nError: policy/security-program-governance (generate): the model returned no text for the Policy after 0 output tokens (stop_reason 'stop', z-ai/glm-5.3-flash). Nothing was written. A reasoning model may have spent the whole reply thinking; try again, or choose a model that answers in its content.\n"
+  },
+  {
+   "topic": "Security Program Governance",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 111.6
+  },
+  {
+   "topic": "Risk Assessment & Authorization",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 108.8
+  },
+  {
+   "topic": "Risk Assessment & Authorization",
+   "step": "standard",
+   "ok": true,
+   "seconds": 396.6
+  },
+  {
+   "topic": "Risk Assessment & Authorization",
+   "step": "policy",
+   "ok": true,
+   "seconds": 18.9
+  },
+  {
+   "topic": "Risk Assessment & Authorization",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 85.4
+  },
+  {
+   "topic": "Identity Lifecycle & Access Review",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 110.8
+  },
+  {
+   "topic": "Identity Lifecycle & Access Review",
+   "step": "standard",
+   "ok": true,
+   "seconds": 106.9
+  },
+  {
+   "topic": "Identity Lifecycle & Access Review",
+   "step": "policy",
+   "ok": true,
+   "seconds": 15.1
+  },
+  {
+   "topic": "Identity Lifecycle & Access Review",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 100.2
+  },
+  {
+   "topic": "Authentication & Credential Management",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 75.7
+  },
+  {
+   "topic": "Authentication & Credential Management",
+   "step": "standard",
+   "ok": true,
+   "seconds": 89.9
+  },
+  {
+   "topic": "Authentication & Credential Management",
+   "step": "policy",
+   "ok": true,
+   "seconds": 25.2
+  },
+  {
+   "topic": "Authentication & Credential Management",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 81.2
+  },
+  {
+   "topic": "Remote & Third-Party Access",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 121.3
+  },
+  {
+   "topic": "Remote & Third-Party Access",
+   "step": "standard",
+   "ok": true,
+   "seconds": 36.7
+  },
+  {
+   "topic": "Remote & Third-Party Access",
+   "step": "policy",
+   "ok": true,
+   "seconds": 15.7
+  },
+  {
+   "topic": "Remote & Third-Party Access",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 109.7
+  },
+  {
+   "topic": "Network & Boundary Protection",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 91.7
+  },
+  {
+   "topic": "Network & Boundary Protection",
+   "step": "standard",
+   "ok": true,
+   "seconds": 22.2
+  },
+  {
+   "topic": "Network & Boundary Protection",
+   "step": "policy",
+   "ok": true,
+   "seconds": 26.4
+  },
+  {
+   "topic": "Network & Boundary Protection",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 422.7
+  },
+  {
+   "topic": "Encryption & Key Management",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 139.4
+  },
+  {
+   "topic": "Encryption & Key Management",
+   "step": "standard",
+   "ok": true,
+   "seconds": 24.7
+  },
+  {
+   "topic": "Encryption & Key Management",
+   "step": "policy",
+   "ok": true,
+   "seconds": 13.7
+  },
+  {
+   "topic": "Encryption & Key Management",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 52.4
+  },
+  {
+   "topic": "Logging, Monitoring & Alerting",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 100.8
+  },
+  {
+   "topic": "Logging, Monitoring & Alerting",
+   "step": "standard",
+   "ok": true,
+   "seconds": 71.1
+  },
+  {
+   "topic": "Logging, Monitoring & Alerting",
+   "step": "policy",
+   "ok": true,
+   "seconds": 18.7
+  },
+  {
+   "topic": "Logging, Monitoring & Alerting",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 91.3
+  },
+  {
+   "topic": "Incident Response",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 287.4
+  },
+  {
+   "topic": "Incident Response",
+   "step": "standard",
+   "ok": true,
+   "seconds": 77.6
+  },
+  {
+   "topic": "Incident Response",
+   "step": "policy",
+   "ok": true,
+   "seconds": 14.9
+  },
+  {
+   "topic": "Incident Response",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 73.5
+  },
+  {
+   "topic": "Vulnerability & Patch Management",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 66.2
+  },
+  {
+   "topic": "Vulnerability & Patch Management",
+   "step": "standard",
+   "ok": true,
+   "seconds": 41.1
+  },
+  {
+   "topic": "Vulnerability & Patch Management",
+   "step": "policy",
+   "ok": true,
+   "seconds": 14.3
+  },
+  {
+   "topic": "Vulnerability & Patch Management",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 43.6
+  },
+  {
+   "topic": "Endpoint Protection & Device Controls",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 29.2
+  },
+  {
+   "topic": "Endpoint Protection & Device Controls",
+   "step": "standard",
+   "ok": true,
+   "seconds": 42.6
+  },
+  {
+   "topic": "Endpoint Protection & Device Controls",
+   "step": "policy",
+   "ok": true,
+   "seconds": 14.9
+  },
+  {
+   "topic": "Endpoint Protection & Device Controls",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 48.1
+  },
+  {
+   "topic": "Change & Configuration Management",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 199.1
+  },
+  {
+   "topic": "Change & Configuration Management",
+   "step": "standard",
+   "ok": true,
+   "seconds": 75.4
+  },
+  {
+   "topic": "Change & Configuration Management",
+   "step": "policy",
+   "ok": true,
+   "seconds": 42.5
+  },
+  {
+   "topic": "Change & Configuration Management",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 81.4
+  },
+  {
+   "topic": "Secure Development Lifecycle",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 101.8
+  },
+  {
+   "topic": "Secure Development Lifecycle",
+   "step": "standard",
+   "ok": true,
+   "seconds": 74.2
+  },
+  {
+   "topic": "Secure Development Lifecycle",
+   "step": "policy",
+   "ok": true,
+   "seconds": 11.7
+  },
+  {
+   "topic": "Secure Development Lifecycle",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 93.3
+  },
+  {
+   "topic": "Backup, Restore & Contingency",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 292.4
+  },
+  {
+   "topic": "Backup, Restore & Contingency",
+   "step": "standard",
+   "ok": true,
+   "seconds": 117.5
+  },
+  {
+   "topic": "Backup, Restore & Contingency",
+   "step": "policy",
+   "ok": true,
+   "seconds": 19.1
+  },
+  {
+   "topic": "Backup, Restore & Contingency",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 72.5
+  },
+  {
+   "topic": "Media Handling & Disposal",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 49.8
+  },
+  {
+   "topic": "Media Handling & Disposal",
+   "step": "standard",
+   "ok": true,
+   "seconds": 56.2
+  },
+  {
+   "topic": "Media Handling & Disposal",
+   "step": "policy",
+   "ok": true,
+   "seconds": 13.2
+  },
+  {
+   "topic": "Media Handling & Disposal",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 42.8
+  },
+  {
+   "topic": "Physical & Environmental Security",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 48.6
+  },
+  {
+   "topic": "Physical & Environmental Security",
+   "step": "standard",
+   "ok": true,
+   "seconds": 60.7
+  },
+  {
+   "topic": "Physical & Environmental Security",
+   "step": "policy",
+   "ok": true,
+   "seconds": 20.6
+  },
+  {
+   "topic": "Physical & Environmental Security",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 56.3
+  },
+  {
+   "topic": "System Maintenance",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 29.5
+  },
+  {
+   "topic": "System Maintenance",
+   "step": "standard",
+   "ok": true,
+   "seconds": 54.7
+  },
+  {
+   "topic": "System Maintenance",
+   "step": "policy",
+   "ok": true,
+   "seconds": 21.3
+  },
+  {
+   "topic": "System Maintenance",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 63.1
+  },
+  {
+   "topic": "Business Associate & Vendor Risk",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 79.1
+  },
+  {
+   "topic": "Business Associate & Vendor Risk",
+   "step": "standard",
+   "ok": true,
+   "seconds": 44.0
+  },
+  {
+   "topic": "Business Associate & Vendor Risk",
+   "step": "policy",
+   "ok": true,
+   "seconds": 17.8
+  },
+  {
+   "topic": "Business Associate & Vendor Risk",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 173.4
+  },
+  {
+   "topic": "Workforce Security Training",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 101.4
+  },
+  {
+   "topic": "Workforce Security Training",
+   "step": "standard",
+   "ok": true,
+   "seconds": 135.8
+  },
+  {
+   "topic": "Workforce Security Training",
+   "step": "policy",
+   "ok": true,
+   "seconds": 15.5
+  },
+  {
+   "topic": "Workforce Security Training",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 49.5
+  },
+  {
+   "topic": "Data Protection & Privacy",
+   "step": "synthesize",
+   "ok": true,
+   "seconds": 56.0
+  },
+  {
+   "topic": "Data Protection & Privacy",
+   "step": "standard",
+   "ok": true,
+   "seconds": 44.9
+  },
+  {
+   "topic": "Data Protection & Privacy",
+   "step": "policy",
+   "ok": true,
+   "seconds": 13.9
+  },
+  {
+   "topic": "Data Protection & Privacy",
+   "step": "procedure",
+   "ok": true,
+   "seconds": 35.5
+  }
+ ],
+ "wall_seconds": 6179.4
+}

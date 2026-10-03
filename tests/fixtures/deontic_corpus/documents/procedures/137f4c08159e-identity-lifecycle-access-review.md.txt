@@ -1,0 +1,289 @@
+---
+generated_by:
+  calls: 2
+  content_class: public-domain
+  cost_usd: 0.310232
+  models:
+    - anthropic/claude-sonnet-5
+  prompt_shas:
+    - 759a16c1a96ea6dd
+  provider: litellm
+  provider_class: third-party
+---
+
+# Identity Lifecycle & Access Review Procedure
+
+## Purpose
+
+Executing this procedure ensures that identities, accounts, and access rights across Example Org systems are established, reviewed, modified, and terminated in a controlled, documented, and auditable manner, so that only authorized individuals retain access to organizational systems and electronic PHI.
+
+## Scope
+
+This procedure is performed by IAM Engineering, with participation from HR, supervisors/sponsors, system and application owners, and the [Authorizing Official], across all Example Org identity provider accounts, application accounts, privileged accounts, and workstations that create, store, transmit, or access organizational data, including electronic PHI.
+
+## Prerequisites
+
+- Administrative access to the [Identity Provider]
+- Access to the [Ticketing System] for logging account and access review actions
+- Current HR active-employee roster export from [HR System]
+- Approved Access Control Policy and the Identity Lifecycle & Access Review Standard on file
+- Current [Authorizing Official] designation for approvals requiring AO sign-off
+- [Account Approval Authority] roster identifying who may approve account creation, modification, and privileged access requests
+- Access to system security plans (SSPs) for in-scope systems
+- Access to [Privileged Access Management Tool] or equivalent privileged-account inventory, if deployed
+- [Data Loss Prevention/Release Control Tool] access, where information release review is required
+
+## Procedure Steps
+
+### 1. Access Control Policy Development, Dissemination, and Review [NIST AC-1 | ARC-AMPE AC-1 AE Mandatory]
+
+1. IAM Engineering drafts or updates the Access Control Policy, addressing purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance with applicable laws, regulations, and standards.
+1. The designated [Access Control Policy Owner] reviews and approves the policy and associated procedures.
+1. IAM Engineering disseminates the approved policy and procedures to all personnel and roles identified in the Standard via the [Identity Provider] or [Document Management System].
+1. IAM Engineering reviews and updates the policy and procedures at least every 1 year, and additionally following an assessment/audit finding, a security or privacy incident, or a change in applicable law, regulation, or policy.
+1. IAM Engineering logs each review and its outcome in the [Ticketing System].
+
+### 2. Workforce Access Authorization, Supervision, Clearance, and Termination [HIPAA 164.308(a)(3)(i) | HIPAA 164.308(a)(3)(ii)(A) | HIPAA 164.308(a)(3)(ii)(B) | HIPAA 164.308(a)(3)(ii)(C)]
+
+1. IAM Engineering maintains documented procedures for authorization and supervision of workforce members who work with electronic PHI.
+1. Before granting access, the supervisor or [Account Approval Authority] completes a workforce clearance check to determine the appropriateness of the requested access for the individual's role.
+1. IAM Engineering records the clearance decision and the granted access in the [Ticketing System].
+1. Upon notice from HR that employment or the workforce arrangement has ended, IAM Engineering executes the termination procedure defined in Step 40 (PS-4) to remove access.
+
+### 3. PHI Access Authorization Procedures [HIPAA 164.308(a)(4)(i) | HIPAA 164.308(a)(4)(ii)(A) | HIPAA 164.308(a)(4)(ii)(B) | HIPAA 164.308(a)(4)(ii)(C)]
+
+1. IAM Engineering documents access authorization procedures for granting access to workstations, transactions, programs, and processes involving electronic PHI.
+1. IAM Engineering establishes each user's initial right of access based on the documented authorization policy, recording the decision in the [Ticketing System].
+1. IAM Engineering reviews and, as needed, modifies each user's right of access at the quarterly access review (see Step 10) or upon a triggering event (transfer, termination, role change).
+1. If Example Org operates a health care clearinghouse component within a larger organization, IAM Engineering implements and documents policies and procedures that segregate the clearinghouse's electronic PHI from unauthorized access by the larger organization.
+
+### 4. Technical Access Controls for Systems Holding Electronic PHI [HIPAA 164.312(a)(1) | HIPAA 164.312(a)(2)(i) | HIPAA 164.312(a)(2)(ii) | HIPAA 164.312(a)(2)(iii) | HIPAA 164.312(a)(2)(iv)]
+
+1. IAM Engineering configures each in-scope system to permit access only to persons or software programs that have been granted access rights in the [Identity Provider].
+1. IAM Engineering assigns a unique name and/or number to each user at account creation to identify and track that user's identity across all systems.
+1. IAM Engineering establishes emergency access procedures for each system holding electronic PHI and documents the activation steps in the system security plan; these are implemented when an emergency access event occurs.
+1. System/application owners configure automatic logoff after a predetermined period of inactivity, as specified in the system security plan.
+1. System/application owners implement a mechanism to encrypt and decrypt electronic PHI at rest and in transit, consistent with the system security plan.
+
+### 5. Person or Entity Authentication [HIPAA 164.312(d)]
+
+1. IAM Engineering configures each in-scope system to require authentication of any person or entity requesting access to electronic PHI before granting that access.
+1. IAM Engineering verifies, at account provisioning and at each quarterly review, that authentication mechanisms in place correctly bind the credential to the claimed identity.
+
+### 6. Documentation Retention for Access Policies and Records [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii) | HIPAA 164.316(b)(2)(iii)]
+
+1. IAM Engineering maintains all access-related policies, procedures, and records of required actions, activities, and assessments in written (which may be electronic) form in the [Document Management System].
+1. IAM Engineering retains this documentation for 6 years from the date of creation or the date it was last in effect, whichever is later.
+1. IAM Engineering makes the documentation available to all personnel responsible for implementing the procedures it describes.
+1. IAM Engineering reviews and updates the documentation in response to environmental or operational changes affecting the security of electronic PHI, in addition to the quarterly review cycle.
+
+### 7. Workstation Use Policies [HIPAA 164.310(b)]
+
+1. IAM Engineering, together with the system/application owner, documents the proper functions permitted on each workstation or workstation class that can access electronic PHI.
+1. IAM Engineering documents the manner in which those functions must be performed and the physical attributes required of the workstation's surroundings.
+1. IAM Engineering disseminates the workstation use policy to affected personnel and records acknowledgment in the [Ticketing System] or [Learning Management System].
+
+### 8. Account Types, Roles, and Approval Requirements [NIST AC-2 | ARC-AMPE AC-2 AE Mandatory]
+
+1. IAM Engineering defines and documents the account types allowed and specifically prohibited on each in-scope system in the system security plan.
+1. IAM Engineering assigns an account manager for each system.
+1. IAM Engineering documents prerequisites and criteria for group and role membership for each system.
+1. For each account, IAM Engineering records the authorized user, group/role membership, and access authorization in the [Identity Provider].
+1. The [Account Approval Authority] approves each account creation request before IAM Engineering provisions the account.
+1. IAM Engineering creates, enables, modifies, disables, and removes accounts according to the documented policy and criteria, and monitors account use on an ongoing basis.
+1. IAM Engineering authorizes access only where a valid access authorization, intended system usage, and any other required attribute are documented and approved.
+1. IAM Engineering aligns all account management actions with the personnel termination procedure (Step 40) and transfer procedure (Step 41).
+
+### 9. Account Change Notification Timeframes [NIST AC-2 | ARC-AMPE AC-2 AE Mandatory]
+
+1. When an account is no longer required, the requesting manager or system owner notifies the account manager and [Account Approval Authority] within 24 hours.
+1. When HR notifies IAM Engineering of a user termination or transfer, IAM Engineering notifies the account manager and [Account Approval Authority] within 8 hours.
+1. When a user's system usage or need-to-know changes, the requesting manager notifies IAM Engineering and the account manager within 8 hours.
+1. IAM Engineering logs each notification and the resulting account action in the [Ticketing System].
+
+### 10. Periodic Account Review and Shared Authenticator Rotation [NIST AC-2 | ARC-AMPE AC-2 AE Mandatory]
+
+1. IAM Engineering reviews all accounts on all systems quarterly (at least every 90 days) for compliance with account management requirements, using the identity provider user export and the HR active-employee roster as source data.
+1. IAM Engineering reconciles the identity provider user export against the HR active-employee roster to identify accounts belonging to individuals no longer employed.
+1. IAM Engineering opens an access review ticket in the [Ticketing System] for each discrepancy and obtains sign-off from the account owner or manager before closing it.
+1. Where shared or group accounts are deployed, IAM Engineering changes the shared authenticator whenever an individual is removed from the associated group, and records the rotation in the [Ticketing System].
+
+### 11. Automated Account Management [NIST AC-2(1) Moderate/High | ARC-AMPE AC-2(1) AE Mandatory]
+
+1. IAM Engineering configures the [Identity Provider] to support automated creation, modification, disabling, and removal of system accounts.
+1. IAM Engineering verifies quarterly, during the account review (Step 10), that automated account management mechanisms are functioning as configured.
+
+### 12. Temporary and Emergency Account Removal [NIST AC-2(2) Moderate/High | ARC-AMPE AC-2(2) AE Mandatory]
+
+1. IAM Engineering configures temporary and emergency accounts in the [Identity Provider] with an automatic expiration or disablement trigger of no more than 96 hours from last use.
+1. IAM Engineering verifies expiration of each temporary/emergency account and logs the disablement event in the [Ticketing System].
+
+### 13. Disabling Expired, Orphaned, Non-Compliant, or Inactive Accounts [NIST AC-2(3) Moderate/High | ARC-AMPE AC-2(3) AE Mandatory]
+
+1. IAM Engineering configures the [Identity Provider] to disable non-consumer accounts within 24 hours of expiration, loss of association with a user, or a detected violation of organizational policy.
+1. IAM Engineering configures the [Identity Provider] to disable accounts that have been inactive for 60 days.
+1. IAM Engineering reviews disablement events during the quarterly account review (Step 10) and confirms each disabled account is logged in the [Ticketing System].
+
+### 14. Automated Auditing of Account Actions [NIST AC-2(4) Moderate/High | ARC-AMPE AC-2(4) AE Mandatory]
+
+1. IAM Engineering enables audit logging in the [Identity Provider] for all account creation, modification, enabling, disabling, and removal actions.
+1. IAM Engineering verifies quarterly that the audit log is capturing these events and retains the log per the retention schedule in Step 6.
+
+### 15. Mandatory Logout After Inactivity [NIST AC-2(5) Moderate/High | ARC-AMPE AC-2(5) AE Mandatory]
+
+1. IAM Engineering documents, as a user-policy requirement, that users must log out of any session exceeding 24 hours of expected inactivity.
+1. IAM Engineering disseminates this requirement through the Access Control Policy and confirms user acknowledgment via the [Learning Management System] or [Ticketing System].
+
+### 16. Privileged Account Role-Based Administration and Review [NIST AC-2(7) | ARC-AMPE AC-2(7) AE Mandatory]
+
+1. IAM Engineering establishes and administers privileged user accounts, including application-specific privileged accounts, using a role-based access scheme documented in the [Identity Provider] or [Privileged Access Management Tool].
+1. IAM Engineering monitors privileged role assignments and any changes to roles or attributes on an ongoing basis.
+1. IAM Engineering inspects administrator groups, root accounts, and other system-related privileged accounts on demand and at least every 14 days.
+1. IAM Engineering inspects application-related privileged roles at least every 30 days.
+1. IAM Engineering revokes privileged access immediately when the role or attribute assignment is no longer appropriate, and logs the revocation in the [Ticketing System].
+
+### 17. Shared and Group Account Conditions [NIST AC-2(9) | ARC-AMPE AC-2(9) AE Mandatory]
+
+1. Before provisioning a shared or group account, the requesting owner submits a documented business need to the [Authorizing Official] for advance approval.
+1. IAM Engineering does not provision the shared/group account until AO approval is recorded in the [Ticketing System].
+1. IAM Engineering documents, in the system security plan, the account's use and the compensating processes (e.g., check-out logging, session recording) that provide unique attribution of individual user activity within the shared account.
+
+### 18. Monitoring for Atypical Account Usage [NIST AC-2(12) Moderate/High | ARC-AMPE AC-2(12) AE Mandatory]
+
+1. IAM Engineering monitors system accounts for atypical usage patterns using the [Identity Provider] or [SIEM Tool].
+1. IAM Engineering reports detected atypical usage to [Designated Security Personnel] and, where necessary, to the applicable incident response team.
+1. IAM Engineering logs the report and any resulting action in the [Ticketing System].
+
+### 19. Disabling Accounts of Individuals Posing Significant Risk [NIST AC-2(13) Moderate/High | ARC-AMPE AC-2(13) AE Mandatory]
+
+1. Upon discovery or notification that an individual poses a significant risk, IAM Engineering disables that individual's account(s) in the [Identity Provider] within 1 hour of discovery.
+1. IAM Engineering logs the disablement, the reporting party, and the justification in the [Ticketing System].
+
+### 20. Enforcement of Approved Access Authorizations [NIST AC-3 | ARC-AMPE AC-3 AE Mandatory]
+
+1. IAM Engineering configures each in-scope system to enforce approved access authorizations for logical access to information and system resources, consistent with the Access Control Policy.
+1. IAM Engineering verifies enforcement configuration during the quarterly account review (Step 10).
+
+### 21. Revocation on Change of Security Attributes [NIST AC-3(8) | ARC-AMPE AC-3(8) AE Mandatory]
+
+1. When a subject's or object's security attribute changes, IAM Engineering revokes the resulting invalid access authorization according to the timing rules documented in the Access Control Policy.
+1. IAM Engineering records the revocation event and its timing in the [Ticketing System].
+
+### 22. Controls on Information Release Outside the System [NIST AC-3(9) | ARC-AMPE AC-3(9) AE Mandatory]
+
+1. Before releasing information outside the system, IAM Engineering or the data owner confirms that the receiving system, component, or external organization provides information security and privacy safeguards commensurate with those Example Org implements.
+1. IAM Engineering or the data owner validates the appropriateness of the specific information designated for release using [Data Loss Prevention/Release Control Tool] or documented manual review.
+1. IAM Engineering logs the release authorization in the [Ticketing System].
+
+### 23. Individual Access to Personal Information [NIST AC-3(14) | ARC-AMPE AC-3(14) AE Mandatory]
+
+1. IAM Engineering provides a documented mechanism (e.g., a request process through [Ticketing System] or a self-service portal) enabling individuals to access the PII/PHI elements about themselves defined in the applicable system security or privacy plan.
+1. IAM Engineering verifies the requester's identity per Step 5 before releasing the requested elements.
+
+### 24. Separation of Duties [NIST AC-5 Moderate/High | ARC-AMPE AC-5 AE Mandatory]
+
+1. IAM Engineering identifies and documents duties requiring separation in a [Separation-of-Duties Matrix].
+1. IAM Engineering defines system access authorizations for each role so that no individual can independently execute both halves of a separated duty.
+1. IAM Engineering verifies separation-of-duties compliance during the quarterly account review (Step 10).
+
+### 25. Least Privilege [NIST AC-6 Moderate/High | FedRAMP AC-6 | ARC-AMPE AC-6 AE Mandatory]
+
+1. IAM Engineering provisions each account with only the access necessary to accomplish the individual's assigned organizational tasks.
+1. IAM Engineering reviews and adjusts access grants that exceed least-privilege requirements as part of the quarterly account review (Step 10).
+
+### 26. Authorization for Security Functions and Security-Relevant Information [NIST AC-6(1) Moderate/High | FedRAMP AC-6(1) | ARC-AMPE AC-6(1) AE Mandatory]
+
+1. IAM Engineering restricts access to security functions (hardware, software, firmware) and security-relevant information — including setting/modifying audit logs and auditing behavior, boundary protection rules, access authorizations, authentication parameters, and system configurations/parameters — to explicitly authorized personnel.
+1. The [Account Approval Authority] approves each request for this access before IAM Engineering provisions it.
+
+### 27. Non-Privileged Accounts for Nonsecurity Functions [NIST AC-6(2) Moderate/High | FedRAMP AC-6(2) | ARC-AMPE AC-6(2) AE Mandatory]
+
+1. IAM Engineering issues each user with security-function access a separate non-privileged account for use when performing nonsecurity functions.
+1. IAM Engineering verifies during privileged account review (Step 16) that users are using the non-privileged account for nonsecurity tasks.
+
+### 28. Restriction of Privileged Accounts [NIST AC-6(5) Moderate/High | ARC-AMPE AC-6(5) AE Mandatory]
+
+1. IAM Engineering restricts assignment of privileged accounts on each system to the personnel or roles designated in the system security plan.
+1. IAM Engineering confirms this restriction during the privileged account inspection cycle (Step 16).
+
+### 29. Review of Assigned Privileges [NIST AC-6(7) Moderate/High | ARC-AMPE AC-6(7) AE Mandatory]
+
+1. IAM Engineering reviews the privileges assigned to all users with privileges at least every 90 days to validate continued need.
+1. IAM Engineering reassigns or removes privileges that no longer reflect organizational mission or business need, and records each change in the [Ticketing System] as a signed-off access review ticket.
+
+### 30. Preventing Software Execution at Elevated Privilege [NIST AC-6(8) | FedRAMP AC-6(8)]
+
+1. System/application owners configure each system so that software does not execute at a higher privilege level than the user executing it, except where explicitly documented in the system security plan.
+1. IAM Engineering reviews documented exceptions during the quarterly account review (Step 10).
+
+### 31. Logging Execution of Privileged Functions [NIST AC-6(9) Moderate/High | ARC-AMPE AC-6(9) AE Mandatory]
+
+1. IAM Engineering enables logging of privileged function execution in the [Identity Provider] or [SIEM Tool] for all in-scope systems.
+1. IAM Engineering retains these logs per the retention schedule in Step 6.
+
+### 32. Preventing Non-Privileged Users from Executing Privileged Functions [NIST AC-6(10) Moderate/High | ARC-AMPE AC-6(10) AE Mandatory]
+
+1. System/application owners configure technical controls in each system to block non-privileged users from executing privileged functions.
+1. IAM Engineering tests this restriction as part of the quarterly account review (Step 10).
+
+### 33. Actions Permitted Without Identification or Authentication [NIST AC-14 | ARC-AMPE AC-14 AE Mandatory]
+
+1. IAM Engineering, with system/application owners, identifies the user actions that may be performed without identification or authentication, consistent with mission and business functions, and records them in an [Unauthenticated Actions List].
+1. IAM Engineering documents the supporting rationale for each such action in the applicable system security plan.
+
+### 34. Management of System Identifiers [NIST IA-4 | FedRAMP IA-4 | ARC-AMPE IA-4 AE Mandatory]
+
+1. IAM Engineering obtains authorization from the [Account Approval Authority] before assigning an identifier to an individual, group, role, service, or device.
+1. IAM Engineering selects an identifier that correctly identifies the individual, group, role, service, or device, and assigns it in the [Identity Provider].
+1. IAM Engineering prevents reuse of an identifier for 2 years, removing any previous identifier-based access authorizations before the identifier may be reused.
+
+### 35. Individual Identifier Characteristics [NIST IA-4(4) Moderate/High | FedRAMP IA-4(4) | ARC-AMPE IA-4(4) AE Mandatory]
+
+1. At registration, IAM Engineering records the individual status characteristics defined in the applicable system security or privacy plan (e.g., contractor, foreign national, non-organizational user) against the identifier in the [Identity Provider].
+1. IAM Engineering uses this characteristic tag when applying access rules that depend on individual status.
+
+### 36. Identity Proofing [NIST IA-12 Moderate/High | ARC-AMPE IA-12 AE Mandatory]
+
+1. Before issuing any account — privileged, non-privileged, or consumer — IAM Engineering identity-proofs the requesting user to Identity Assurance Level 2 (IAL-2) or higher per NIST SP 800-63, or, for ACA Consumer Accounts, via the Federal Data Services Hub Remote Identity Proofing Service.
+1. IAM Engineering resolves the user's identity to a unique individual before account creation.
+1. IAM Engineering records the proofing outcome in the [Ticketing System] prior to account provisioning.
+
+### 37. Sponsor Authorization at Registration [NIST IA-12(1) | ARC-AMPE IA-12(1) AE Mandatory]
+
+1. For every account request, including non-privileged/consumer accounts, IAM Engineering requires supervisor or sponsor authorization before beginning registration.
+1. IAM Engineering records the sponsor's authorization in the [Ticketing System] before provisioning the account.
+
+### 38. Presentation of Identity Evidence [NIST IA-12(2) Moderate/High | ARC-AMPE IA-12(2) AE Mandatory]
+
+1. For every account request, including non-privileged/consumer accounts, IAM Engineering requires the individual to present evidence of identification to the registration authority.
+1. IAM Engineering records the type of evidence presented in the [Ticketing System].
+
+### 39. Validation and Verification of Identity Evidence [NIST IA-12(3) Moderate/High | ARC-AMPE IA-12(3) AE Mandatory]
+
+1. IAM Engineering validates and verifies presented identity evidence using organization-approved, CMS-agreement-compliant validation and verification methods, applying this requirement to all accounts including non-privileged/consumer accounts.
+1. IAM Engineering records the validation/verification outcome in the [Ticketing System] before completing registration.
+
+### 40. Personnel Termination [NIST PS-4 | ARC-AMPE PS-4 AE Mandatory]
+
+1. HR notifies IAM Engineering of an individual's termination as soon as the action is confirmed.
+1. IAM Engineering disables the individual's system access in the [Identity Provider] the same day as termination.
+1. IAM Engineering terminates or revokes all authenticators and credentials associated with the individual.
+1. The individual's supervisor or HR conducts an exit interview covering the organization-defined information security topics, including non-disclosure of information security and privacy information.
+1. IAM Engineering or Facilities retrieves all security-related organizational system-related property from the individual.
+1. IAM Engineering retains organizational access to information and systems formerly controlled by the terminated individual and logs completion of all steps in a signed-off access review ticket in the [Ticketing System].
+
+### 41. Personnel Reassignment or Transfer [NIST PS-5 | ARC-AMPE PS-5 AE Mandatory]
+
+1. HR notifies IAM Engineering of an individual's reassignment or transfer as soon as the action is confirmed.
+1. The individual's new and former supervisors, with IAM Engineering, review and confirm the ongoing operational need for the individual's current logical and physical access authorizations.
+1. IAM Engineering removes or disables all system accesses no longer required within 24 hours of the formal transfer action.
+1. IAM Engineering modifies remaining access authorizations to correspond to the individual's new operational need.
+1. IAM Engineering notifies the account manager and [Account Approval Authority] of the completed transfer action within 24 hours, and logs the action as a signed-off access review ticket in the [Ticketing System].
+
+## Roles & Responsibilities
+
+IAM Engineering owns this procedure end to end and is the only team authorized to create, modify, disable, or remove accounts and to execute the review, termination, and transfer actions described above. The [Authorizing Official] and [Account Approval Authority] review and approve exceptions, shared-account requests, and privileged-access decisions; HR and individual supervisors initiate and confirm termination and transfer triggers but do not themselves modify system access.
+
+## Related Standard
+
+This procedure operationalizes the **Identity Lifecycle & Access Review Standard**, which defines the full requirement text, rationale, and control objectives for the steps above.

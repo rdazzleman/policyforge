@@ -1,0 +1,269 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.005053
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 181ab3de9393fa56
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Risk Assessment and Authorization Procedure
+
+## Purpose
+
+Executing this procedure establishes and sustains Example Org's risk assessment, control assessment, continuous monitoring, and authorization operations, producing an accurate, current **risk register** and a defensible **authorization decision record** for every system in scope. It ensures risks to organizational systems and to electronic protected health information (ePHI) are identified, analyzed, responded to, and formally accepted or authorized by the appropriate officials.
+
+## Scope
+
+This procedure is performed by the **Security Program / GRC** team, with participation from System Owners, the Authorizing Official, the CISO, the Senior Official for Privacy, and independent assessors, across all Example Org systems that process, store, or transmit organizational or ePHI data. It covers policy maintenance, risk analysis, security categorization, control assessment, plan of action and milestones (POA&M) management, authorization, continuous monitoring, and penetration testing.
+
+## Prerequisites
+
+- Access to the [GRC / Document Management System] where policies, procedures, the risk register, the authorization decision record, and HIPAA documentation are maintained.
+- Access to the [Ticketing System] for tracking remediation actions and POA&M entries.
+- Access to the [Vulnerability Scanning Tool], [SIEM], and [Penetration Test Results Repository].
+- A named, appointed Authorizing Official for each system and for common controls, and a named CISO and Senior Official for Privacy.
+- A named HIPAA Security Official responsible for security policy development and implementation.
+- An established CMS coordination point of contact and access to CMS-provided templates, the CMS Standard for POA&M Management and Reporting, and the CMS Framework for Independent Assessment of Security and Privacy Controls.
+- Approved Rules of Engagement templates and executed agreements with [Independent Assessment Provider] and [Independent Penetration Testing Provider].
+
+## Procedure Steps
+
+### Maintain the Risk Assessment Policy and Procedures [NIST RA-1 Low, Moderate, High | ARC-AMPE RA-1 AE Mandatory]
+
+1. Have the Security Program / GRC team develop, document, and disseminate an organization-level risk assessment policy in the [GRC / Document Management System] that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Designate, by name in the appropriate security and privacy documents, the official within Security Program / GRC who manages the development, documentation, and dissemination of the risk assessment policy and procedures.
+1. Develop, document, and disseminate supporting procedures that facilitate implementation of the risk assessment policy and the associated risk assessment controls; distribute both to organization-defined personnel and roles via the [GRC / Document Management System].
+1. Ensure the policy and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system life cycle and for the information on each system.
+1. Review and update the risk assessment policy and procedures at least every one (1) year, and additionally following assessment or audit findings, security or privacy incidents, or changes to applicable laws, regulations, policies, standards, or guidelines.
+1. Actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect risk assessment policies, and review the policies at least every one (1) year to confirm they remain effective; record each review in the policy document's revision history.
+
+### Execute the HIPAA Security Risk Analysis and Risk Reduction Cycle [HIPAA 164.308(a)(1)(i) | HIPAA 164.308(a)(1)(ii)(A) | HIPAA 164.308(a)(1)(ii)(B)]
+
+1. Have the Security Program / GRC team implement and maintain policies and procedures to prevent, detect, contain, and correct security violations affecting ePHI.
+1. Conduct an accurate and thorough risk analysis of the potential risks and vulnerabilities to the confidentiality, integrity, and availability of ePHI held by Example Org; document the analysis in the risk assessment report and record identified risks in the risk register.
+1. Identify and implement security measures sufficient to reduce the risks and vulnerabilities identified in the risk analysis to a reasonable and appropriate level; track each measure to closure in the [Ticketing System].
+
+### Apply Sanctions and Review System Activity Records [HIPAA 164.308(a)(1)(ii)(C) | HIPAA 164.308(a)(1)(ii)(D)]
+
+1. Maintain and apply the sanctions process against workforce members who fail to comply with Example Org security policies and procedures; route confirmed non-compliance cases to [Human Resources] for sanction determination and retain the outcome record.
+1. Regularly review records of information system activity — including audit logs, access reports, and security incident tracking reports — using the [SIEM] and [Log Review Tool], and document the review results for inclusion in the risk register.
+
+### Manage HIPAA Security Rule Documentation [HIPAA 164.316(a) | HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii) | HIPAA 164.316(b)(2)(iii)]
+
+1. Implement reasonable and appropriate policies and procedures to comply with the HIPAA Security Rule; when any policy or procedure is changed, document and implement the change in accordance with the Rule.
+1. Maintain all HIPAA-related policies, procedures, and required records of actions, activities, and assessments in written (electronic) form in the [GRC / Document Management System].
+1. Retain HIPAA Security Rule documentation for 6 years from the date of its creation or the date it was last in effect, whichever is later.
+1. Make the documentation available to the persons responsible for implementing the procedures to which it pertains, via [GRC / Document Management System] access permissions.
+1. Review the documentation at least every one (1) year and update it as needed in response to environmental or operational changes affecting the security of ePHI.
+
+### Categorize the System and Prioritize Impact Levels [NIST RA-2 Low, Moderate, High | ARC-AMPE RA-2 AE Mandatory | NIST RA-2(1)]
+
+1. Have the Security Program / GRC team, in coordination with the System Owner, categorize the system and the information it processes, stores, and transmits.
+1. Involve the Senior Official for Privacy, or their designee, in the categorization process.
+1. Document the security categorization results, including supporting rationale, in the system's security plan.
+1. Submit the categorization decision to the Authorizing Official or their designated representative for review and approval; record the approval in the authorization decision record.
+1. Conduct an impact-level prioritization of organizational systems to obtain additional granularity beyond the base impact levels, and record the prioritization results alongside the categorization documentation.
+
+### Establish and Maintain ePHI Contingency Procedures [HIPAA 164.308(a)(7)(i) | HIPAA 164.308(a)(7)(ii)(A) | HIPAA 164.308(a)(7)(ii)(B) | HIPAA 164.308(a)(7)(ii)(C) | HIPAA 164.308(a)(7)(ii)(D) | HIPAA 164.308(a)(7)(ii)(E)]
+
+1. Establish and implement policies and procedures for responding to an emergency or other occurrence (for example, fire, vandalism, system failure, and natural disaster) that damages systems containing ePHI.
+1. Establish and implement procedures to create and maintain retrievable exact copies of ePHI (data backup plan) using the [Backup Solution].
+1. Establish and implement, as needed, procedures to restore any loss of data (disaster recovery plan).
+1. Establish and implement, as needed, procedures to enable continuation of critical business processes for protection of ePHI security while operating in emergency mode.
+1. Assess the relative criticality of specific applications and data in support of the other contingency plan components, and record the criticality assessment with the plan.
+1. Periodically test and revise the contingency plans, document each test's results, and update the plans based on the findings.
+
+### Conduct the System Risk Assessment [NIST RA-3 Low, Moderate, High | ARC-AMPE RA-3 AE Mandatory]
+
+1. Conduct a risk assessment that identifies threats to and vulnerabilities in the system; determines the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system and its information; and determines the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information (PII).
+1. Integrate risk assessment results and risk management decisions from the organization and mission/business process perspectives with the system-level risk assessment.
+1. Document the risk assessment results in the security and privacy plans and the risk assessment report, and record identified risks in the risk register.
+1. Document and implement a privacy risk management process that assesses privacy risk to individuals resulting from the collection, sharing, storing, transmitting, use, and disposal of PII.
+1. Review the risk assessment results at least every one (1) year, and when a significant change occurs.
+1. Update the risk assessment at least every three (3) years at a minimum (for internal, organization-specific authorizations), before issuing a new internal organization-specific authorization, or upon significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system.
+1. Disseminate the risk assessment results to organization-defined personnel or roles via the [GRC / Document Management System] distribution list.
+
+### Assess Supply Chain Risks [NIST RA-3(1) Low, Moderate, High]
+
+1. Identify the systems, system components, and system services in scope for supply chain risk assessment per [Systems, Components, and Services in Scope for Supply Chain Risk Assessment].
+1. Assess the supply chain risks associated with the in-scope systems, components, and services.
+1. Update the supply chain risk assessment per [Supply Chain Risk Assessment Update Frequency], when there are significant changes to the relevant supply chain, or when changes to the system, environments of operation, or other conditions may necessitate a change in the supply chain.
+1. Record the results in the supply chain risk assessment section of the risk register.
+
+### Use All-Source Intelligence in Risk Analysis [NIST RA-3(2) | ARC-AMPE RA-3(2) AE Mandatory]
+
+1. Obtain and review all-source intelligence — including publicly available or open-source information — using the [Threat Intelligence Service] and [Open-Source Intelligence Collection Process].
+1. Use the intelligence to inform engineering, acquisition, and risk management decisions, including analysis of intentional and unintentional vulnerabilities arising from development, manufacturing, delivery processes, people, and the environment.
+1. Document intelligence-derived findings and their effect on risk decisions in the risk assessment report.
+
+### Determine the Current Cyber Threat Environment [NIST RA-3(3)]
+
+1. Establish the means for determining the current cyber threat environment per [Threat Environment Determination Means], using the [Threat Intelligence Service].
+1. Monitor the threat environment on an ongoing basis and incorporate current threat data into each risk assessment update and the risk register.
+
+### Employ Advanced Automation and Analytics for Risk Prediction [NIST RA-3(4)]
+
+1. Identify the advanced automation and analytics capabilities in use per [Advanced Analytics Capabilities] and the systems or components they cover per [Systems or Components in Scope for Predictive Analytics].
+1. Apply the capabilities to predict and identify risks to the in-scope systems or components, and feed predicted risks into the risk register and risk assessment report.
+
+### Respond to Assessment, Monitoring, and Audit Findings [NIST RA-7 Low, Moderate, High | FedRAMP RA-7 | ARC-AMPE RA-7 AE Mandatory]
+
+1. Respond to findings from security and privacy assessments, monitoring, and audits in accordance with organizational risk tolerance, selecting to mitigate the risk, accept the risk with appropriate justification, share or transfer the risk, or avoid the risk.
+1. Follow the FedRAMP Vulnerability Detection and Response and Vulnerability Evaluation and Reporting rules when responding to findings.
+1. Before accepting any risk, discuss the risk acceptance with CMS to confirm CMS agrees with the approach and mitigations.
+1. Document and track risk-accepted findings in the POA&M, with full detail captured in the risk acceptance form, and record the accepted risk in the risk register.
+
+### Perform Criticality Analysis [NIST RA-9 Moderate, High | ARC-AMPE RA-9 AE Mandatory]
+
+1. Identify the systems, system components, or system services in scope per [Systems, Components, or Services in Scope for Criticality Analysis].
+1. Perform a criticality analysis at the organization-defined decision points in the system development life cycle per [Criticality Analysis Decision Points].
+1. Treat all system components within the CMS Authority to Connect (ATC)/Request to Connect (RTC) boundary as critical in the analysis.
+1. Record the criticality analysis results in the security plan and reflect critical components in the risk register.
+
+### Maintain the Assessment, Authorization, and Monitoring Policy and Procedures [NIST CA-1 Low, Moderate, High | ARC-AMPE CA-1 AE Mandatory]
+
+1. Have the Security Program / GRC team develop, document, and disseminate an organization-level assessment, authorization, and monitoring (AAM) policy addressing purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, consistent with applicable laws, regulations, policies, standards, and guidelines.
+1. Designate, by name in the appropriate security and privacy documents, the official within Security Program / GRC who manages the development, documentation, and dissemination of the AAM policy and procedures.
+1. Develop, document, and disseminate procedures that facilitate implementation of the AAM policy and associated controls.
+1. Ensure the AAM policy and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system life cycle and for the information on each system.
+1. Review and update the AAM policy and procedures at least every one (1) year, and additionally following assessment or audit findings, security or privacy incidents, or changes to applicable laws, regulations, policies, standards, or guidelines.
+1. Actively monitor for changes to applicable privacy laws, regulations, and overarching policy affecting AAM policies, and review at least every one (1) year to ensure the policies remain effective.
+
+### Perform the HIPAA Periodic Technical and Nontechnical Evaluation [HIPAA 164.308(a)(8)]
+
+1. Perform a periodic technical and nontechnical evaluation, based initially on the standards implemented under the HIPAA Security Rule, that establishes the extent to which Example Org's security policies and procedures meet the requirements of the Rule.
+1. Repeat the evaluation in response to environmental or operational changes affecting the security of ePHI, and document the evaluation results in the [GRC / Document Management System].
+
+### Plan and Conduct the Security and Privacy Control Assessment [NIST CA-2 Low, Moderate, High | FedRAMP CA-2 | ARC-AMPE CA-2 AE Mandatory]
+
+1. Select the appropriate assessor or assessment team for the type of assessment to be conducted.
+1. Develop a control assessment plan describing the scope of the assessment, including the controls and control enhancements under assessment, the assessment procedures to be used to determine control effectiveness, and the assessment environment, assessment team, and assessment roles and responsibilities.
+1. Submit the control assessment plan to the Authorizing Official or designated representative for review and approval prior to conducting the assessment; retain the approval in the authorization decision record.
+1. Assess the controls in the system and its environment of operation at the frequency specified in the supplemental control requirements and guidance, to determine the extent to which controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting established security and privacy requirements.
+1. Complete an independent assessment of all security and privacy controls before the Authorizing Official issues authority to operate for any newly implemented or significantly changed system.
+1. Conduct a complete independent assessment of all security and privacy controls over a three (3) year period, using one of the following approaches: a full controls assessment at the end of the Authority to Connect lifespan (final ATC package delivered no less than ninety (90) days prior to expiration); independent assessments of the annually required controls designated by CMS so all controls are assessed within the three-year period (final ATC package delivered no less than ninety (90) days prior to expiration); or per CMS guidance on required documentation and testing for each significant system change.
+1. Produce a control assessment report documenting the results of the assessment.
+1. Provide the assessment results in writing to the Business Owner responsible for the system and the personnel responsible for reviewing assessment documentation within thirty (30) days after completion, and to FedRAMP and agency customers as applicable.
+1. Update relevant security and privacy documentation to reflect any changes to the system within thirty (30) days of the changes or within thirty (30) days of the control assessment results.
+1. Notify CMS within thirty (30) days whenever updates are made to system security and privacy authorization artifacts or when significant role changes occur.
+
+### Employ Independent Assessors [NIST CA-2(1) Moderate, High | ARC-AMPE CA-2(1) AE Mandatory]
+
+1. Engage independent assessors or assessment teams to conduct control assessments, following the CMS Framework for Independent Assessment of Security and Privacy Controls provided for the program.
+1. Document the independence of the assessment team in the control assessment plan and retain the documentation with the assessment report.
+
+### Conduct Specialized Assessments [NIST CA-2(2) High]
+
+1. Determine the specialized assessment types to perform per [Specialized Assessment Types], selecting from in-depth monitoring, security instrumentation, automated security test cases, vulnerability scanning, malicious user testing, insider threat assessment, performance and load testing, data leakage or data loss assessment, or other defined forms of assessment.
+1. Conduct the specialized assessments at the frequency defined per [Specialized Assessment Frequency] on an announced or unannounced basis per [Specialized Assessment Announcement Basis].
+1. Record specialized assessment results and feed identified weaknesses into the POA&M.
+
+### Leverage External Control Assessments [NIST CA-2(3) | FedRAMP CA-2(3)]
+
+1. Identify control assessments performed by external organizations per [External Organizations Whose Assessments May Be Leveraged] on the system defined per [System Covered by External Assessment].
+1. Leverage the external assessment results when the assessment meets the requirements defined per [Requirements for Leveraging External Assessments] (for FedRAMP purposes, the external organization is any FedRAMP-recognized independent assessment service).
+1. Document which external assessment results were leveraged, and why they met the leveraging requirements, in the control assessment report.
+
+### Develop and Maintain the Plan of Action and Milestones [NIST CA-5 Low, Moderate, High | ARC-AMPE CA-5 AE Mandatory | NIST CA-5(1)]
+
+1. Develop a POA&M for the system in the [POA&M Management Tool] to document planned remediation actions that correct weaknesses or deficiencies noted during control assessments and reduce or eliminate known vulnerabilities.
+1. Include in each POA&M entry scheduled completion dates, milestones with dates, appropriate risk levels, and weakness descriptions with as much detail as possible, following the CMS Standard for POA&M Management and Reporting and the CMS-provided template.
+1. Include all findings in the POA&M, whether self-discovered or identified through assessments or testing (e.g., security control assessments, penetration tests, automated configuration and vulnerability scans).
+1. Establish the POA&M starting in development and maintain it throughout the system life cycle; remediate POA&M entries consistent with SI-2.
+1. Update the existing POA&M in accordance with the frequency documented in the organization's Information Security Continuous Monitoring strategy, based on findings from control assessments, independent audits or reviews, and continuous monitoring activities.
+1. Deliver to CMS a fully updated and accurate POA&M quarterly on 31 January, 30 April, 31 July, and 31 October.
+1. Ensure the accuracy, currency, and availability of the POA&M using the automated mechanisms defined per [Automated Mechanisms for POA&M Accuracy and Availability].
+
+### Authorize the System to Operate [NIST CA-6 Low, Moderate, High | ARC-AMPE CA-6 AE Mandatory]
+
+1. Assign a senior official as the Authorizing Official for the system and a senior official as the Authorizing Official for common controls available for inheritance by organizational systems; record both designations in the authorization decision record.
+1. Before commencing operations, ensure the Authorizing Official for the system accepts the use of common controls inherited by the system and authorizes the system to operate.
+1. Ensure the Authorizing Official for common controls authorizes the use of those controls for inheritance by organizational systems.
+1. Update authorizations at least every three (3) years (Direct Enrollment Technology Providers must update at least every one (1) year), when significant security breaches occur, whenever there is a significant change to the system or its operating environment, and prior to expiration of the current authorization; record each update in the authorization decision record.
+1. Notify CMS of significant or major changes to architecture, security and privacy posture, or other items that could cause degradation or unexpected results in security and privacy monitoring, detection, response, and mitigation activities prior to making the change.
+
+### Conduct Joint Authorization [NIST CA-6(1) | NIST CA-6(2)]
+
+1. When a joint authorization applies, employ a joint authorization process for the system that includes multiple authorizing officials from the same organization conducting the authorization.
+1. Where external participation is required, employ a joint authorization process that includes multiple authorizing officials with at least one authorizing official from an organization external to the organization conducting the authorization.
+1. Document each participating authorizing official's authorization decision in the authorization decision record.
+
+### Identify the HIPAA Security Official [HIPAA 164.308(a)(2)]
+
+1. Identify by name the security official responsible for the development and implementation of the policies and procedures required by the HIPAA Security Rule, and record the designation in the security plan and the [GRC / Document Management System].
+
+### Develop and Implement the Continuous Monitoring Strategy [ARC-AMPE CA-7 AE Mandatory | NIST CA-7 | FedRAMP CA-7]
+
+1. Have the CIO and CISO develop a system-level continuous monitoring strategy, with Example Org as the responsible implementation agent, and implement continuous monitoring in accordance with the organization-level continuous monitoring strategy.
+1. Establish the system-level metrics to be monitored per [System-Level Metrics], based on organization security and privacy goals and in accordance with the organization's ISCM strategy.
+1. Establish the frequencies for monitoring per [Monitoring Frequency] and for assessment of control effectiveness per [Control Effectiveness Assessment Frequency], applying the ARC-AMPE minimums of at least once-a-month scans of operating systems, databases, and web applications for monitoring, and assessment of control effectiveness no less than at least every one (1) year.
+1. Include risk monitoring as an integral part of the continuous monitoring strategy, covering effectiveness monitoring, compliance monitoring, and change monitoring; document in the strategy the processes and guidance for what is considered effectiveness, compliance, and change monitoring as part of a holistic risk monitoring strategy.
+
+### Execute Ongoing Monitoring, Analysis, and Response [NIST CA-7 | FedRAMP CA-7 | ARC-AMPE CA-7]
+
+1. Conduct ongoing control assessments in accordance with the continuous monitoring strategy.
+1. Conduct ongoing monitoring of system and defined metrics in accordance with the continuous monitoring strategy, monitoring systems, appliances, devices, and applications (including databases), and providing oversight of information security and privacy, including Security Information and Event Management (SIEM) as applicable, for each system via the [SIEM].
+1. Correlate and analyze information generated by control assessments and monitoring in the [SIEM] and [Analytics Platform].
+1. Take response actions to address the results of the analysis of control assessment and monitoring information, logging response actions in the [Ticketing System].
+1. Report the security and privacy status of the system to the personnel defined per [Security and Privacy Status Reporting Recipients] at least every thirty (30) days (monthly).
+1. When subject to a legal investigation (e.g., of an insider threat), maintain continuous monitoring records until released by the investigating authority.
+1. Follow the FedRAMP Continuous Collaborative Monitoring, Significant Change Notification, Vulnerability Detection and Response, and Vulnerability Evaluation and Reporting rules.
+
+### Employ Independent Assessors for Ongoing Monitoring [NIST CA-7(1) Moderate, High | ARC-AMPE CA-7(1) AE Mandatory]
+
+1. Engage independent assessors or assessment teams to monitor the controls in the system on an ongoing basis, following the CMS Framework for Independent Assessment of Security and Privacy Controls provided for the program.
+1. Retain the independent monitoring results and reports with the system's authorization documentation.
+
+### Employ Trend Analysis of Monitoring Activities [NIST CA-7(3) | FedRAMP CA-7(3)]
+
+1. Employ trend analyses on monitoring and assessment data to determine if control implementations, the frequency of continuous monitoring activities, and the types of activities used in the continuous monitoring process need to be modified based on empirical data.
+1. Document proposed modifications and, once approved by Security Program / GRC leadership, update the continuous monitoring strategy accordingly.
+
+### Validate Policy Establishment and Control Consistency [NIST CA-7(5) | FedRAMP CA-7(5)]
+
+1. Define the validation actions to employ per [Control Consistency Validation Actions].
+1. Employ the actions to validate that policies are established and that implemented controls are operating in a consistent manner, and record validation results for review by Security Program / GRC.
+
+### Ensure Availability of Monitoring Results [NIST CA-7(6) | FedRAMP CA-7(6)]
+
+1. Identify the automated mechanisms to use per [Automated Mechanisms for Monitoring Results].
+1. Use those mechanisms to ensure the accuracy, currency, and availability of monitoring results for the system.
+
+### Plan and Conduct Penetration Testing [NIST CA-8 High | FedRAMP CA-8 | ARC-AMPE CA-8 AE Mandatory]
+
+1. Schedule penetration testing at least every one (1) year to maintain authorization, on the systems or components defined per [Systems or Components in Scope for Penetration Testing].
+1. Conduct penetration testing on the documented system and its full boundary as documented in the System Security and Privacy Plan, and perform additional penetration tests when new risks and threats potentially affecting the system or applications are identified and reported or upon request from CMS.
+1. Agree to the Rules of Engagement before commencing testing, with the rules co-signed by the system Authorizing Official and the penetration testing organization official; include in the Rules of Engagement the scope of systems or components to be tested and any exclusions.
+1. Ensure penetration test scanning includes evaluation of embedded structures (e.g., content that can be changed without reloading the anchor content) and interactive content, and covers information sources including systems, appliances, devices, services, and applications (including databases).
+1. Ensure penetration test scanning results are searchable by the organization and in a format compliant with CMS requirements, and implement or provide organization-directed penetration test information collection rules/requests (e.g., sources, queries, data calls) within the timeframe specified in the request.
+1. Conduct penetration testing on production systems in a manner that minimizes risk of information corruption or service outage.
+1. Provide penetration testing reports to CMS that summarize the findings, articulate the significance, impact, and risk of the findings, provide remediation plans, and include the underlying raw security information/results in unaltered format.
+1. Treat penetration testing as part of vulnerability detection, subject to the FedRAMP Vulnerability Detection and Response rules; record findings in the POA&M.
+
+### Employ an Independent Penetration Testing Agent or Team [NIST CA-8(1) High | ARC-AMPE CA-8(1) AE Mandatory]
+
+1. Engage an independent penetration testing agent or team to perform penetration testing on the system or system components.
+1. Obtain approval of the independent penetration testing agent or team from Example Org's Chief Information Security Officer (CISO) or equivalent before testing begins, and retain the approval record with the test documentation.
+
+### Conduct Red Team Exercises [NIST CA-8(2)]
+
+1. Define the red team exercises to employ per [Red Team Exercise Definition].
+1. Employ the exercises to simulate attempts by adversaries to compromise organizational systems in accordance with applicable rules of engagement, and record exercise findings in the POA&M.
+
+### Test Physical Access Points [NIST CA-8(3)]
+
+1. Define the frequency of physical access bypass attempts per [Physical Access Bypass Testing Frequency] and select an announced or unannounced basis per [Physical Access Bypass Testing Announcement Basis].
+1. Employ a penetration testing process that includes attempts to bypass or circumvent controls associated with physical access points to the facility at that frequency, and record the results for review by Security Program / GRC.
+
+## Roles & Responsibilities
+
+The **Security Program / GRC** team owns this procedure end to end: it develops and maintains the policies, conducts the risk and control assessments, manages the risk register, POA&M, and authorization decision record, and coordinates all CMS and FedRAMP interactions. System Owners, the CIO, the CISO, the Senior Official for Privacy, the Authorizing Official(s), independent assessors, and [Human Resources] participate in the specific steps assigned to them above; exceptions to any step in this procedure require review and written approval by Security Program / GRC leadership in consultation with the system Authorizing Official.
+
+## Related Standard
+
+This procedure operationalizes the **Risk Assessment and Authorization Standard**, which contains the underlying requirement text, the full control language, and the rationale for each requirement reflected above.

@@ -1,0 +1,163 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.00353
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - ed4c25e1c0627269
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org — System Maintenance Standard
+
+## 1. Purpose
+
+This Standard establishes the requirements governing the maintenance, repair, and replacement of Example Org information systems and their components, including maintenance performed locally, off site, and remotely (nonlocally). It defines the policy framework, maintenance controls, tool management requirements, personnel authorization requirements, and documentation obligations that Infrastructure Security shall implement and audit against. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+## 2. Scope
+
+This Standard applies to all Example Org information systems and system components subject to maintenance, repair, or replacement, to all maintenance tools used on those systems, to all personnel and external organizations performing maintenance activities, and to the facilities housing electronic information systems and electronic protected health information (ePHI). The System Maintenance process operates on a **continuous** basis and is owned end to end by **Infrastructure Security**.
+
+## 3. Roles and Responsibilities
+
+- **Infrastructure Security** owns the System Maintenance process end to end, including scheduling, approval, monitoring, recordkeeping, review, and evidence production for all maintenance activities.
+- Infrastructure Security shall designate a **Maintenance Policy Official** to manage the development, documentation, and dissemination of the maintenance policy and procedures required by Section 4. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+- Personnel or roles designated by Infrastructure Security shall perform the explicit approval functions identified in this Standard (e.g., approval of off-site removal, approval of nonlocal maintenance sessions). [NIST 800-53 MA-2 Low/Moderate/High | NIST 800-53 MA-4(5)]
+- Supervisory and escorting personnel shall meet the authorization, training, and technical competence requirements of Section 8. [NIST 800-53 MA-5 Low/Moderate/High | FedRAMP MA-5 | ARC-AMPE MA-5 AE Mandatory]
+- All workforce members are subject to the ePHI access requirements of Sections 8 and 10. [HIPAA 164.308(a)(3)(i) | HIPAA 164.310(a)(1)]
+
+## 4. Maintenance Policy and Procedures
+
+4.1. Infrastructure Security shall develop, document, and disseminate to applicable personnel or roles a maintenance policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. Infrastructure Security shall develop and maintain procedures to facilitate implementation of the policy and the associated maintenance controls. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+4.2. The Maintenance Policy Official designated by Infrastructure Security shall manage the development, documentation, and dissemination of the maintenance policy and procedures. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+4.3. Infrastructure Security shall review and update the maintenance policy and the maintenance procedures at [Review Frequency] and following organization-defined events (such as assessment or audit findings, security or privacy incidents, and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines). ARC-AMPE requires this review at least every one (1) year. [NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]
+
+4.4. Infrastructure Security shall maintain the policies and procedures implemented to comply with this Standard in written (which may be electronic) form, and shall maintain a written (which may be electronic) record of any action, activity, or assessment required to be documented under this Standard. [HIPAA 164.316(b)(1)]
+
+## 5. Controlled Maintenance
+
+5.1. Infrastructure Security shall schedule, document, and review records of maintenance, repair, and replacement on system components in accordance with manufacturer or vendor specifications and/or organizational requirements. [NIST 800-53 MA-2 Low/Moderate/High | ARC-AMPE MA-2 AE Mandatory]
+
+5.2. Infrastructure Security shall approve and monitor all maintenance activities, whether performed on site or remotely and whether the system or components are serviced on site or removed to another location. [NIST 800-53 MA-2 Low/Moderate/High | ARC-AMPE MA-2 AE Mandatory]
+
+5.3. Personnel or roles designated by Infrastructure Security shall explicitly approve removal of the system or system components from organizational facilities for off-site maintenance, repair, or replacement. [NIST 800-53 MA-2 Low/Moderate/High | ARC-AMPE MA-2 AE Mandatory]
+
+5.4. Infrastructure Security shall sanitize equipment to remove information from associated media prior to removal from organizational facilities for off-site maintenance, repair, or replacement. ARC-AMPE requires removal of all organizational information using sanitization methods per the latest published NIST SP 800-88. [NIST 800-53 MA-2 Low/Moderate/High | ARC-AMPE MA-2 AE Mandatory]
+
+5.5. Infrastructure Security shall check all potentially impacted controls to verify they are still functioning properly following maintenance, repair, or replacement actions. [NIST 800-53 MA-2 Low/Moderate/High | ARC-AMPE MA-2 AE Mandatory]
+
+5.6. Infrastructure Security shall include the following maintenance-related information in organizational maintenance records (maintenance records with authorization): date and time, description of maintenance performed, names of individuals performing it, escort name, and components removed or replaced. [NIST 800-53 MA-2 Low/Moderate/High | ARC-AMPE MA-2 AE Mandatory]
+
+5.7. All repairs and modifications to system components on systems where Personally Identifiable Information (PII) is stored or accessed shall be documented. Infrastructure Security shall implement policies and procedures to document repairs and modifications to security-related physical components of a facility (for example, hardware, walls, doors, and locks). [ARC-AMPE MA-2 AE Mandatory | HIPAA 164.310(a)(2)(iv) Addressable]
+
+5.8. Infrastructure Security shall schedule, conduct, and document maintenance, repair, and replacement actions for the system using [Automated Maintenance Mechanism], and shall produce up-to-date, accurate, and complete records of all such actions requested, scheduled, in process, and completed. [NIST 800-53 MA-2(2) High]
+
+## 6. Maintenance Tools
+
+6.1. Infrastructure Security shall approve, control, and monitor the use of system maintenance tools, and shall review previously approved maintenance tools at [Tool Review Frequency]. ARC-AMPE requires this review at least every one (1) year. [NIST 800-53 MA-3 Moderate/High | ARC-AMPE MA-3 AE Mandatory]
+
+6.2. Infrastructure Security shall check all maintenance tools with the capability of retaining information to ensure information is not saved on the tool and that the tool is appropriately sanitized, using approved sanitization methods from the latest published NIST SP 800-88. [ARC-AMPE MA-3 AE Mandatory]
+
+6.3. Infrastructure Security shall inspect the maintenance tools used by maintenance personnel for improper or unauthorized modifications. [NIST 800-53 MA-3(1) Moderate/High | ARC-AMPE MA-3(1) AE Mandatory]
+
+6.4. Infrastructure Security shall check media containing diagnostic and test programs for malicious code before the media are used in the system; if malware or unauthorized changes are discovered, the discovery shall be treated consistent with organizational policies and procedures for incident handling. [NIST 800-53 MA-3(2) Moderate/High | ARC-AMPE MA-3(2) AE Mandatory]
+
+6.5. Infrastructure Security shall prevent the removal of maintenance equipment containing organizational information by verifying there is no organizational information on the equipment, sanitizing or destroying the equipment, retaining the equipment within the facility, or obtaining an exemption from personnel or roles designated by Infrastructure Security explicitly authorizing removal. Infrastructure Security shall check all such tools with information-retention capability to ensure no information is saved and shall sanitize them per the latest published NIST SP 800-88. [NIST 800-53 MA-3(3) Moderate/High | ARC-AMPE MA-3(3) AE Mandatory]
+
+6.6. The use of maintenance tools shall be restricted to authorized personnel only. [NIST 800-53 MA-3(4)]
+
+6.7. Infrastructure Security shall monitor the use of maintenance tools that execute with increased privilege, including monitoring to detect unauthorized access to information and assets that would otherwise be inaccessible to individuals as a result of increased system privileges. [NIST 800-53 MA-3(5) | ARC-AMPE MA-3(5) AE Mandatory]
+
+6.8. Infrastructure Security shall inspect maintenance tools to ensure the latest software updates and patches are installed, and shall, to the extent possible, install updates and patches on organizational systems to minimize vulnerabilities, with minimal impact to organizational systems. [NIST 800-53 MA-3(6) | ARC-AMPE MA-3(6) AE Mandatory]
+
+## 7. Nonlocal (Remote) Maintenance and Diagnostics
+
+7.1. Infrastructure Security shall approve and monitor nonlocal maintenance and diagnostic activities, and shall allow the use of nonlocal maintenance and diagnostic tools only as consistent with organizational policy and documented in the security plan for the system. [NIST 800-53 MA-4 Low/Moderate/High | ARC-AMPE MA-4 AE Mandatory]
+
+7.2. Infrastructure Security shall employ strong authentication in the establishment of nonlocal maintenance and diagnostic sessions, in accordance with the latest published NIST SP 800-63B. If password-based authentication is used during remote maintenance, the passwords shall be changed following each remote maintenance service. [NIST 800-53 MA-4 Low/Moderate/High | ARC-AMPE MA-4 AE Mandatory]
+
+7.3. Infrastructure Security shall maintain records for nonlocal maintenance and diagnostic activities (remote maintenance session logs). [NIST 800-53 MA-4 Low/Moderate/High | ARC-AMPE MA-4 AE Mandatory]
+
+7.4. Session and network connections shall be terminated when nonlocal maintenance is completed. [NIST 800-53 MA-4 Low/Moderate/High | ARC-AMPE MA-4 AE Mandatory]
+
+7.5. Infrastructure Security shall sanitize media used during remote nonlocal maintenance in accordance with the latest published NIST SP 800-88. [ARC-AMPE MA-4 AE Mandatory]
+
+7.6. Infrastructure Security shall log organization-defined audit events (as defined in the organization's formal audit policy; see AU-2) for nonlocal maintenance and diagnostic sessions, and shall review the audit records of those sessions to detect anomalous behavior. [NIST 800-53 MA-4(1) | ARC-AMPE MA-4(1) AE Mandatory]
+
+7.7. Infrastructure Security shall require that nonlocal maintenance and diagnostic services be performed from a system implementing a security capability comparable to the system being serviced, or shall remove the component to be serviced prior to nonlocal maintenance, sanitize it for organizational information, and after service inspect and sanitize it for potentially malicious software before reconnecting it. [NIST 800-53 MA-4(3) High]
+
+7.8. Infrastructure Security shall protect nonlocal maintenance sessions by employing [Replay-Resistant Authenticators] and by separating the maintenance sessions from other network sessions with the system using physically or logically separated communications paths. [NIST 800-53 MA-4(4) | ARC-AMPE MA-4(4) AE Mandatory]
+
+7.9. Each nonlocal maintenance session shall require approval by personnel or roles designated by Infrastructure Security, and personnel and roles designated by Infrastructure Security shall be notified of the date and time of planned nonlocal maintenance. [NIST 800-53 MA-4(5)]
+
+7.10. Infrastructure Security shall implement organization-defined cryptographic mechanisms ([Cryptographic Mechanisms]) to protect the integrity and confidentiality of nonlocal maintenance and diagnostic communications. [NIST 800-53 MA-4(6)]
+
+7.11. Infrastructure Security shall verify session and network connection termination after the completion of nonlocal maintenance and diagnostic sessions. [NIST 800-53 MA-4(7) | ARC-AMPE MA-4(7) AE Mandatory]
+
+## 8. Maintenance Personnel Authorization
+
+8.1. Infrastructure Security shall ensure all workforce members have appropriate access to electronic protected health information and shall prevent workforce members without such access from obtaining it. [HIPAA 164.308(a)(3)(i)]
+
+8.2. Infrastructure Security shall establish a process for maintenance personnel authorization and shall maintain a list of authorized maintenance organizations or personnel, including procedures for the authorization and/or supervision of workforce members who work with electronic protected health information or in locations where it might be accessed. [NIST 800-53 MA-5 Low/Moderate/High | FedRAMP MA-5 | ARC-AMPE MA-5 AE Mandatory | HIPAA 164.308(a)(3)(ii)(A) Addressable]
+
+8.3. Infrastructure Security shall verify that non-escorted personnel performing maintenance on the system possess the required access authorizations (and security credentials), and shall implement procedures to determine that a workforce member's access to electronic protected health information is appropriate. [NIST 800-53 MA-5 Low/Moderate/High | FedRAMP MA-5 | ARC-AMPE MA-5 AE Mandatory | HIPAA 164.308(a)(3)(ii)(B) Addressable]
+
+8.4. Infrastructure Security shall designate organizational personnel with required access authorizations and technical competence to supervise the maintenance activities of personnel who do not possess the required access authorizations. Infrastructure Security shall ensure supervisors are trained on supervisory and escorting responsibilities, and shall follow organization-established visitor logging and escort security protocols. [NIST 800-53 MA-5 Low/Moderate/High | FedRAMP MA-5 | ARC-AMPE MA-5 AE Mandatory]
+
+8.5. Infrastructure Security shall clearly document nationality requirements (or lack thereof) for maintenance personnel where applicable. [FedRAMP MA-5]
+
+8.6. Infrastructure Security shall implement procedures for terminating access to electronic protected health information when a workforce member's employment or other arrangement ends, or as required by clearance determinations. [HIPAA 164.308(a)(3)(ii)(C) Addressable]
+
+8.7. Infrastructure Security shall implement procedures for the use of maintenance personnel who lack appropriate security clearances or are not U.S. citizens, under which such personnel are escorted and supervised during maintenance and diagnostic activities by approved organizational personnel who are fully cleared, have appropriate access authorizations, and are technically qualified. Prior to such maintenance, all volatile information storage components shall be sanitized and all nonvolatile storage media shall be removed or physically disconnected and secured. Where a component cannot be sanitized, removed, or disconnected, Infrastructure Security shall develop and implement organization-defined alternate controls (identified in the System Security and Privacy Plan). [NIST 800-53 MA-5(1) High | FedRAMP MA-5(1) | ARC-AMPE MA-5(1) AE Mandatory]
+
+8.8. Infrastructure Security shall verify that personnel performing maintenance and diagnostic activities on a system processing, storing, or transmitting classified information possess security clearances and formal access approvals for at least the highest classification level and for compartments of information on the system. [NIST 800-53 MA-5(2)]
+
+8.9. Infrastructure Security shall verify that personnel performing maintenance and diagnostic activities on a system processing, storing, or transmitting classified information are U.S. citizens. [NIST 800-53 MA-5(3)]
+
+8.10. Foreign nationals with appropriate security clearances may be used to conduct maintenance on classified systems only when the systems are jointly owned and operated by the United States and foreign allied governments, or owned and operated solely by foreign allied governments, with approvals, consents, and operational conditions fully documented within Memoranda of Agreements. [NIST 800-53 MA-5(4)]
+
+8.11. Infrastructure Security shall ensure that non-escorted personnel performing maintenance activities not directly associated with the system but in its physical proximity have required access authorizations. [NIST 800-53 MA-5(5)]
+
+## 9. Timely, Preventive, and Predictive Maintenance
+
+9.1. Infrastructure Security shall obtain maintenance support and/or spare parts for organization-defined system components within [Maintenance Support Time Period] of failure. ARC-AMPE requires obtaining them within the applicable Recovery Time Objective (RTO) specified in the system Contingency Plan, consistent with the RTOs defined in CP-7(3) and CP-8. [NIST 800-53 MA-6 Moderate/High | ARC-AMPE MA-6 AE Mandatory]
+
+9.2. Infrastructure Security shall perform preventive maintenance on organization-defined system components at [Preventive Maintenance Interval]. ARC-AMPE specifies intervals based on the applicable Recovery Time Objective (RTO) in the system Contingency Plan, consistent with CP-7(3) and CP-8. [NIST 800-53 MA-6(1) | ARC-AMPE MA-6(1) AE Mandatory]
+
+9.3. Infrastructure Security shall perform predictive maintenance on organization-defined system components at [Predictive Maintenance Interval]. [NIST 800-53 MA-6(2)]
+
+9.4. Infrastructure Security shall transfer predictive maintenance data to a maintenance management system using [Automated Maintenance Mechanism]. [NIST 800-53 MA-6(3)]
+
+## 10. Physical Access and Facility Controls
+
+10.1. Infrastructure Security shall implement policies and procedures to limit physical access to electronic information systems and the facilities in which they are housed, while ensuring properly authorized access is allowed. [HIPAA 164.310(a)(1)]
+
+10.2. Infrastructure Security shall establish (and implement as needed) procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan in the event of an emergency. [HIPAA 164.310(a)(2)(i) Addressable]
+
+10.3. Infrastructure Security shall implement policies and procedures to safeguard the facility and the equipment therein from unauthorized physical access, tampering, and theft. [HIPAA 164.310(a)(2)(ii) Addressable]
+
+10.4. Infrastructure Security shall implement procedures to control and validate a person's access to facilities based on their role or function, including visitor control, and control of access to software programs for testing and revision. [HIPAA 164.310(a)(2)(iii) Addressable]
+
+## 11. Documentation, Availability, Retention, and Review
+
+11.1. Documentation maintained under this Standard shall be made available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii) Required]
+
+11.2. Required documentation shall be retained for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA 164.316(b)(2)(i) Required]
+
+11.3. Documentation shall be reviewed periodically and updated as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii) Required]
+
+## 12. Evidence and Records
+
+Infrastructure Security shall produce and retain, as evidence of conformance with this Standard:
+
+| Artifact                                                                                                                                                                   | Produced Under          | Retention                                                                                               |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------- |
+| Maintenance records with authorization (including date and time, description of work, names of individuals performing it, escort name, and components removed or replaced) | Sections 5.1, 5.6, 5.7  | 6 years from creation or from date last in effect, whichever is later [HIPAA 164.316(b)(2)(i) Required] |
+| Remote maintenance session logs (nonlocal maintenance and diagnostic activity records)                                                                                     | Sections 7.3, 7.6, 7.11 | 6 years from creation or from date last in effect, whichever is later [HIPAA 164.316(b)(2)(i) Required] |
+
+Infrastructure Security is accountable for the completeness, accuracy, and availability of these artifacts on a continuous basis.

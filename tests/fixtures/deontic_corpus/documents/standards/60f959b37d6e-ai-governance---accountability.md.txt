@@ -1,0 +1,97 @@
+# Artificial Intelligence Risk Management Standard
+
+## 1. Purpose and Scope
+
+This Standard establishes requirements for the governance, risk management, and oversight of Artificial Intelligence (AI) systems at Acme Health. This Standard applies to all AI systems developed, deployed, evaluated, or used by the organization throughout their lifecycle.
+
+## 2. AI Risk Management Framework
+
+### 2.1 Risk Management Policies and Processes
+
+Acme Health must establish and maintain policies, processes, procedures, and practices related to the mapping, measuring, and managing of AI risks. These policies, processes, procedures, and practices must be transparent and implemented effectively. [NIST AI RMF Govern 1]
+
+The organization must implement processes, procedures, and practices to determine the needed level of risk management activities based on the organization's risk tolerance. [NIST AI RMF Govern 1.3]
+
+The risk management process and its outcomes must be established through transparent policies, procedures, and other controls based on organizational risk priorities. [NIST AI RMF Govern 1.4]
+
+### 2.2 Legal and Regulatory Compliance
+
+Legal and regulatory requirements involving AI must be understood, managed, and documented. [NIST AI RMF Govern 1.1]
+
+### 2.3 Trustworthy AI Characteristics
+
+The characteristics of trustworthy AI must be integrated into organizational policies, processes, procedures, and practices. [NIST AI RMF Govern 1.2]
+
+### 2.4 Monitoring and Review
+
+Acme Health must plan for ongoing monitoring and periodic review of the risk management process and its outcomes. Organizational roles and responsibilities must be clearly defined, including determining the frequency of periodic review. [NIST AI RMF Govern 1.5]
+
+### 2.5 AI System Inventory
+
+Mechanisms must be in place to inventory AI systems and be resourced according to organizational risk priorities. [NIST AI RMF Govern 1.6]
+
+### 2.6 Decommissioning and Phase-Out
+
+Processes and procedures must be in place for decommissioning and phasing out AI systems safely and in a manner that does not increase risks or decrease the organization's trustworthiness. [NIST AI RMF Govern 1.7]
+
+## 3. Accountability Structures
+
+### 3.1 Empowerment and Training
+
+Accountability structures must be in place so that the appropriate teams and individuals are empowered, responsible, and trained for mapping, measuring, and managing AI risks. [NIST AI RMF Govern 2]
+
+### 3.2 Roles and Responsibilities
+
+Roles and responsibilities and lines of communication related to mapping, measuring, and managing AI risks must be documented and clear to individuals and teams throughout the organization. [NIST AI RMF Govern 2.1]
+
+### 3.3 AI Risk Management Training
+
+The organization's personnel and partners must receive AI risk management training to enable them to perform their duties and responsibilities consistent with related policies, procedures, and agreements. [NIST AI RMF Govern 2.2]
+
+### 3.4 Executive Leadership Responsibility
+
+Executive leadership of the organization must take responsibility for decisions about risks associated with AI system development and deployment. [NIST AI RMF Govern 2.3]
+
+## 4. Workforce Diversity, Equity, Inclusion, and Accessibility
+
+### 4.1 Diversity in AI Risk Management
+
+Workforce diversity, equity, inclusion, and accessibility processes must be prioritized in the mapping, measuring, and managing of AI risks throughout the lifecycle. [NIST AI RMF Govern 3]
+
+### 4.2 Diverse Team Composition
+
+Decision-making related to mapping, measuring, and managing AI risks throughout the lifecycle must be informed by a diverse team (e.g., diversity of demographics, disciplines, experience, expertise, and backgrounds). [NIST AI RMF Govern 3.1]
+
+### 4.3 Human-AI Configuration Roles
+
+Policies and procedures must be in place to define and differentiate roles and responsibilities for human-AI configurations and oversight of AI systems. [NIST AI RMF Govern 3.2]
+
+## 5. Organizational Culture and Risk Communication
+
+### 5.1 Risk-Aware Culture
+
+Organizational teams must be committed to a culture that considers and communicates AI risk. [NIST AI RMF Govern 4]
+
+### 5.2 Critical Thinking and Safety-First Mindset
+
+Organizational policies and practices must be in place to foster a critical thinking and safety-first mindset in the design, development, deployment, and uses of AI systems to minimize potential negative impacts. [NIST AI RMF Govern 4.1]
+
+### 5.3 Risk and Impact Documentation
+
+Organizational teams must document the risks and potential impacts of the AI technology they design, develop, deploy, evaluate, and use, and communicate about the impacts more broadly. [NIST AI RMF Govern 4.2]
+
+### 5.4 Testing, Incident Response, and Information Sharing
+
+Organizational practices must be in place to enable AI testing, identification of incidents, and information sharing. [NIST AI RMF Govern 4.3]
+
+## 6. External Engagement and Stakeholder Feedback
+
+### 6.1 Engagement with AI Actors
+
+Processes must be in place for robust engagement with relevant AI actors. [NIST AI RMF Govern 5]
+
+### 6.2 External Feedback Collection and Integration
+
+Organizational policies and practices must be in place to collect, consider, prioritize, and integrate feedback from those external to the team that developed or deployed the AI system regarding the potential individual and societal impacts related to AI risks. [NIST AI RMF Govern 5.1]
+
+Mechanisms must be established to enable the team that developed or deployed AI systems to regularly incorporate adjudicated feedback from relevant AI actors into system design and implementation. [NIST AI RMF Govern 5.2]

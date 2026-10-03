@@ -1,0 +1,307 @@
+# Acme Health Security Awareness and Training Standard
+
+## 1. Purpose and Scope
+
+This standard establishes requirements for security awareness and training programs at Acme Health. It defines mandatory training for all workforce members, role-based training for personnel with security and privacy responsibilities, and personnel screening requirements. This standard supports compliance with HIPAA Security Rule requirements and industry best practices for healthcare organizations.
+
+## 2. Policy Development and Dissemination
+
+### 2.1 Awareness and Training Policy
+
+Acme Health must develop, document, and disseminate an awareness and training policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 AT-1 Low, Moderate, High | ARC-AMPE AT-1 AE Mandatory]
+
+### 2.2 Procedures
+
+Acme Health must develop, document, and disseminate procedures to facilitate the implementation of the awareness and training policy and associated controls. [NIST 800-53 AT-1 Low, Moderate, High | ARC-AMPE AT-1 AE Mandatory]
+
+### 2.3 Management Responsibility
+
+Acme Health must designate an [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the awareness and training policy and procedures. [NIST 800-53 AT-1 Low, Moderate, High | ARC-AMPE AT-1 AE Mandatory]
+
+### 2.4 Policy Review and Updates
+
+Acme Health must review and update the awareness and training policy [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 AT-1 Low, Moderate, High]
+
+Acme Health must review and update the awareness and training policy at least every one (1) year and following organization-defined events. [ARC-AMPE AT-1 AE Mandatory]
+
+### 2.5 Procedures Review and Updates
+
+Acme Health must review and update the awareness and training procedures [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 AT-1 Low, Moderate, High]
+
+Acme Health must review and update the awareness and training procedures at least every one (1) year and following organization-defined events. [ARC-AMPE AT-1 AE Mandatory]
+
+## 3. Security Awareness and Literacy Training Program
+
+### 3.1 Program Implementation
+
+Acme Health must implement a security awareness and training program for all members of the workforce, including management. [HIPAA Security Rule 164.308(a)(5)(i) | NIST 800-53 AT-2 Low, Moderate, High | ARC-AMPE AT-2 AE Mandatory]
+
+### 3.2 Initial and Ongoing Training
+
+Acme Health must provide security and privacy literacy training to system users, including managers, senior executives, and contractors, as part of initial training for new users and [Assignment: organization-defined frequency] thereafter. [NIST 800-53 AT-2 Low, Moderate, High]
+
+Acme Health must provide security and privacy literacy training to system users, including managers, senior executives, and contractors, as part of initial training for new users and within at least every one (1) year thereafter. [ARC-AMPE AT-2 AE Mandatory]
+
+### 3.3 Event-Driven Training
+
+Acme Health must provide security and privacy literacy training when required by system changes or following [Assignment: organization-defined events]. [NIST 800-53 AT-2 Low, Moderate, High | ARC-AMPE AT-2 AE Mandatory]
+
+### 3.4 Awareness Techniques
+
+Acme Health must employ [Assignment: organization-defined awareness techniques] to increase the security and privacy awareness of system users. [NIST 800-53 AT-2 Low, Moderate, High]
+
+Acme Health must employ phishing email tests and other organization-defined techniques to increase the security and privacy awareness of system users. [ARC-AMPE AT-2 AE Mandatory]
+
+### 3.5 Content Updates
+
+Acme Health must update literacy training and awareness content [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 AT-2 Low, Moderate, High]
+
+Acme Health must update literacy training and awareness content at least once every one (1) year and following organization-defined events. [ARC-AMPE AT-2 AE Mandatory]
+
+### 3.6 Lessons Learned Integration
+
+Acme Health must incorporate lessons learned from internal or external security incidents or breaches into literacy training and awareness techniques. [NIST 800-53 AT-2 Low, Moderate, High | ARC-AMPE AT-2 AE Mandatory]
+
+### 3.7 Practical Exercises
+
+Acme Health must provide practical exercises in literacy training that simulate events and incidents. [NIST 800-53 AT-2(1)]
+
+## 4. Specific Training Topics
+
+### 4.1 Insider Threat Training
+
+Acme Health must provide literacy training on recognizing and reporting potential indicators of insider threat. [NIST 800-53 AT-2(2) Low, Moderate, High | ARC-AMPE AT-2(2) AE Mandatory]
+
+Acme Health must include in insider threat training how to communicate employee and management concerns regarding potential indicators through appropriate organizational channels in accordance with established policies and procedures. [ARC-AMPE AT-2(2) AE Mandatory]
+
+### 4.2 Social Engineering and Social Mining Training
+
+Acme Health must provide literacy training on recognizing and reporting potential and actual instances of social engineering and social mining. [NIST 800-53 AT-2(3) Moderate, High | ARC-AMPE AT-2(3) AE Mandatory]
+
+Acme Health must include in social engineering and mining training how to recognize and report, through appropriate organizational and defined channels, potential attempts to trick an individual into revealing information or taking an action that can be used to breach, compromise, or otherwise adversely impact a system. [ARC-AMPE AT-2(3) AE Mandatory]
+
+### 4.3 Suspicious Communications and Anomalous Behavior Training
+
+Acme Health must provide literacy training on recognizing suspicious communications and anomalous behavior in organizational systems using [Assignment: organization-defined indicators of malicious code]. [NIST 800-53 AT-2(4) | ARC-AMPE AT-2(4) AE Mandatory]
+
+Acme Health must include in suspicious communications training how to recognize and report, through appropriate organizational and defined channels: potentially suspicious email or web communications (e.g., receiving an unexpected email, receiving an email containing strange or poor grammar, or receiving an email from an unfamiliar sender but who appears to be from a known sponsor or contractor); and anomalous behaviors in systems. [ARC-AMPE AT-2(4) AE Mandatory]
+
+### 4.4 Advanced Persistent Threat Training
+
+Acme Health must provide literacy training on the advanced persistent threat. [NIST 800-53 AT-2(5) | ARC-AMPE AT-2(5) AE Mandatory]
+
+Acme Health must include in advanced persistent threat training techniques for recognizing suspicious emails, use of removable systems in non-secure settings, the potential targeting of individuals at home, and the various ways that APTs can infiltrate the organization (e.g., through websites, emails, advertisement pop-ups, articles, and social engineering). [ARC-AMPE AT-2(5) AE Mandatory]
+
+### 4.5 Cyber Threat Environment Training
+
+Acme Health must provide literacy training on the cyber threat environment and reflect current cyber threat information in system operations. [NIST 800-53 AT-2(6)]
+
+## 5. HIPAA-Specific Security Awareness Requirements
+
+### 5.1 Periodic Security Updates
+
+Acme Health must implement periodic security updates or reminders. [HIPAA Security Rule 164.308(a)(5)(ii)(A)]
+
+### 5.2 Malicious Software Training
+
+Acme Health must implement procedures for guarding against, detecting, and reporting malicious software. [HIPAA Security Rule 164.308(a)(5)(ii)(B)]
+
+### 5.3 Log-In Monitoring Training
+
+Acme Health must implement procedures for monitoring log-in attempts and reporting discrepancies. [HIPAA Security Rule 164.308(a)(5)(ii)(C)]
+
+### 5.4 Password Management Training
+
+Acme Health must implement procedures for creating, changing, and safeguarding passwords. [HIPAA Security Rule 164.308(a)(5)(ii)(D)]
+
+## 6. Role-Based Security and Privacy Training
+
+### 6.1 Training for Personnel with Significant Roles
+
+Acme Health must provide role-based security and privacy training to personnel with [Assignment: organization-defined roles and responsibilities] before authorizing access to the system, information, or performing assigned duties, and [Assignment: organization-defined frequency] thereafter. [NIST 800-53 AT-3 Low, Moderate, High]
+
+Acme Health must provide role-based security and privacy training to personnel with significant information security and privacy roles and responsibilities before authorizing access to the system, information, or performing assigned duties, and at least every one (1) year thereafter. [ARC-AMPE AT-3 AE Mandatory]
+
+### 6.2 Training Required by System Changes
+
+Acme Health must provide role-based security and privacy training when required by system changes. [NIST 800-53 AT-3 Low, Moderate, High | ARC-AMPE AT-3 AE Mandatory]
+
+### 6.3 Role-Based Training Content Updates
+
+Acme Health must update role-based training content [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 AT-3 Low, Moderate, High]
+
+Acme Health must update role-based training content at least every one (1) year and following significant changes to the system or the system environment. [ARC-AMPE AT-3 AE Mandatory]
+
+### 6.4 Lessons Learned in Role-Based Training
+
+Acme Health must incorporate lessons learned from internal or external security incidents or breaches into role-based training. [NIST 800-53 AT-3 Low, Moderate, High | ARC-AMPE AT-3 AE Mandatory]
+
+### 6.5 Account Disabling for Training Noncompliance
+
+Acme Health must disable user accounts for personnel with significant information security and privacy roles and responsibilities who have not completed required training within mandated timeframes until they meet their role-based training requirement. [ARC-AMPE AT-3 AE Mandatory]
+
+### 6.6 Environmental Controls Training
+
+Acme Health must provide [Assignment: organization-defined personnel or roles] with initial and [Assignment: organization-defined frequency] training in the employment and operation of environmental controls. [NIST 800-53 AT-3(1)]
+
+### 6.7 Physical Security Controls Training
+
+Acme Health must provide [Assignment: organization-defined personnel or roles] with initial and [Assignment: organization-defined frequency] training in the employment and operation of physical security controls. [NIST 800-53 AT-3(2)]
+
+### 6.8 Practical Exercises in Role-Based Training
+
+Acme Health must provide practical exercises in security and privacy training that reinforce training objectives. [NIST 800-53 AT-3(3)]
+
+## 7. Privacy Training Requirements
+
+### 7.1 PII Processing and Transparency Controls Training
+
+Acme Health must provide [Assignment: organization-defined personnel or roles] with initial and [Assignment: organization-defined frequency] training in the employment and operation of personally identifiable information processing and transparency controls. [NIST 800-53 AT-3(5)]
+
+Acme Health must provide organizational-personnel, including vendors, contractors, and employees, with initial and at least every one (1) year thereafter training in the employment and operation of Personally Identifiable Information processing and transparency controls. [ARC-AMPE AT-3(5) AE Mandatory]
+
+### 7.2 Privacy Education and Awareness Program
+
+Acme Health must develop and implement a privacy education and awareness training program for all employees and individuals working on behalf of the organization involved in managing, using, and/or processing Personally Identifiable Information. [ARC-AMPE AT-3(5) AE Mandatory]
+
+### 7.3 Email PII Responsibilities
+
+Acme Health must include responsibilities associated with sending PII in email within the privacy education and awareness training. [ARC-AMPE AT-3(5) AE Mandatory]
+
+### 7.4 Job-Specific Privacy Training
+
+Acme Health must ensure communications and training related to privacy is job-specific and commensurate with the employee's responsibilities. [ARC-AMPE AT-3(5) AE Mandatory]
+
+### 7.5 Privacy Training Timeline
+
+Acme Health must ensure the initial training of employees, including managers, on their privacy responsibilities is completed before permitting access to organizational information and systems; thereafter, ensure refresher training is completed every one (1) year. [ARC-AMPE AT-3(5) AE Mandatory]
+
+### 7.6 Advanced Privacy Training
+
+Acme Health must ensure provided additional or advanced training is commensurate with increased responsibilities or change in duties. [ARC-AMPE AT-3(5) AE Mandatory]
+
+### 7.7 Rules of Behavior in Privacy Training
+
+Acme Health must include acceptable rules of behavior and the consequences when the rules are not followed within both initial and refresher training. [ARC-AMPE AT-3(5) AE Mandatory]
+
+### 7.8 Telework and Remote Access Training
+
+Acme Health must ensure training addresses the rules for telework and other authorized remote access programs. [ARC-AMPE AT-3(5) AE Mandatory]
+
+## 8. Training Documentation and Records
+
+### 8.1 Training Activity Documentation
+
+Acme Health must document and monitor information security and privacy training activities, including security and privacy awareness training and specific role-based security and privacy training. [NIST 800-53 AT-4 Low, Moderate, High | ARC-AMPE AT-4 AE Mandatory]
+
+### 8.2 Training Records Retention
+
+Acme Health must retain individual training records for [Assignment: organization-defined time period]. [NIST 800-53 AT-4 Low, Moderate, High]
+
+Acme Health must retain individual training records for a minimum of five (5) years after completing a specific training course. [ARC-AMPE AT-4 AE Mandatory]
+
+## 9. Personnel Screening and Position Management
+
+### 9.1 Position Risk Designation
+
+Acme Health must assign a risk designation to all organizational positions. [NIST 800-53 PS-2 Low, Moderate, High | ARC-AMPE PS-2 AE Mandatory]
+
+### 9.2 Screening Criteria
+
+Acme Health must establish screening criteria for individuals filling organizational positions. [NIST 800-53 PS-2 Low, Moderate, High | ARC-AMPE PS-2 AE Mandatory]
+
+### 9.3 Risk Designation Review
+
+Acme Health must review and update position risk designations [Assignment: organization-defined frequency]. [NIST 800-53 PS-2 Low, Moderate, High]
+
+Acme Health must review and update position risk designations at least every one (1) year or whenever a position's duties are changed, revised, or realigned. [ARC-AMPE PS-2 AE Mandatory]
+
+### 9.4 Background Investigations for Security Responsibilities
+
+Acme Health must ensure that all individuals with significant security responsibilities possess, at a minimum, a background investigation. [ARC-AMPE PS-2 AE Mandatory]
+
+### 9.5 PII Consideration in Screening
+
+Acme Health must consider whether a member of the workforce will be working with Personally Identifiable Information as a factor in determining the screening criteria for the position. [ARC-AMPE PS-2 AE Mandatory]
+
+### 9.6 Security and Privacy Roles in Position Descriptions
+
+Acme Health must incorporate security and privacy roles and responsibilities into organizational position descriptions. [NIST 800-53 PS-9 Low, Moderate, High | ARC-AMPE PS-9 AE Mandatory]
+
+Acme Health must develop position descriptions for security and privacy roles in consultation with the organization's security and privacy officers, including role-based training requirements. [ARC-AMPE PS-9 AE Mandatory]
+
+## 10. Personnel Screening Requirements
+
+### 10.1 Pre-Authorization Screening
+
+Acme Health must screen individuals prior to authorizing access to the system. [NIST 800-53 PS-3 Low, Moderate, High | ARC-AMPE PS-3 AE Mandatory]
+
+### 10.2 Rescreening
+
+Acme Health must rescreen individuals in accordance with [Assignment: organization-defined conditions requiring rescreening and, where rescreening is so indicated, the frequency of rescreening]. [NIST 800-53 PS-3 Low, Moderate, High]
+
+Acme Health must rescreen individuals in accordance with organizational Personnel Security Policy and anytime they change a position. [ARC-AMPE PS-3 AE Mandatory]
+
+### 10.3 Background Investigations
+
+Acme Health must conduct background investigations in a manner commensurate with organizational Personnel Security policy and guidance prior to employment. [ARC-AMPE PS-3 AE Mandatory]
+
+### 10.4 Access Restrictions Pending Vetting
+
+Acme Health must not permit employees and contractors access to information systems until they have been vetted in accordance with organizational policy and signed the appropriate access agreements. [ARC-AMPE PS-3 AE Mandatory]
+
+### 10.5 ACA-Sensitive Information and PII Access Requirements
+
+For all employees and contractors requiring access to ACA-sensitive information or Personally Identifiable Information, Acme Health must ensure they meet personnel suitability standards based on a valid need-to-know (which cannot be assumed from position or title) and favorable results from a background check; the background check for prospective and existing employees (if not previously completed) must include, at a minimum, contacting references provided by the employee as well as the local law enforcement agency or agencies. [ARC-AMPE PS-3 AE Mandatory]
+
+### 10.6 Classified Information Access Verification
+
+Acme Health must verify that individuals accessing a system processing, storing, or transmitting classified information are cleared and indoctrinated to the highest classification level of the information to which they have access on the system. [NIST 800-53 PS-3(1)]
+
+### 10.7 Formal Indoctrination Verification
+
+Acme Health must verify that individuals accessing a system processing, storing, or transmitting types of classified information that require formal indoctrination are formally indoctrinated for all the relevant types of information to which they have access on the system. [NIST 800-53 PS-3(2)]
+
+### 10.8 Information Requiring Special Protection
+
+Acme Health must verify that individuals accessing a system processing, storing, or transmitting information requiring special protective measures have valid access authorizations that are demonstrated by assigned official government duties and satisfy [Assignment: organization-defined additional personnel screening criteria]. [NIST 800-53 PS-3(3)]
+
+### 10.9 Citizenship Requirements
+
+Acme Health must verify that individuals accessing a system processing, storing, or transmitting [Assignment: organization-defined information types] meet [Assignment: organization-defined citizenship requirements]. [NIST 800-53 PS-3(4)]
+
+## 11. Workforce Access Management
+
+### 11.1 Access Authorization Policy
+
+Acme Health must implement policies and procedures to ensure that all members of the workforce have appropriate access to electronic protected health information and to prevent those workforce members who do not have access rights from obtaining access. [HIPAA Security Rule 164.308(a)(3)(i)]
+
+### 11.2 Authorization and Supervision
+
+Acme Health must implement procedures for the authorization and/or supervision of workforce members who work with electronic protected health information or in locations where it might be accessed. [HIPAA Security Rule 164.308(a)(3)(ii)(A)]
+
+### 11.3 Access Determination
+
+Acme Health must implement procedures to determine that the access of a workforce member to electronic protected health information is appropriate. [HIPAA Security Rule 164.308(a)(3)(ii)(B)]
+
+### 11.4 Access Termination
+
+Acme Health must implement procedures for terminating access to electronic protected health information when the employment of, or other arrangement with, a workforce member ends or as required by determinations of access appropriateness. [HIPAA Security Rule 164.308(a)(3)(ii)(C)]
+
+## 12. Documentation Management
+
+### 12.1 Written Documentation
+
+Acme Health must maintain policies and procedures in written form, which may be electronic. [HIPAA Security Rule 164.316(b)(1)]
+
+### 12.2 Documentation Retention
+
+Acme Health must retain documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+
+### 12.3 Documentation Availability
+
+Acme Health must make documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+### 12.4 Documentation Review and Updates
+
+Acme Health must review documentation periodically, and update as needed, in response to environmental or operational changes affecting the security of the electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]

@@ -1,0 +1,338 @@
+name: ci
+
+on:
+  # Push runs only on the branches a PR merges INTO: the train and main.
+  # A PR branch's commit ran twice before, once for `push` and once for
+  # `pull_request`, on 64 of 148 commits (#80, 9b measured it), and on
+  # Forgejo both runs test the same tree, the PR head, not the merge. So
+  # the pull_request run alone covers a PR branch, and the push run after
+  # each merge is the one that tests the merged tree. What this gives up: a
+  # branch pushed WITHOUT a PR gets no CI; open a PR (or run check.py).
+  push:
+    branches: [main, "release/**"]
+  pull_request:
+    # `edited` so that changing the pull request BODY re-runs the changelog
+    # job, which reads its exemption from the event payload
+    # (`github.event.pull_request.body`). Without it the default is
+    # opened/synchronize/reopened, and editing the body fires nothing -- worse,
+    # re-running the failed job REPLAYS THE ORIGINAL PAYLOAD, so it fails
+    # again exactly as though the exemption had been rejected, and the likely
+    # "fix" is a changelog fragment for a change with no user-visible effect.
+    # Found and measured by policyforge-23 (handle b5) on #234 (#250).
+    #
+    # `edited` also fires on a title change and on a BASE-BRANCH change. The
+    # other jobs are deliberately NOT gated off on edits: a base change is a
+    # real reason to re-test, and a job skipped on the edit run would post
+    # `skipped` for the same head and mask its earlier green in the checks
+    # view. The cost is a full re-run on a title typo, on a public repo.
+    types: [opened, synchronize, reopened, edited]
+
+# Least privilege, as content.yml and codeql.yml already declare. Without a
+# block this job ran with whatever default the repository grants. Nothing
+# here writes, and nothing calls the pull request API: tests and scanners
+# read the checkout. gitleaks is the binary (#30), which reads the checked-out
+# history, posts no PR comments and uses no token; a leak fails the job.
+# `changelog` reads the PR body from the event payload, not the API. So
+# `pull-requests: read`, which only gitleaks-action needed, is gone (#30).
+permissions:
+  contents: read
+
+jobs:
+  scan-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0  # gitleaks needs history to scan past commits too
+
+      # pip's download cache, keyed on both locks this job installs from
+      # (#80, fix 2). It caches downloads, not trust: `--require-hashes`
+      # checks every downloaded wheel against the lock, cached or fresh. A
+      # wheel pip BUILDS from a source archive is different: pip caches it
+      # and doesn't re-verify it against the lock (pip 26.2.1's
+      # prepare.py; ba found it on #88). So both hashed installs below also
+      # pass `--only-binary :all:`: pip never builds from a source archive
+      # here, and a future sdist-only pin fails the install loudly rather
+      # than landing in the cache unverified. (Run 340: 154 wheels, 0
+      # sdists, so this changes nothing that installs today.) A lock change
+      # changes the key, so a stale cache is never restored for a new lock.
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements/ci.txt
+            requirements/semgrep/semgrep.txt
+
+      # Every dependency from a hashed lock, so this job installs exactly what
+      # was reviewed rather than whatever resolved on the day — which also
+      # gives Dependabot's seven-day cooldown something to constrain. The
+      # project goes on last with --no-deps: it is the checkout, not a
+      # download. Regenerate the lock with the command in its header.
+      #
+      # No unpinned `pip install --upgrade pip` first: the lock pins pip
+      # itself by hash, so this install is the upgrade (Scorecard's
+      # Pinned-Dependencies check).
+      - name: Install project
+        run: |
+          pip install --require-hashes --only-binary :all: -r requirements/ci.txt
+          pip install --no-deps -e .
+
+      - name: ruff (lint)
+        run: ruff check src tests scripts
+
+      - name: ruff (format)
+        run: ruff format --check src tests scripts
+
+      # The gitleaks BINARY, pinned and checksummed, not gitleaks-action: the
+      # action asks the repository owner's account type, and an ORGANIZATION
+      # owner needs a paid licence. On the team's Forgejo the owner is an org,
+      # so the action failed with "missing gitleaks license" and pytest never
+      # ran (#7). The binary needs no licence and no token.
+      #
+      # The scan `scripts/check.py` runs locally (its GITLEAKS_ARGS; a test
+      # holds this line to them): `--log-opts=HEAD`, so both scan the history
+      # of the commit under test and nothing else.
+      # Without it, gitleaks scans every ref, and `fetch-depth: 0` fetches
+      # every branch on the server: a secret planted on an unrelated
+      # throwaway branch turned THIS PR's run red (#30, measured: run 127).
+      # What it no longer covers: a secret on some OTHER branch. That branch's
+      # own push run scans its own history, so nothing goes unscanned; it
+      # just fails there, not here. check.py scans the same scope (it used
+      # to scan every local ref, which let one session's flagged unpushed
+      # commit turn every session's gate red).
+      # The version is the one the team runs locally (8.30.1).
+      # The sha256 was checked against the release's own checksums.txt AND
+      # computed from the downloaded tarball, and the two agreed (#7). A
+      # tampered or substituted download fails `sha256sum -c` before it runs.
+      - name: gitleaks (secrets scan)
+        env:
+          GITLEAKS_VERSION: "8.30.1"
+          GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+        run: |
+          curl -sSfL -o /tmp/gitleaks.tgz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  /tmp/gitleaks.tgz" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/bin"
+          tar -xzf /tmp/gitleaks.tgz -C "$RUNNER_TEMP/bin" gitleaks
+          # On PATH for the steps after this one, so pytest's behavioural
+          # gitleaks test runs here rather than skipping (#31).
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/bin/gitleaks" version
+          "$RUNNER_TEMP/bin/gitleaks" detect --source . --verbose --redact --log-opts=HEAD
+
+      # The project environment (blocking), then semgrep's lock, which is no
+      # longer part of it. The second is in ADVISORY mode (#82; 80's ruling
+      # 1774): it lists and counts every advisory, and fails only when the
+      # product shares one or the audit can't run. It's the same script the
+      # gate runs, so CI and the gate report exactly the same thing.
+      - name: pip-audit (dependency CVEs)
+        run: |
+          pip-audit
+          python scripts/semgrep_lock_audit.py
+
+      - name: bandit (static security analysis)
+        run: bandit -c pyproject.toml -r src
+
+      # In its own environment, from its own hashed lock. semgrep pins its
+      # dependencies exactly; installed alongside the project those pins
+      # became the project's, and Dependabot proposed bumps that could never
+      # install.
+      - name: semgrep (broader SAST)
+        run: |
+          python -m venv "$RUNNER_TEMP/semgrep"
+          "$RUNNER_TEMP/semgrep/bin/pip" install --require-hashes --only-binary :all: -r requirements/semgrep/semgrep.txt
+          # Through semgrep_gate, not `--error`, which fails only on findings:
+          # a rule timeout, a partial parse or an oversized file was a warning
+          # and the step passed (#43). Same script as scripts/check.py.
+          python scripts/semgrep_gate.py --semgrep "$RUNNER_TEMP/semgrep/bin/semgrep"
+
+      - name: mdformat (markdown quality)
+        # mdformat-gfm and mdformat-frontmatter are already project
+        # dependencies, so no extra install here — and pulling them from the
+        # pinned project install keeps this identical to what pre-commit and
+        # scripts/check.py run. Without mdformat-frontmatter, mdformat
+        # rewrites YAML frontmatter into a heading.
+        # Every tracked markdown file, rather than a hand-maintained list that
+        # drifts. `scripts/check.py` globs every *.md in the tree, so a fixed
+        # list here meant CHANGELOG.md and MEASUREMENTS.md were gated locally
+        # and not in CI — the direction that lets a pre-push gate fail on
+        # something CI called clean. git ls-files is the same set CI has
+        # checked out, and output/ and local_content/ are gitignored, so they
+        # stay excluded without naming them.
+        # `set -o pipefail` because GitHub's default shell is `bash -e` with
+        # pipefail OFF: measured, `false | xargs -0 mdformat --check` exits 0
+        # under `bash -e` and 1 with pipefail. Without it, `git ls-files`
+        # failing made this step pass having examined nothing.
+        #
+        # The count assertion closes the half pipefail cannot: `mdformat
+        # --check` with no paths prints "No files have been passed in" and
+        # exits 0, so a pathspec that stops matching reads as "all clean".
+        # Nothing failed, so pipefail never fires.
+        shell: bash
+        run: |
+          set -o pipefail
+          mapfile -t -d '' files < <(git ls-files -z '*.md')
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "::error::git ls-files matched no *.md -- the pathspec stopped matching" >&2
+            exit 1
+          fi
+          echo "checking ${#files[@]} markdown file(s)"
+          mdformat --check "${files[@]}"
+
+      # In `scan-and-test` rather than the pull-request job because it reads
+      # committed files, not the diff: a workflow edited directly on main
+      # must fail here too. The finding that prompted it was in THIS file,
+      # four lines above -- see scripts/shell_status.py.
+      - name: committed shell reports real exit status
+        run: python scripts/shell_status.py
+
+      # -rs: every skip is named in the log with its reason (#31). CI skipped
+      # 14 where a local run skipped 2, and a bare -q said neither which nor why.
+      - name: pytest
+        run: pytest -q -rs --junitxml="$RUNNER_TEMP/pytest.xml"
+
+      # The skips must be exactly the committed list: a new one is a test
+      # CI stopped running without anyone deciding it (#31).
+      - name: expected skips only
+        run: python scripts/skip_gate.py "$RUNNER_TEMP/pytest.xml"
+
+      # Build the public commit P from this head and run the publish guard on
+      # it (#49). G is the newest vX.Y.Z tag, so this needs the tags and the
+      # history that `fetch-depth: 0` above brings; it touches no remote.
+      - name: public commit passes the publish guard
+        run: python scripts/public_rehearsal.py
+
+  # The test suite on the other two platforms people run this on. Two
+  # Windows-only defects reached main with the Linux job green (CRLF in
+  # generated Markdown, a CRLF-hashed catalog), so the platforms are tested
+  # rather than assumed. Python 3.12 only, the version CI, the image and the
+  # Homebrew formula all use. Scanners stay on the Linux job: they read the
+  # same source on every platform.
+  #
+  # Same hashed lock as above: ci.txt is a uv --universal lock, so it
+  # resolves on all three (pywin32 carries a win32 marker). A leg that
+  # cannot install hashed is a lock bug to fix, not a reason to install
+  # unhashed. No fail-fast, so one platform's failure does not hide the
+  # other's, and no skips or continue-on-error: these failures are the point.
+  pytest-platforms:
+    name: pytest (${{ matrix.os }}, 3.12)
+    # GitHub's hosted Windows and macOS runners only. The team's Forgejo
+    # runner offers a Linux container alone, so on it these legs matched no
+    # runner and PENDED FOREVER, and a pending check blocks every merge
+    # (#7). Skipped there instead: a skipped job reports `skipped`, never
+    # pending. On github.com, `server_url` is exactly this, so the legs run
+    # there unchanged. What Forgejo CI therefore does NOT cover (Windows,
+    # macOS) is a scope question for 80, recorded on the PR, not settled here.
+    if: ${{ github.server_url == 'https://github.com' }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    # bash on every leg. On Windows `run:` defaults to pwsh, which does not stop
+    # on a failing native command mid-step and only checks the last one's exit
+    # code: a failed hashed install followed by a working `pip install -e .`
+    # would go green and hide exactly the lock failure this job is here for.
+    # Git Bash is on the Windows runners and runs with -e, as on Linux.
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install project
+        run: |
+          pip install --require-hashes -r requirements/ci.txt
+          pip install --no-deps -e .
+
+      # -rs: every skip is named in the log with its reason (#31). CI skipped
+      # 14 where a local run skipped 2, and a bare -q said neither which nor why.
+      - name: pytest
+        run: pytest -q -rs
+
+  # Fails a pull request that changes what a user sees and says nothing about
+  # it in CHANGELOG.md. Two merges shipped that way on 2026-09-18, one of them
+  # a config flag that runs a second model; both pull requests were reviewed
+  # and every per-change check passed. A rule for it already existed in
+  # PULL_REQUEST_TEMPLATE.md's checklist and was not run — a checklist is the
+  # remembered form, and the remembered form is what failed three times in one
+  # evening. scripts/changelog_guard.py holds the rule and the opt-out; this
+  # job only supplies the two facts it cannot know, the branch point and the
+  # pull request body.
+  #
+  # pull_request only: on a push there is no body to read an exemption from,
+  # so running it there could fail a change nobody can exempt.
+  changelog:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0  # the merge-base has to exist for base...HEAD
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.12"
+
+      # BOTH values reach the shell through `env:`, never through `${{ }}`
+      # inside a `run:` block, which is a script injection. A pull request
+      # body is obviously attacker text — and so is a branch NAME, which a
+      # fork can set to anything a ref permits. The first draft handled the
+      # body correctly and interpolated `github.base_ref` two lines below
+      # it; semgrep caught that, which is what it is in the gate for. The
+      # lesson had been applied to one variable and not its neighbour.
+      - name: Write the pull request body to a file
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.txt"
+
+      - name: Changelog entry present, or exempted with a reason
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          python scripts/changelog_guard.py \
+            --base "origin/$BASE_REF" \
+            --body-file "$RUNNER_TEMP/pr-body.txt"
+
+      # Fragments are validated here rather than at release, because a
+      # malformed one discovered while cutting a tag is discovered at the
+      # worst possible moment. The defects it catches — a CR, a stray `## `,
+      # an empty file — are the ones that did real damage in the shared
+      # section this directory replaces.
+      - name: Changelog fragments are well-formed
+        run: python scripts/changelog_fragments.py --check
+
+  # The prompt version ledger only grows (#424). tests/test_prompt_fingerprint_file.py
+  # holds the ledger equal to the registry, but against the ledger as committed
+  # in the SAME change, so a change that edits a prompt and rewrites its
+  # recorded fingerprint passes it. This compares with the BASE branch's
+  # ledger, which the change cannot edit. pull_request only, as above: on a
+  # push there is no base to hold it to. Exit 2 (the base did not resolve) is
+  # a failure, never a pass.
+  prompt-ledger:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0  # origin/<base> has to exist to be read
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.12"
+
+      # Through `env:`, never `${{ }}` in `run:`: a branch name is attacker
+      # text (see the changelog job above).
+      - name: Nothing the base recorded is changed or removed
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: python scripts/prompt_ledger_grows.py --base "origin/$BASE_REF"

@@ -1,0 +1,140 @@
+id: hipaa-privacy-rule
+name: HIPAA Privacy Rule
+framework_id: hipaa-privacy
+licence: public-domain
+source: eCFR (renderer and versioner XML), 45 CFR 164 Subpart E, via policyforge etl-hipaa-privacy
+notes: A US government work, so freely redistributable. The Privacy Rule, 45 CFR 164.500-535,
+  with the Definitions section (164.501) excluded. Every paragraph is under the citation eCFR
+  itself gives it. ECFR STILL PRINTS TEXT A COURT VACATED (Purl v. HHS, 2025); it ships as
+  eCFR prints it, and the ids under vacated below are not used for generation. This is the
+  project's reading of the judgment, not legal advice. NO PUBLISHED MAPPING TO 800-53 is known,
+  so this catalog is not anchored and is not counted in /coverage's 800-53 figures. Read README.md
+  before citing it.
+family: section
+vacated:
+  judgment: Purl v. HHS, No. 2:24-cv-228-Z (N.D. Tex.), Amended Judgment (ECF 114), 2025-07-03;
+    appeal No. 25-10743 dismissed 2025-09-10
+  rule: HIPAA Privacy Rule To Support Reproductive Health Care Privacy, 89 FR 32976 (FR Doc.
+    2024-08503)
+  note: This project's reading of the judgment, not legal advice. The catalog carries eCFR's
+    text as eCFR prints it; these ids are not used for generation, and the revised ones are
+    generated from the pre-rule wording quoted here.
+  pre_rule_source:
+    url: https://www.ecfr.gov/api/renderer/v1/content/enhanced/2024-04-25/title-45?part=164&subpart=E
+    sha256: 18ef17dad305b38b416ad69310334a6e1f5b3873f4a7aef5ff12a5490e1c2b6b
+  added:
+  - 164.502(a)(5)(iii)
+  - 164.502(a)(5)(iii)(A)
+  - 164.502(a)(5)(iii)(A)(1)
+  - 164.502(a)(5)(iii)(A)(2)
+  - 164.502(a)(5)(iii)(A)(3)
+  - 164.502(a)(5)(iii)(B)
+  - 164.502(a)(5)(iii)(B)(1)
+  - 164.502(a)(5)(iii)(B)(2)
+  - 164.502(a)(5)(iii)(B)(3)
+  - 164.502(a)(5)(iii)(C)
+  - 164.502(a)(5)(iii)(C)(1)
+  - 164.502(a)(5)(iii)(C)(2)
+  - 164.502(a)(5)(iii)(D)
+  - 164.509(a)
+  - 164.509(a)(1)
+  - 164.509(a)(2)
+  - 164.509(b)
+  - 164.509(b)(1)
+  - 164.509(b)(1)(i)
+  - 164.509(b)(1)(ii)
+  - 164.509(b)(1)(iii)
+  - 164.509(b)(2)
+  - 164.509(b)(2)(i)
+  - 164.509(b)(2)(ii)
+  - 164.509(b)(2)(iii)
+  - 164.509(b)(2)(iv)
+  - 164.509(b)(2)(v)
+  - 164.509(b)(3)
+  - 164.509(c)
+  - 164.509(c)(1)
+  - 164.509(c)(1)(i)
+  - 164.509(c)(1)(i)(A)
+  - 164.509(c)(1)(i)(B)
+  - 164.509(c)(1)(ii)
+  - 164.509(c)(1)(iii)
+  - 164.509(c)(1)(iv)
+  - 164.509(c)(1)(v)
+  - 164.509(c)(1)(vi)
+  - 164.509(c)(2)
+  - 164.509(d)
+  - 164.512(c)(3)
+  - 164.520(b)(1)(ii)(F)
+  - 164.520(b)(1)(ii)(G)
+  - 164.520(b)(1)(ii)(H)
+  - '164.535'
+  sections:
+  - '164.509'
+  - '164.535'
+  revised:
+    164.502(a)(1)(vi):
+      scope: subtree
+      ids:
+      - 164.502(a)(1)(vi)
+      - 164.502(a)(1)(vi)(A)
+      - 164.502(a)(1)(vi)(B)
+      - 164.502(a)(1)(vi)(C)
+      added_ids:
+      - 164.502(a)(1)(vi)(A)
+      - 164.502(a)(1)(vi)(B)
+      - 164.502(a)(1)(vi)(C)
+      pre_rule_text: (vi) As permitted by and in compliance with this section, § 164.512,
+        § 164.514(e), (f), or (g).
+    164.502(g)(5):
+      scope: subtree
+      ids:
+      - 164.502(g)(5)
+      - 164.502(g)(5)(i)
+      - 164.502(g)(5)(i)(A)
+      - 164.502(g)(5)(i)(A)(1)
+      - 164.502(g)(5)(i)(A)(2)
+      - 164.502(g)(5)(i)(B)
+      - 164.502(g)(5)(ii)
+      added_ids:
+      - 164.502(g)(5)(i)(A)(1)
+      - 164.502(g)(5)(i)(A)(2)
+      pre_rule_text: '(5) Implementation specification: Abuse, neglect, endangerment situations.
+        Notwithstanding a State law or any requirement of this paragraph to the contrary,
+        a covered entity may elect not to treat a person as the personal representative of
+        an individual if: (i) The covered entity has a reasonable belief that: (A) The individual
+        has been or may be subjected to domestic violence, abuse, or neglect by such person;
+        or (B) Treating such person as the personal representative could endanger the individual;
+        and (ii) The covered entity, in the exercise of professional judgment, decides that
+        it is not in the best interest of the individual to treat the person as the individual''s
+        personal representative.'
+    '164.512':
+      scope: statement
+      ids:
+      - '164.512'
+      added_ids: []
+      pre_rule_text: A covered entity may use or disclose protected health information without
+        the written authorization of the individual, as described in § 164.508, or the opportunity
+        for the individual to agree or object as described in § 164.510, in the situations
+        covered by this section, subject to the applicable requirements of this section. When
+        the covered entity is required by this section to inform the individual of, or when
+        the individual may agree to, a use or disclosure permitted by this section, the covered
+        entity's information and the individual's agreement may be given orally.
+    164.512(c):
+      scope: heading
+      ids:
+      - 164.512(c)
+      added_ids: []
+      pre_rule_text: '(c) Standard: Disclosures about victims of abuse, neglect or domestic
+        violence —'
+    164.512(f)(1)(ii)(C):
+      scope: self
+      ids:
+      - 164.512(f)(1)(ii)(C)
+      added_ids: []
+      pre_rule_text: '(C) An administrative request, including an administrative subpoena
+        or summons, a civil or an authorized investigative demand, or similar process authorized
+        under law, provided that:'
+source_ref: '2026-09-17'
+source_url: https://www.ecfr.gov/api/renderer/v1/content/enhanced/2026-09-17/title-45?part=164&subpart=E
+content_sha256: 31fcffdc898e4b195296f7e5e5811ea10908d6d3ea4ff5728f5759561ae5c903
+fetched_at: '2026-09-26'

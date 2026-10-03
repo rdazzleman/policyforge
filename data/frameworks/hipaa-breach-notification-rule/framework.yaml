@@ -1,0 +1,15 @@
+id: hipaa-breach-notification-rule
+name: HIPAA Breach Notification Rule
+framework_id: hipaa-breach
+licence: public-domain
+source: eCFR (renderer and versioner XML), 45 CFR 164 Subpart D, via policyforge etl-hipaa-privacy
+notes: A US government work, so freely redistributable. The Breach Notification Rule, 45 CFR
+  164.400-414, with the Definitions section (164.402) excluded. Every paragraph is under the
+  citation eCFR itself gives it. NO PUBLISHED MAPPING TO 800-53 is known, so this catalog
+  is not anchored and is not counted in /coverage's 800-53 figures. Read README.md before
+  citing it.
+family: section
+source_ref: '2026-09-17'
+source_url: https://www.ecfr.gov/api/renderer/v1/content/enhanced/2026-09-17/title-45?part=164&subpart=D
+content_sha256: 0dba75802be7e06efcfdde43931dcfb1c2353bed26d58e0e0d6222f15069c1d0
+fetched_at: '2026-09-26'

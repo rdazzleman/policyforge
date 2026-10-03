@@ -1,0 +1,19 @@
+id: nist-ai-rmf-playbook
+name: NIST AI RMF Playbook
+framework_id: nist-ai-rmf-playbook
+licence: public-domain
+source: NIST AIRC (airc.nist.gov/docs/playbook.json), via policyforge etl-ai-rmf-playbook
+notes: A US government work, so freely redistributable. NIST's suggested actions for each
+  of the 72 AI RMF Core subcategories. THE PLAYBOOK IS VOLUNTARY - NIST's suggestions, which
+  a document may say NIST suggests and never that NIST requires. Versioned separately from
+  the Core, with no revision number of its own, so it is pinned to one export by the export's
+  SHA-256 and a different export is refused. Carries no outcome wording - Control titles are
+  PolicyForge's labels, and each outcome is read from nist-ai-rmf under the same id. Read
+  README.md before citing this catalog.
+core: nist-ai-rmf 1.0
+source_sha256: aecbee3d3c8820816d295b11d10fb61324b17c25c2ff39ee95e2aa5654555bba
+source_last_modified: '2026-06-11'
+source_ref: AIRC export 2026-06-11 (AI RMF 1.0)
+source_url: https://airc.nist.gov/docs/playbook.json
+content_sha256: 63bc1db9c760dcbcddbcf5376a5aeea114f2082741364781fa9771e651fd4445
+fetched_at: '2026-09-24'

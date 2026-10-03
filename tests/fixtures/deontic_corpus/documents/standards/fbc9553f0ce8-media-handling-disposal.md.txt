@@ -1,0 +1,212 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001216
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 3cb47d2b416dc86d
+  provider: litellm
+  provider_class: third-party
+---
+
+# Media Handling & Disposal Standard
+
+**Organization:** Example Org
+**Owning Team:** IT Asset Management
+**Status:** [Draft | Approved]
+**Effective Date:** [Effective Date]
+
+## 1. Purpose
+
+This Standard establishes the requirements for the protection, handling, transport, sanitization, and disposal of digital and non-digital media at Example Org. It addresses the full media lifecycle — from receipt into a facility through final destruction or release out of organizational control — and ensures that media containing sensitive information, including electronic protected health information (ePHI) and personally identifiable information (PII), is protected against unauthorized access, alteration, disclosure, and destruction.
+
+## 2. Scope
+
+This Standard applies to all digital and non-digital system media owned, controlled, or processed by Example Org, including magnetic tapes, external removable hard drives, flash/thumb drives, diskettes, compact disks, digital video disks, and hard-copy documents, and to all personnel and roles that handle such media.
+
+## 3. Roles and Responsibilities
+
+**IT Asset Management** is accountable for this process end to end, including receipt and removal of media, movement of media within facilities, transport accountability, sanitization and disposal actions, and the production and retention of the evidence artifacts defined in this Standard (Certificates of destruction and the Media transport log).
+
+**IT Asset Management** must designate official(s) to manage the development, documentation, and dissemination of the media protection policy and procedures. [NIST MP-1 | ARC-AMPE MP-1]
+
+## 4. Media Protection Policy and Procedures
+
+### 4.1 Policy Development and Dissemination
+
+Example Org must develop, document, and disseminate to applicable personnel or roles an organization-level media protection policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST MP-1 | ARC-AMPE MP-1]
+
+Example Org must develop, document, and disseminate procedures to facilitate implementation of the media protection policy and the associated media protection controls. [NIST MP-1 | ARC-AMPE MP-1]
+
+### 4.2 Policy Review and Update
+
+The media protection policy and procedures must be reviewed and updated following organization-defined events (such as assessment or audit findings, security or privacy incidents, and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines). This review must occur at least every one (1) year. [NIST MP-1 | ARC-AMPE MP-1]
+
+### 4.3 Documentation Retention (HIPAA)
+
+The media protection policies and procedures must be maintained in written (which may be electronic) form, retained for 6 years from the date of creation or the date they were last in effect (whichever is later), made available to persons responsible for implementing the procedures, and reviewed and updated periodically in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii) | HIPAA 164.316(b)(2)(iii)]
+
+## 5. Media Access and Use
+
+### 5.1 Receipt, Removal, and Internal Movement
+
+IT Asset Management must implement policies and procedures that govern the receipt and removal of hardware and electronic media containing electronic protected health information into and out of a facility, and the movement of these items within the facility. [HIPAA 164.310(d)(1)]
+
+### 5.2 Access Restriction
+
+Access to digital and non-digital media (including all types of media containing PII) must be restricted to organization-defined authorized personnel or roles. [NIST MP-2 | ARC-AMPE MP-2]
+
+Use of media write capabilities must be restricted by disabling CD/DVD writers and USB ports, allowing access only to authorized individuals with a valid need to know, in compliance with the latest published NIST SP 800-88. [ARC-AMPE MP-2]
+
+A risk assessment must be conducted to determine what sensitive information, if any, can be stored on certain media types and who is authorized with a need to know that information. [ARC-AMPE MP-2]
+
+### 5.3 Workforce Access to ePHI
+
+Policies and procedures must be implemented ensuring all workforce members have appropriate access to electronic protected health information and preventing workforce members without such access from obtaining it, including:
+
+- procedures for authorization and/or supervision of workforce members; [HIPAA 164.308(a)(3)(ii)(A)]
+- procedures to determine that workforce access is appropriate; and [HIPAA 164.308(a)(3)(ii)(B)]
+- procedures for terminating access when employment or other arrangements end. [HIPAA 164.308(a)(3)(ii)(C)]
+
+[HIPAA 164.308(a)(3)(i)]
+
+### 5.4 Workstation and Integrity Safeguards
+
+Physical safeguards must be implemented for all workstations that access electronic protected health information to restrict access to authorized users. [HIPAA 164.310(c)]
+
+Policies and procedures must be implemented to protect electronic protected health information from improper alteration or destruction, and electronic mechanisms must be implemented to corroborate that it has not been altered or destroyed in an unauthorized manner. [HIPAA 164.312(c)(1) | HIPAA 164.312(c)(2)]
+
+## 6. Media Marking
+
+### 6.1 Marking Requirements
+
+System media must be marked indicating the distribution limitations, handling caveats, and applicable security markings (if any) of the information. At a minimum, markings must include:
+
+- creation date;
+- information safeguarding markings (based on applicable record retention regulations); and
+- organization-defined contact information,
+
+with backup tapes also labeled with the system name, and media containing PII or PHI (or its container, if labeling the media is not practicable) marked consistently with ACA record retention regulations. [NIST MP-3 | ARC-AMPE MP-3]
+
+### 6.2 Marking Exemptions
+
+Specific types of media may be exempted from marking if the media remain within organization-defined controlled areas or secure environments. Such exemptions must be specified in writing by the Chief Information Officer or their designated representative. [NIST MP-3 | ARC-AMPE MP-3]
+
+## 7. Media Storage
+
+### 7.1 Physical Control and Secure Storage
+
+Digital and non-digital media (including magnetic tapes, external removable hard drives, flash/thumb drives, diskettes, compact disks, and digital video disks) must be physically controlled and securely stored within organization-defined controlled areas. [NIST MP-4 | ARC-AMPE MP-4]
+
+Stored system media must be protected until the media are destroyed or sanitized using approved equipment, techniques, and procedures. [NIST MP-4 | ARC-AMPE MP-4]
+
+### 7.2 Storage Protections
+
+- Digital media must be encrypted using the latest published FIPS 140-compliant encryption standards. [ARC-AMPE MP-4]
+- Non-digital media must be stored in secure storage such as locked cabinets or safes. [ARC-AMPE MP-4]
+- Removable media containing PII must be stored in a securable area or locked container. [ARC-AMPE MP-4]
+- Magnetic media containing PII recorded alongside other data must be protected as if all data on the media were PII. [ARC-AMPE MP-4]
+- Surplus equipment must be stored securely while not in use. [ARC-AMPE MP-4]
+
+### 7.3 Storage Area Access Logging
+
+Access to media storage areas must be restricted, and access attempts and access granted must be logged using [Assignment: organization-defined automated mechanisms]. [NIST MP-4(2)]
+
+## 8. Media Transport
+
+### 8.1 Transport Protections
+
+Digital and non-digital media containing sensitive information (such as PII) must be protected and controlled during transport outside of controlled areas using organization-defined controls such as:
+
+- a latest published FIPS 140-compliant encryption module;
+- locked/securable containers or tamper-evident packaging transported via authorized personnel;
+- a trackable receipt by the commercial shipping carrier; and
+- sealed packing cartons for non-digital media containing sensitive information.
+
+[NIST MP-5 | ARC-AMPE MP-5]
+
+### 8.2 Transport Accountability and Documentation
+
+Accountability for system media must be maintained during transport outside of controlled areas, including maintaining a record of the movements of hardware and electronic media and of any person responsible for them. IT Asset Management must record these movements in the Media transport log. [NIST MP-5 | ARC-AMPE MP-5 | HIPAA 164.310(d)(2)(iii)]
+
+Activities associated with the transport of system media must be documented. [NIST MP-5 | ARC-AMPE MP-5]
+
+Activities associated with the transport of system media must be restricted to authorized personnel. [NIST MP-5 | ARC-AMPE MP-5]
+
+An identified custodian must be employed during transport of system media outside of controlled areas. [NIST MP-5(3)]
+
+### 8.3 Backup Before Equipment Movement
+
+A retrievable, exact copy of electronic protected health information must be created, when needed, before movement of equipment. [HIPAA 164.310(d)(2)(iv)]
+
+## 9. Media Sanitization and Disposal
+
+### 9.1 Sanitization Prior to Disposal, Release, or Reuse
+
+Digital and non-digital system media must be sanitized prior to disposal, release out of organizational control, or release for reuse using organization-defined sanitization techniques and procedures in accordance with the latest published NIST SP 800-88 guidelines. For electronic protected health information, this includes addressing the final disposition of the information and the hardware or media on which it is stored, and removing ePHI from electronic media before the media are made available for re-use. [NIST MP-6 | ARC-AMPE MP-6 | HIPAA 164.310(d)(2)(i) | HIPAA 164.310(d)(2)(ii)]
+
+Sanitization mechanisms must be employed with the strength and integrity commensurate with the security category or classification of the information. [NIST MP-6 | ARC-AMPE MP-6]
+
+### 9.2 Hard-Copy and Surplus Equipment Disposal
+
+- Hard-copy documents must be finely shredded using approved equipment, techniques, and procedures with cross-cut shredding at a minimum. [ARC-AMPE MP-6]
+- Media containing PII must be sanitized prior to disposal, release out of the organization, or release for reuse using the latest FIPS-validated media sanitization techniques or procedures. [ARC-AMPE MP-6]
+- Surplus equipment must be disposed of or sanitized in accordance with the latest published NIST SP 800-88. [ARC-AMPE MP-6]
+
+### 9.3 Sanitization and Disposal Oversight
+
+Media sanitization and disposal actions must be reviewed, approved, tracked, documented, and verified. [NIST MP-6(1) High | ARC-AMPE MP-6(1)]
+
+Sensitive information, including PII, must be securely destroyed or disposed of appropriately and reasonably and in accordance with retention schedules. [ARC-AMPE MP-6(1)]
+
+### 9.4 Sanitization Records
+
+Media-related sanitization records must contain:
+
+- the name of the media recipient;
+- the signature of the media recipient;
+- the date/time received;
+- the media control number and contents;
+- movement or routing information; and
+- if disposed of, the date, time, and method of destruction.
+
+[ARC-AMPE MP-6(1)]
+
+IT Asset Management must produce a Certificate of destruction for each disposal action and retain it as evidence of the sanitization and disposal process.
+
+### 9.5 Sanitization Equipment Testing
+
+Sanitization equipment and procedures must be tested to ensure that the intended sanitization is being achieved. This testing must occur within every one (1) year. [NIST MP-6(2) High | ARC-AMPE MP-6(2)]
+
+### 9.6 Portable Storage Device Sanitization
+
+Nondestructive sanitization techniques must be applied to portable storage devices prior to connecting such devices to the system under [Assignment: organization-defined circumstances]. [NIST MP-6(3) High]
+
+### 9.7 Dual Authorization for Sanitization
+
+Dual authorization must be enforced for the sanitization of [Assignment: organization-defined system media]. [NIST MP-6(7)]
+
+### 9.8 Remote Purge or Wipe Capability
+
+The capability must be provided to purge or wipe information from [Assignment: organization-defined systems or system components] \[Selection: remotely; under [Assignment: organization-defined conditions]\]. [NIST MP-6(8)]
+
+## 10. Evidence and Records
+
+This process runs on a continuous basis and must produce and retain the following evidence artifacts:
+
+| Artifact                   | Produced By         | Associated Requirements                                    |
+| -------------------------- | ------------------- | ---------------------------------------------------------- |
+| Certificate of destruction | IT Asset Management | Media sanitization and disposal actions (Section 9.3, 9.4) |
+| Media transport log        | IT Asset Management | Transport accountability and documentation (Section 8.2)   |
+
+## 11. Compliance and Enforcement
+
+Compliance with this Standard is mandatory for all personnel and roles within scope. Exceptions must be documented and approved in accordance with the organization's exception management process. Violations may result in disciplinary action in accordance with organizational policy.
+
+## 12. Revision History
+
+| Version | Date   | Author              | Description     |
+| ------- | ------ | ------------------- | --------------- |
+| 1.0     | [Date] | IT Asset Management | Initial release |

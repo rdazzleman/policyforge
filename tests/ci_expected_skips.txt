@@ -1,0 +1,14 @@
+# The tests CI's Linux job skips on purpose, checked after every run by
+# scripts/skip_gate.py (#31): a skip not listed here, or listed and not seen,
+# fails CI. Format: <count> <test module>::<function> | <reason, with any
+# file.py:NNN removed>. Keep each reason honest: it is why CI doesn't run it.
+#
+# Two printed commands that are illustrations, not invocations. They skip
+# locally too, so they aren't a CI gap.
+2 tests.test_printed_commands_run::test_every_flag_in_a_printed_command_exists | is illustrative, not an invocation
+
+# The real-container check of #96 (80 on #90: the token is not in the
+# container's environment). Opt-in, so it skips alike in CI (no Docker) and in
+# every local gate; the argv-and-mount test that proves the same thing runs
+# everywhere. Run it with POLICYFORGE_DOCKER_TESTS=1 at the cut.
+1 tests.test_release_local::test_the_token_is_not_in_a_real_containers_environment | opt-in: POLICYFORGE_DOCKER_TESTS=1 runs it, with docker and the release image

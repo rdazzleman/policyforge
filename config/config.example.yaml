@@ -1,0 +1,291 @@
+# Copy this to config.yaml (already gitignored) and fill in your own values.
+# Never put an actual API key in this file — reference an environment
+# variable name instead, and export that variable in your shell.
+#
+# A `.env` file is not enough on its own: nothing in this project loads
+# one. LiteLLM happens to read `.env` when it is imported, so keys appear
+# to work through `provider: litellm` and through nothing else, which is a
+# difference no user could infer. Export the variable, or source the file
+# yourself, and the same instruction holds for every provider.
+
+llm:
+  # Seven providers: anthropic, bedrock, vertex, gemini, openai-compat
+  # (alias: local), litellm, cascade. This block uses anthropic; a working
+  # block for each of the others is at the end of this file.
+  provider: anthropic
+  model: claude-sonnet-5       # an example — check your provider's model list
+  # The NAME of the environment variable holding the key, never the key.
+  # Required by anthropic; optional for openai-compat and litellm (a local
+  # server usually needs none, and LiteLLM can find most vendors' keys under
+  # their own conventional names). bedrock and vertex ignore it and use their
+  # cloud's normal credential chain.
+  api_key_env: ANTHROPIC_API_KEY
+
+  # Where this provider sends its bytes: local, self-hosted, or third-party.
+  # Normally inferred — a hosted API is third-party, a loopback base_url is
+  # local, an RFC 1918 one is self-hosted — and `policyforge boundary` shows
+  # what was inferred and why. Declare it when the inference is wrong, which
+  # is usually a self-hosted model behind a public DNS name. `local` means a
+  # model on THIS machine, and declaring it on an endpoint that is not one
+  # (a hosted API, a private-network or public address) is refused.
+  # classification: self-hosted
+
+  # Tighten what may be sent where. Each entry is the most exposed provider
+  # class that class of content may reach. Defaults: licensed content may
+  # only reach a local model; everything else may reach a third party.
+  # These tighten only.
+  # boundary:
+  #   organization-internal: self-hosted   # our own drafts stay inside
+
+  # If your organisation has a data agreement that covers sending licensed
+  # content (HITRUST, GovRAMP, SOC 2) to a hosted provider, declare that
+  # provider here. Licensed content may then reach it, and only it; every
+  # such call records this declaration in the ledger. Absent, licensed
+  # content reaches only a local model. Covers `llm:` only in this version.
+  # It names who the agreement is with: for openai-compat, the local alias
+  # and litellm with an api_base, add `base_url` (matched by scheme, host and port);
+  # for litellm with no api_base, add `vendor` (e.g. openrouter).
+  # licensed_agreement:
+  #   provider: anthropic          # must match llm.provider
+  #   model: claude-sonnet-5       # optional: only this model
+  #   reference: "DPA 2026-02 s.7" # optional: recorded, never checked
+  #   base_url: https://openrouter.ai/api/v1   # openai-compat, local, litellm+api_base
+  #   vendor: openrouter                       # litellm with no api_base
+
+  # Every model call is recorded — provider, model, the document or control
+  # it was about, token counts, cost, and a hash of the prompt. Never the
+  # prompt or the reply: a record that quoted what it saw would copy
+  # licensed content into a file under output/, which is the leak it exists
+  # to disprove. Read it back with `policyforge model-log`.
+  # ledger:
+  #   enabled: true                        # the default
+  #   path: output/.model-log/calls.jsonl  # the default; under gitignored output/
+
+# Optional. A second model that judges whether a cited passage actually
+# supports the claim made from it. Off unless `answering: true`, because it
+# costs one model call per cited sentence, on top of the answer itself.
+#
+# It must be a DIFFERENT model from the one writing the answers: a model
+# checking its own work shares every blind spot it had while producing it.
+# It also refuses to run on a provider that cannot be held to a schema —
+# an unconstrained verdict is not worth having — so it reports rather than
+# degrades. A failed judgement is shown as a warning above the answer, the
+# way a citation disagreement already is; it never rewrites or withholds
+# the answer.
+# entail:
+#   answering: true
+#   model: openrouter/deepseek/deepseek-v4-pro
+#   api_key_env: OPENROUTER_API_KEY
+#   max_tokens: 2000        # the judge's own budget, separate from the answer's
+
+frameworks:
+  # Where to look for framework catalogs, in order. The first match for an
+  # id wins, so your own newer export shadows a bundled one without deleting
+  # anything.
+  search_paths:
+    - data/frameworks     # bundled with policyforge: 800-53, HIPAA (public domain)
+    - frameworks          # your own, committed alongside your docs/ tree
+    - local_content       # your own, deliberately kept out of git
+
+  # Some catalogs are licensed rather than public domain — HITRUST CSF and
+  # GovRAMP are the ones this project maps. Whether your repository may hold
+  # a copy is a question about YOUR licence, and only you can answer it.
+  #
+  # Leave this false and `policyforge check` fails if licensed content is
+  # ever committed here — keep it under local_content/ (gitignored) instead.
+  # Set it true if your MyCSF/GovRAMP licence permits your own repository to
+  # carry the export, which for a private repo it commonly does.
+  allow_licensed_in_repo: false
+
+  # Which levels of a per-level framework apply to your organisation, as
+  # your own scoping answers decide them. Undeclared, `policyforge coverage`
+  # counts every level the catalog carries and says so. Maturity levels are
+  # alternatives: per control reference, the highest statement at or below
+  # the level you declare is counted, and the report names any reference
+  # counted at a lower one. Overlays are switched on by name, matched
+  # against your export's own level labels (case and spacing ignored); a
+  # name that matches none is refused, naming the nearest labels.
+  # scoping:
+  #   hitrust-csf:          # the key the HITRUST importer writes (HITRUST-CSF)
+  #     maturity: 2
+  #     overlays: ["<an overlay level label from your export>"]
+
+  # Each catalog directory should carry a framework.yaml declaring its terms:
+  #   id: hitrust-csf
+  #   name: HITRUST CSF v11.3
+  #   licence: licensed        # or: public-domain
+  #   source: MyCSF export, 2026-01
+  # A directory with no manifest is treated as licensed. Assuming content is
+  # freely redistributable because nobody said otherwise is the mistake with
+  # consequences.
+
+org:
+  name: "Example Org"
+  industry: ""
+
+  # Tools, keyed by the role each one fills. Naming the role is what makes
+  # substitution deterministic: the generator is told what a tool is FOR
+  # rather than inferring it from a product name, and every `[Identity
+  # Provider]` in a generated document becomes "Okta" or none of them does.
+  #
+  # `policyforge roles` lists every key. A flat list still works and still
+  # means "these exist, work out where they go" — it is just less exact.
+  vendors: {}
+    # identity_provider: Okta
+    # endpoint_protection: CrowdStrike
+    # ticketing: Jira
+    # siem: Splunk
+
+  # Teams, keyed by the function each one performs. This is what lets a
+  # generated procedure say "Identity and Access Management" instead of
+  # [Responsible Team].
+  teams: {}
+    # identity_access: IAM Engineering
+    # security_operations: SecOps
+    # grc: Security Assurance
+
+# Optional. Describes the system a System Security Plan is written about,
+# using NIST SP 800-18's plan elements. Only used by `policyforge ssp`;
+# anything left blank becomes a visible [Placeholder] in the workbook rather
+# than being guessed at. `--system-name` overrides `name` for a one-off run.
+system:
+  name: ""
+  identifier: ""
+  system_type: ""            # General Support System | Major Application | Minor Application
+  operational_status: ""     # Operational | Under Development | Major Modification
+  # FIPS 199 impact levels — Low | Moderate | High. `overall_categorization`
+  # is the high-water mark of the three, and is what picks the 800-53
+  # baseline you'd pass to `policyforge ssp --baseline`.
+  confidentiality: ""
+  integrity: ""
+  availability: ""
+  overall_categorization: ""
+  owner: ""
+  authorizing_official: ""
+  security_officer: ""
+  description: ""
+  environment: ""
+  interconnections: ""
+  laws_and_regulations: []
+
+# Optional. Where the Zardoz conversational shell reads from
+# (`policyforge zardoz`). Only used by `zardoz sync`.
+zardoz:
+  # A markdown content tree — the documents as files. Needs no credentials,
+  # so this alone is enough to sync and ask questions offline. In a
+  # repo-backed setup this is the source of truth and Confluence is the
+  # published copy, so where both are configured the tree wins.
+  content_dir: ""            # e.g. docs
+  # Your Confluence base URL, so you don't retype it on every sync.
+  host: ""                   # e.g. https://yourorg.atlassian.net/wiki
+  # An extra space pulled in as *supporting* context: real content, often
+  # more current than the governance set, but nobody has declared what it is
+  # or who owns it. Answers may draw on it and will say when they did.
+  # Leave blank to sync only the pages your topic registry declares, which
+  # are the ones that arrive knowing their topic, owner and tier.
+  supporting_space: ""       # e.g. RUNBOOKS
+
+# ---------------------------------------------------------------------------
+# Other providers
+#
+# To use one, replace the `llm:` block at the top of this file with it,
+# uncommented. Keep the classification, boundary and ledger settings you
+# want. Each block below is built by tests/test_config_example.py exactly as
+# written, so a block that stops matching the code fails the test suite.
+# ---------------------------------------------------------------------------
+
+# Amazon Bedrock. Needs `pip install "policyforge[bedrock]"`; credentials come
+# from the normal AWS chain. Set `model` to a Bedrock model ID your account
+# has access to.
+# llm:
+#   provider: bedrock
+#   model: your-bedrock-model-id
+#   region: us-east-1
+
+# Google Cloud Vertex AI Model Garden. Needs `pip install "policyforge[vertex]"`
+# and Application Default Credentials (`gcloud auth application-default login`).
+# `project_id` is required.
+# llm:
+#   provider: vertex
+#   model: your-vertex-model-id
+#   project_id: my-gcp-project
+#   region: us-central1
+
+# Google's own Gemini models, with an API key from AI Studio. This is NOT
+# the `vertex` block above: that one serves Claude models in Google Cloud
+# through Anthropic's client and needs a GCP project. This one needs only a
+# key, from https://aistudio.google.com, in the variable named here.
+#
+# The model name below was current in September 2026 and will not stay that
+# way: Google retires names, and a retired one answers with HTTP 404 naming
+# its replacement. This provider surfaces that message verbatim, so the
+# error tells you what to put here.
+#
+# Google's terms have historically differed between the free and paid tiers
+# on whether prompts may be used to improve their products. That is between
+# you and Google and it changes — confirm which tier your key is on before
+# sending anything you would not want used that way. See docs/subprocessors.md.
+# llm:
+#   provider: gemini
+#   model: gemini-3.6-flash
+#   api_key_env: GEMINI_API_KEY
+
+# Any OpenAI-compatible server. Pointed at a loopback address, as here, it is
+# classified `local`: nothing leaves the machine, which is the one setup
+# licensed catalog content may use by default. `local` is an alias. This
+# example is Ollama.
+# llm:
+#   provider: local
+#   model: qwen3:14b
+#   base_url: http://localhost:11434/v1
+
+# LiteLLM, one client for most hosted vendors, including OpenRouter. Needs
+# `pip install "policyforge[litellm]"`.
+# llm:
+#   provider: litellm
+#   model: openrouter/z-ai/glm-5.3-flash
+#   api_key_env: OPENROUTER_API_KEY
+
+# Cascade: ask `primary` first, and escalate to `escalate_to` only when the
+# primary exhausts its reasoning budget without starting an answer. A wrong
+# answer does not escalate; the provider layer cannot see what is wrong with
+# one. Each half is a provider block in the same shape as any of the above.
+# The cascade is classified by its more exposed half, so a local primary with
+# a hosted escalation counts as third-party.
+# llm:
+#   provider: cascade
+#   primary:
+#     provider: local
+#     model: qwen3:14b
+#     base_url: http://localhost:11434/v1
+#   escalate_to:
+#     provider: anthropic
+#     model: claude-sonnet-5
+#     api_key_env: ANTHROPIC_API_KEY
+
+# ---------------------------------------------------------------------------
+# Where `publish`, `wiki-drift` and `pull` send documents
+# ---------------------------------------------------------------------------
+# Confluence is the default and needs `zardoz.host`; nothing below is
+# required for it. `--target` overrides `target` for one run.
+#
+# A GitHub wiki is a git repository of markdown pages. Each document still
+# declares its own destination in frontmatter — a `targets.github_wiki` block,
+# which may be empty to mean "this wiki, under this document's title" — so the
+# file-to-page mapping stays in the repository under review. A file with no
+# such block is not published, which is how a draft stays a draft.
+#
+# `token_env` is optional: without it, git uses your credential helper, which
+# is how a developer machine already authenticates. With it, the token is
+# passed to git through the environment and never reaches a command line or
+# the clone's .git/config.
+#
+# Publishing to a *public* wiki needs `--allow-public`, and a wiki whose
+# visibility cannot be determined counts as public. Documents carrying
+# licensed catalog content are never published to a public wiki, with or
+# without that flag.
+# publish:
+#   target: github-wiki
+#   github_wiki:
+#     repository: acme/security-policies
+#     token_env: GITHUB_TOKEN

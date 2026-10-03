@@ -1,0 +1,272 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002214
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 93dadff430e6329b
+  provider: litellm
+  provider_class: third-party
+---
+
+# Business Associate & Vendor Risk Procedure
+
+## Purpose
+
+This procedure directs the Third-Party Risk team through establishing, approving, documenting, monitoring, and terminating information exchange and vendor relationships so that every external party handling organizational data — including business associates handling electronic protected health information (ePHI) — operates under executed agreements, verified controls, and managed supply chain risk. Executing it produces the retained evidence of this process: executed business associate agreements and vendor security review records.
+
+## Scope
+
+The Third-Party Risk team performs this procedure for all internal and external parties that exchange information with, provide system services to, or handle ePHI or other sensitive data on behalf of Example Org, including business associates, subcontractors, external system service providers, and supply chain entities. Legal counsel, the senior privacy officer, contracting officers, the Authorizing Official, and senior cybersecurity or privacy officials participate in defined steps.
+
+## Prerequisites
+
+- Access to the organization's contract repository `[Contract Repository]` for storing and retrieving executed agreements
+- Access to the vendor inventory and tracking system `[Vendor Management System]`
+- Access to the ticketing and workflow system `[Ticketing System]` for recording reviews, approvals, and notifications
+- Access to the identity and access management system `[Identity Provider]` for verifying transfer authorizations
+- Engagement of legal counsel, the senior privacy officer, and contracting officers for contract review
+- Designation of the Authorizing Official with authority to order interconnection termination or suspension
+- Designation of the supply chain risk management (SCRM) official(s) and SCRM team members
+- The current supply chain risk management policy and supply chain risk management plan
+- The current HIPAA Security Rule policy documentation set
+
+## Procedure Steps
+
+### Establish and approve information exchange agreements [NIST 800-53 CA-3 | ARC-AMPE CA-3]
+
+1. Identify each proposed exchange of information between the organizational system and another system, and record it in `[Vendor Management System]`.
+1. Select the appropriate agreement type for the exchange — interconnection security agreement, information exchange security agreement, memorandum of understanding or agreement, service level agreement, user agreement, non-disclosure agreement, or another organization-defined agreement type `[Agreement Type Definition]`.
+1. Draft the agreement with legal counsel and the senior privacy officer, covering the security and privacy obligations of both parties.
+1. Submit the draft to Third-Party Risk for review, then to the designated approver `[Agreement Approver]` for signature.
+1. Do not permit any information sharing to begin until the agreement is fully approved and executed; store the executed agreement in `[Contract Repository]` as part of the vendor security review record.
+
+### Document interface characteristics and responsibilities in each agreement [NIST 800-53 CA-3 | ARC-AMPE CA-3]
+
+1. As part of drafting each agreement, document the interface characteristics of the exchange: protocols, ports, data flows, connection methods, and endpoints for each system.
+1. Document the security and privacy requirements and the specific controls each system must apply to the exchanged information.
+1. Document the responsibilities of each system's owner for operating, monitoring, and securing the interface.
+1. Document the impact level of the information communicated across the interface.
+1. Retain the completed documentation with the executed agreement in `[Contract Repository]`.
+
+### Review and update information exchange agreements at least annually [NIST 800-53 CA-3 | ARC-AMPE CA-3]
+
+1. Third-Party Risk maintains a review calendar in `[Vendor Management System]` scheduling every information exchange agreement for review at least every one (1) year.
+1. On each scheduled review, verify with the system owner that the interface characteristics, controls, responsibilities, and impact level recorded in the agreement still match the exchange as operated.
+1. Update the agreement whenever significant changes to the system, the organizations, or the nature of the information sharing could affect its validity or security posture, and route the update through the approval step above.
+1. Record the review outcome and date in the vendor security review record in `[Contract Repository]`.
+
+### Describe PII covered and restrict use to compatible purposes [ARC-AMPE CA-3]
+
+1. For every agreement involving internal or external parties, enter into an MOU, MOA, Letter of Intent, Computer Matching Agreement, Information Exchange Agreement, or similar instrument that specifically describes the Personally Identifiable Information (PII) covered.
+1. Enumerate in the agreement the purposes for which the PII may be used, and confirm with the senior privacy officer that each purpose is compatible with the purpose for which the PII was originally collected.
+1. When a party proposes a use that is incompatible with the original collection purpose, block the sharing until all of the following are complete: additional notice is provided to the individual, the individual's consent is obtained, and the relevant documents are updated or published.
+1. Record the consent and notice actions in `[Ticketing System]` before releasing the sharing restriction.
+
+### Authorize termination or suspension of high-risk interconnections [ARC-AMPE CA-3]
+
+1. Confirm in writing that the Authorizing Official or other senior leadership holds documented authority to order the immediate termination and/or suspension of any interconnection, and record this designation in the security and privacy documentation.
+1. When senior cybersecurity or privacy officials judge that an interconnection presents an unacceptable level of risk, escalate the judgment to the Authorizing Official with supporting rationale.
+1. Upon the Authorizing Official's order, Third-Party Risk coordinates immediate termination or suspension of the interconnection, notifies the connected party per the agreement's terms, and records the action and rationale in `[Ticketing System]`.
+
+### Verify transfer authorizations before accepting interconnection data [NIST 800-53 CA-3(6) High]
+
+1. Before accepting data transferred between interconnecting systems, open `[Identity Provider]` and verify that the individual or system initiating the transfer holds the requisite authorizations, such as write permissions or privileges, on the receiving system.
+1. Reject any transfer from an individual or system whose authorizations cannot be verified, and record the rejection in `[Ticketing System]`.
+1. Re-verify authorizations whenever the interconnection agreement is reviewed or updated.
+
+### Identify and control transitive (downstream) information exchanges [NIST 800-53 CA-3(7)]
+
+1. Using the systems named in each approved exchange agreement, map any downstream (transitive) exchanges — exchanges those systems in turn conduct with other systems using the organization's information.
+1. Record each identified transitive exchange and its downstream system in `[Vendor Management System]`.
+1. Verify and validate the controls on each identified downstream system; where verification cannot be completed, take measures to ensure the transitive exchange ceases, coordinating with the upstream party per the agreement.
+1. Re-run this mapping during the annual agreement review.
+
+### Implement ePHI access authorization policies [HIPAA 164.308(a)(4)(i)]
+
+1. Third-Party Risk, with the security team, maintains written policies and procedures for authorizing access to electronic protected health information, consistent with the applicable requirements of 45 CFR part 164 subpart E.
+1. Store the policies in the HIPAA documentation set and disseminate them to personnel responsible for access administration.
+
+### Protect clearinghouse ePHI from the larger organization [HIPAA 164.308(a)(4)(ii)(A) Required]
+
+1. If a health care clearinghouse is part of a larger organization, implement policies and procedures that protect the clearinghouse's ePHI from unauthorized access by the larger organization.
+1. Configure logical segregation in `[Identity Provider]` and the clearinghouse systems so that larger-organization personnel without a documented clearinghouse role cannot access clearinghouse ePHI.
+
+### Establish procedures for granting ePHI access mechanisms [HIPAA 164.308(a)(4)(ii)(B) Addressable]
+
+1. Implement policies and procedures for granting access to ePHI through each access mechanism in use — workstation, transaction, program, process, or other mechanism.
+1. Apply these procedures whenever a new access mechanism is introduced or an existing one changes.
+
+### Establish, document, review, and modify user access rights [HIPAA 164.308(a)(4)(ii)(C) Addressable]
+
+1. Based on the organization's access authorization policies, establish each user's right of access to a workstation, transaction, program, or process at the time access is requested.
+1. Document each granted right in `[Identity Provider]` and the associated access record.
+1. Review user access rights on the defined review cycle `[Access Review Frequency]` and modify or revoke rights when the user's role changes or the right is no longer required.
+
+### Obtain satisfactory assurances before permitting business associate ePHI handling [HIPAA 164.308(b)(1)]
+
+1. Before permitting any business associate to create, receive, maintain, or transmit ePHI on the organization's behalf, obtain satisfactory assurances, in accordance with 45 CFR § 164.314(a), that the business associate will appropriately safeguard the information.
+1. When a business associate proposes to permit a subcontractor to handle ePHI on its behalf, require the business associate to obtain the same satisfactory assurances from the subcontractor before the subcontractor begins handling.
+1. Record the obtained assurances in the vendor security review record.
+
+### Document business associate assurances in a written contract [HIPAA 164.308(b)(3) Required | HIPAA 164.314(a)(1)]
+
+1. Document the satisfactory assurances provided by each business associate — and each subcontractor — through a written contract or other arrangement that meets the applicable requirements of § 164.314(a).
+1. Route the contract through legal counsel for review, obtain signatures from the authorized signatories, and store the executed business associate agreement in `[Contract Repository]`.
+1. Do not permit ePHI flows to begin until the executed agreement is on file.
+
+### Include required compliance, subcontractor, and incident-reporting terms in BA contracts [HIPAA 164.314(a)(2)(i) Required]
+
+1. Verify that every business associate contract provides that the business associate will comply with the applicable requirements of the HIPAA Security Rule subpart.
+1. Verify the contract requires the business associate to ensure that any subcontractors that create, receive, maintain, or transmit ePHI on its behalf agree to comply, by entering into a contract or other arrangement that complies with § 164.314.
+1. Verify the contract requires the business associate to report to the organization any security incident of which it becomes aware, including breaches of unsecured protected health information as required by § 164.410.
+1. Where any required term is missing, return the contract to legal counsel for correction before execution.
+
+### Apply identical contract requirements to business associate–subcontractor arrangements [HIPAA 164.314(a)(2)(iii) Required]
+
+1. When reviewing a subcontractor arrangement, verify that the same contract requirements that apply between the organization and its business associate apply in the same manner to the contract or other arrangement between the business associate and its subcontractor.
+1. Obtain a copy or attestation of the subcontractor agreement and file it with the parent business associate agreement in `[Contract Repository]`.
+
+### Satisfy the contract requirement through an alternative arrangement where applicable [HIPAA 164.314(a)(2)(ii)]
+
+1. Where a written business associate contract is not used, verify that another arrangement in place meets the requirements of § 164.504(e)(3).
+1. Have legal counsel confirm the alternative arrangement's sufficiency and record the confirmation in the vendor security review record.
+
+### Amend group health plan documents to safeguard ePHI [HIPAA 164.314(b)(1) | HIPAA 164.314(b)(2) Required]
+
+1. Except where limited exceptions apply, verify that the group health plan's plan documents require the plan sponsor to reasonably and appropriately safeguard ePHI created, received, maintained, or transmitted on the plan's behalf.
+1. Amend the plan documents as needed to require the plan sponsor to implement administrative, physical, and technical safeguards protecting the ePHI's confidentiality, integrity, and availability.
+1. Verify the plan documents support the adequate separation required by § 164.504(f)(2)(iii) with reasonable and appropriate security measures.
+1. Verify that any agent to whom the plan provides the information agrees to implement reasonable and appropriate security measures, and that the plan documents require the sponsor to report to the group health plan any security incident of which it becomes aware.
+
+### Require external system service providers to meet organizational controls [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+1. For each provider of external system services, require in the service contract or agreement that the provider comply with organizational security and privacy requirements and employ the organization-defined controls `[External Provider Control Set]`.
+1. Verify the provider's acceptance of these requirements before service activation and record it in the vendor security review record.
+
+### Define oversight and user roles for external system services [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+1. Define and document the organization's oversight roles and responsibilities with regard to each external system service, assigning oversight to Third-Party Risk.
+1. Define and document the user roles and responsibilities for personnel consuming the external service.
+1. Store the role definitions with the service agreement in `[Contract Repository]` and update them at each annual review.
+
+### Monitor external service provider control compliance on an ongoing basis [NIST 800-53 SA-9 | FedRAMP SA-9 | ARC-AMPE SA-9]
+
+1. Employ the organization's defined processes, methods, and techniques `[Provider Monitoring Methods]` to monitor control compliance by each external service provider on an ongoing basis.
+1. Third-Party Risk records each monitoring activity and its findings as a vendor security review record in `[Contract Repository]`.
+1. Escalate identified compliance gaps to the provider and track remediation in `[Ticketing System]`.
+
+### Include PII law, policy, and role language in service contracts [ARC-AMPE SA-9]
+
+1. Include in each service contract or agreement language requiring the provider to be subject to U.S. federal laws and regulations protecting PII.
+1. Include language requiring adherence to the organization's security and privacy policies and standards consistent with 45 CFR § 155.260(b).
+1. Include language defining the security and privacy roles and responsibilities of both parties.
+1. Consult legal counsel, the senior privacy officer, and contracting officers about applicable laws, directives, policies, or regulations affecting implementation before finalizing the language.
+
+### Assess risk and obtain approval before outsourcing information security services [NIST 800-53 SA-9(1) | ARC-AMPE SA-9(1)]
+
+1. Before any acquisition or outsourcing of information security services, conduct an organizational assessment of risk and document the assessment outcome.
+1. Verify that the acquisition or outsourcing of dedicated information security services is approved by the organization-defined personnel or roles `[Outsourcing Approver]` before contracting.
+1. File the risk assessment and approval with the vendor security review record.
+
+### Require providers to identify required functions, ports, protocols, and services [NIST 800-53 SA-9(2) Moderate, High | FedRAMP SA-9 | ARC-AMPE SA-9(2)]
+
+1. Require each provider of external system services to identify the functions, ports, protocols, and other services required for the use of such services.
+1. For all external systems where federal customer data is processed or stored, apply this requirement per FedRAMP.
+1. Record the provider's identification in the service agreement documentation and validate it against the interface characteristics documented under the CA-3 steps.
+
+### Restrict processing and data locations to approved jurisdictions [NIST 800-53 SA-9(5) | FedRAMP SA-9 | ARC-AMPE SA-9(5) | NIST 800-53 SA-9(8) | ARC-AMPE SA-9(8)]
+
+1. Restrict the location of information processing, information or data, and system services to the organization-defined locations `[Approved Locations]` based on the organization-defined requirements `[Location Requirements]`.
+1. Per FedRAMP, for Certification Classes C and D apply this restriction to information processing, information or data, and system services for all federal customer data; for Certification Class D, restrict locations to within the U.S. or U.S. Territories or geographic locations under U.S. jurisdiction.
+1. Restrict the geographic location of information processing and data storage to facilities located within the legal jurisdictional boundary of the United States.
+1. Ensure PII of the system is processed and stored within the continental U.S., Hawaii, or U.S. Territories; support, development, and IT services may be off-shored only after Third-Party Risk weighs that risk and documents the assessment.
+1. In no case permit safeguards afforded to sensitive information to be less than those mandated by state regulation, federal law, Executive Order, or other authoritative direction.
+1. For organizations processing Federal Tax Information, verify adherence to IRS Publication 1075.
+1. For ARC-AMPE Administering Entities, notify CMS at least sixty (60) days prior to committing to outsourcing information system services outside the U.S., such as by contract award or services purchase, and at least sixty (60) days prior to transmitting data into an external information service environment per Change Notification guidance; record each notification in `[Ticketing System]`.
+
+### Maintain exclusive control of cryptographic keys for external systems [NIST 800-53 SA-9(6)]
+
+1. For encrypted material stored or transmitted through an external system, configure key management so the organization retains exclusive control of the cryptographic keys.
+1. Verify in the provider arrangement that the provider cannot access, export, or escrow the keys, and record the verification in the vendor security review record.
+
+### Provide integrity checking for information in external systems [NIST 800-53 SA-9(7)]
+
+1. Establish with the external system provider the capability to check the integrity of information while it resides in the external system.
+1. Exercise the integrity-check capability during provider monitoring and record the results in the vendor security review record.
+
+### Develop and disseminate the supply chain risk management policy [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+1. Develop and document a supply chain risk management policy addressing purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Develop procedures to facilitate implementation of the policy and the associated SCRM controls.
+1. Disseminate the policy and procedures to the organization-defined personnel or roles `[SCRM Policy Distribution]`.
+1. Ensure the policy and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and for the information on that system.
+
+### Designate the SCRM policy official [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+1. Designate the official(s) responsible for managing the development, documentation, and dissemination of the supply chain risk management policy and procedures.
+1. Name the designated official(s) in the appropriate security and privacy documents.
+
+### Review and update the SCRM policy at least annually [NIST 800-53 SR-1 | ARC-AMPE SR-1]
+
+1. Third-Party Risk schedules review and update of the supply chain risk management policy and procedures at least every one (1) year.
+1. Also review and update following organization-defined events: assessment or audit findings, security or privacy incidents, and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Actively monitor for changes to applicable privacy laws and trigger an off-cycle review when a relevant change is identified.
+1. Record each review and update in the HIPAA/SCRM documentation record.
+
+### Maintain HIPAA documentation in written form with 6-year retention [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) Required | HIPAA 164.316(b)(2)(ii) Required | HIPAA 164.316(b)(2)(iii) Required]
+
+1. Maintain the policies and procedures implemented to comply with the HIPAA Security Rule in written (which may be electronic) form, and maintain a written (which may be electronic) record of any action, activity, or assessment the rule requires to be documented.
+1. Retain all HIPAA documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later.
+1. Make the documentation available to those persons responsible for implementing the procedures to which it pertains.
+1. Review the documentation periodically `[HIPAA Documentation Review Frequency]` and update it as needed in response to environmental or operational changes affecting the security of ePHI.
+
+### Develop the supply chain risk management plan [NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+1. Develop, document, and maintain a plan for managing supply chain risks associated with the research and development, design, manufacturing, acquisition, delivery, integration, operations and maintenance, and disposal of the organization-defined systems, system components, or system services `[Systems in Plan Scope]`.
+1. Address in the plan: risk tolerance, acceptable mitigation strategies or controls, a process for consistently evaluating and monitoring supply chain risk, approaches for implementing and communicating the plan, justification for mitigation measures, associated roles and responsibilities, and requirements for developing trustworthy, secure, privacy-protective, and resilient components and systems.
+
+### Review and update the SCRM plan at least annually [NIST 800-53 SR-2 | ARC-AMPE SR-2]
+
+1. Third-Party Risk schedules review and update of the supply chain risk management plan at least every one (1) year, or as required to address threat, organizational, or environmental changes.
+1. Record each review and the resulting changes in the plan's version history.
+
+### Protect the SCRM plan from unauthorized disclosure and modification [NIST 800-53 SR-2]
+
+1. Apply access restrictions in `[Contract Repository]` so the supply chain risk management plan is readable and modifiable only by authorized personnel.
+1. Verify the restrictions during the annual plan review.
+
+### Establish the SCRM team [NIST 800-53 SR-2(1) | ARC-AMPE SR-2(1)]
+
+1. Establish a supply chain risk management team consisting of the organization-defined personnel, roles, and responsibilities to lead and support the organization's SCRM activities.
+1. Per ARC-AMPE, include diverse functions on the team: risk executive, information technology, contracting, information security, privacy, mission or business, legal, supply chain and logistics, acquisition, and business continuity.
+1. Refer to NIST SP 800-161 and NISTIR 8276 for guidance on SCRM activities.
+1. Record team membership and responsibilities in the SCRM plan.
+
+### Assess supplier and contractor supply chain risks [NIST 800-53 SR-6 Moderate, High]
+
+1. Assess and review the supply chain-related risks associated with each supplier or contractor and the system, system component, or system service it provides, on the defined assessment cycle `[Supplier Assessment Frequency]`.
+1. Cover in each assessment: the supplier's security and SCRM processes, foreign ownership, control or influence, and the supplier's ability to assess its subordinate second- and third-tier suppliers.
+1. Record each assessment as a vendor security review record in `[Contract Repository]`.
+
+### Employ third-party analysis and testing of supply chain elements [NIST 800-53 SR-6(1)]
+
+1. Employ organizational or independent third-party analysis and/or testing of the organization-defined supply chain elements, processes, and actors associated with the system, system component, or system service `[Supply Chain Elements for Testing]`.
+1. Retain the analysis and testing results with the vendor security review record.
+
+### Establish supply chain compromise notification agreements and procedures [NIST 800-53 SR-8 | FedRAMP SR-8 | ARC-AMPE SR-8]
+
+1. Establish agreements and procedures with each entity involved in the supply chain for the system, system component, or system service, requiring notification of supply chain compromises and of the results of assessments or audits.
+1. Follow the FedRAMP Incident Evaluation and Communication rules for supply chain notifications.
+1. Ensure notifications of supply chain incidents are consistent with the organization's incident handling and incident reporting procedures.
+1. When a supply chain compromise notification is received, Third-Party Risk logs it in `[Ticketing System]`, routes it into the incident handling process, and records the disposition in the vendor security review record.
+
+## Roles & Responsibilities
+
+The Third-Party Risk team is accountable for this process end to end: it executes the reviews, maintains the agreement and vendor records, coordinates monitoring, and answers for the outcome of each step. Legal counsel, the senior privacy officer, contracting officers, the security and privacy teams, and the SCRM team participate in the steps where named; the Authorizing Official or other senior leadership approves agreements and holds sole authority to order interconnection termination or suspension, and approves any exception to this procedure.
+
+## Related Standard
+
+Business Associate & Vendor Risk Standard

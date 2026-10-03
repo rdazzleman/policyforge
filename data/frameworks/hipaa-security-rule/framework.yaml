@@ -1,0 +1,29 @@
+id: hipaa-security-rule
+name: HIPAA Security Rule (45 CFR 164 Subpart C)
+framework_id: hipaa
+licence: public-domain
+source: eCFR public API, via policyforge etl-hipaa
+notes: A US government work, so freely redistributable. Bundled with this project and safe
+  to commit to any repository.
+source_ref: '2026-09-17'
+source_url: https://www.ecfr.gov/api/versioner/v1/full/2026-09-17/title-45.xml?part=164
+content_sha256: bd23022fe3f117588edaffb6289e262777e531103829bdb39ac04c74e3167f15
+fetched_at: '2026-09-25'
+# The unit the regulation names as a requirement, for document reach (80's
+# ruling on #423): a standard. The catalog carries it as structure, each
+# top-level entry a standard and its enhancements the standard's
+# implementation specifications, so a change to 164.308(a)(1)(ii)(A)
+# reaches a document citing 164.308(a)(1) or any of its specifications.
+family: structure
+# Where the catalog's structure and the regulation disagree. 164.314(a)(2)
+# is "Implementation specifications (Required)" under the standard
+# 164.314(a)(1), though the ETL made its three items top-level entries.
+family_overrides:
+  164.314(a)(2)(i): 164.314(a)(1)
+  164.314(a)(2)(ii): 164.314(a)(1)
+  164.314(a)(2)(iii): 164.314(a)(1)
+# Nested in the catalog for structure only: 164.306(c) and (d) define
+# "standards" and "implementation specifications"; they are not a standard
+# and its specification, so (d) is its own family.
+structure_only:
+  - 164.306(d)

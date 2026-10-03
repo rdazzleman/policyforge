@@ -1,0 +1,159 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001271
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - d9d530e03dee81a9
+  provider: litellm
+  provider_class: third-party
+---
+
+# Information Security Standard: Network & Boundary Protection
+
+**Document Owner:** Network Security
+**Applies To:** All systems, network boundary devices, and interconnected systems operated by Example Org
+**Enforcement Cadence:** Continuous
+
+______________________________________________________________________
+
+## 1. Purpose and Scope
+
+This standard defines the requirements for controlling the flow of information within Example Org systems and between connected systems, and for operating and maintaining the organization's network boundary protections. It applies to all Network Security personnel responsible for implementing, configuring, and auditing boundary and information flow controls, and to all system owners whose systems are subject to those controls.
+
+Evidence of compliance with this standard is captured through the **Firewall and segmentation rule review** and the **External attack-surface scan**, as described in Section 5.
+
+______________________________________________________________________
+
+## 2. Roles and Responsibilities
+
+The **Network Security** team is accountable for this process end to end, including implementation, operation, review, and evidence production for all requirements in this standard.
+
+The **Authorizing Official**, in consultation with the system owner, is responsible for risk-informed interconnection termination and suspension decisions as defined in Section 3.2.
+
+______________________________________________________________________
+
+## 3. Information Flow Control
+
+### 3.1 Information Flow Authorization
+
+Network Security must enforce approved authorizations for controlling the flow of information within the system and between connected systems based on [Assignment: organization-defined information flow control policies]. [NIST AC-4 | ARC-AMPE AC-4]
+
+### 3.2 Interconnection Termination and Suspension Authority
+
+Network Security must ensure that the organization's System Security and Privacy Plan (SSPP) defines the authority to order the immediate termination and/or suspension of any interconnection. The Authorizing Official should make a risk-informed decision, in consultation with the system owner, to terminate or suspend an interconnection that presents an unacceptable level of risk to the enterprise and/or mission. [ARC-AMPE AC-4]
+
+### 3.3 Attribute-Based Flow Control Decisions
+
+Network Security must use [Assignment: organization-defined security and privacy attributes] associated with [Assignment: organization-defined information, source, and destination objects] to enforce [Assignment: organization-defined information flow control policies] as a basis for flow control decisions. [NIST AC-4(1)]
+
+### 3.4 Protected Processing Domains
+
+Network Security must use protected processing domains to enforce [Assignment: organization-defined information flow control policies] as a basis for flow control decisions. [NIST AC-4(2)]
+
+### 3.5 Dynamic Enforcement of Flow Control Policies
+
+Network Security must enforce [Assignment: organization-defined information flow control policies] dynamically. [NIST AC-4(3)]
+
+### 3.6 Encrypted Information Flow Control Bypass Prevention
+
+Network Security must prevent encrypted information from bypassing [Assignment: organization-defined information flow control mechanisms] by \[Selection (one or more): decrypting the information; blocking the flow of the encrypted information; terminating communications sessions attempting to pass encrypted information; [Assignment: organization-defined procedure or method]\]. [NIST AC-4(4) High]
+
+### 3.7 Data Type Embedding Limitations
+
+Network Security must enforce [Assignment: organization-defined limitations] on embedding data types within other data types. [NIST AC-4(5)]
+
+### 3.8 Metadata-Based Flow Control
+
+Network Security must enforce information flow control based on [Assignment: organization-defined metadata]. [NIST AC-4(6)]
+
+### 3.9 One-Way Information Flows
+
+Network Security must enforce one-way information flows through hardware-based flow control mechanisms. [NIST AC-4(7)]
+
+### 3.10 Security and Privacy Policy Filters
+
+Network Security must enforce information flow control using [Assignment: organization-defined security or privacy policy filters] as a basis for flow control decisions for [Assignment: organization-defined information flows], and [Selection (one or more): block; strip; modify; quarantine] data after a filter processing failure in accordance with [Assignment: organization-defined security or privacy policy]. [NIST AC-4(8)]
+
+### 3.11 Human Reviews of Information Flows
+
+Network Security must enforce the use of human reviews for [Assignment: organization-defined information flows] under [Assignment: organization-defined conditions]. [NIST AC-4(9)]
+
+### 3.12 Privileged Administrator Filter Control
+
+Network Security must provide privileged administrators the capability to enable and disable [Assignment: organization-defined security or privacy policy filters] under [Assignment: organization-defined conditions]. [NIST AC-4(10)]
+
+### 3.13 Privileged Administrator Filter Configuration
+
+Network Security must provide privileged administrators the capability to configure [Assignment: organization-defined security or privacy policy filters] to support different security or privacy policies. [NIST AC-4(11)]
+
+______________________________________________________________________
+
+## 4. Cross-Domain Information Transfer
+
+### 4.1 Data Type Identifier Validation
+
+When transferring information between different security domains, Network Security must use [Assignment: organization-defined data type identifiers] to validate data essential for information flow decisions. [NIST AC-4(12)]
+
+### 4.2 Decomposition into Policy-Relevant Subcomponents
+
+When transferring information between different security domains, Network Security must decompose information into [Assignment: organization-defined policy-relevant subcomponents] for submission to policy enforcement mechanisms. [NIST AC-4(13)]
+
+### 4.3 Fully Enumerated Format Filters
+
+When transferring information between different security domains, Network Security must implement [Assignment: organization-defined security or privacy policy filters] requiring fully enumerated formats that restrict data structure and content. [NIST AC-4(14)]
+
+### 4.4 Unsanctioned Information Examination
+
+When transferring information between different security domains, Network Security must examine the information for the presence of [Assignment: organization-defined unsanctioned information] and prohibit the transfer of such information in accordance with the [Assignment: organization-defined security or privacy policy]. [NIST AC-4(15)]
+
+### 4.5 Security and Privacy Policy Filters on Metadata
+
+When transferring information between different security domains, Network Security must implement [Assignment: organization-defined security or privacy policy filters] on metadata. [NIST AC-4(19)]
+
+### 4.6 Approved Cross-Domain Solutions
+
+Network Security must employ [Assignment: organization-defined solutions in approved configurations] to control the flow of [Assignment: organization-defined information] across security domains. [NIST AC-4(20)]
+
+______________________________________________________________________
+
+## 5. Flow Separation, Endpoint Identification, and Multi-Domain Access
+
+### 5.1 Logical or Physical Separation of Information Flows
+
+Network Security must separate information flows logically or physically using [Assignment: organization-defined mechanisms and/or techniques] to accomplish [Assignment: organization-defined required separations]. [NIST AC-4(21)]
+
+### 5.2 Endpoint Identification and Authentication for Information Transfer
+
+Network Security must uniquely identify and authenticate source and destination points by [Selection (one or more): organization, system, application, service, individual] for information transfer. [NIST AC-4(17)]
+
+### 5.3 Single-Device Multi-Domain Access
+
+Network Security must provide access from a single device to computing platforms, applications, or data residing in multiple different security domains, while preventing information flow between the different security domains. [NIST AC-4(22)]
+
+______________________________________________________________________
+
+## 6. Boundary Monitoring and Attack Surface Verification
+
+Network Security must conduct an **External attack-surface scan** on a continuous basis to verify that external-facing boundary controls enforce the information flow control policies defined under this standard, and that no unauthorized pathways exist between the organization's systems and connected external systems.
+
+______________________________________________________________________
+
+## 7. Rule Review and Evidence Retention
+
+Network Security must perform a **Firewall and segmentation rule review** on a continuous basis to confirm that firewall and segmentation rules remain consistent with the [Assignment: organization-defined information flow control policies] and the required separations defined under this standard.
+
+The following artifacts constitute the record of compliance with this standard and must be retained by Network Security:
+
+- Firewall and segmentation rule review
+- External attack-surface scan
+
+These artifacts are the authoritative evidence set against which conformance with this standard is audited.
+
+______________________________________________________________________
+
+## 8. Compliance and Accountability
+
+Network Security is accountable for the end-to-end operation of the processes described in this standard, including handoffs with system owners, the Authorizing Official, and privileged administrators. Deviations from this standard must be documented and remediated under the organization's exception management process.

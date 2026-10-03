@@ -1,0 +1,184 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.003641
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 782e7d81f65c009b
+  provider: litellm
+  provider_class: third-party
+---
+
+# Procedure: Physical & Environmental Security Operations
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions for implementing the physical and environmental protection requirements defined in the Physical & Environmental Security Standard, covering facility access control, physical monitoring, environmental and power protection, and equipment/media control. Executing this procedure produces the evidence artifacts — the Badge access review and Data centre environmental monitoring records — that demonstrate compliance with the Standard.
+
+## Scope
+
+This procedure is performed by Facilities / Physical Security, with participation from Information Security, HR, the Privacy Office, and the incident response capability, across all facilities that house electronic information systems, including data centres, wiring closets, and designated alternate work sites. It applies to all personnel, visitors, contractors, and maintenance staff who request or hold physical access to those facilities.
+
+## Prerequisites
+
+- Access to the [Badge Access Control System] with administrative rights for Facilities / Physical Security personnel
+- Access to the [Visitor Management System] and [Video Surveillance System]
+- Access to the [Environmental Monitoring System] covering the data centre
+- Access to the [Physical Access Audit Log System] and [Ticketing System]
+- The current System Security and Privacy Policy naming the designated official for physical and environmental protection policy (per [NIST PE-1 | ARC PE-1 AE Mandatory])
+- The current Physical & Environmental Security Standard and the organization's physical and environmental protection policy
+- The organization-defined list of acceptable forms of identification for visitor access `[Assignment: Acceptable Forms of Identification]`
+- Contact roster for organization-defined notification personnel, emergency responders, and the incident response capability
+- Current vendor documentation for power, emergency lighting, fire protection, and water damage protection equipment, plus applicable local, state, and federal testing requirements
+
+## Procedure Steps
+
+### Develop and Maintain the Physical & Environmental Protection Policy and Procedures [NIST PE-1 | ARC PE-1 AE Mandatory]
+
+1. Facilities / Physical Security develops and documents the organization-level physical and environmental protection policy addressing purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, ensuring consistency with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines.
+1. Facilities / Physical Security documents these implementing procedures to facilitate execution of the policy and its associated controls, and disseminates both to all applicable personnel and roles.
+1. Facilities / Physical Security confirms the designated official responsible for the development, documentation, and dissemination of the policy and procedures is named in the System Security and Privacy Policy; if not, submit a change to the [Ticketing System] to have the official documented.
+1. Facilities / Physical Security reviews and updates the policy and procedures at least every one (1) year, and additionally following assessment or audit findings, security or privacy incidents, and changes to applicable laws, regulations, policies, standards, or guidelines.
+1. Facilities / Physical Security actively monitors for changes to applicable privacy laws, regulations, and overarching policy affecting physical and environmental protection, and reviews at least annually to confirm the policies and procedures remain effective.
+1. Facilities / Physical Security validates, during each review, that the policy and associated controls support privacy throughout the system life cycle and limit unnecessary or inappropriate access to Personally Identifiable Information (PII).
+
+### Maintain and Retain Security Documentation [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) Required | HIPAA 164.316(b)(2)(ii) Required | HIPAA 164.316(b)(2)(iii) Required]
+
+1. Facilities / Physical Security maintains all policies, procedures, and required documented actions, activities, and assessments in written (electronic or paper) form in the [Documentation Repository].
+1. Facilities / Physical Security retains all required documentation for 6 years from the date of its creation or the date it was last in effect, whichever is later.
+1. Facilities / Physical Security makes current documentation available to every person responsible for implementing the procedures to which it pertains, via the [Documentation Repository].
+1. Facilities / Physical Security reviews documentation periodically and updates it as needed in response to environmental or operational changes affecting the security of electronic protected health information.
+
+### Manage the Facility Access List and Authorization Credentials [NIST PE-2 | ARC PE-2 AE Mandatory | NIST PE-2(1) | ARC PE-2 AE Mandatory | NIST PE-2(2) | NIST PE-2(3)]
+
+1. Facilities / Physical Security develops, obtains approval for, and maintains the list of individuals with authorized access to the facility where the system resides.
+1. Facilities / Physical Security issues authorization credentials (badges) through the [Badge Access Control System] only to individuals on the approved access list, and authorizes access based on the individual's position or role.
+1. Facilities / Physical Security conducts the Badge access review quarterly (this satisfies the requirement to review the access list at least every six [6] months), reconciling the active badge list in the [Badge Access Control System] against the approved access list and current HR role assignments.
+1. When access is no longer required (transfer, termination, or role change), Facilities / Physical Security removes the individual from the facility access list and deactivates the credential in the [Badge Access Control System], retaining the Badge access review evidence.
+1. At visitor reception, verify two forms of identification from the organization-defined list of acceptable forms of identification `[Assignment: Acceptable Forms of Identification]` before granting visitor access.
+1. Restrict unescorted access to the facility to personnel holding security clearances, formal access authorizations, a need for access to all information contained within the system, or the organization-defined physical access authorizations `[Assignment: Unescorted Access Authorizations]`.
+
+### Safeguard and Define Workstations Accessing Electronic Protected Health Information [HIPAA 164.310(c) | HIPAA 164.310(b)]
+
+1. Facilities / Physical Security, with Information Security, implements physical safeguards for all workstations that access electronic protected health information to restrict access to authorized users.
+1. Facilities / Physical Security documents, per workstation or workstation class, the proper functions to be performed, the manner in which those functions are performed, and the physical attributes of the workstation surroundings.
+1. Facilities / Physical Security applies position or role–based physical restrictions (placement, cabling locks, screen positioning, or lockable enclosures) so only authorized users can operate these workstations.
+
+### Enforce Physical Access at Entry, Exit, and Interior Points [NIST PE-3 | ARC PE-3 AE Mandatory | NIST PE-3(1) High | NIST PE-3(2) | NIST PE-3(3) | NIST PE-3(4) | NIST PE-3(5) | NIST PE-3(7) | NIST PE-3(8)]
+
+1. Facilities / Physical Security enforces physical access authorizations at all entry and exit points, verifying individual access authorizations before granting access and controlling ingress and egress using the [Physical Access Control System] and/or guards.
+1. Facilities / Physical Security controls access to areas designated as publicly accessible using the defined physical access controls or security safeguards, and escorts visitors and controls visitor activity in the organization-defined circumstances `[Assignment: Visitor Escort Circumstances]`.
+1. Facilities / Physical Security secures all keys, combinations, and other physical access devices in controlled storage, inventories all physical access devices every ninety (90) days, and changes combinations and keys at least every one (1) year — or earlier after any security-relevant event, lost key, compromised combination, or transfer/termination of a key or combination holder.
+1. Facilities / Physical Security controls access to the data center/facility using door and window locks, security personnel, or physical authentication devices (e.g., biometrics and smart card/PIN combination), and restricts access to grounds/facilities to authorized persons only.
+1. Facilities / Physical Security stores and operates servers only in physically secure environments, granting access to explicitly authorized personnel only.
+1. Facilities / Physical Security creates and maintains restricted areas, security rooms, or locked rooms controlling access to areas containing PII, requiring two barriers to access PII under normal security (secured perimeter/locked container, locked perimeter/secured interior, or locked perimeter/security container); where non-authorized employees may have access after hours, protected information must be containerized.
+1. Facilities / Physical Security enforces physical access authorizations to the system itself — in addition to facility controls — at the organization-defined physical spaces `[Assignment: System-Level Physical Spaces]`.
+1. Facilities / Physical Security performs security checks at the physical perimeter for exfiltration of information or removal of system components at the organization-defined frequency `[Assignment: Perimeter Security Check Frequency]`.
+1. Facilities / Physical Security staffs guards at the organization-defined physical access points to the facility 24 hours per day, 7 days per week.
+1. Facilities / Physical Security installs lockable physical casings on the organization-defined system components `[Assignment: Components Requiring Lockable Casings]` and employs the organization-defined anti-tamper technologies `[Assignment: Anti-Tamper Technologies]` to detect and/or prevent physical tampering or alteration of hardware components within the system.
+1. Facilities / Physical Security limits access using physical barriers and employs access control vestibules at the organization-defined locations `[Assignment: Access Control Vestibule Locations]`.
+
+### Control Access to Distribution Lines, Transmission Lines, and Output Devices [NIST PE-4 Moderate/High | ARC PE-4 AE Mandatory | NIST PE-5 Moderate/High | ARC PE-5 AE Mandatory | NIST PE-5(2)]
+
+1. Facilities / Physical Security controls physical access to the organization-defined system distribution and transmission lines within facilities using the defined security controls or safeguards `[Assignment: Line Access Controls]`.
+1. Facilities / Physical Security disables any physical ports not in use (e.g., in wiring closets and patch panels), verifying port status during the periodic wiring closet inspection recorded in the [Ticketing System].
+1. Facilities / Physical Security controls physical access to output from the organization-defined output devices `[Assignment: Output Devices]` so unauthorized individuals cannot obtain the output, and links individual identity to receipt of output (e.g., badge-in release or logged retrieval acknowledgment) via the [Physical Access Audit Log System].
+
+### Monitor Physical Access and Investigate Incidents [NIST PE-6 | ARC PE-6 AE Mandatory | NIST PE-6(1) Moderate/High | ARC PE-6(1) AE Mandatory | NIST PE-6(2) | NIST PE-6(3) | NIST PE-6(4) High]
+
+1. Facilities / Physical Security monitors physical access to the facility where the system resides to detect and respond to physical security incidents, using physical intrusion alarms and surveillance equipment ([Video Surveillance System]).
+1. Facilities / Physical Security reviews physical access logs at least monthly (every thirty [30] days), and additionally upon occurrence of the organization-defined events or potential indications of events `[Assignment: Log Review Trigger Events]`.
+1. Facilities / Physical Security configures the monitoring systems to recognize the organization-defined classes or types of intrusions `[Assignment: Intrusion Classes]` and initiate the defined response actions using the defined automated mechanisms `[Assignment: Automated Response Mechanisms]`.
+1. Facilities / Physical Security employs video surveillance of the defined operational areas `[Assignment: Surveillance Areas]`, reviews video recordings at the defined frequency `[Assignment: Video Review Frequency]`, and retains recordings for the defined period `[Assignment: Video Retention Period]`.
+1. Facilities / Physical Security monitors physical access to the system itself — in addition to facility-level monitoring — at the organization-defined physical spaces `[Assignment: System-Level Physical Spaces]`.
+1. Facilities / Physical Security coordinates the results of reviews and investigations with the organizational incident response capability, escalating suspected incidents through the [Ticketing System].
+
+### Manage Visitor Access Records [ARC PE-8 AE Mandatory | NIST PE-8 | NIST PE-8(1) High | NIST PE-8(3)]
+
+1. Reception staff and guards record every visitor in the [Visitor Management System]; each record must include the visitor's name and organization, the visitor's signature, form of identification, date of access, time of entry and departure, purpose of visit, and the name and organization of the person visited.
+1. Facilities / Physical Security maintains and reviews visitor access records using the defined automated mechanism ([Visitor Management System]) at least monthly (every thirty [30] days).
+1. Facilities / Physical Security reports anomalies in visitor access records to the defined personnel or roles `[Assignment: Anomaly Recipients]` via the [Ticketing System].
+1. Facilities / Physical Security retains visitor access records for at least one (1) year.
+1. Facilities / Physical Security submits the policy for collection and retention of visitor access records to the privacy office and/or the senior official for privacy for review, and limits PII in visitor records to the elements identified in the privacy risk assessment.
+
+### Protect Power Equipment and Cabling [NIST PE-9 Moderate/High | ARC PE-9 AE Mandatory | NIST PE-9(1) | NIST PE-9(2)]
+
+1. Facilities / Physical Security protects power equipment and power cabling for the system from damage and destruction (conduit, cable trays, restricted routing).
+1. Facilities / Physical Security permits only authorized maintenance personnel to access infrastructure assets, including power generators; heating, ventilation, and air conditioning (HVAC) systems; cabling; and wiring closets, verifying authorization against the access list before entry.
+1. Facilities / Physical Security employs redundant power cabling paths physically separated by the defined distance `[Assignment: Redundant Cabling Separation Distance]`, and employs automatic voltage controls for the defined critical system components `[Assignment: Critical Components for Voltage Control]`.
+
+### Operate Emergency Power Shutoff [NIST PE-10 Moderate/High | ARC PE-10 AE Mandatory]
+
+1. Facilities / Physical Security provides the capability of shutting off power to the defined system or individual system components `[Assignment: Emergency Shutoff Scope]` in emergency situations.
+1. Facilities / Physical Security places emergency shutoff switches or devices in the defined locations by system or component to facilitate access for authorized personnel.
+1. Facilities / Physical Security protects the emergency power shutoff capability from unauthorized activation (covers, locked enclosures, or restricted access).
+1. Facilities / Physical Security implements and maintains a main power switch or emergency cut-off switch for data centers, server rooms, and mainframe rooms, prominently marked and protected by a cover, and inspects it during quarterly facility walkthroughs.
+
+### Maintain and Test Power Continuity Capability [NIST PE-11 Moderate/High | ARC PE-11 AE Mandatory | NIST PE-11(1) High | NIST PE-11(2)]
+
+1. Facilities / Physical Security provides an uninterruptible power supply (UPS) to facilitate orderly shutdown of the system and/or transition to long-term alternate power in the event of primary power loss.
+1. Facilities / Physical Security provides an alternate power supply, activated manually or automatically, that can maintain minimally required operational capability during an extended loss of primary power; where required, the alternate supply must be self-contained — not reliant on external power generation — and capable of maintaining minimally required or full operational capability.
+1. Facilities / Physical Security tests emergency power equipment on a schedule complying with manufacturer recommendations and local, state, and federal requirements, and no less often than every three (3) years, recording results in the [Documentation Repository].
+
+### Maintain and Test Emergency Lighting [NIST PE-12 | ARC PE-12 AE Mandatory | NIST PE-12(1)]
+
+1. Facilities / Physical Security employs and maintains automatic emergency lighting that activates on power outage or disruption and covers emergency exits and evacuation routes within the facility.
+1. Facilities / Physical Security provides emergency lighting for all areas within the facility supporting essential mission and business functions.
+1. Facilities / Physical Security tests emergency lighting equipment on a schedule complying with manufacturer recommendations and local, state, and federal requirements, and no less often than every three (3) years, recording results in the [Documentation Repository].
+
+### Maintain and Test Fire Protection [NIST PE-13 | ARC PE-13 AE Mandatory | NIST PE-13(1) Moderate/High | ARC PE-13(1) AE Mandatory | NIST PE-13(2) High | NIST PE-13(4)]
+
+1. Facilities / Physical Security employs and maintains fire detection and suppression systems supported by an independent energy source.
+1. Facilities / Physical Security ensures fire detection systems activate automatically and notify the defined personnel or roles `[Assignment: Fire Notification Recipients]` and defined emergency responders in the event of a fire.
+1. Facilities / Physical Security ensures fire suppression systems activate automatically and notify the defined personnel or roles and defined emergency responders, and employs an automatic fire suppression capability whenever the facility is not staffed on a continuous basis.
+1. Facilities / Physical Security schedules fire protection inspections by authorized and qualified inspectors at the defined frequency `[Assignment: Fire Inspection Frequency]`, and resolves identified deficiencies within the defined period `[Assignment: Fire Deficiency Remediation Deadline]`.
+1. Facilities / Physical Security tests fire protection equipment on a schedule complying with manufacturer recommendations and local, state, and federal requirements, and no less often than every three (3) years, recording results in the [Documentation Repository].
+
+### Monitor and Maintain Environmental Controls [NIST PE-14 | ARC PE-14 AE Mandatory | NIST PE-14(1) | NIST PE-14(2)]
+
+1. Facilities / Physical Security maintains temperature, humidity, and pressure levels within the facility where the system resides at acceptable vendor-specified levels consistent with the ASHRAE document *Thermal Guidelines for Data Processing Environments*.
+1. Facilities / Physical Security monitors environmental control levels at the defined frequency `[Assignment: Environmental Monitoring Frequency]` using the [Environmental Monitoring System], producing the Data centre environmental monitoring records as evidence.
+1. When an environmental control alert occurs, Facilities / Physical Security evaluates the alert level and follows the prescribed guidelines for that level, alerts component management of possible loss of service and/or media, reports damage, provides remedial action, and implements the contingency plan if necessary.
+1. Facilities / Physical Security employs the defined automatic environmental controls `[Assignment: Automatic Environmental Controls]` in the facility to prevent fluctuations potentially harmful to the system.
+1. Facilities / Physical Security employs environmental control monitoring that provides an alarm or notification of changes potentially harmful to personnel or equipment to the defined personnel or roles `[Assignment: Environmental Alert Recipients]` via the [Environmental Monitoring System].
+
+### Protect Against Water Damage [NIST PE-15 | ARC PE-15 AE Mandatory | NIST PE-15(1) High]
+
+1. Facilities / Physical Security protects the system from damage resulting from water leakage by providing master shutoff or isolation valves that are accessible, working properly, and known to key personnel; document valve locations and brief key personnel on them.
+1. Facilities / Physical Security tests water damage protection equipment on a schedule complying with manufacturer recommendations and local, state, and federal requirements, and no less often than every three (3) years, recording results in the [Documentation Repository].
+1. Facilities / Physical Security employs automated water detection near the system that alerts the defined personnel or roles `[Assignment: Water Alert Recipients]` using the defined automated mechanisms via the [Environmental Monitoring System].
+
+### Control and Track Equipment and Media Movement [NIST PE-16 | ARC PE-16 AE Mandatory | HIPAA 164.310(d)(1) | HIPAA 164.310(d)(2)(i) Required | HIPAA 164.310(d)(2)(ii) Required | HIPAA 164.310(d)(2)(iii) Addressable | HIPAA 164.310(d)(2)(iv) Addressable]
+
+1. Facilities / Physical Security authorizes and controls all system components entering and exiting the facility, logging each item in the component movement register.
+1. Facilities / Physical Security maintains records of the system components, and of the movements of hardware and electronic media and the person responsible for each movement, in the [Asset Tracking System].
+1. Facilities / Physical Security implements procedures governing the receipt and removal of hardware and electronic media containing electronic protected health information into and out of the facility, and movement of these items within the facility.
+1. Facilities / Physical Security implements procedures addressing final disposition of electronic protected health information and/or the hardware or electronic media on which it is stored, and procedures for removal of electronic protected health information from electronic media before the media are made available for re-use.
+1. Before movement of equipment, the requesting team creates a retrievable, exact copy of electronic protected health information when needed, confirmed by Facilities / Physical Security prior to releasing the item.
+
+### Manage and Assess Alternate Work Sites [NIST PE-17 Moderate/High | ARC PE-17 AE Mandatory]
+
+1. Facilities / Physical Security determines and documents the alternate work sites allowed for use by employees, in coordination with Information Security.
+1. Facilities / Physical Security defines the controls employed at alternate work sites in the appropriate System Security and Privacy Plan (SSPP) and implements them.
+1. Facilities / Physical Security assesses the effectiveness of controls at alternate work sites and records the assessment results in the [Documentation Repository].
+1. Facilities / Physical Security provides employees at alternate work sites a means to communicate with information security and privacy personnel in case of incidents, and publicizes the contact channel to affected personnel.
+
+### Position System Components Within the Facility [NIST PE-18 High]
+
+1. Facilities / Physical Security positions system components within the facility to minimize potential damage from the defined physical and environmental hazards `[Assignment: Positioning Hazards]` (e.g., away from water sources, exterior walls, and high-traffic areas) and to minimize the opportunity for unauthorized access.
+1. Facilities / Physical Security re-evaluates component placement whenever facility layout changes or new hazards are identified, recording placement decisions and changes in the [Ticketing System].
+
+### Enable Emergency Access and Document Security Repairs [HIPAA 164.310(a)(2)(i) Addressable | HIPAA 164.310(a)(2)(iv) Addressable]
+
+1. Facilities / Physical Security establishes — and implements as needed — procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan in the event of an emergency; step 2 of the facility access list procedure is bypassed only under these documented emergency procedures, with the access logged and reconciled afterward.
+1. Facilities / Physical Security documents all repairs and modifications to the physical components of a facility that are related to security (e.g., hardware, walls, doors, and locks) in the [Ticketing System], retaining the records per the documentation retention procedure above.
+
+## Roles & Responsibilities
+
+Facilities / Physical Security is accountable for this procedure end to end: it executes all steps, produces the Badge access review and Data centre environmental monitoring records, coordinates handoffs with HR, Information Security, the Privacy Office, reception staff, guards, maintenance personnel, and the incident response capability, and answers for the outcome. Exceptions to any step in this procedure require review and written approval by Facilities / Physical Security in consultation with Information Security, documented in the [Ticketing System].
+
+## Related Standard
+
+Physical & Environmental Security Standard

@@ -1,0 +1,135 @@
+# Personally Identifiable Information Processing and Transparency Standard
+
+## 1. Purpose and Scope
+
+This standard establishes requirements for the processing and transparency of personally identifiable information (PII) at Acme Health. This standard applies to all systems, applications, and projects that process, store, or transmit PII, including Protected Health Information (PHI).
+
+## 2. Policy and Procedure Management
+
+### 2.1 Policy Development and Dissemination
+
+Acme Health shall develop, document, and disseminate to [Assignment: organization-defined personnel or roles] a personally identifiable information processing and transparency policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+Acme Health shall develop procedures to facilitate the implementation of the personally identifiable information processing and transparency policy and associated controls. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+Acme Health shall designate an [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the personally identifiable information processing and transparency policy and procedures. [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory]
+
+### 2.2 Policy and Procedure Review and Update
+
+Acme Health shall review and update the personally identifiable information processing and transparency policy [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 PT-1]
+
+Acme Health shall review and update the personally identifiable information processing and transparency policy at least every one (1) year and following [Assignment: organization-defined events]. [ARC-AMPE PT-1 AE Mandatory]
+
+Acme Health shall review and update the personally identifiable information processing and transparency procedures [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 PT-1]
+
+Acme Health shall review and update the personally identifiable information processing and transparency procedures at least every one (1) year and following [Assignment: organization-defined events]. [ARC-AMPE PT-1 AE Mandatory]
+
+### 2.3 Documentation Requirements
+
+Acme Health shall maintain policies and procedures implemented to comply with security requirements in written (which may be electronic) form, and maintain a written (which may be electronic) record of required actions, activities, or assessments. [HIPAA Security Rule 164.316(b)(1)]
+
+Acme Health shall retain documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+
+Acme Health shall make documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+Acme Health shall review documentation periodically, and update as needed, in response to environmental or operational changes affecting the security of the electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+Acme Health shall document policies and procedures regarding the creation, collection, use, and disclosure of personally identifiable information, make them available to appropriate authorities upon request, and identify applicable law governing collection, use, and disclosure. [ARC-AMPE PT-2 AE Mandatory | ARC-AMPE PT-3 AE Mandatory]
+
+## 3. PII Processing Authority and Purpose
+
+### 3.1 Authority for PII Processing
+
+Acme Health shall determine and document the [Assignment: organization-defined authority] that permits the [Assignment: organization-defined processing] of personally identifiable information. [NIST 800-53 PT-2 | ARC-AMPE PT-2 AE Mandatory]
+
+Acme Health shall restrict the [Assignment: organization-defined processing] of personally identifiable information to only that which is authorized. [NIST 800-53 PT-2 | ARC-AMPE PT-2 AE Mandatory]
+
+### 3.2 Purpose Specification
+
+Acme Health shall identify and document the [Assignment: organization-defined purpose(s)] for processing personally identifiable information. [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+Acme Health shall describe the purpose(s) for processing personally identifiable information in the public privacy notices and policies of the organization. [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+Acme Health shall restrict the [Assignment: organization-defined processing] of personally identifiable information to only that which is compatible with the identified purpose(s). [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+Acme Health shall monitor changes in processing personally identifiable information and implement [Assignment: organization-defined mechanisms] to ensure that any changes are made in accordance with [Assignment: organization-defined requirements]. [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+## 4. Information Sharing and Collaboration
+
+Acme Health shall enable authorized users to determine whether access authorizations assigned to a sharing partner match the information's access and use restrictions for [Assignment: organization-defined information-sharing circumstances]. [NIST 800-53 AC-21 Moderate, High | ARC-AMPE AC-21 AE Mandatory]
+
+Acme Health shall employ [Assignment: organization-defined automated mechanisms] or manual processes to assist users in making information sharing and collaboration decisions. [NIST 800-53 AC-21 Moderate, High | ARC-AMPE AC-21 AE Mandatory]
+
+Acme Health shall share personally identifiable information only when authorized, there is a need to know, and adequate assurances of protection have been provided. [ARC-AMPE AC-21 AE Mandatory]
+
+## 5. Information Lifecycle Management
+
+### 5.1 Information Management and Retention
+
+Acme Health shall manage and retain information within the system and information output from the system in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements. [NIST 800-53 SI-12 Low, Moderate, High | ARC-AMPE SI-12 AE Mandatory]
+
+Acme Health shall retain output, including audit records, system reports, business and financial reports, and business records from the information system for ten (10) years or in accordance with organizational policy. [ARC-AMPE SI-12 AE Mandatory]
+
+For systems processing, storing, or transmitting Protected Health Information, Acme Health shall retain documentation relating to the security of systems containing such information for at least six (6) years from the date of its creation or the date when it was last in effect, whichever is later. [ARC-AMPE SI-12 AE Mandatory]
+
+### 5.2 Information Minimization
+
+Acme Health shall limit personally identifiable information being processed in the information life cycle to [Assignment: organization-defined elements of personally identifiable information]. [NIST 800-53 SI-12(1)]
+
+Acme Health shall limit personally identifiable information processed in the information life cycle to the minimum elements necessary to accomplish the legally authorized purpose of collection. [ARC-AMPE SI-12(1) AE Mandatory]
+
+### 5.3 Minimization in Testing and Research
+
+Acme Health shall use [Assignment: organization-defined techniques] to minimize the use of personally identifiable information for research, testing, or training. [NIST 800-53 SI-12(2)]
+
+Acme Health shall use techniques in accordance with organizational standards and applicable federal and state laws and regulations to minimize the use of personally identifiable information for research, testing, or training. [ARC-AMPE SI-12(2) AE Mandatory]
+
+If personally identifiable information is used in the test environment, Acme Health shall apply the same controls required for systems containing such information to the test environment, and use synthetic information to the maximum extent practicable when testing system functionality. [ARC-AMPE SI-12(2) AE Mandatory]
+
+Acme Health shall limit the creation, collection, use, and/or disclosure of personally identifiable information only to the extent necessary to accomplish a specified and authorized purpose(s), and obtain senior official for privacy approval for using such information in testing, training, and research. [ARC-AMPE SI-12(2) AE Mandatory]
+
+### 5.4 Information Disposal
+
+Acme Health shall use [Assignment: organization-defined techniques] to dispose of, destroy, or erase information following the retention period. [NIST 800-53 SI-12(3)]
+
+Acme Health shall use [Assignment: organization-defined techniques] to dispose of, destroy, or erase information following the retention period in a manner that prevents loss, theft, misuse, or unauthorized access. [ARC-AMPE SI-12(3) AE Mandatory]
+
+Acme Health shall use FIPS 140-compliant encryption standards to ensure secure deletion or destruction of personally identifiable information (including originals, copies, and archived records). [ARC-AMPE SI-12(3) AE Mandatory]
+
+## 6. Data Quality and Accuracy
+
+### 6.1 Data Quality Review
+
+Acme Health shall check the accuracy, relevance, timeliness, and completeness of personally identifiable information across the information life cycle [Assignment: organization-defined frequency]. [NIST 800-53 SI-18]
+
+Acme Health shall check the accuracy, relevance, timeliness, and completeness of personally identifiable information across the information life cycle at least every one (1) year. [ARC-AMPE SI-18 AE Mandatory]
+
+### 6.2 Correction and Deletion
+
+Acme Health shall correct or delete inaccurate or outdated personally identifiable information. [NIST 800-53 SI-18 | ARC-AMPE SI-18 AE Mandatory]
+
+Acme Health shall maintain an individual's record in accordance with the retention schedule regardless of that individual's activity or inactivity, ensuring that correcting or deleting inaccurate data does not violate retention rules provided a log of those changes is maintained. [ARC-AMPE SI-18 AE Mandatory]
+
+### 6.3 Individual Requests
+
+Acme Health shall correct or delete personally identifiable information upon request by individuals or their designated representatives. [NIST 800-53 SI-18(4) | ARC-AMPE SI-18(4) AE Mandatory]
+
+When organizations are not permitted to delete certain personally identifiable information regardless of an individual's preference, Acme Health shall communicate the reason in the denial of the individual's request. [ARC-AMPE SI-18(4) AE Mandatory | ARC-AMPE SI-18(5) AE Mandatory]
+
+### 6.4 Notification of Changes
+
+Acme Health shall notify [Assignment: organization-defined recipients] and individuals that the personally identifiable information has been corrected or deleted. [NIST 800-53 SI-18(5) | ARC-AMPE SI-18(5) AE Mandatory]
+
+## 7. System Inventory
+
+### 7.1 Organizational System Inventory
+
+Acme Health shall develop and update [Assignment: organization-defined frequency] an inventory of organizational systems. [NIST 800-53 PM-5]
+
+Acme Health shall develop and update an inventory of organizational systems at least every one (1) year or when there is a significant change to the inventory. [ARC-AMPE PM-5 AE Mandatory]
+
+### 7.2 PII Processing System Inventory
+
+Acme Health shall establish, maintain, and update [Assignment: organization-defined frequency] an inventory of all systems, applications, and projects that process personally identifiable information. [NIST 800-53 PM-5(1)]
+
+Acme Health shall establish, maintain, and update an inventory of all systems, applications, and projects that process personally identifiable information continuously or when there is a significant change to the systems, applications, and projects that process such information. [ARC-AMPE PM-5(1) AE Mandatory]

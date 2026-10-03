@@ -1,0 +1,26 @@
+id: nist-ai-rmf
+name: NIST AI Risk Management Framework 1.0
+framework_id: nist-ai-rmf
+licence: public-domain
+source: NIST AIRC (airc.nist.gov), via policyforge etl-ai-rmf
+notes: A US government work, so freely redistributable. Bundled with this project and safe
+  to commit to any repository. Nineteen categories carrying seventy-two subcategories - the
+  whole Core. THIS CATALOG STATES OUTCOMES RATHER THAN OBLIGATIONS, which is unlike every
+  other catalog here and changes what citing it proves. NIST puts the actions in the separately
+  versioned, explicitly voluntary Playbook, so a document citing a subcategory can be fully
+  traceable and still commit nobody to anything. There is deliberately no crosswalk - mapping
+  an outcome to a control would assert the control achieves the outcome, which is the claim
+  NIST declined to make when it split the Playbook out. Read README.md before citing this
+  catalog or building a crosswalk against it. Pinned to revision 1.0. The Core is stable across
+  Playbook revisions, so a Playbook update is not a reason to re-run the ETL.
+# The Core's shape at revision 1.0, pinned here beside the revision's other
+# pins (#189). etl-ai-rmf refuses a parse of any other shape, and never
+# rewrites this key: a new revision is a deliberate edit here plus a README
+# update, by a person.
+shape:
+  categories: 19
+  subcategories: 72
+source_ref: AI RMF 1.0
+source_url: https://airc.nist.gov/airmf-resources/airmf/5-sec-core/
+content_sha256: 2001835eb636522c1759e15caf476d99d0e3ba45721b18ce2a8f3d75bc8be10a
+fetched_at: '2026-09-20'

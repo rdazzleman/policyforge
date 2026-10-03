@@ -1,0 +1,88 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001545
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - dcdbb6ef93b861e4
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Change & Configuration Management Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions Platform Engineering follows to maintain Example Org's configuration baselines, control changes to production and non-production systems, and keep the governing configuration management policy and procedures current. Executing it produces the evidence artifacts this process is accountable for: change tickets with approvals, and the baseline configuration and drift report.
+
+## Scope
+
+Platform Engineering performs this procedure continuously across all Example Org systems, devices, appliances, and applications, including development and test environments and systems issued for high-risk travel. Other teams (Security, Privacy, and system owners) participate in reviews and approvals, but Platform Engineering owns the process and its handoffs end to end.
+
+## Prerequisites
+
+- Access to the [Change Management System] with permissions to raise, review, and approve change tickets.
+- Access to the [Configuration Management Software] and the [Hardware/Software Asset Management System] used to maintain and compare baseline configurations.
+- Membership roster for the [Configuration Change Control Board], including the designated security and privacy representatives.
+- A named official designated to manage the configuration management policy and procedures, recorded in the appropriate security and privacy documents.
+- An established [status page or electronic bulletin board] approved and accepted by the system owner for communicating significant changes to CMS and business partners.
+- Access to the [Ticketing System] for logging drift findings and emergency changes.
+- Current copies of the *Example Org Information Security Standard: Change & Configuration Management* and the configuration management policy.
+
+## Procedure Steps
+
+### Maintain and Review the Configuration Management Policy and Procedures [NIST 800-53 CM-1 | FedRAMP CM-1 | ARC-AMPE CM-1]
+
+1. Confirm the configuration management policy addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that it is maintained at the organization level as a single, authoritative document.
+1. Verify that the procedures facilitating implementation of the policy (this document) are documented, current, and disseminated to all personnel and roles with configuration or change responsibilities. Make the documentation available to every person responsible for implementing it.
+1. Confirm the designated official responsible for developing, documenting, and disseminating the policy and procedures is named in the appropriate security and privacy documents; if the designation has changed, update the security and privacy documents.
+1. Review and update the configuration management policy and procedures at least every one (1) year, and additionally whenever any of the following trigger events occurs: assessment or audit findings; security or privacy incidents; or changes to applicable laws (including privacy laws), executive orders, directives, regulations, policies, standards, or guidelines.
+1. Actively monitor for changes to applicable privacy laws and regulations that affect configuration management policies; when a change is identified, open a review ticket in the [Ticketing System] and update the policy before the next scheduled review if needed.
+1. Apply FedRAMP Significant Change Notification rules whenever configuration management policy or procedures change in a way that constitutes a significant change to the system or its environment.
+1. Confirm the policy and procedures support cybersecurity and privacy safeguards throughout the system life cycle and for the information on the system; document any gaps and remediate them via the change control process below.
+1. Store the policy, these procedures, and all records of actions, activities, and assessments required by the HIPAA Security Rule in written (electronic) form, and retain them for 6 years from the date of creation or the date last in effect, whichever is later. Review this documentation periodically and update it in response to environmental or operational changes affecting the security of electronic protected health information.
+
+### Develop and Maintain the Baseline Configuration [NIST 800-53 CM-2 | ARC-AMPE CM-2]
+
+1. Document and maintain a current baseline configuration for every system, device, appliance, and application, including security update posture, under configuration control in the [Configuration Management Software].
+1. Review and update the baseline configuration at least every one (1) year, when major system changes or upgrades occur, when critical security patches are applied, when emergency changes occur (e.g., unscheduled changes, system crashes, replacement of critical hardware components), and whenever system components are installed or upgraded.
+1. Configure the [automated mechanisms] (e.g., the [Hardware/Software Asset Management System], [Software Asset Management System], and [Configuration Management Software]) so they capture everything needed to verify the baseline, including access controls that give the automation the information it requires, and run them as part of the Continuous Monitoring Program to maintain the currency, completeness, accuracy, and availability of the baseline.
+1. Produce and retain the baseline configuration and drift report from the automated comparison as evidence of baseline currency.
+1. Retain at least one (1) previous version of each baseline configuration — the most recent older generation — to support emergency rollback; retain additional previous versions based on risk tolerance.
+1. Maintain a baseline configuration for development and test environments that is managed separately from the operational baseline configuration, with development and testing performed in environments separate from operational systems to minimize risk to production.
+1. Before an individual travels to a location deemed to be of significant risk, issue them a system or system component configured to a stringent baseline (e.g., latest published FIPS 140-compliant encryption). When the individual returns, apply return safeguards: perform a detailed inspection for physical tampering, then purge or reimage the hard disk drive and removable media before reconnecting the system.
+
+### Determine and Approve Configuration-Controlled Changes [NIST 800-53 CM-3 | ARC-AMPE CM-3]
+
+1. Document the types of changes to the system that are configuration-controlled (e.g., changes to baseline settings, security configurations, critical components) and record this determination alongside the baseline documentation.
+1. Route every proposed configuration-controlled change through a change request form in the [Change Management System], including an explicit security and privacy impact analysis for the Board to consider.
+1. Convene the [Configuration Change Control Board] sufficiently frequently to accommodate proposed change requests, and coordinate change control activities with the requirements of other appropriate organization officials whenever those activities occur.
+1. Require security and privacy representatives (which may include the [Information System Security Officer], [Chief Information Security Officer], and/or the [Senior Official for Privacy]) as members of the Board reviewing each request.
+1. Document the Board's approval or disapproval decision on the change ticket in the [Change Management System]; retain the change ticket with its approvals as evidence.
+1. Use the [Change Management System]'s automated mechanisms to document proposed changes, notify approval authorities and request approval, highlight proposed changes not approved or disapproved within [Approval Response Window], prohibit implementation of changes until designated approvals are received, document all changes, and notify designated personnel when approved changes are completed.
+1. Retain records of configuration-controlled changes for no less than one (1) year after the change.
+
+### Implement, Test, and Monitor Approved Changes [NIST 800-53 CM-3(2) Moderate, High | ARC-AMPE CM-3(2) | NIST 800-53 CM-3(3)]
+
+1. Test, validate, and document each approved change in the separate test environment before finalizing its implementation.
+1. Implement the approved change in production only after testing is documented on the change ticket.
+1. Update the current system baseline to reflect the change and deploy the updated baseline across the installed base using the [automated deployment mechanisms], then regenerate the baseline configuration and drift report.
+1. Monitor and review activities associated with configuration-controlled changes — approvals, implementation steps, and outcomes — via the change ticket record and the Continuous Monitoring Program.
+1. Review changes to the system [Change Review Frequency] to determine whether unauthorized changes have occurred, and additionally whenever drift is reported by the automated monitoring mechanisms; log any unauthorized change in the [Ticketing System] as a security incident.
+1. Configure the [Detection & Response tooling] to implement the defined security responses automatically if baseline configurations are changed in an unauthorized manner (e.g., alerting, reverting the configuration, disabling the change source).
+1. Verify that all cryptographic mechanisms used to provide the defined controls (e.g., encryption modules, key management configurations) are tracked under configuration management and changed only via the change control process.
+
+### Communicate Significant Changes to CMS and Business Partners [ARC-AMPE CM-3]
+
+1. Establish and maintain an approved means of communication — such as an electronic bulletin board or web status page, accepted by the system owner — for notifying the business owner and associated service consumers of significant changes to or developments in the information system or environment of operations that may affect business agreements or contracts with CMS and business partners.
+1. When a significant change meeting this threshold is approved, post the notification to the [status page or electronic bulletin board] and follow CMS change reporting procedures, utilizing the CMS change notification form for the specific entity type.
+
+## Roles & Responsibilities
+
+Platform Engineering is authorized and accountable to execute all steps above end to end, including baseline maintenance, change ticket handling, drift review, and evidence retention. Approvals and disapprovals of configuration-controlled changes rest with the [Configuration Change Control Board], which must include the designated security and privacy representatives; exceptions to any step in this procedure require Board approval and documented rationale on the change ticket.
+
+## Related Standard
+
+This procedure operationalizes the *Example Org Information Security Standard: Change & Configuration Management*, which contains the full requirement text and the rationale for each control implemented here.

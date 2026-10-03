@@ -1,0 +1,215 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.004031
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - b095ff324b8e1a30
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Backup, Restore & Contingency Operating Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions Site Reliability Engineering follows to execute Example Org's backup, restore, and contingency obligations — maintaining retrievable, protected copies of critical data, standing up alternate processing, storage, and telecommunications capability, and proving through testing that systems can be recovered to a known state. Executing it produces the required evidence artifacts: **Restore test results** and the **Backup job success report**.
+
+## Scope
+
+Site Reliability Engineering performs this procedure on all Example Org systems that store, process, transmit, or back up electronic protected health information and other critical mission and business data, together with the alternate storage, processing, and telecommunications sites and providers that support them. Business Owners, related-plan owners, and external service providers participate in individual steps but do not own them.
+
+## Prerequisites
+
+- Administrative access to the [Backup Platform] and its job scheduling, encryption, and reporting functions
+- Access to the [Document Repository] where the contingency planning policy, Information System Contingency Plan (ISCP), and evidence artifacts are stored
+- Access to the [Ticketing System] for tracking corrective actions and approvals
+- Access to the [Key Management Service] holding the keys used for backup encryption and integrity signing
+- A Business Owner-approved Maximum Tolerable Downtime (MTD) and documented recovery time objectives (RTO) and recovery point objectives (RPO) for each critical system
+- Executed agreements (for example, Service Level Agreements) for the alternate storage site, alternate processing site, and alternate telecommunications services
+- Contingency training records maintained in the [Training Platform]
+- The current ISCP distributed to and acknowledged by key contingency personnel
+
+## Procedure Steps
+
+### Develop and Disseminate the Contingency Planning Policy and Procedures
+
+*[NIST CP-1 | ARC-AMPE CP-1 AE Mandatory | HIPAA 164.316(b)(1)]*
+
+1. Site Reliability Engineering drafts or updates the contingency planning policy so it explicitly addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and confirms it is consistent with applicable laws, regulations, and Example Org policies and standards.
+1. Draft companion procedures that facilitate implementation of the policy and its associated contingency planning controls, including this procedure.
+1. Submit the policy and procedures to the [Designated Contingency Plan Official] — the official Example Org has designated to manage their development, documentation, and dissemination — for review and approval.
+1. Have the [Designated Contingency Plan Official] confirm management commitment is documented and coordinate sign-off from organizational entities whose operations the policy affects.
+1. Disseminate the approved policy and procedures to applicable personnel and roles via the [Document Repository], and record the dissemination date and recipient list as evidence.
+1. Maintain all contingency-related policies, procedures, and records of actions, activities, or assessments in written (electronic) form in the [Document Repository], retain them for six (6) years from the date of creation or the date they were last in effect (whichever is later), and make them available to the persons responsible for implementing the procedures they pertain to. *[HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) | HIPAA 164.316(b)(2)(ii) | HIPAA 164.316(b)(2)(iii)]*
+
+### Review and Update the Contingency Planning Policy and Procedures
+
+*[NIST CP-1 | ARC-AMPE CP-1 AE Mandatory | HIPAA 164.316(b)(2)(ii) | HIPAA 164.316(b)(2)(iii)]*
+
+1. Site Reliability Engineering reviews the contingency planning policy and associated procedures at least annually, on the quarterly process cycle that falls closest to the annual anniversary of the last approval.
+1. Review and update the policy and procedures outside the annual cycle following assessment or audit findings, security or privacy incidents, and changes to applicable laws, executive orders, directives, regulations, policies, standards, or guidelines, and in response to environmental or operational changes affecting the security of electronic protected health information.
+1. Record each review in the [Document Repository], noting the reviewer, date, and any updates made.
+
+### Develop and Approve the Information System Contingency Plan
+
+*[NIST CP-2 | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory | HIPAA 164.308(a)(7)(i) | HIPAA 164.308(a)(7)(ii)(B) | HIPAA 164.308(a)(7)(ii)(C) | HIPAA 164.312(a)(2)(ii) | HIPAA 164.310(a)(2)(i)]*
+
+1. Site Reliability Engineering identifies essential mission and business functions supported by each system and documents their associated contingency requirements in the ISCP.
+1. Document recovery objectives, restoration priorities, and metrics for each essential function in the ISCP, using the Business Owner-approved MTD and the derived RTO and RPO (see the Resumption Planning section below).
+1. Document contingency roles, responsibilities, and the assigned individuals — with current contact information — in the ISCP, and include procedures for maintaining essential mission and business functions despite a system disruption, compromise, or failure.
+1. Document in the ISCP how eventual full system restoration will occur without deterioration of the originally planned and implemented controls.
+1. Write and maintain, as part of or alongside the ISCP, the policies and procedures for responding to an emergency or other occurrence (for example, fire, vandalism, system failure, natural disaster) that damages systems containing electronic protected health information, including procedures to restore any loss of data.
+1. Write and maintain procedures enabling continuation of critical business processes for the protection of electronic protected health information while operating in emergency mode, including procedures for obtaining necessary electronic protected health information during an emergency.
+1. Write and maintain procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan in the event of an emergency; coordinate these with the facility access owners.
+1. Document how contingency information is shared among response participants, then submit the completed ISCP to the [ISCP Reviewers and Approvers] for review and approval, and record the approval as evidence.
+
+### Distribute, Coordinate, and Protect the Contingency Plan
+
+*[NIST CP-2 | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory | NIST CP-2(1) Moderate, High | ARC-AMPE CP-2(1) AE Mandatory]*
+
+1. Site Reliability Engineering distributes copies of the approved contingency plan to key contingency personnel identified by name and/or role and to the organizational elements listed in the ISCP distribution list, and collects acknowledgments.
+1. Coordinate contingency planning activities with incident handling activities by reviewing the ISCP against the cyber incident response plan with the incident handling team and reconciling activation triggers, escalation paths, and communication channels.
+1. Coordinate contingency plan development with the organizational elements responsible for related plans — Business Continuity Plans, Disaster Recovery Plans, Continuity of Operations Plans, Crisis Communications Plans, Critical Infrastructure Plans, Cyber Incident Response Plans, Insider Threat Implementation Plans, and Occupant Emergency Plans — and provide the system contingency plan to the [COOP Program Office] and other defined recipients.
+1. Store the contingency plan in the access-controlled section of the [Document Repository], restrict read and edit permissions to the distribution list, and enable version history to protect it from unauthorized disclosure and modification.
+
+### Review, Update, and Improve the Contingency Plan
+
+*[NIST CP-2 | FedRAMP CP-2 | ARC-AMPE CP-2 AE Mandatory]*
+
+1. Site Reliability Engineering reviews the contingency plan for the system at least annually, on the quarterly process cycle that falls closest to the annual anniversary of the last review.
+1. Update the plan to address changes to the organization, system, or environment of operation and problems encountered during implementation, execution, or testing.
+1. Incorporate lessons learned from contingency plan testing, training, or actual contingency activities into contingency testing and training plans.
+1. Communicate all contingency plan changes to key contingency personnel and organizational elements on the distribution list, and record the change and communication as evidence.
+
+### Plan Recovery Objectives, Capacity, and Resumption
+
+*[NIST CP-2(2) High | NIST CP-2(3) Moderate, High | FedRAMP CP-2(3) | ARC-AMPE CP-2(3) AE Mandatory | NIST CP-2(5) High | NIST CP-2(6)]*
+
+1. Site Reliability Engineering conducts capacity planning to confirm that necessary capacity for information processing, telecommunications, and environmental support exists during contingency operations, and records the capacity analysis in the ISCP.
+1. Plan for resumption of all or essential mission and business functions within the time period defined in the service provider and organization Service Level Agreements following contingency plan activation.
+1. Work with the Business Owner to calculate the Maximum Tolerable Downtime, consistent with the mission/business Continuity of Operations Plan, and derive recovery time objectives such that each RTO does not exceed the MTD; document both in the ISCP.
+1. Determine with the designated authority who can activate the contingency plan when to activate it, based on maintaining continuity of critical mission/business processes, and record that activation authority and criteria in the ISCP.
+1. Confirm that planned resumption meets mission/business COOP requirements for the system and document the results in the mission/business Contingency Plan.
+1. Plan for continuance of all or essential mission and business functions with minimal or no loss of operational continuity, sustaining that continuity until full system restoration at primary processing and/or storage sites.
+1. Plan for the transfer of all or essential mission and business functions to alternate processing and/or storage sites with minimal or no loss of operational continuity, sustaining that continuity through system restoration to the primary sites.
+
+### Coordinate with External Service Providers
+
+*[NIST CP-2(7)]*
+
+1. Site Reliability Engineering coordinates the contingency plan with the contingency plans of external service providers supporting the system.
+1. Compare each provider's stated recovery capabilities against Example Org's contingency requirements and record the confirmation that requirements can be satisfied.
+
+### Maintain the Critical Asset Inventory
+
+*[NIST CP-2(8) Moderate, High | ARC-AMPE CP-2(8) AE Mandatory | HIPAA 164.308(a)(7)(ii)(E)]*
+
+1. Site Reliability Engineering identifies the critical system assets supporting all or essential mission and business functions — hardware, software, firmware, information, data, applications, communications, and people.
+1. Maintain an active inventory of those critical assets in the ISCP, verifying it against current environment state each quarterly cycle.
+1. Assess and record the relative criticality of specific applications and data in support of the other contingency plan components.
+
+### Deliver and Maintain Contingency Training
+
+*[NIST CP-3 | ARC-AMPE CP-3 AE Mandatory | NIST CP-3(1) High | NIST CP-3(2)]*
+
+1. Site Reliability Engineering assigns contingency training through the [Training Platform] to system users consistent with their assigned roles and responsibilities, completing it within thirty (30) days of a person assuming a contingency role or responsibility, when required by system changes, and every one (1) year thereafter.
+1. Review and update contingency training content at least every one (1) year and following organization-defined events.
+1. Incorporate simulated events into contingency training to facilitate effective response by personnel in crisis situations.
+1. Employ the mechanisms used in actual operations — the [Backup Platform], [Ticketing System], and operational runbooks — in the training environment to provide a more thorough and realistic exercise.
+
+### Test the Contingency Plan
+
+*[NIST CP-4 | ARC-AMPE CP-4 AE Mandatory | HIPAA 164.308(a)(7)(ii)(D) | NIST CP-4(1) Moderate, High | ARC-AMPE CP-4(1) AE Mandatory | NIST CP-4(2) High | NIST CP-4(3) | NIST CP-4(4) | NIST CP-4(5)]*
+
+1. Site Reliability Engineering tests the contingency plan for the system at least within every one (1) year, executing the test on a quarterly process cycle, using organization-defined tests — including the latest published NIST SP 800-34 and NIST SP 800-84 guidance and any organization-defined functional tests or exercises — to determine the effectiveness of the plan and readiness to execute it.
+1. Coordinate the test with the organizational elements responsible for related plans (COOP, BCP, CIP, DRP, ISCP, CIRP, and OEP) before scheduling.
+1. Test the contingency plan at the alternate processing site, both to familiarize contingency personnel with the facility and available resources and to evaluate the site's capability to support contingency operations.
+1. Execute the test using organization-defined automated mechanisms (for example, orchestrated failover and restore tooling in the [Backup Platform]) and retain the tool output as evidence.
+1. Include a full recovery and reconstitution of the system to a known state as part of the test, and record the results in the **Restore test results** artifact.
+1. Conduct a self-challenge exercise: employ organization-defined mechanisms against the organization-defined system or system component to disrupt and adversely affect it, and execute the plan against the induced disruption.
+1. Include in the test and exercise an evaluation of the capability to meet privacy requirements in a contingency scenario, along with corrective measures addressing any privacy risks identified.
+
+### Review Test Results and Produce the After-Action Report
+
+*[NIST CP-4 | ARC-AMPE CP-4 AE Mandatory | HIPAA 164.308(a)(7)(ii)(D)]*
+
+1. Site Reliability Engineering reviews the contingency plan test results, determines effectiveness, and initiates corrective actions for identified deficiencies via the [Ticketing System] with assigned owners and deadlines.
+1. Produce an after-action report from the test that identifies improvements to existing processes, procedures, and policies, and fold those improvements into plan updates and the next training cycle.
+1. Make the contingency plan test results and after-action report available to the Business Owner.
+
+### Establish and Maintain the Alternate Storage Site
+
+*[NIST CP-6 Moderate, High | ARC-AMPE CP-6 AE Mandatory | NIST CP-6(1) Moderate, High | ARC-AMPE CP-6(1) AE Mandatory | NIST CP-6(2) High | NIST CP-6(3) Moderate, High | ARC-AMPE CP-6(3) AE Mandatory]*
+
+1. Site Reliability Engineering establishes an alternate storage site, including necessary agreements (for example, Service Level Agreements) permitting the storage and retrieval of system backup information.
+1. Identify an alternate storage site sufficiently separated from the primary storage site to reduce susceptibility to the same threats, with the sufficient degree of separation ([Minimum Safe Distance]) determined based on the types of threats of concern to the operation.
+1. Configure the alternate storage site to facilitate recovery operations in accordance with the recovery time and recovery point objectives in the ISCP.
+1. Verify that the alternate storage site provides controls equivalent to those of the primary site (physical, environmental, and logical), and record the equivalence assessment.
+1. Identify potential accessibility problems to the alternate storage site in the event of an area-wide disruption or disaster, outline explicit mitigation actions (for example, duplicating backup information at other geographically diverse alternate storage sites or planning physical access to retrieve backup information if electronic accessibility is disrupted), and document those mitigation actions in the ISCP.
+
+### Establish and Maintain the Alternate Processing Site
+
+*[NIST CP-7 Moderate, High | FedRAMP CP-7 | ARC-AMPE CP-7 AE Mandatory | NIST CP-7(1) | NIST CP-7(2) | NIST CP-7(3) | NIST CP-7(4) | NIST CP-7(6)]*
+
+1. Site Reliability Engineering establishes an alternate processing site, including necessary agreements permitting the transfer and resumption of system operations for essential mission and business functions within the defined time period ([Transfer and Resumption Time Period], consistent with the RTO and RPO in the ISCP/COOP) when primary processing capabilities are unavailable.
+1. Verify that the required equipment and supplies are available at the alternate processing site, or that contracts are in place to support delivery within the defined transfer and resumption time period.
+1. Confirm the alternate processing site provides administrative, physical, and technical controls equivalent to those at the primary site, and record the equivalence assessment.
+1. Where Personally Identifiable Information is processed at the alternate site, implement administrative, physical, and technical controls to protect it in accordance with the identified privacy risks.
+1. Identify an alternate processing site sufficiently separated from the primary processing site to reduce susceptibility to the same threats, with the degree of separation determined by the organization based on the types of threats of concern (noting that for hostile cyber attacks the degree of separation between sites is less relevant).
+1. Identify potential accessibility problems to the alternate processing site in an area-wide disruption or disaster, outline explicit mitigation actions, and document the remediation actions in the ISCP.
+1. Ensure the alternate processing site agreements (for example, Service Level Agreements) contain priority-of-service provisions in accordance with availability requirements, including the RTOs specified in the ISCP.
+1. Prepare the alternate processing site — provisioning, configurations, and data replication — so it can serve as the operational site supporting essential mission and business functions.
+1. Plan and prepare for circumstances that preclude returning to the primary processing site, including long-term operations at the alternate site, and document that plan in the ISCP.
+
+### Establish and Maintain Alternate Telecommunications Services
+
+*[NIST CP-8 Moderate, High | ARC-AMPE CP-8 AE Mandatory | NIST CP-8(1) | ARC-AMPE CP-8(1) AE Mandatory | NIST CP-8(2) | NIST CP-8(3) High | NIST CP-8(4) High | NIST CP-8(5)]*
+
+1. Site Reliability Engineering establishes alternate telecommunications services, including necessary agreements, permitting resumption of system operations for essential mission and business functions within the defined resumption time (as specified by the system RTOs and business function MTD in the contingency plan, ISCP, Business Impact Analysis, or COOP) when primary telecommunications are unavailable at either the primary or alternate processing or storage sites.
+1. Ensure primary and alternate telecommunications service agreements contain priority-of-service provisions in accordance with availability requirements (including the ISCP RTOs, documented in the ISCP remediation/mitigation strategy), and request Telecommunications Service Priority for all telecommunications services used for national security emergency preparedness if the services are provided by a common carrier.
+1. Obtain alternate telecommunications services that reduce the likelihood of sharing a single point of failure with primary telecommunications services, and document the remediation/mitigation strategy in the ISCP.
+1. Obtain alternate telecommunications services from providers separated from the primary service providers to reduce susceptibility to the same threats.
+1. Require primary and alternate telecommunications service providers to have contingency plans; review each provider's plan to ensure it meets Example Org's contingency requirements; and obtain evidence of the providers' contingency testing and training at [Provider Evidence Frequency].
+1. Test the alternate telecommunications services at [Alternate Telecommunications Test Frequency] and retain the test output as evidence.
+
+### Conduct and Protect Backups
+
+*[NIST CP-9 | ARC-AMPE CP-9 AE Mandatory | HIPAA 164.308(a)(7)(ii)(A) | HIPAA 164.310(d)(2)(iv) | NIST CP-9(3) High | NIST CP-9(6) | NIST CP-9(7) | NIST CP-9(8) Moderate, High | ARC-AMPE CP-9(8) AE Mandatory]*
+
+1. Site Reliability Engineering configures the [Backup Platform] to conduct backups of user-level information contained in the defined system components, system-level information contained in the system, and system documentation (including security- and privacy-related documentation) at the defined backup frequency — for ARC-AMPE scope, daily incremental backups and weekly full backups while maintaining three (3) generations of backups, at least one of which is available online (a full backup and all related incremental backups).
+1. Verify that the backup configuration creates and maintains retrievable exact copies of electronic protected health information, and record each cycle's outcomes in the **Backup job success report**.
+1. Protect the confidentiality, integrity, and availability of backup information: apply role-based access restrictions in the [Backup Platform], store backups redundantly per the configuration above, and alert on failed jobs through the [Monitoring Platform].
+1. Before any movement of equipment containing electronic protected health information, create a retrievable exact copy of that information; before movement of information system equipment generally, ensure a current, retrievable copy of Personally Identifiable Information is available.
+1. Store backup copies of critical system software and other security-related information in a separate facility or in a fire-rated container that is not collocated with the operational system.
+1. Maintain a redundant secondary system that is not collocated with the primary system and that can be activated without loss of information or disruption to operations.
+1. Enforce dual authorization for the deletion or destruction of [Backup Information in Scope for Deletion Control] using the [Backup Platform]'s dual-approval capability: the requesting engineer raises the deletion request, and a second authorized SRE approver must approve before deletion executes.
+1. Implement cryptographic mechanisms to prevent unauthorized disclosure and modification of backup information (all backup files for ARC-AMPE): enable encryption of backups at the storage location using the methodology referenced for encrypting Personally Identifiable Information, with keys held in the [Key Management Service], and apply digital signatures or cryptographic hashes to protect backup integrity.
+
+### Test and Transfer Backup Information
+
+*[NIST CP-9(1) Moderate, High | ARC-AMPE CP-9(1) AE Mandatory | NIST CP-9(2) High | NIST CP-9(5) High]*
+
+1. Site Reliability Engineering tests backup information to verify media reliability and information integrity at least every six (6) months for ARC-AMPE scope, and on the quarterly process cycle for all other in-scope systems — including, for example, decrypting and transporting a random sample of backup files from the alternate storage or backup site and comparing the information to the same information at the primary processing site — and records the results in the **Restore test results** artifact.
+1. Use a sample of backup information in the restoration of selected system functions as part of contingency plan testing.
+1. Transfer system backup information to the alternate storage site within the defined time period ([Transfer Time Period]) and at the defined rate ([Transfer Rate]), consistent with the recovery time and recovery point objectives, and confirm completion in the **Backup job success report**.
+
+### Recover and Reconstitute the System
+
+*[NIST CP-10 | FedRAMP CP-10 | ARC-AMPE CP-10 AE Mandatory | NIST CP-10(2) Moderate, High | ARC-AMPE CP-10(2) AE Mandatory | NIST CP-10(4) High | FedRAMP CP-10(4) | NIST CP-10(6)]*
+
+1. Following a disruption, compromise, or failure, Site Reliability Engineering recovers and reconstitutes the system to a known state within the defined time period ([Recovery and Reconstitution Time Period]) consistent with the recovery time and recovery point objectives defined in the Service Level Agreements and specified in the contingency plan or COOP.
+1. Perform the recovery and reconstitution in a trusted, secure, and verifiable manner: reset all system parameters, reinstall patches, reestablish configuration settings, reinstall application and system software, and fully test the system before returning it to production.
+1. For transaction-based systems (for example, database management systems and transaction processing systems), implement transaction recovery using mechanisms such as transaction rollback and transaction journaling.
+1. Restore system components from configuration-controlled and integrity-protected information representing a known, operational state (for example, versioned golden images and infrastructure-as-code artifacts held under change control) within the defined restoration time periods ([Restoration Time Periods], consistent with the Service Level Agreements).
+1. Protect the system components used for recovery and reconstitution — the golden images, backup media, key material, and reconstitution tooling — with access controls and integrity verification, and record the recovery actions and outcomes in the **Restore test results** artifact.
+
+## Roles & Responsibilities
+
+Site Reliability Engineering is accountable end to end for this procedure: it executes every step, produces the **Restore test results** and **Backup job success report**, and answers for outcomes. The Business Owner approves the MTD and receives test results; the [Designated Contingency Plan Official] approves policy; the [ISCP Reviewers and Approvers] approve the plan; exceptions to any step require documented approval from Site Reliability Engineering leadership and the [Security Officer].
+
+## Related Standard
+
+Example Org Information Security Standard: Backup, Restore & Contingency — this Standard is the source of the requirements above and contains the full requirement text and the rationale for each step in this procedure.

@@ -1,0 +1,161 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001913
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 63aead947b7a49f4
+  provider: litellm
+  provider_class: third-party
+---
+
+# Endpoint Protection & Device Controls Standard
+
+**Organization:** Example Org
+**Document Type:** Information Security Standard
+**Owning Team:** Endpoint Engineering
+**Process Cadence:** Continuous
+**Evidence Artifacts:** EDR deployment coverage report; Removable media policy configuration
+
+## 1. Purpose and Scope
+
+This Standard defines the requirements for malicious code protection, verification of security and privacy functions, spam protection, memory protection, media use restrictions, and mobile code controls on Example Org systems and endpoints. It applies to all systems, system components, and endpoints within scope of Example Org's security program, including workstations, notebook computers, mobile devices, servers, and network entry and exit points.
+
+Endpoint Engineering is accountable for this process end to end, including implementation, configuration, operation, verification, evidence production, and handoffs to other teams.
+
+## 2. Malicious Code Protection
+
+### 2.1 Implementation of Malicious Code Protection Mechanisms
+
+Endpoint Engineering must implement malicious code protection mechanisms at system entry and exit points — which can include firewalls, remote-access servers, workstations, email servers, web servers, proxy servers, notebook computers, and mobile devices — to detect and eradicate malicious code, using one or more of signature-based or non-signature-based technologies. [NIST SI-3 (Low, Moderate, High)]
+
+Endpoint Engineering must implement both signature-based and non-signature-based malicious code protection mechanisms at system entry and exit points to detect and eradicate malicious code. [ARC-AMPE SI-3 (AE Mandatory)]
+
+### 2.2 Updates to Malicious Code Protection Mechanisms
+
+Endpoint Engineering must automatically update malicious code protection mechanisms as new releases are available, in accordance with organizational configuration management policies and procedures. [NIST SI-3 (Low, Moderate, High) | ARC-AMPE SI-3 (AE Mandatory)]
+
+Endpoint Engineering must update malicious code protection mechanisms only when directed by a privileged user. [NIST SI-3(4)]
+
+### 2.3 Periodic Scanning
+
+Endpoint Engineering must configure malicious code protection mechanisms to perform periodic scans of the system at an organization-defined frequency of [Scan Frequency]. [NIST SI-3 (Low, Moderate, High)]
+
+Periodic scans of the system must be performed at least every one (1) week. [ARC-AMPE SI-3 (AE Mandatory)]
+
+### 2.4 Real-Time Scanning
+
+Endpoint Engineering must configure malicious code protection mechanisms to perform real-time scans of files from external sources as the files are downloaded, opened, or executed, in accordance with organizational policy, at one or more of the endpoint or network entry and exit points. [NIST SI-3 (Low, Moderate, High)]
+
+Endpoint Engineering must configure malicious code protection mechanisms to perform real-time scans of files from external sources at both endpoints and network entry and exit points as the files are downloaded, opened, or executed, in accordance with organizational policy. [ARC-AMPE SI-3 (AE Mandatory)]
+
+### 2.5 Response to Malicious Code Detection
+
+Endpoint Engineering must configure malicious code protection mechanisms to block or quarantine malicious code, or take an organization-defined action of [Detection Response Action], and send an alert to organization-defined personnel or roles of [Detection Alert Recipients] in response to malicious code detection. [NIST SI-3 (Low, Moderate, High)]
+
+Endpoint Engineering must configure malicious code protection mechanisms to both block and quarantine malicious code and send an alert to the administrator or organization-defined security personnel in near real-time in response to malicious code detection. [ARC-AMPE SI-3 (AE Mandatory)]
+
+Endpoint Engineering must address the receipt of false positives during malicious code detection and eradication and the resulting potential impact on the availability of the system. [NIST SI-3 (Low, Moderate, High) | ARC-AMPE SI-3 (AE Mandatory)]
+
+### 2.6 Testing of Malicious Code Protection Mechanisms
+
+Endpoint Engineering must test malicious code protection mechanisms at an organization-defined frequency of [Malicious Code Protection Test Frequency] by introducing known benign code into the system, and must verify that detection of the code and the associated incident reporting occur. [NIST SI-3(6)]
+
+### 2.7 Detection of Unauthorized Operating System Commands
+
+Endpoint Engineering must detect the organization-defined unauthorized operating system commands of [Unauthorized OS Command Definitions] through the kernel application programming interface on organization-defined system hardware components of [In-Scope Hardware Components], and must issue a warning, audit the command execution, and/or prevent execution of the command. [NIST SI-3(8)]
+
+### 2.8 Malicious Code Analysis
+
+Endpoint Engineering must employ organization-defined tools and techniques of [Malicious Code Analysis Tools] to analyze the characteristics and behavior of malicious code, and must incorporate the results of malicious code analysis into organizational incident response and flaw remediation processes. [NIST SI-3(10)]
+
+## 3. Verification of Security and Privacy Functions
+
+Endpoint Engineering must verify the correct operation of organization-defined security and privacy functions. [NIST SI-6 (High) | ARC-AMPE SI-6 (AE Mandatory)]
+
+Verification of security and privacy functions must be performed upon command by a user with appropriate privilege, at an organization-defined frequency of [Verification Frequency], and/or during organization-defined system transitional states. [NIST SI-6 (High)]
+
+Verification of security and privacy functions must be performed upon system startup and/or restart, upon command by a user with appropriate privileges, or at least monthly. [ARC-AMPE SI-6 (AE Mandatory)]
+
+Endpoint Engineering must alert organization-defined personnel or roles — at a minimum, the system/security administrator — to failed security and privacy verification tests. [NIST SI-6 (High) | ARC-AMPE SI-6 (AE Mandatory)]
+
+Endpoint Engineering must shut the system down, restart the system, or perform an organization-defined alternative action of [Anomaly Response Action] when anomalies are discovered; under ARC-AMPE, any alternative action must be documented in the applicable System Security and Privacy Plan (SSPP). [NIST SI-6 (High) | ARC-AMPE SI-6 (AE Mandatory)]
+
+Endpoint Engineering must implement automated mechanisms to support the management of distributed security and privacy function testing. [NIST SI-6(2)]
+
+Endpoint Engineering must report the results of security and privacy function verification to organization-defined personnel or roles of [Verification Report Recipients]. [NIST SI-6(3)]
+
+## 4. Spam Protection
+
+### 4.1 Implementation of Spam Protection Mechanisms
+
+Endpoint Engineering must employ spam protection mechanisms at system entry and exit points — which can include firewalls, remote-access servers, email servers, web servers, proxy servers, workstations, notebook computers, and mobile devices — to detect and act on unsolicited messages. [NIST SI-8 (Moderate, High) | FedRAMP SI-8 | ARC-AMPE SI-8 (AE Mandatory)]
+
+Endpoint Engineering must update spam protection mechanisms when new releases are available, in accordance with organizational configuration management policies and procedures. [NIST SI-8 (Moderate, High) | FedRAMP SI-8 | ARC-AMPE SI-8 (AE Mandatory)]
+
+Endpoint Engineering must automatically update spam protection mechanisms at an organization-defined frequency of [Spam Protection Update Frequency]. [NIST SI-8(2) (Moderate, High)]
+
+Spam protection mechanisms must be automatically updated at least every one (1) week. [ARC-AMPE SI-8(2) (AE Mandatory)]
+
+Endpoint Engineering must implement spam protection mechanisms with a learning capability to more effectively identify legitimate communications traffic. [NIST SI-8(3)]
+
+### 4.2 DMARC Requirements for Outgoing Email
+
+When Example Org sends email on behalf of the government as part of the business offering, Endpoint Engineering must implement Domain-based Message Authentication, Reporting & Conformance (DMARC) on the sending domain for outgoing messages as described in DHS Binding Operational Directive (BOD) 18-01. [FedRAMP SI-8]
+
+Where DMARC is implemented, Endpoint Engineering must confirm the configuration to ensure the policy is set to reject and the rua parameter includes reports@dmarc.cyber.dhs.gov, document DMARC compliance in the SI-08 control implementation solution description, and list the FROM: domain(s) used when emails are sent on behalf of the government. [FedRAMP SI-8]
+
+## 5. Protection of System Memory
+
+Endpoint Engineering must implement organization-defined controls of [Memory Protection Controls] to protect the system memory from unauthorized code execution. [NIST SI-16 (Moderate, High)]
+
+At a minimum, Endpoint Engineering must implement the related controls within this control set to protect system memory from unauthorized code execution, using safeguards such as data execution prevention and address space layout randomization. [ARC-AMPE SI-16 (AE Mandatory)]
+
+## 6. Media Use Restrictions
+
+Endpoint Engineering must restrict or prohibit the use of organization-defined types of system media on organization-defined systems or system components, using organization-defined controls. [NIST MP-7 (Low, Moderate, High)]
+
+Endpoint Engineering must prohibit the use of personally owned media (e.g., flash drives, external hard disk drives, and other portable storage and media devices) on organization-defined systems and networks, using organization-defined security safeguards. [ARC-AMPE MP-7 (AE Mandatory)]
+
+Endpoint Engineering must prohibit the use of portable storage devices in organizational systems when such devices have no identifiable owner. [NIST MP-7 (Low, Moderate, High) | ARC-AMPE MP-7 (AE Mandatory)]
+
+Endpoint Engineering must prohibit the use of sanitization-resistant media in organizational systems. [NIST MP-7(2)]
+
+Endpoint Engineering must record the resulting removable media restrictions and safeguards in the Removable media policy configuration.
+
+## 7. Mobile Code Controls
+
+### 7.1 Definition and Authorization of Mobile Code
+
+Endpoint Engineering must define acceptable and unacceptable mobile code and mobile code technologies, and must authorize, monitor, and control the use of mobile code within the system. [NIST SC-18 (Moderate, High) | ARC-AMPE SC-18 (AE Mandatory)]
+
+Under ARC-AMPE, Endpoint Engineering must define the acceptable and unacceptable mobile code and mobile code technologies in the applicable System Security and Privacy Plan (SSPP). [ARC-AMPE SC-18 (AE Mandatory)]
+
+### 7.2 Detection and Corrective Action
+
+Endpoint Engineering must identify organization-defined unacceptable mobile code of [Unacceptable Mobile Code Definitions] and take organization-defined corrective actions. [NIST SC-18(1)]
+
+### 7.3 Mobile Code Requirements Verification
+
+Endpoint Engineering must verify that the acquisition, development, and use of mobile code to be deployed in the system meets organization-defined mobile code requirements. [NIST SC-18(2)]
+
+### 7.4 Prevention of Unacceptable Mobile Code Execution
+
+Endpoint Engineering must prevent the download and execution of organization-defined unacceptable mobile code. [NIST SC-18(3)]
+
+Endpoint Engineering must prevent the automatic execution of mobile code in organization-defined software applications and enforce organization-defined actions prior to executing the code. [NIST SC-18(4)]
+
+Endpoint Engineering must allow execution of permitted mobile code only in confined virtual machine environments. [NIST SC-18(5)]
+
+## 8. Evidence and Records
+
+Endpoint Engineering produces and maintains the following evidence artifacts in support of this Standard, on a continuous basis:
+
+| Evidence Artifact                    | Associated Requirements                                                                                              |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| EDR deployment coverage report       | Malicious code protection mechanism implementation, scanning, real-time scanning, and detection response (Section 2) |
+| Removable media policy configuration | Media use restrictions (Section 6)                                                                                   |
+
+Endpoint Engineering must retain these artifacts and make them available for audit and compliance review.

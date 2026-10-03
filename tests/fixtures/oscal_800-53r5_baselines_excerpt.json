@@ -1,0 +1,372 @@
+{
+ "Low": {
+  "profile": {
+   "uuid": "201765f8-6d45-4941-8789-9eef2effd7d0",
+   "metadata": {
+    "title": "Electronic (OSCAL) Version of NIST Special Publication 800-53 Revision 5.2.0 LOW IMPACT BASELINE",
+    "last-modified": "2026-05-11T16:10:16.00000-00:00",
+    "version": "5.2.0",
+    "oscal-version": "1.2.2",
+    "roles": [
+     {
+      "id": "creator",
+      "title": "OSCAL Version Creator"
+     },
+     {
+      "id": "contact-creator",
+      "title": "Contact"
+     },
+     {
+      "id": "publisher",
+      "title": "SP 800-53 Publisher"
+     },
+     {
+      "id": "contact-publisher",
+      "title": "Contact"
+     }
+    ],
+    "parties": [
+     {
+      "uuid": "41a93829-b76b-43ec-b9e7-250553511549",
+      "type": "organization",
+      "name": "Joint Task Force, Interagency Working Group",
+      "email-addresses": [
+       "sec-cert@nist.gov"
+      ],
+      "addresses": [
+       {
+        "addr-lines": [
+         "National Institute of Standards and Technology",
+         "Attn: Computer Security Division",
+         "Information Technology Laboratory",
+         "100 Bureau Drive (Mail Stop 8930)"
+        ],
+        "city": "Gaithersburg",
+        "state": "MD",
+        "postal-code": "20899-8930"
+       }
+      ]
+     },
+     {
+      "uuid": "98c78f9b-5d50-4b01-b47f-d16801e8d0ab",
+      "type": "organization",
+      "name": "OSCAL Program",
+      "short-name": "NIST",
+      "email-addresses": [
+       "oscal@nist.gov"
+      ],
+      "addresses": [
+       {
+        "addr-lines": [
+         "National Institute of Standards and Technology",
+         "Attn: Computer Security Division",
+         "Information Technology Laboratory",
+         "100 Bureau Drive (Mail Stop 2000)"
+        ],
+        "city": "Gaithersburg",
+        "state": "MD",
+        "postal-code": "20899-2000"
+       }
+      ]
+     }
+    ],
+    "responsible-parties": [
+     {
+      "role-id": "publisher",
+      "party-uuids": [
+       "41a93829-b76b-43ec-b9e7-250553511549"
+      ]
+     },
+     {
+      "role-id": "contact-publisher",
+      "party-uuids": [
+       "41a93829-b76b-43ec-b9e7-250553511549"
+      ]
+     },
+     {
+      "role-id": "creator",
+      "party-uuids": [
+       "98c78f9b-5d50-4b01-b47f-d16801e8d0ab"
+      ]
+     },
+     {
+      "role-id": "contact-creator",
+      "party-uuids": [
+       "98c78f9b-5d50-4b01-b47f-d16801e8d0ab"
+      ]
+     }
+    ]
+   },
+   "imports": [
+    {
+     "href": "#84cbf061-eb87-4ec1-8112-1f529232e907",
+     "include-controls": [
+      {
+       "with-ids": [
+        "ac-1",
+        "ac-2",
+        "ac-3",
+        "ac-7",
+        "at-1",
+        "at-2",
+        "at-2.2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Moderate": {
+  "profile": {
+   "uuid": "b07979a6-1b98-42dc-a776-60ee575b061e",
+   "metadata": {
+    "title": "Electronic (OSCAL) Version of NIST Special Publication 800-53 Revision 5.2.0 MODERATE IMPACT BASELINE",
+    "last-modified": "2026-05-11T16:10:16.00000-00:00",
+    "version": "5.2.0",
+    "oscal-version": "1.2.2",
+    "roles": [
+     {
+      "id": "creator",
+      "title": "OSCAL Version Creator"
+     },
+     {
+      "id": "contact-creator",
+      "title": "Contact"
+     },
+     {
+      "id": "publisher",
+      "title": "SP 800-53 Publisher"
+     },
+     {
+      "id": "contact-publisher",
+      "title": "Contact"
+     }
+    ],
+    "parties": [
+     {
+      "uuid": "41a93829-b76b-43ec-b9e7-250553511549",
+      "type": "organization",
+      "name": "Joint Task Force, Interagency Working Group",
+      "email-addresses": [
+       "sec-cert@nist.gov"
+      ],
+      "addresses": [
+       {
+        "addr-lines": [
+         "National Institute of Standards and Technology",
+         "Attn: Computer Security Division",
+         "Information Technology Laboratory",
+         "100 Bureau Drive (Mail Stop 8930)"
+        ],
+        "city": "Gaithersburg",
+        "state": "MD",
+        "postal-code": "20899-8930"
+       }
+      ]
+     },
+     {
+      "uuid": "98c78f9b-5d50-4b01-b47f-d16801e8d0ab",
+      "type": "organization",
+      "name": "OSCAL Program",
+      "short-name": "NIST",
+      "email-addresses": [
+       "oscal@nist.gov"
+      ],
+      "addresses": [
+       {
+        "addr-lines": [
+         "National Institute of Standards and Technology",
+         "Attn: Computer Security Division",
+         "Information Technology Laboratory",
+         "100 Bureau Drive (Mail Stop 2000)"
+        ],
+        "city": "Gaithersburg",
+        "state": "MD",
+        "postal-code": "20899-2000"
+       }
+      ]
+     }
+    ],
+    "responsible-parties": [
+     {
+      "role-id": "publisher",
+      "party-uuids": [
+       "41a93829-b76b-43ec-b9e7-250553511549"
+      ]
+     },
+     {
+      "role-id": "contact-publisher",
+      "party-uuids": [
+       "41a93829-b76b-43ec-b9e7-250553511549"
+      ]
+     },
+     {
+      "role-id": "creator",
+      "party-uuids": [
+       "98c78f9b-5d50-4b01-b47f-d16801e8d0ab"
+      ]
+     },
+     {
+      "role-id": "contact-creator",
+      "party-uuids": [
+       "98c78f9b-5d50-4b01-b47f-d16801e8d0ab"
+      ]
+     }
+    ]
+   },
+   "imports": [
+    {
+     "href": "#84cbf061-eb87-4ec1-8112-1f529232e907",
+     "include-controls": [
+      {
+       "with-ids": [
+        "ac-1",
+        "ac-2",
+        "ac-2.1",
+        "ac-2.2",
+        "ac-2.3",
+        "ac-2.4",
+        "ac-2.5",
+        "ac-2.13",
+        "ac-3",
+        "ac-7",
+        "at-1",
+        "at-2",
+        "at-2.2",
+        "at-2.3"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "High": {
+  "profile": {
+   "uuid": "b5c9c74d-b24d-4e80-815a-80936528fb6d",
+   "metadata": {
+    "title": "Electronic (OSCAL) Version of NIST Special Publication 800-53 Revision 5.1.1 HIGH IMPACT BASELINE",
+    "last-modified": "2026-05-11T16:10:16.00000-00:00",
+    "version": "5.2.0",
+    "oscal-version": "1.2.2",
+    "roles": [
+     {
+      "id": "creator",
+      "title": "OSCAL Version Creator"
+     },
+     {
+      "id": "contact-creator",
+      "title": "Contact"
+     },
+     {
+      "id": "publisher",
+      "title": "SP 800-53 Publisher"
+     },
+     {
+      "id": "contact-publisher",
+      "title": "Contact"
+     }
+    ],
+    "parties": [
+     {
+      "uuid": "41a93829-b76b-43ec-b9e7-250553511549",
+      "type": "organization",
+      "name": "Joint Task Force, Interagency Working Group",
+      "email-addresses": [
+       "sec-cert@nist.gov"
+      ],
+      "addresses": [
+       {
+        "addr-lines": [
+         "National Institute of Standards and Technology",
+         "Attn: Computer Security Division",
+         "Information Technology Laboratory",
+         "100 Bureau Drive (Mail Stop 8930)"
+        ],
+        "city": "Gaithersburg",
+        "state": "MD",
+        "postal-code": "20899-8930"
+       }
+      ]
+     },
+     {
+      "uuid": "98c78f9b-5d50-4b01-b47f-d16801e8d0ab",
+      "type": "organization",
+      "name": "OSCAL Program",
+      "short-name": "NIST",
+      "email-addresses": [
+       "oscal@nist.gov"
+      ],
+      "addresses": [
+       {
+        "addr-lines": [
+         "National Institute of Standards and Technology",
+         "Attn: Computer Security Division",
+         "Information Technology Laboratory",
+         "100 Bureau Drive (Mail Stop 2000)"
+        ],
+        "city": "Gaithersburg",
+        "state": "MD",
+        "postal-code": "20899-2000"
+       }
+      ]
+     }
+    ],
+    "responsible-parties": [
+     {
+      "role-id": "publisher",
+      "party-uuids": [
+       "41a93829-b76b-43ec-b9e7-250553511549"
+      ]
+     },
+     {
+      "role-id": "contact-publisher",
+      "party-uuids": [
+       "41a93829-b76b-43ec-b9e7-250553511549"
+      ]
+     },
+     {
+      "role-id": "creator",
+      "party-uuids": [
+       "98c78f9b-5d50-4b01-b47f-d16801e8d0ab"
+      ]
+     },
+     {
+      "role-id": "contact-creator",
+      "party-uuids": [
+       "98c78f9b-5d50-4b01-b47f-d16801e8d0ab"
+      ]
+     }
+    ]
+   },
+   "imports": [
+    {
+     "href": "#84cbf061-eb87-4ec1-8112-1f529232e907",
+     "include-controls": [
+      {
+       "with-ids": [
+        "ac-1",
+        "ac-2",
+        "ac-2.1",
+        "ac-2.2",
+        "ac-2.3",
+        "ac-2.4",
+        "ac-2.5",
+        "ac-2.11",
+        "ac-2.12",
+        "ac-2.13",
+        "ac-3",
+        "ac-7",
+        "at-1",
+        "at-2",
+        "at-2.2",
+        "at-2.3"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

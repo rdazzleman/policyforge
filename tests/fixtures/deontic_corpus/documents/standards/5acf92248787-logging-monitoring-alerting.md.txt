@@ -1,0 +1,32 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.00147
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 3a54328c23e2005f
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Logging, Monitoring & Alerting Standard
+
+**Document Owner:** Detection & Response
+**Cadence:** Continuous
+**Classification:** Internal
+
+## 1. Purpose and Scope
+
+This Standard defines the requirements for audit logging, audit record review and analysis, system monitoring, and alerting across Example Org information systems that contain, use, or support electronic protected health information (ePHI) and other sensitive information. It is issued under the authority of the Example Org information security program and applies to all personnel, systems, appliances, devices, services, and applications within scope of the Example Org security program.
+
+The **Detection & Response** team is accountable for this process end to end, including logging configuration, monitoring, alerting, review, escalation, and the evidence artifacts defined in Section 15.
+
+## 2. Audit and Accountability Policy and Procedures
+
+### 2.1 Policy Development and Dissemination
+
+- Example Org must develop, document, and disseminate to organization-defined personnel or roles an audit and accountability policy (at the organization level, mission/business process level, or system level) that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 AU-1 Low, Moderate, High | ARC-AMPE AU-1 AE Mandatory | HIPAA 164.316(b)(1)]
+- Example Org must develop, document, and disseminate procedures to facilitate implementation of the audit and accountability policy and the associated audit and accountability controls. [NIST 800-53 AU-1 Low, Moderate, High | ARC-AMPE AU-1 AE Mandatory | HIPAA 164.316(b)(1)]
+- Example Org must maintain

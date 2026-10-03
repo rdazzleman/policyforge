@@ -1,0 +1,260 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.005189
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - bc89482afdae9166
+  provider: litellm
+  provider_class: third-party
+---
+
+# Identity Lifecycle & Access Review Procedure
+
+## Purpose
+
+Executing this procedure implements the account management, access enforcement, identifier, identity proofing, and personnel security requirements of the Identity Lifecycle & Access Review Standard, ensuring that only authorized individuals retain appropriate access to Example Org systems throughout the identity lifecycle. It produces the operational evidence — identity provider user exports, HR active-employee rosters, and access review tickets with sign-off — that demonstrates ongoing compliance.
+
+## Scope
+
+IAM Engineering performs this procedure end to end for all user, service, privileged, shared/group, temporary, and emergency accounts across Example Org systems, coordinating with Human Resources, System Owners, the Authorizing Official, and [Security Operations] as participants in individual steps.
+
+## Prerequisites
+
+- IAM Engineering administrative access to the [Identity Provider] for account creation, modification, disablement, and export.
+- Read access to the HR active-employee roster export from [HR System].
+- Access to the [Ticketing System] for access review tickets, approvals, and sign-off records.
+- Read access to audit logs via the [Audit Logging Platform / SIEM].
+- Access to the [Privileged Access Management] solution for privileged account administration, where deployed.
+- Identification of the designated official accountable for the access control policy and procedures, per the Access Control Policy.
+- The current Identity Lifecycle & Access Review Standard and Access Control Policy, stored in the [Document Repository].
+
+## Procedure Steps
+
+### Maintain the Access Control Policy and Procedures [NIST AC-1 | ARC-AMPE AC-1 | HIPAA 164.308(a)(4)(i) | HIPAA 164.308(a)(3)(i) | HIPAA 164.316(b)]
+
+1. Confirm the designated official named in the Access Control Policy remains accountable for the development, documentation, and dissemination of the access control policy and procedures; if the designation has changed, update the policy to name the new official.
+1. Review the Access Control Policy and this procedure to verify they address purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that they remain consistent with applicable laws, regulations, policies, standards, and guidelines.
+1. Conduct this review at least annually, and additionally following any assessment or audit finding, security or privacy incident, or change to applicable laws, regulations, policies, standards, or guidelines. Actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect the policy and procedures.
+1. When updates are required, revise the documents, and disseminate the revised versions to all applicable personnel and roles via [Communication Channel / Document Repository].
+1. Retain the policies, procedures, and records of required actions, activities, and assessments in written (electronic) form in the [Document Repository] for 6 years from creation or the date last in effect, whichever is later, and confirm access is available to those responsible for implementing them.
+
+### Define Permitted and Prohibited Account Types and Assign Account Managers [NIST AC-2 | ARC-AMPE AC-2]
+
+1. Maintain the documented list of account types permitted for use within each system (e.g., standard user, privileged, service, temporary, emergency, shared/group) and the account types specifically prohibited (e.g., guest, anonymous, shared accounts for PII access), in the account management section of the system documentation.
+1. Record the assigned account manager for each account or account group in the [Ticketing System]; assign an account manager for every account lacking one.
+1. Document the prerequisites and criteria for group and role membership (e.g., job code, business justification, approval requirement) for each role managed in the [Identity Provider].
+1. Specify the authorized users of each system, their group and role memberships, and the access authorizations (privileges) and required attributes for each account in the system's access authorization records.
+
+### Process Account Creation, Modification, and Removal Requests [NIST AC-2 | ARC-AMPE AC-2]
+
+1. On receipt of an account request in the [Ticketing System], verify the request includes the documented prerequisites: supervisor or sponsor authorization, identity proofing completion (see Identity Proofing below), and role/group membership criteria.
+1. Route the request to the required approver role defined for that account type; do not create the account until approval is recorded in the ticket.
+1. Create, enable, modify, disable, or remove the account in the [Identity Provider] only in accordance with the Access Control Policy, this procedure, and the documented prerequisites and criteria.
+1. Authorize the account's access based on a valid access authorization, intended system usage, and other required attributes before granting any entitlements.
+1. Centralize the user access administrator functions (account creation, modification, entitlement grant, removal) in IAM Engineering; do not permit system administrators outside IAM Engineering to exercise these functions independently.
+
+### Monitor Account Usage and Notify Account Managers of Status Changes [NIST AC-2 | ARC-AMPE AC-2]
+
+1. Configure the [Audit Logging Platform / SIEM] to monitor account usage, including login events and entitlement changes, for all managed accounts.
+1. Establish automated notification from [HR System] to the [Ticketing System] so that account managers and IAM Engineering are notified within 24 hours when an account is no longer required, and within 8 hours when a user is terminated or transferred or when system usage or need-to-know changes for an individual.
+1. On each notification, verify the corresponding account action (disable, remove, or entitlement change) is completed per the relevant sections below, and record completion in the originating ticket.
+
+### Manage Contractor and External Access [ARC-AMPE AC-2 | ARC-AMPE AC-6]
+
+1. Before provisioning contractor access, confirm a signed agreement to support Example Org security requirements is on file, and document the defined security requirements in the contractor's access request ticket.
+1. Grant contractors only minimal system and physical access required for their contracted duties; record the justification for each entitlement in the [Ticketing System].
+1. Apply the same minimum-PII rule applied to employees: provide access only to the minimum amount of PII necessary for the contractor to perform their duties, and prohibit guest, anonymous, and shared accounts for any access to PII.
+1. Include contractor accounts in every quarterly account and privilege review (see below) with the contract end date recorded, and remove access when the contract ends.
+
+### Manage Shared and Group Accounts [NIST AC-2(9) | ARC-AMPE AC-2(9) | NIST AC-2 | ARC-AMPE AC-2]
+
+1. Permit use of shared or group accounts only where a documented business need has been approved in advance by the Authorizing Official; retain the approval in the system security plan documentation.
+1. For each approved shared/group account, ensure the system security plan describes how the account is used and includes compensating processes (e.g., individual check-out of credentials, session recording) to uniquely attribute account user activities.
+1. Maintain a roster of individuals authorized to use each shared/group account in the [Ticketing System].
+1. When an individual is removed from a shared/group account roster, immediately change the shared or group account authenticator(s) in the [Identity Provider] or [Privileged Access Management] solution, and record the change in the audit log.
+
+### Align Account Management with Termination and Transfer Using Automated Mechanisms [NIST AC-2(1) | ARC-AMPE AC-2(1) | NIST AC-2 | ARC-AMPE AC-2]
+
+1. Configure [HR System] integration with the [Identity Provider] and [Ticketing System] so that termination and transfer events automatically notify account managers and IAM Engineering (email or [Ticketing System] notification), trigger access disablement, and support system monitoring of account usage.
+1. Verify the automated notification path is functioning as part of each quarterly review, using a test termination event where feasible, and document the test result in the review ticket.
+
+### Manage Temporary and Emergency Accounts [NIST AC-2(2) Moderate, High | ARC-AMPE AC-2(2)]
+
+1. When a temporary or emergency account is required, create it in the [Identity Provider] with an expiration configuration no longer than the approved need, and record the requester, justification, and sponsor in the [Ticketing System].
+1. Configure the account to be automatically disabled after no more than ninety-six (96) hours from last use.
+1. Confirm at each quarterly review that no temporary or emergency accounts remain active beyond their expiration configuration; disable any that do.
+
+### Disable Expired, Orphaned, and Inactive Accounts [NIST AC-2(3) Moderate, High | ARC-AMPE AC-2(3)]
+
+1. Configure automated disablement in the [Identity Provider] so that non-consumer accounts are disabled within twenty-four (24) hours when they have expired, are no longer associated with a user or individual, or are in violation of organizational policy.
+1. Configure automated disablement of non-consumer accounts that have been inactive for sixty (60) days.
+1. During each quarterly review, reconcile the identity provider user export against the HR active-employee roster and disable any account with no matching active individual within twenty-four (24) hours of identification.
+
+### Audit Account Management Actions [NIST AC-2(4) Moderate, High | ARC-AMPE AC-2(4)]
+
+1. Configure the [Identity Provider] and connected systems to automatically audit all account creation, modification, enabling, disabling, and removal actions, forwarding events to the [Audit Logging Platform / SIEM].
+1. Verify during each quarterly review that these event types are present in the audit stream for every managed system, and remediate any gaps through a ticket in the [Ticketing System].
+
+### Enforce Session Termination and User Logout [NIST AC-2(5) Moderate, High | ARC-AMPE AC-2(5) | HIPAA 164.312(a)(2)(iii)]
+
+1. Publish the user-behavior requirement that users must log out when the expected period of inactivity is exceeded, with the inactivity threshold set at no more than twenty-four (24) hours, via [Organizational User Policy Communication].
+1. For HIPAA-covered systems, configure electronic procedures (session timeout settings in the application or its [Session Management] configuration) that terminate an electronic session after [Predetermined Inactivity Timeout] of inactivity.
+1. Verify configured timeout values during each quarterly review and record the verified values in the review ticket.
+
+### Implement Dynamic Privilege and Account Management [NIST AC-2(6) | NIST AC-2(8) | NIST AC-2(11) High]
+
+1. Implement and operate the organization's dynamic privilege management capability in the [Identity Provider / Privileged Access Management] solution, so privilege adjustments can be applied in response to attribute, role, or need-to-know changes without manual system-by-system edits.
+1. Configure the automated mechanisms to create, activate, manage, and deactivate defined system accounts dynamically in response to HR events (hire, transfer, termination) per the integration in the Automated Mechanisms section.
+1. Enforce the documented circumstances and usage conditions for restricted account types (e.g., network location, device compliance, time-of-day restrictions) via conditional access policies in the [Identity Provider]; document each condition and the account types it applies to in the system security plan.
+
+### Administer Privileged User Accounts [NIST AC-2(7) Moderate, High | ARC-AMPE AC-2(7)]
+
+1. Establish and administer all privileged user accounts under the role-based access scheme, including application-specific privileged accounts organized by user responsibilities; record role definitions in the [Identity Provider] role catalog.
+1. Configure monitoring of privileged role and attribute assignments and changes to them in the [Audit Logging Platform / SIEM].
+1. When a privileged role or attribute assignment is no longer appropriate, revoke it and confirm revocation in the audit log.
+1. Inspect administrator groups, root accounts, and other system-related accounts at least once every fourteen (14) days — and on demand upon request or indication of compromise — to ensure unauthorized accounts have not been created; record findings in the [Ticketing System].
+1. Inspect application-specific privileged user roles at least every thirty (30) days using the same method, and record findings in the [Ticketing System].
+
+### Monitor for Atypical Account Usage [NIST AC-2(12) High | ARC-AMPE AC-2(12)]
+
+1. Configure detection rules in the [Audit Logging Platform / SIEM] for atypical usage patterns, such as access at unusual times or from locations inconsistent with normal usage.
+1. On detection, report the usage to IAM Engineering and the account manager; where the usage indicates possible compromise, escalate to [Incident Response Team] per the incident response procedure.
+1. Record each atypical-usage report and its disposition in the [Ticketing System].
+
+### Disable Accounts of High-Risk Individuals [NIST AC-2(13) Moderate, High | ARC-AMPE AC-2(13)]
+
+1. Upon notification from [HR System], [Insider Risk Program], or [Incident Response Team] that an individual poses a significant risk, disable all accounts associated with that individual in the [Identity Provider] within one (1) hour of discovery.
+1. Confirm disablement of every linked account, including privileged, service, and shared/group memberships, and record the action and timestamp in the [Ticketing System].
+
+### Obtain ePHI During an Emergency [HIPAA 164.312(a)(2)(ii)]
+
+1. Maintain documented procedures for obtaining necessary electronic protected health information during an emergency, including the break-glass access mechanism, required approvals, and post-event review steps.
+1. When an emergency access event occurs, activate the procedure, log all ePHI accessed during the event, and conduct a post-event review of the accessed records and the requester's justification; retain the record in the [Ticketing System].
+
+### Enforce Logical Access Authorizations [NIST AC-3 | ARC-AMPE AC-3 | HIPAA 164.312(a)(1) | HIPAA 164.308(a)(3)(ii)(A) | HIPAA 164.308(a)(3)(ii)(B) | HIPAA 164.308(a)(4)(ii)(B) | HIPAA 164.308(a)(4)(ii)(C) | HIPAA 164.308(a)(4)(ii)(A) | ARC-AMPE AC-3]
+
+1. Enforce approved authorizations for logical access to information and system resources using the technical access control mechanisms in each system, so access is granted only to persons or software programs holding granted access rights.
+1. Maintain documented procedures for the authorization and supervision of workforce members who work with ePHI or in locations where ePHI might be accessed, including the procedure for determining that a workforce member's access remains appropriate; apply those procedures at onboarding and at each quarterly review.
+1. Maintain documented procedures for granting (via workstation, transaction, program, process, or other mechanism), establishing, documenting, reviewing, and modifying user access rights based on the access authorization policies; execute all grants and modifications through the Account Creation/Modification workflow above.
+1. If Example Org operates a health care clearinghouse within a larger organization, implement and verify segmentation controls that protect the clearinghouse's ePHI from unauthorized access by the larger organization, and test those controls during the quarterly review.
+1. Configure operating system controls to disable public "read" and "write" access to system-related files, objects, and directories containing sensitive information; where encryption is used as an access control mechanism for data stored in non-secure areas, use FIPS 140-compliant encryption.
+1. When contracting with external service providers, verify the contract and configuration isolate PII (and the software and services that receive, process, store, or transmit PII) within the service provider environment to the maximum extent possible so other customers sharing physical or virtual space cannot access it; confirm during vendor security reviews.
+
+### Configure Advanced Access Control Policies [NIST AC-3(3) | ARC-AMPE AC-5 | NIST AC-3(4) | NIST AC-3(15) | NIST AC-3(5) | NIST AC-3(7) | NIST AC-3(8) | ARC-AMPE AC-3(8) | NIST AC-3(9) | ARC-AMPE AC-3(9) | NIST AC-3(10) | NIST AC-3(11) | NIST AC-3(12) | NIST AC-3(13) | NIST AC-3(14) | ARC-AMPE AC-3(14)]
+
+1. Enforce the mandatory access control policy uniformly across covered subjects and objects, constraining subjects from passing information to unauthorized recipients, granting their privileges to others, changing security attributes, choosing security attributes for newly created or modified objects, or changing access control rules.
+1. Enforce the discretionary access control policy covering the defined subjects and objects, and verify configurations during the quarterly review.
+1. Where configured, prevent access to defined security-relevant information except during secure, non-operable system states.
+1. Enforce the role-based access control policy over defined subjects and objects, controlling access based on the roles defined in the role catalog and the users authorized to assume them.
+1. Configure access revocation to trigger automatically upon changes to security attributes of subjects and objects, per the documented revocation timing rules (e.g., revocation upon next object open or access attempt).
+1. Release information outside of the system only after confirming the receiving external organization provides information security and privacy safeguards commensurate with Example Org's own, and apply the documented controls to validate the appropriateness of the information designated for release; record the validation in the [Ticketing System].
+1. Permit override of automated access control mechanisms only under the documented conditions, only by the documented roles, and only with the override audited; review override events in the [Audit Logging Platform / SIEM].
+1. Restrict access to data repositories containing the defined information types using the repository's access control configuration, and verify repository permissions at each quarterly review.
+1. Require applications to assert, as part of installation, the access needed to defined system applications and functions; apply the enforcement mechanism that prevents unauthorized access; require IAM Engineering approval of any access changes after initial installation via the [Ticketing System].
+1. Enforce the attribute-based access control policy over defined subjects and objects where deployed, controlling access based on the documented attributes.
+1. Maintain, in consultation with the senior privacy official and legal counsel, the mechanisms enabling individuals to access their PII/PHI elements defined in applicable security/privacy plans — including individual authentication and identification, accounting of disclosures, notice of privacy practices, and request forms and application interfaces — providing the data in readable form and format with published access request policies and procedures; process individual access requests through [Privacy Request System / Ticketing System].
+
+### Enforce Dual Authorization for Privileged Commands [NIST AC-3(2)]
+
+1. Identify the privileged commands and actions designated for dual authorization and record the list in the system security plan.
+1. Configure the [Privileged Access Management] solution or native system controls to require approval by a second authorized individual before execution of any listed command or action.
+1. Retain records of both approvals and the command execution in the audit log.
+
+### Enforce Separation of Duties [NIST AC-5 Moderate, High | ARC-AMPE AC-5]
+
+1. Identify and document the duties of individuals requiring separation, and define system access authorizations to support that separation via role-based access control; specifically ensure that personnel who administer access control functions do not also administer audit functions.
+1. Divide critical mission functions, information system support functions, and information system testing functions (user acceptance, quality assurance, information security) among separate individuals or groups, ensuring information security testing is conducted by an independent entity other than the Business Owner, ISSO, system developers/maintainers, or system administrators.
+1. At each quarterly review, test for conflicting role combinations in the [Identity Provider] and remediate any conflicts through entitlement removal.
+
+### Apply the Principle of Least Privilege [NIST AC-6 Moderate, High | FedRAMP AC-6 | ARC-AMPE AC-6 | ARC-AMPE AC-6(1) | NIST AC-6(1) Moderate, High | FedRAMP AC-6(1) | NIST AC-6(2) Moderate, High | FedRAMP AC-6(2) | ARC-AMPE AC-6(2)]
+
+1. Allow only authorized accesses for users and processes acting on their behalf that are necessary to accomplish assigned organizational tasks; remove excess entitlements discovered during reviews.
+1. Disable all file system, network share, port, protocol, service, and removable media/system boot access not explicitly required for system, application, and administrator functionality; obtain Authorizing Official authorization for any exception based on compelling operational need, password-protect any authorized boot access, and record the authorization in the system security plan.
+1. Ensure only authorized users can access files, directories, drives, workstations, servers, and other resources expressly required for their job duties.
+1. Restrict use of database management utilities to authorized database administrators, and implement table-level access control so users cannot access database data files at the logical data view, field, or field-value level beyond their authorization.
+1. Authorize access to security functions (deployed in hardware, software, and firmware) and security-relevant information — including setting/modifying audit logs and auditing behavior, boundary protection system rules, access authorizations, authentication parameters, and system configurations and parameters — only for the individuals or roles explicitly authorized, with explicit System Owner authorization recorded for each.
+1. Require users of system accounts or roles with access to security functions or security-relevant information to use non-privileged accounts or roles when accessing nonsecurity functions; where feasible, configure auditing of any use of privileged accounts for nonsecurity functions in the [Audit Logging Platform / SIEM].
+
+### Restrict and Review Privileged Access [NIST AC-6(3) High | NIST AC-6(4) | NIST AC-6(5) Moderate, High | ARC-AMPE AC-6(5) | NIST AC-6(6) | NIST AC-6(7) Moderate, High | ARC-AMPE AC-6(7)]
+
+1. Authorize network access to privileged commands only for compelling operational needs, and document the rationale in the system security plan before granting it.
+1. Where deployed, provide separate processing domains to enable finer-grained allocation of user privileges, and document the domain boundaries in the system security plan.
+1. Restrict privileged accounts on each system to the personnel or roles defined in the System Security and Privacy Plan; remove privileged access for anyone not on the defined list.
+1. Prohibit privileged access to the system by non-organizational users; verify no external or federated non-organizational identity holds a privileged role during each review.
+1. Review the privileges assigned to all users with privileges no less often than every ninety (90) days — executed as part of the quarterly review — validating the need for each privilege and reassigning or removing privileges as necessary to correctly reflect organizational mission and business needs; record the review and actions in the access review ticket with sign-off.
+
+### Control Execution of Privileged Functions [NIST AC-6(8) | FedRAMP AC-6(8) | NIST AC-6(9) Moderate, High | ARC-AMPE AC-6(9) | NIST AC-6(10) Moderate, High | ARC-AMPE AC-6(10)]
+
+1. Prevent all software except software explicitly documented (per the FedRAMP-defined exception list) from executing at higher privilege levels than the users executing it, using the operating system's execution control configuration.
+1. Configure logging of the execution of all privileged functions to the [Audit Logging Platform / SIEM], and verify the logging is active during each quarterly review.
+1. Configure systems to prevent non-privileged users from executing privileged functions, and test this prevention with a non-privileged test account during each quarterly review.
+
+### Document Actions Performed Without Identification or Authentication [NIST AC-14 | ARC-AMPE AC-14]
+
+1. Identify the user actions that can be performed on the system without identification or authentication, consistent with organizational mission and business functions, and document each such action with supporting rationale in the system security plan.
+1. Review the list of identified actions during each quarterly review and remove any action no longer justified by mission or business need.
+
+### Manage Identifiers [NIST IA-4 | FedRAMP IA-4 | ARC-AMPE IA-4 | NIST IA-4(1) | NIST IA-4(4) Moderate, High | FedRAMP IA-4(4) | ARC-AMPE IA-4(4) | NIST IA-4(5) | NIST IA-4(6) | NIST IA-4(8) | NIST IA-4(9) | HIPAA 164.312(a)(2)(i) | HIPAA 164.312(d)]
+
+1. Receive authorization from the designated approving role before assigning any new identifier, and record the authorization in the [Ticketing System].
+1. Select an identifier that identifies the individual, group, role, service, or device, and assign it to the intended party; assign a unique name and/or number for identifying and tracking user identity, and maintain procedures to verify that a person or entity seeking access to ePHI is the one claimed.
+1. Prevent reuse of identifiers for two (2) years, and before reusing an identifier, confirm all previous identifier-based access authorizations (e.g., to sensitive files or folders) have been removed from the system.
+1. Prohibit the use of system account identifiers that are the same as public identifiers for individual accounts.
+1. Uniquely identify each individual using the documented characteristics identifying individual status, such as contractors, foreign nationals, and non-organizational users, and record the status attribute alongside the identifier.
+1. Manage individual identifiers dynamically in accordance with the dynamic identifier policy using the [Identity Provider] automated provisioning.
+1. Coordinate with the designated external organizations for cross-organization management of identifiers where such relationships exist, and document the coordination mechanism.
+1. Generate pairwise pseudonymous identifiers where required by the applicable service architecture, and record the mapping in protected storage.
+1. Maintain the attributes for each uniquely identified individual, device, or service in the organization's protected central storage ([Identity Provider] directory), restricting attribute modification to IAM Engineering.
+
+### Identity Proof Account Applicants [NIST IA-12 Moderate, High | ARC-AMPE IA-12 | NIST IA-12(1) | ARC-AMPE IA-12(1) | NIST IA-12(2) Moderate, High | ARC-AMPE IA-12(2) | NIST IA-12(3) Moderate, High | ARC-AMPE IA-12(3) | NIST IA-12(4) High | NIST IA-12(5) Moderate, High | NIST IA-12(6)]
+
+1. Identity proof every user requiring an account for logical access based on the identity assurance level requirements specified in the applicable standards and guidelines, resolving the user to a unique individual and collecting, validating, and verifying identity evidence.
+1. Proof all users requiring logical access accounts, including non-privileged/consumer accounts, to Identity Assurance Level 2 (IAL-2) or higher per the latest NIST SP 800-63 suite; for ACA consumer accounts, use the FDSH Remote Identity Proofing Service.
+1. Require that the registration process includes supervisor or sponsor authorization before an account is issued; retain the authorization in the access request ticket.
+1. Require that evidence of individual identification be presented to the registration authority, and validate and verify that evidence through the organization-approved methods, complying with applicable CMS agreements where they apply.
+1. For systems requiring it, conduct validation and verification of identity evidence in person before a designated registration authority.
+1. Deliver the registration code or notice of proofing through an out-of-band channel to verify the user's physical or digital address of record before account activation.
+1. Where permitted, accept externally-proofed identities at the organization-defined identity assurance level, and record the accepted proofing source and level in the account record.
+
+### Process Terminations [NIST PS-4 | ARC-AMPE PS-4 | HIPAA 164.308(a)(3)(ii)(C) | NIST PS-4(1) | NIST PS-4(2) High]
+
+1. On receipt of the automated termination notification from [HR System], disable the terminated individual's system access in the [Identity Provider] within the same day as termination.
+1. Terminate or revoke all authenticators and credentials associated with the individual — including certificates, tokens, API keys, and shared/group account memberships — and confirm revocation in the audit log.
+1. Conduct an exit interview that includes a discussion of information security topics, including non-disclosure of information security and privacy information; record the interview completion in the termination checklist.
+1. Retrieve all security-related organizational system-related property from the terminated individual, including hardware authentication tokens, technical manuals, keys, identification cards, and building passes, and record retrieval in the termination checklist.
+1. Retain access to the organizational information and systems formerly controlled by the terminated individual by reassigning mailbox ownership, delegated permissions, and administrative responsibilities to the manager or designated successor.
+1. Notify terminated individuals of applicable legally binding post-employment requirements for the protection of organizational information, and require them to sign an acknowledgment of those requirements as part of termination; retain the signed acknowledgment per the documentation retention requirements.
+1. Use the automated mechanisms ([HR System] to [Identity Provider] integration) to notify IAM Engineering of termination actions and/or disable access to system resources, and verify the automated disablement fired correctly for each termination.
+1. Apply the access-termination procedures to ePHI access specifically, ensuring termination of access when employment or other arrangement with a workforce member ends, or as required by access-determination procedures.
+
+### Process Transfers and Reassignments [NIST PS-5 | ARC-AMPE PS-5]
+
+1. On notification of a transfer or reassignment from [HR System] (received within twenty-four (24) hours of the personnel transfer), review and confirm the ongoing operational need for the individual's current logical and physical access authorizations to systems and facilities.
+1. For access to sensitive information such as PII, determine how permissions should change based on the new role, and document the determination in the [Ticketing System].
+1. Initiate reassignment actions so that all system accesses no longer required (e.g., need-to-know) are removed or disabled within twenty-four (24) hours.
+1. Modify access authorizations as needed to correspond with changes in operational need due to the reassignment or transfer, and record the resulting entitlement set in the ticket.
+
+### Conduct Quarterly Account and Privilege Reviews [NIST AC-2 | ARC-AMPE AC-2 | NIST AC-6(7) Moderate, High | ARC-AMPE AC-6(7)]
+
+1. Each quarter, IAM Engineering exports the identity provider user export and obtains the HR active-employee roster from [HR System].
+1. Reconcile the user export against the HR roster, flagging accounts with no matching active employee, accounts with mismatched role or status attributes, and privileged accounts outside the authorized list.
+1. Review all accounts for compliance with the account management requirements — account types, group/role membership criteria, approved authorizations, shared/group account conditions, contractor agreements, and privilege assignments — no less often than every ninety (90) days.
+1. For each flagged item, create an access review ticket in the [Ticketing System] describing the finding and required action, and complete remediation per the applicable deadlines in this procedure (e.g., 24-hour disablement for orphaned accounts).
+1. Obtain and record reviewer and approver sign-off on each access review ticket, and retain the identity provider user export, HR roster, and signed tickets as the evidence set for the quarter.
+
+### Define Workstation Use for ePHI Access [HIPAA 164.310(b)]
+
+1. Maintain policies and procedures specifying the proper functions to be performed on workstations that can access ePHI, the manner in which those functions are to be performed, and the physical attributes of the surroundings of those workstations (or classes of workstations).
+1. Disseminate the workstation use policies to all workforce members granted ePHI access, and confirm workforce acknowledgment during access provisioning.
+1. Verify workstation access lists remain consistent with authorized access determinations during each quarterly review.
+
+## Roles & Responsibilities
+
+IAM Engineering is authorized to perform all steps in this procedure — account lifecycle operations, identifier management, identity proofing coordination, privilege administration, and the quarterly reviews — and is accountable for the process and its handoffs end to end. Human Resources initiates termination and transfer notifications; System Owners authorize security-function access for their systems; the Authorizing Official approves shared/group accounts and least-privilege exceptions; any exception to this procedure requires documented approval by the Authorizing Official with IAM Engineering's recommendation recorded in the [Ticketing System].
+
+## Related Standard
+
+Identity Lifecycle & Access Review Standard

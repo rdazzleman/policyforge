@@ -1,0 +1,71 @@
+# Acme Health Information Security Standard: Third-Party AI & Data Supply Chain
+
+## 1. Purpose and Scope
+
+This standard establishes Acme Health's requirements for identifying, assessing, and managing the risks and benefits that third-party software, data, models, and other supply chain elements introduce into the organization's AI systems. It applies to all third-party AI technologies, third-party data, and third-party components incorporated into AI systems developed, procured, or operated by Acme Health.
+
+The **Vendor Risk / AI Risk** team is accountable for this process end to end, including performance of the steps defined in this document, review of their outputs, and answerability for their outcomes. Other teams (e.g., Procurement, Legal, IT, Security Engineering) participate in individual steps as identified below.
+
+## 2. Governance of Third-Party AI Risk
+
+### 2.1 Policies and Procedures
+
+Acme Health must maintain policies and procedures that address the AI risks and benefits arising from third-party software, data, and other supply chain issues. [NIST AI RMF Govern 6]
+
+The Vendor Risk / AI Risk team must maintain and enforce these policies and procedures.
+
+### 2.2 Third-Party Entities and Intellectual Property
+
+Acme Health must maintain policies, procedures, and documented mapping approaches that address AI risks associated with third-party entities, including the risk of infringement of a third party's intellectual property or other rights. These approaches must be followed and documented. [NIST AI RMF Govern 6.1 | NIST AI RMF Map 4.1]
+
+The Vendor Risk / AI Risk team owns the development, application, and documentation of these mapping approaches.
+
+NIST suggests, among its 4 actions for Govern 6.1, collaboratively establishing policies that address third-party AI systems and data [NIST AI RMF Playbook Govern 6.1 Action 1]; establishing policies related to transparency into third-party system functions — including knowledge about training data, training and inference algorithms, and assumptions and limitations — thorough testing of third-party AI systems, and requirements for clear and complete instructions for third-party system usage [NIST AI RMF Playbook Govern 6.1 Action 2]; evaluating policies for third-party technology [NIST AI RMF Playbook Govern 6.1 Action 3]; and establishing policies that address the supply chain, the full product lifecycle, and associated processes, including legal, ethical, and other issues concerning the procurement and use of third-party software or hardware systems and data [NIST AI RMF Playbook Govern 6.1 Action 4].
+
+## 3. Risk Mapping for AI System Components
+
+### 3.1 Mapping Risks and Benefits
+
+Acme Health must map the risks and benefits of all components of the AI system, including third-party software and data. [NIST AI RMF Map 4]
+
+The Vendor Risk / AI Risk team performs and maintains this mapping.
+
+NIST suggests, among its 4 actions for Map 4.1, reviewing audit reports, testing results, product roadmaps, warranties, terms of service, end user license agreements, contracts, and other documentation related to third-party entities to assist in value assessment and risk management activities [NIST AI RMF Playbook Map 4.1 Action 1]; reviewing third-party software release schedules and software change management plans (hotfixes, patches, updates, and forward- and backward-compatibility guarantees) for irregularities that may contribute to AI system risks [NIST AI RMF Playbook Map 4.1 Action 2]; inventorying the third-party material (hardware, open-source software, foundation models, open source data, proprietary software, proprietary data, etc.) required for system implementation and maintenance [NIST AI RMF Playbook Map 4.1 Action 3]; and reviewing redundancies related to third-party technology and personnel to assess potential risks due to lack of adequate support [NIST AI RMF Playbook Map 4.1 Action 4].
+
+### 3.2 Internal Risk Controls
+
+Acme Health must identify and document internal risk controls for components of the AI system, including third-party AI technologies. [NIST AI RMF Map 4.2]
+
+The Vendor Risk / AI Risk team identifies and documents these controls.
+
+NIST suggests, among its 4 actions for Map 4.2, tracking third parties that prevent or hamper risk-mapping as indications of increased risk [NIST AI RMF Playbook Map 4.2 Action 1]; supplying resources such as model documentation templates and software safelists to assist in third-party technology inventory and approval activities [NIST AI RMF Playbook Map 4.2 Action 2]; reviewing third-party material (including data and models) for risks related to bias, data privacy, and security vulnerabilities [NIST AI RMF Playbook Map 4.2 Action 3]; and applying traditional technology risk controls — such as procurement, security, and data privacy controls — to all acquired third-party technologies [NIST AI RMF Playbook Map 4.2 Action 4].
+
+## 4. Contingency Processes for Third-Party Failures
+
+Acme Health must maintain contingency processes to handle failures or incidents in third-party data or AI systems deemed to be high-risk. [NIST AI RMF Govern 6.2]
+
+The Vendor Risk / AI Risk team owns these contingency processes and their execution.
+
+NIST suggests, among its 2 actions for Govern 6.2, establishing policies for handling third-party system failures that include consideration of redundancy mechanisms for vital third-party AI systems [NIST AI RMF Playbook Govern 6.2 Action 1], and verifying that incident response plans address third-party AI systems [NIST AI RMF Playbook Govern 6.2 Action 2].
+
+## 5. Ongoing Management and Monitoring of Third-Party AI Risk
+
+### 5.1 Managing Third-Party Risks and Benefits
+
+Acme Health must manage AI risks and benefits from third-party entities. Risks and benefits from third-party resources must be regularly monitored, and risk controls must be applied and documented. [NIST AI RMF Manage 3 | NIST AI RMF Manage 3.1]
+
+The Vendor Risk / AI Risk team performs this monitoring, applies the risk controls, and maintains the documentation of both.
+
+NIST suggests, among its 10 actions for Manage 3.1, addressing legal requirements [NIST AI RMF Playbook Manage 3.1 Action 1]; applying organizational risk tolerance to third-party AI systems [NIST AI RMF Playbook Manage 3.1 Action 2]; applying and documenting organizational risk management plans and practices to third-party AI technology, personnel, or other resources [NIST AI RMF Playbook Manage 3.1 Action 3]; identifying and maintaining documentation for third-party AI systems and components [NIST AI RMF Playbook Manage 3.1 Action 4]; establishing testing, evaluation, validation, and verification processes for third-party AI systems that address the need for transparency without exposing proprietary algorithms [NIST AI RMF Playbook Manage 3.1 Action 5]; establishing processes to identify beneficial use and risk indicators in third-party systems or components, such as inconsistent software release schedules, sparse documentation, and incomplete software change management (e.g., lack of forward or backward compatibility) [NIST AI RMF Playbook Manage 3.1 Action 6]; establishing processes for third parties to report known and potential vulnerabilities, risks, or biases in supplied resources [NIST AI RMF Playbook Manage 3.1 Action 7]; verifying contingency processes for handling negative impacts associated with mission-critical third-party AI systems [NIST AI RMF Playbook Manage 3.1 Action 8]; monitoring third-party AI systems for potential negative impacts and risks associated with trustworthiness characteristics [NIST AI RMF Playbook Manage 3.1 Action 9]; and decommissioning third-party systems that exceed risk tolerances [NIST AI RMF Playbook Manage 3.1 Action 10].
+
+### 5.2 Pre-Trained Models
+
+Pre-trained models used for development must be monitored as part of AI system regular monitoring and maintenance. [NIST AI RMF Manage 3.2]
+
+The Vendor Risk / AI Risk team is responsible for including pre-trained models in this monitoring and maintenance activity.
+
+NIST suggests, among its 5 actions for Manage 3.2, identifying pre-trained models within the AI system inventory for risk tracking [NIST AI RMF Playbook Manage 3.2 Action 1]; establishing processes to independently and continually monitor the performance and trustworthiness of pre-trained models, as part of third-party risk tracking [NIST AI RMF Playbook Manage 3.2 Action 2]; monitoring the performance and trustworthiness of AI system components connected to pre-trained models, as part of third-party risk tracking [NIST AI RMF Playbook Manage 3.2 Action 3]; identifying, documenting, and remediating risks arising from AI system components and pre-trained models per organizational risk management procedures, as part of third-party risk tracking [NIST AI RMF Playbook Manage 3.2 Action 4]; and decommissioning AI system components and pre-trained models that exceed risk tolerances, as part of third-party risk tracking [NIST AI RMF Playbook Manage 3.2 Action 5].
+
+## 6. Compliance and Enforcement
+
+Compliance with this standard is verified by the Vendor Risk / AI Risk team, which is accountable for the end-to-end process described herein and for the handoffs between participating teams. Deviations from this standard must be reported to the Vendor Risk / AI Risk team.

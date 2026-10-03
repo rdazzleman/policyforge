@@ -1,0 +1,101 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.063956
+  models:
+    - anthropic/claude-sonnet-5
+  prompt_shas:
+    - af46ecf289fc415a
+  provider: litellm
+  provider_class: third-party
+---
+
+# Remote & Third-Party Access Standard
+
+## 1. Purpose and Scope
+
+This Standard establishes Example Org's requirements for remote access, wireless access, mobile device access, external system connections, portable storage device use, and publicly accessible content, in order to protect the confidentiality, integrity, and availability of organizational information and systems. Network Security owns this process end to end, including authorization, monitoring, documentation, and review of all remote and third-party access.
+
+## 2. Roles and Responsibilities
+
+Network Security is accountable for:
+
+- Establishing, authorizing, documenting, and periodically reviewing all remote access, wireless access, mobile device, and external system connections.
+- Maintaining the VPN and remote-access configuration as the authoritative record of allowed connection types, configuration requirements, and usage restrictions.
+- Maintaining the Third-party access register as the authoritative record of external parties, external systems, and third-party agreements authorized to connect to or exchange data with organizational systems.
+- Coordinating with other teams (e.g., system owners, [Ticketing System] administrators, [Identity Provider] administrators) as participants in individual steps of this process, without relinquishing ownership of the overall process or its handoffs.
+
+## 3. Remote Access
+
+- Network Security must establish and document, within the VPN and remote-access configuration, usage restrictions, configuration/connection requirements, and implementation guidance for each type of remote access allowed, and must authorize each type of remote access to the system prior to allowing such connections. [NIST 800-53 AC-17 Low/Moderate/High | ARC-AMPE AC-17 AE Mandatory]
+- Network Security must employ automated mechanisms to monitor and control remote access methods. [NIST 800-53 AC-17(1) Moderate/High | ARC-AMPE AC-17(1) AE Mandatory]
+- Network Security must implement cryptographic mechanisms to protect the confidentiality and integrity of remote access sessions; encrypting remote sessions is required to protect the confidentiality and integrity of sensitive information. [NIST 800-53 AC-17(2) Moderate/High | ARC-AMPE AC-17(2) AE Mandatory]
+- Network Security must route all remote accesses through authorized and managed network access control points. [NIST 800-53 AC-17(3) Moderate/High | ARC-AMPE AC-17(3) AE Mandatory]
+- Network Security must authorize the execution of privileged commands and access to security-relevant information via remote access only in a format that provides assessable evidence, and only for [Assignment: Organization-Defined Remote Access Needs] (NIST) / for compelling operational needs, which must be defined and documented in the applicable System Security and Privacy Plan (ARC-AMPE). The rationale for such remote access must be documented in the security plan for the system. [NIST 800-53 AC-17(4) Moderate/High | ARC-AMPE AC-17(4) AE Mandatory]
+- Network Security must protect information about remote access mechanisms from unauthorized use and disclosure. [NIST 800-53 AC-17(6)]
+- Network Security must provide the capability to disconnect or disable remote access to the system within [Assignment: Organization-Defined Time Period] (NIST) / within one (1) hour (ARC-AMPE). ARC-AMPE additionally requires that network connections (system-to-system interconnections) be terminated or suspended within one (1) hour upon issuance of an order by organization-defined officials. [NIST 800-53 AC-17(9) | ARC-AMPE AC-17(9) AE Mandatory]
+- Network Security must implement [Assignment: Organization-Defined Authentication Mechanisms] to authenticate [Assignment: Organization-Defined Remote Commands]. [NIST 800-53 AC-17(10)]
+- Network Security must implement policies and procedures that specify the proper functions to be performed, the manner in which those functions are performed, and the physical attributes of the surroundings of a specific workstation or class of workstation that can access electronic protected health information. [HIPAA Security Rule 164.310(b)]
+
+## 4. Wireless Access
+
+- Network Security must establish configuration requirements, connection requirements, and implementation guidance for each type of wireless access, documented in the VPN and remote-access configuration, and must authorize each type of wireless access to the system prior to allowing such connections. [NIST 800-53 AC-18 Low/Moderate/High | ARC-AMPE AC-18 AE Mandatory]
+- Network Security must protect wireless access to the system using authentication of users and/or devices (NIST: selection of one or more) / authentication of both users and devices (ARC-AMPE), together with encryption. ARC-AMPE additionally requires that all wireless communications be encrypted using the latest published FIPS 140-compliant encryption standards. [NIST 800-53 AC-18(1) Moderate/High | ARC-AMPE AC-18(1) AE Mandatory]
+- Network Security must disable, when not intended for use, wireless networking capabilities embedded within system components prior to issuance and deployment. [NIST 800-53 AC-18(3) Moderate/High | ARC-AMPE AC-18(3) AE Mandatory]
+- Network Security must identify and explicitly authorize users allowed to independently configure wireless networking capabilities. [NIST 800-53 AC-18(4) High]
+- Network Security must select radio antennas and calibrate transmission power levels to reduce the probability that signals from wireless access points can be received outside of organization-controlled boundaries. [NIST 800-53 AC-18(5) High]
+
+## 5. Mobile Devices
+
+- Network Security must establish configuration requirements, connection requirements, and implementation guidance for organization-controlled mobile devices, including when such devices are outside controlled areas, and must authorize the connection of mobile devices to organizational systems. [NIST 800-53 AC-19 Low/Moderate/High | ARC-AMPE AC-19 AE Mandatory]
+- Network Security must prohibit the use of unclassified mobile devices in facilities containing systems that process, store, or transmit classified information unless specifically permitted by the authorizing official. For individuals permitted such use:
+  - Connection of unclassified mobile devices to classified systems must be prohibited.
+  - Connection of unclassified mobile devices to unclassified systems must require authorizing official approval.
+  - Use of internal or external modems or wireless interfaces within the unclassified mobile devices must be prohibited.
+  - Unclassified mobile devices and their stored information must be subject to random reviews/inspections by organization-defined security officials, following incident handling policy if classified information is found.
+  - Connection of classified mobile devices to classified systems must be restricted per organization-defined security policies. [NIST 800-53 AC-19(4)]
+- Network Security must employ full-device encryption or container-based encryption to protect the confidentiality and integrity of information on [Assignment: Organization-Defined Mobile Devices] (NIST) / on approved mobile devices, using the latest published FIPS 140-compliant encryption standards (ARC-AMPE). ARC-AMPE additionally requires that information on all mobile devices containing Personally Identifiable Information (PII) be encrypted. [NIST 800-53 AC-19(5) Moderate/High | ARC-AMPE AC-19(5) AE Mandatory]
+
+## 6. External Systems and Third-Party Access
+
+- Network Security must establish [Assignment: Organization-Defined Terms and Conditions] and/or identify [Assignment: Organization-Defined Controls Asserted] to be implemented on external systems, consistent with the trust relationships established with other organizations owning, operating, and/or maintaining external systems, so that authorized individuals may access the system from external systems and process, store, or transmit organization-controlled information using external systems; or must prohibit the use of [Assignment: Organization-Defined Prohibited Types of External Systems]. All such determinations must be recorded in the Third-party access register. [NIST 800-53 AC-20 Low/Moderate/High | FedRAMP AC-20 | ARC-AMPE AC-20 AE Mandatory]
+
+- Network Security must differentiate the interrelated controls governing external access: AC-20 governs system access to and from external systems; CA-3 governs documentation of the agreement between system owners when data is exchanged between the system and an external system; SA-9 governs the responsibilities of external system owners, which are typically captured in the CA-3 agreement. [FedRAMP AC-20]
+
+- Network Security must permit authorized individuals to use an external system to access the system or to process, store, or transmit organization-controlled information only after (a) verifying implementation of the controls required on the external system as specified in organizational security and privacy policies/plans, or (b) retaining approved system connection or processing agreements with the entity hosting the external system, recorded in the Third-party access register. [NIST 800-53 AC-20(1) Moderate/High | ARC-AMPE AC-20(1) AE Mandatory]
+
+- Network Security must restrict the use of non-organizationally owned systems or system components to process, store, or transmit organizational information using [Assignment: Organization-Defined Restrictions] (NIST). ARC-AMPE restricts such use unless:
+
+  - Contractor-owned devices are documented in the contract and applicable security/privacy plans and are explicitly authorized in writing by the Authorizing Official (AO) or designated representative;
+  - Personally owned devices comply with organizational policies on personally-owned systems;
+  - Appropriate security/privacy safeguards are employed for the sensitivity of the data; and
+  - Full-device or virtual container encryption is implemented to reduce vulnerability of information processed, stored, or transmitted by non-organizationally owned systems/components.
+
+  ARC-AMPE additionally states that use of personally owned devices is strongly discouraged, and requires that, prior to being granted access to PII on remote devices, device users acknowledge through a binding agreement their responsibility to safeguard accessible PII and their agreement to the organization's ability to manage that PII on the device, including confiscation (in consultation with organizational counsel) if necessary. [NIST 800-53 AC-20(3) | ARC-AMPE AC-20(3) AE Mandatory]
+
+- Network Security must prohibit the use of [Assignment: Organization-Defined Network-Accessible Storage Devices] in external systems. [NIST 800-53 AC-20(4)]
+
+## 7. Portable Storage Devices
+
+- Network Security must restrict the use of organization-controlled portable storage devices by authorized individuals on external systems using [Assignment: Organization-Defined Restrictions] (NIST). ARC-AMPE specifies these restrictions must be defined in the applicable system security and privacy plans, and that such use is prohibited unless:
+  - The use is documented in appropriate security/privacy plans;
+  - The use is explicitly authorized in writing by the Authorizing Official (AO) or designated representative;
+  - Personally owned devices to which such storage devices are attached comply with organizational policies on personally owned systems; and
+  - Appropriate security/privacy safeguards are employed for the sensitivity of the data. [NIST 800-53 AC-20(2) Moderate/High | ARC-AMPE AC-20(2) AE Mandatory]
+- Network Security must prohibit the use of organization-controlled portable storage devices by authorized individuals on external systems. [NIST 800-53 AC-20(5)]
+
+## 8. Publicly Accessible Content
+
+- Network Security must designate individuals authorized to make information publicly accessible; train those individuals to ensure publicly accessible information does not contain nonpublic information; review proposed content prior to posting on the publicly accessible system to ensure nonpublic information is not included; and review content on the publicly accessible system for nonpublic information at [Assignment: Organization-Defined Frequency] (NIST), or bi-weekly and no less often than every fourteen (14) days (ARC-AMPE), removing such information if discovered. [NIST 800-53 AC-22 Low/Moderate/High | ARC-AMPE AC-22 AE Mandatory]
+
+## 9. Evidence and Records
+
+Network Security must maintain the following evidence in support of this Standard:
+
+- **VPN and remote-access configuration** — reflecting all authorized remote access types, wireless access types, mobile device connection authorizations, usage restrictions, configuration/connection requirements, and implementation guidance described in Sections 3–5.
+- **Third-party access register** — reflecting all authorized external systems, third-party connections, connection/processing agreements, and restrictions on non-organizationally owned systems and portable storage devices described in Section 6–7.
+
+## 10. Review Cadence
+
+Network Security must review the VPN and remote-access configuration and the Third-party access register on a quarterly basis to confirm that authorizations, configuration requirements, and third-party agreements remain accurate and continue to reflect actual remote, wireless, mobile, and external system access in use.

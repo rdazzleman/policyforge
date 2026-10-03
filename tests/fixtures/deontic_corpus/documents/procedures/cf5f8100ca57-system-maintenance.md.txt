@@ -1,0 +1,94 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.000901
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 9b7405ceb29c5a2b
+  provider: litellm
+  provider_class: third-party
+---
+
+# System Maintenance Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions for developing, documenting, disseminating, and maintaining the organization's system maintenance policy and supporting procedures, as required by the System Maintenance Standard. Executing it ensures that maintenance governance documentation remains current, approved, and traceable to applicable laws, regulations, and frameworks.
+
+## Scope
+
+Infrastructure Security performs this procedure on the organization's maintenance governance documentation (the maintenance policy and maintenance procedures) and on the systems used to author, approve, disseminate, and retain that documentation. This procedure covers all organizational systems subject to the System Maintenance Standard.
+
+## Prerequisites
+
+- Designated official accountable for the maintenance policy and procedures, as defined in the System Maintenance Standard (see the "Designation of Managing Official" step below)
+- Write access to [Document Management System] for storing and versioning governance documentation
+- Access to [Communication/Distribution System] for disseminating approved documentation to applicable personnel
+- Access to [Ticketing System] for tracking review and update tasks
+- Current versions of applicable laws, executive orders, directives, regulations, policies, standards, and guidelines relevant to system maintenance
+- Access to recent assessment, audit, and incident records needed to inform periodic reviews
+
+## Procedure Steps
+
+### 1. Develop and Document the Maintenance Policy `[NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]`
+
+Infrastructure Security develops and documents the maintenance policy at the organization level, addressing all required elements.
+
+1. Open [Document Management System] and create a new draft of the maintenance policy under Infrastructure Security ownership.
+1. Draft the policy to address, at minimum: purpose; scope; roles and responsibilities; management commitment; coordination among organizational entities; and compliance.
+1. Draft the policy at the organization level as required by ARC-AMPE (organization-level policy is mandatory), extending to mission/business process and/or system level only where the System Maintenance Standard calls for it.
+1. Cross-check each policy element against applicable laws, executive orders, directives, regulations, policies, standards, and guidelines, and record the sources consulted in the draft's reference section.
+1. Submit the draft to the designated managing official (see Step 3) for review and approval.
+1. Record the approval decision, approver, and approval date in [Document Management System], and link the approval record to the maintenance records with authorization retained as evidence for this process.
+
+### 2. Develop and Document Supporting Maintenance Procedures `[NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]`
+
+Infrastructure Security develops and documents procedures that facilitate implementation of the maintenance policy and its associated maintenance controls.
+
+1. In [Document Management System], create a draft procedures document linked to the approved maintenance policy from Step 1.
+1. Map each control and requirement in the System Maintenance Standard to a corresponding procedure section so that no control lacks an implementation procedure.
+1. Write each procedure section as concrete operational instructions: who performs the action, what system or tool is used, in what order, and what evidence is produced (e.g., maintenance records with authorization, remote maintenance session logs).
+1. Route the draft procedures to affected operational teams for technical review, collect feedback via [Ticketing System], and incorporate changes.
+1. Submit the revised procedures to the designated managing official for approval, and record the approval in [Document Management System].
+
+### 3. Designate the Managing Official `[NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]`
+
+The organization designates a specific official to manage the development, documentation, and dissemination of the maintenance policy and procedures.
+
+1. Identify the official who will manage development, documentation, and dissemination of the maintenance policy and procedures, per the organization-defined designation in the System Maintenance Standard.
+1. Record the designation — official's name, role, and effective date — in [Document Management System] alongside the policy document.
+1. Update the policy's Roles and Responsibilities section to name the designated official explicitly.
+1. Communicate the designation to applicable personnel via [Communication/Distribution System] when the designation changes.
+1. Infrastructure Security maintains this designation record as part of the maintenance records with authorization.
+
+### 4. Disseminate the Policy and Procedures `[NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]`
+
+Infrastructure Security disseminates the approved policy and procedures to applicable personnel or roles.
+
+1. After approval, publish the final policy and procedures to [Document Management System] and mark prior versions as superseded.
+1. Identify the applicable personnel and roles from the policy's scope section.
+1. Distribute the approved documents to those personnel via [Communication/Distribution System], and require acknowledgment of receipt where the System Maintenance Standard calls for it.
+1. Log the distribution date, recipient list, and acknowledgments in [Document Management System].
+1. Re-disseminate the documents to applicable personnel whenever a new version is approved following a review or update under Step 5.
+
+### 5. Review and Update the Policy and Procedures `[NIST 800-53 MA-1 Low/Moderate/High | ARC-AMPE MA-1 AE Mandatory]`
+
+Infrastructure Security reviews and updates the maintenance policy and procedures at the defined frequency and following defined trigger events.
+
+1. Create a recurring review task in [Ticketing System] for the maintenance policy and procedures, scheduled at the defined review frequency — no less than every one (1) year per ARC-AMPE — and assign it to Infrastructure Security. This review activity runs on a continuous basis between scheduled reviews as trigger events occur.
+1. When conducting a scheduled review, read the current policy and procedures in full and verify each element against current applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. In addition to scheduled reviews, initiate an out-of-cycle review whenever one of the following organization-defined events occurs: assessment or audit findings; security or privacy incidents; or changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Periodically review the documentation — independently of the scheduled cycle — and update it as needed in response to environmental or operational changes affecting security (for example, new systems in scope, tooling changes, or organizational restructuring).
+1. Draft and route any resulting changes through the same approval workflow used in Steps 1 and 2, with the designated managing official approving updates.
+1. Record each review — scheduled or event-driven — including the reviewer, date, findings, and any resulting changes, in [Document Management System].
+1. Re-disseminate updated documents per Step 4, and retain the review records with the maintenance records with authorization as evidence of completion.
+
+## Roles & Responsibilities
+
+Infrastructure Security is accountable end to end for this procedure: it develops, documents, disseminates, reviews, and updates the maintenance policy and procedures, and produces the maintenance records with authorization and remote maintenance session logs retained as evidence. The designated managing official named in Step 3 approves the documentation and any changes to it; exceptions to this procedure require that official's review and written approval.
+
+## Related Standard
+
+This procedure operationalizes the **System Maintenance Standard**, which contains the full requirement text and the rationale behind each control referenced above.

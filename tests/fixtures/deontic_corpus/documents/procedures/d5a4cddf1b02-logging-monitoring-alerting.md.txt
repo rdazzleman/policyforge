@@ -1,0 +1,183 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.003716
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 248b3b9627df5f8a
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Logging, Monitoring & Alerting Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions for executing the Example Org Logging, Monitoring & Alerting Standard: selecting and generating audit records, centrally reviewing and analyzing them, alerting on failures and suspicious activity, and retaining the resulting evidence. Executing it produces the Log source inventory and coverage report and the Alert tuning and review records that demonstrate ongoing compliance.
+
+## Scope
+
+The Detection & Response team performs this procedure continuously across all Example Org systems, applications, databases, network devices, appliances, and services that contain or use electronic protected health information or other sensitive data, including cloud-hosted environments. System Owners, the Authorizing Official, [Privacy Official], and other system components' custodians participate in defined steps but Detection & Response owns the process and all handoffs.
+
+## Prerequisites
+
+- Access to the [SIEM] with analyst and administrator roles
+- Access to the [Log Management Platform] and its long-term archive/repository
+- Access to the [IDS/IPS Management Console] and [Wireless IDS Console]
+- Access to the [Ticketing System] for recording reviews, tuning decisions, and follow-up actions
+- Access to the [Time Synchronization Service] (NTP) used for log source configuration
+- The current System Security and Privacy Plan, System Security and Privacy Policy, risk assessment, and Privacy Impact Assessment
+- The designated official for audit and accountability policy, documented in the System Security and Privacy Policy
+- Documented legal opinion regarding system monitoring activities
+- Authorizing Official acceptance of audited events for cloud environments
+- System Owner approval and acceptance of audit record types
+- The prior Log source inventory and coverage report
+
+## Procedure Steps
+
+### Maintain the Audit and Accountability Policy and Procedures [NIST 800-53 AU-1 | ARC-AMPE AU-1 | HIPAA 164.316(b)(1)]
+
+1. Confirm the designated official responsible for the audit and accountability policy and procedures is correctly named in the System Security and Privacy Policy; if the designation has changed, update the policy document before proceeding.
+1. Review the audit and accountability policy and this procedure for consistency with applicable laws, regulations, directives, and Example Org's overarching security and privacy policies.
+1. Verify the policy addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; revise any section that no longer reflects operations.
+1. Confirm the written (electronic is acceptable) record of actions, activities, and assessments required under HIPAA is current in the designated documentation repository.
+1. Review privacy law, regulation, and policy changes affecting audit and accountability; confirm the policy limits unnecessary or inappropriate access to PII and supports privacy throughout the system life cycle.
+1. Update the policy and procedures at least every one (1) year, following [Organization-Defined Trigger Events], and in response to environmental or operational changes affecting the security of electronic protected health information.
+1. Record each review and update — date, reviewer, changes made — in the Alert tuning and review records, and make the updated documents available to all personnel responsible for implementing them.
+1. Retain all documentation produced under this procedure for 6 years from the date of creation or the date it was last in effect, whichever is later, in the designated records repository.
+
+### Select and Document Event Types for Logging [NIST 800-53 AU-2 | ARC-AMPE AU-2]
+
+1. Derive candidate event types from the current risk assessment and organization-defined mission/business needs; coordinate with Legal, [Privacy Official], System Owners, Human Resources, and Physical Security to capture all entities requiring audit-related information in the selection criteria.
+1. Include, at minimum, the ARC-AMPE event set: user log-on/log-off (successful and unsuccessful), configuration changes, application alerts and error messages, all system administration and privileged user activity, modification of privileges and access, account creation/modification/deletion, concurrent log-on from different workstations, and override of access control mechanisms.
+1. For each selected event type, specify the frequency of, or situation requiring, logging, and document a rationale for why the selection is adequate to support after-the-fact incident investigations.
+1. For cloud environments, submit the defined audited events to the Authorizing Official and obtain documented approval before enabling them.
+1. Update the Log source inventory and coverage report to list each event type, its source component, its logging frequency/situation, and its rationale.
+1. Re-review and update the selected event types at least every one (1) year and whenever there is a significant system modification or change in the system environment; record each review in the Alert tuning and review records.
+
+### Define and Validate Audit Record Content [NIST 800-53 AU-3 | AU-3(1) | AU-3(3) | ARC-AMPE AU-3]
+
+1. Configure each log source so every audit record establishes: what type of event occurred, when it occurred, where it occurred, the source of the event, the outcome of the event, and the identity of any individuals, subjects, or entities associated with the event.
+1. Configure logging of disclosures of sensitive information (including PHI and financial information) capturing the information type, date, time, receiving party, and releasing party.
+1. Configure generation of the ARC-AMPE additional record content: session/connection/transaction/activity duration, bytes received and sent for client-server transactions, additional diagnostic messages, characteristics identifying the object or resource acted upon, individual identities of group account users, and full text of privileged commands.
+1. Submit the defined audit record types to the System Owner and obtain documented approval and acceptance before deployment.
+1. Compare all PII elements present in audit records against the system-defined elements in the Privacy Impact Assessment; remove or mask any element not identified as relevant and necessary, confirm any collection requiring legal authorization is legally authorized, and document the justification for PII inclusion in the audit policy.
+
+### Allocate Log Storage and Transfer Logs Off-System [NIST 800-53 AU-4 | AU-4(1) | ARC-AMPE AU-4]
+
+1. Size audit log storage on each source system and the [Log Management Platform] to accommodate at least 90 days of retention at measured peak performance volumes; document the sizing calculation in the Log source inventory and coverage report.
+1. Configure each log source to transfer its audit logs continuously to the [Log Management Platform], which must reside on a different system or component than the one conducting the logging.
+1. Verify transfers are occurring by comparing source-side generation counts against received counts in the [Log Management Platform]; open a [Ticketing System] ticket for any gap and investigate before it ages out of the live window.
+
+### Detect and Respond to Logging Failures and Capacity Alerts [NIST 800-53 AU-5 | AU-5(1) | AU-5(2) | AU-5(3) | AU-5(4) | AU-5(5) | ARC-AMPE AU-5]
+
+1. Configure the [SIEM] and [Log Management Platform] to alert Detection & Response in near real time upon detection of an audit logging process failure.
+1. Upon a logging failure alert: shut down the affected system or halt processing immediately if it supports automatic shutdown; if it does not, shut it down within one (1) hour of the failure.
+1. Configure a warning to Detection & Response when allocated audit log storage reaches [Storage Warning Threshold Percentage] of maximum capacity, and verify the warning fires correctly during the tuning tests in the Alert tuning and review records.
+1. Configure real-time alerts for organization-defined logging failure events to the recipients documented in the System Security and Privacy Plan.
+1. Enforce configurable network communications traffic volume thresholds on the log collection path that reflect audit log storage capacity limits; configure the collector to reject or delay traffic above the thresholds.
+1. Maintain an alternate audit logging capability (e.g., a secondary [Log Management Platform] sink or agent-local spooling) that activates on primary logging failure; when a failure occurs and no alternate capability exists, invoke full or partial system shutdown or a degraded operational mode with limited business functionality per the documented decision matrix.
+1. Record every failure, alert, and shutdown/degraded-mode decision in the [Ticketing System] and summarize it in the Alert tuning and review records.
+
+### Review, Analyze, Correlate, and Report on Audit Records [NIST 800-53 AU-6 | AU-6(1) | AU-6(3) | AU-6(4) | AU-6(5) | AU-6(6) | AU-6(7) | AU-6(8) | AU-6(9) | FedRAMP AU-6 | ARC-AMPE AU-6 | HIPAA 164.308(a)(1)(ii)(D)]
+
+1. Using the [SIEM], review and analyze system audit records at least every seven (7) days — no less often than weekly — for indications of inappropriate or unusual activity and its potential impact; also regularly review audit logs, access reports, and security incident tracking records.
+1. Document each review cycle — analyst, date, queries run, findings, dispositions — in the Alert tuning and review records and the [Ticketing System].
+1. Report review findings to the personnel and roles documented in the System Security and Privacy Plan; investigate suspicious activity or suspected violations and take appropriate action, coordinating with incident response under the Vulnerability Detection and Response rules.
+1. Adjust the level of audit record review, analysis, and reporting whenever there is a change in risk based on law enforcement information, intelligence information, or other credible sources; record the adjustment and its justification in the Alert tuning and review records.
+1. Integrate review, analysis, and reporting into the [SIEM] using automated mechanisms to the fullest extent possible; keep audit records from all automated security capabilities and service tools searchable, and confirm sources include systems, appliances, devices, services, and applications, including databases.
+1. Run cross-repository correlation searches in the [SIEM] to analyze and correlate audit records across systems, appliances, devices, services, and applications for organization-wide situational awareness, and maintain centralized review capability over audit records from multiple system components.
+1. Integrate audit record analysis with vulnerability scanning information, performance data, system monitoring information, and other defined data sources; treat this analysis as vulnerability detection subject to the Vulnerability Detection and Response rules.
+1. Correlate audit record information with physical access monitoring data (e.g., badge/system entry logs from [Physical Access Control System]) to identify suspicious, inappropriate, unusual, or malevolent activity.
+1. Document the permitted actions for each system process, role, and user associated with audit record review, analysis, and reporting; enforce those permissions in the [SIEM] role model.
+1. Perform full text analysis of logged privileged commands in the dedicated [Privileged Command Analysis Component] or another system dedicated to that analysis, physically distinct from the audited systems.
+1. Correlate nontechnical sources (e.g., HR notifications, insider-threat referrals, physical security reports) with audit record information in the [SIEM] correlation layer.
+1. For cloud environments, document the coordination between the service provider and Example Org for audit record review, analysis, and reporting; in multi-tenant environments, document the capability and means for reviewing, analyzing, and reporting on data pertaining to Example Org as the consumer.
+
+### Provide Reduction, Reporting, and Time Synchronization Capabilities [NIST 800-53 AU-7 | AU-7(1) | AU-8 | ARC-AMPE AU-7 | AU-8]
+
+1. Verify the [Log Management Platform] provides on-demand audit record reduction and report generation supporting after-the-fact incident investigations, and that reports do not alter the original content or time ordering of records.
+1. Confirm the capability to process, sort, and search audit records for events of interest based on organization-defined fields and selectable event criteria; exercise each search field and record the results in the Alert tuning and review records.
+1. Confirm every log source generates time stamps from its internal system clock synchronized to the [Time Synchronization Service], mappable to UTC or GMT and accurate to within one hundred (100) milliseconds, with the UTC offset included or fixed as documented.
+1. Verify timestamp accuracy by comparing sample log time stamps against the [Time Synchronization Service]; open a [Ticketing System] ticket to remediate any source exceeding the accuracy tolerance.
+
+### Protect Audit Information and Establish Non-Repudiation [NIST 800-53 AU-9 | AU-9(1) | AU-9(2) | AU-9(3) | AU-9(4) | AU-9(5) | AU-9(6) | AU-9(7) | AU-10 | ARC-AMPE AU-9 | AU-10]
+
+1. Restrict access to audit records, audit log settings, audit reports, and audit logging tools to prevent unauthorized access, modification, and deletion; configure alerts to Detection & Response upon detection of any unauthorized access, modification, or deletion attempt.
+1. Write audit trails to hardware-enforced, write-once media (or the platform's equivalent immutable storage tier) in the long-term repository.
+1. Store audit records in a repository that is part of a physically different system or component than the system being audited, running a different operating system than the audited component.
+1. Enable cryptographic mechanisms (e.g., integrity hashing or signing) protecting the integrity of audit information and audit tools; verify integrity checks during each review cycle.
+1. Restrict management of audit logging functionality to the subset of privileged users or roles defined in the System Security and Privacy Plan — individuals or roles who are not subject to audit by that system — and grant read-only audit access to a separately defined subset.
+1. Enforce dual authorization, via the [Approval Workflow], for any movement or deletion of organization-defined audit information; no single individual may complete these operations.
+1. Configure non-repudiation evidence for the actions defined in the System Security and Privacy Plan — at minimum the addition, modification, deletion, approval, sending, or receiving of data, and ARC-AMPE ACA eligibility and enrollment functions (applying for APTC/CSR advance payments, applying for and completing Qualified Health Plan enrollment, and related customer service) — such that irrefutable evidence ties each action to the individual or process acting on their behalf.
+
+### Retain and Retrieve Audit Records [NIST 800-53 AU-11 | AU-11(1) | ARC-AMPE AU-11]
+
+1. Retain live audit records for at least 90 days, then archive old records for ten (10) years consistent with the records retention policy, including the ACA retention rule (45 CFR §155.1210).
+1. When an audit record is subject to a legal investigation, maintain it until released by the investigating authority; place a legal hold in the [Log Management Platform] and record the hold in the [Ticketing System].
+1. Retain audit inspection reports, including records of corrective actions, for a minimum of three (3) years from completion of the inspection.
+1. Ensure long-term records remain retrievable by converting records to newer formats as needed, retaining equipment capable of reading retained formats, and retaining documentation that helps personnel interpret archived records; verify retrieval by restoring a sample from archive and record the test in the Alert tuning and review records.
+
+### Generate and Compile Audit Records Across Components [NIST 800-53 AU-12 | AU-12(1) | AU-12(2) | AU-12(3) | AU-12(4) | FedRAMP AU-12 | ARC-AMPE AU-12]
+
+1. Enable audit record generation on all information system and network components where audit capability is deployed or available; allow authorized Detection & Response personnel to select which event types are logged by each specific component.
+1. Update the Log source inventory and coverage report listing every generating component, its enabled event types, and its record content; investigate and close any gap between deployed components and inventoried sources.
+1. Compile audit records from all components into a system-wide audit trail in the [SIEM], time-correlated to within [Time Correlation Tolerance] using the [Time Synchronization Service] as reference.
+1. Normalize all component records into a standardized format (e.g., [Standardized Log Format]) at ingestion so the compiled trail is uniform.
+1. Maintain and exercise the capability for authorized personnel to change logging on specific components based on selectable event criteria within [Logging Change Time Threshold]; log every logging change as an auditable event.
+1. Enable auditing of user query event parameters for data sets containing personally identifiable information, capturing the querying identity and the query parameters.
+
+### Monitor the System and Detect Attacks [NIST 800-53 SI-4 | FedRAMP SI-4 | ARC-AMPE SI-4]
+
+1. Define monitoring objectives consistent with the incident response policy and procedures, and configure the [SIEM] and monitoring devices to detect attacks, indicators of potential attacks, and unauthorized local, network, and remote connections.
+1. Document, in the System Security and Privacy Plan, the techniques and methods used to identify unauthorized use of the system.
+1. Deploy internal monitoring capabilities and monitoring devices strategically to collect organization-determined essential information, and at ad hoc locations to track specific types of transactions of interest.
+1. Analyze detected events and anomalies continuously; adjust the level of monitoring activity whenever there is a change in risk to organizational operations and assets, individuals, other organizations, or the Nation, recording each adjustment in the Alert tuning and review records.
+1. Obtain and keep current the legal opinion regarding system monitoring activities; do not enable new monitoring categories affecting personnel communications before the opinion covers them.
+1. Provide system monitoring information to the personnel and roles defined in the System Security and Privacy Plan, as needed and at the frequency documented in that Plan.
+1. Follow all applicable rules within the FedRAMP Vulnerability Detection and Response and Incident Communication Procedure guidance for all system monitoring activities.
+
+### Operate the Centrally Managed IDS/IPS Capability [NIST 800-53 SI-4(1) | SI-4(2) | SI-4(3) | SI-4(4) | SI-4(9) | SI-4(10) | SI-4(14) | SI-4(15) | SI-4(23) | SI-4(25) | ARC-AMPE SI-4]
+
+1. Operate centrally managed IDS/IPS devices at network perimeter points (including between zones) and centrally managed host-based IDS/IPS sensor agents on all networks and subnets; connect individual detection tools into the system-wide intrusion detection system via the [IDS/IPS Management Console].
+1. For communications encrypted within a zone, use mechanisms capable of decrypting content for analysis or analyzing content before transmission or after receipt, making organization-defined encrypted traffic visible to monitoring tools.
+1. Document, in the applicable risk assessment and System Security and Privacy Plan, every component that does not support a host-based IDS/IPS sensor, along with the compensating approach.
+1. Configure the [SIEM] for near real-time analysis of aggregated intrusion detection information: aggregated data must be searchable, delivered in a format meeting organization-defined requirements, sourced from all network- and host-based capabilities, honor organization-directed collection rules within the requested timeframe, and retain raw intrusion detection information in an unaltered format.
+1. Integrate intrusion detection tools into access control and flow control mechanisms so detection results can trigger enforcement.
+1. Define and document criteria for unusual or unauthorized inbound and outbound communications activities or conditions; monitor traffic continuously against those criteria.
+1. Test intrusion-monitoring tools and mechanisms at [IDS/IPS Test Frequency] and record each test in the Alert tuning and review records.
+1. Employ the [Wireless IDS Console] to identify rogue wireless devices and detect attack attempts, potential compromises, and breaches — covering both external events at system boundaries and internal events within the system — and deploy intrusion detection on wireless communications traffic as it passes from wireless to wireline networks.
+1. Implement host-based monitoring on systems, appliances, devices, services, and applications per the System Security and Privacy Plan.
+1. Provide visibility into network traffic at external and key internal system interfaces (e.g., via [Network Packet Broker] or SPAN/tap configurations) to optimize monitoring device effectiveness.
+
+### Detect, Alert On, and Escalate Indicators of Compromise [NIST 800-53 SI-4(5) | SI-4(7) | SI-4(12) | SI-4(22) | SI-4(24) | ARC-AMPE SI-4(5)]
+
+1. Configure automated alerts to Detection & Response when system-generated indications of compromise occur, including the presence of malicious code, unauthorized export of information, signaling to an external information system, or potential intrusions; confirm recipients match the System Security and Privacy Plan.
+1. Handle malicious code alerts consistent with SI-3 (malicious code protection) procedures.
+1. Notify incident response personnel of detected suspicious events and take the documented least-disruptive actions upon detection; record the notification and action in the [Ticketing System].
+1. Alert Detection & Response via automated mechanisms when indications of inappropriate or unusual activities with security or privacy implications occur.
+1. Detect network services that have not been authorized or approved through the organization's authorization processes, and audit or alert Detection & Response when detected; open a [Ticketing System] ticket for each unauthorized service found.
+1. Discover, collect, and distribute indicators of compromise from organization-defined sources (e.g., [Threat Intelligence Source]) to the defined personnel or roles, and load them into the [SIEM] detection layer.
+
+### Analyze Traffic Patterns and Outbound Anomalies [NIST 800-53 SI-4(11) | SI-4(13) | SI-4(18) | ARC-AMPE SI-4(11)]
+
+1. Analyze outbound communications traffic at the external interfaces to the system and at selected interior points to discover anomalies, and analyze outbound traffic at external interfaces and interior points to detect covert exfiltration of information.
+1. Analyze communications traffic and event patterns for the system; develop profiles representing common traffic and event patterns and use those profiles to tune system-monitoring devices.
+1. Record each profile update and tuning change, with its rationale, in the Alert tuning and review records.
+
+### Correlate and Heighten Monitoring for Elevated-Risk Populations [NIST 800-53 SI-4(16) | SI-4(17) | SI-4(19) | SI-4(20) | SI-4(21)]
+
+1. Correlate information from all monitoring tools and mechanisms employed throughout the system in the [SIEM].
+1. Correlate information from monitoring physical, cyber, and supply chain activities to achieve integrated, organization-wide situational awareness.
+1. Implement the additional monitoring defined for individuals identified by organization-defined sources as posing an increased level of risk, and for individuals during the defined probationary period, using the [SIEM] watchlist capability.
+1. Implement the additional monitoring defined for privileged users, including full-session or command-level logging, and route the resulting records to the privileged command analysis capability.
+
+## Roles & Responsibilities
+
+The Detection & Response team is authorized to perform every step of this procedure end to end and is accountable for its outcomes, including the Log source inventory and coverage report and the Alert tuning and review records. System Owners approve and accept audit record types, the Authorizing Official approves audited events for cloud environments, and exceptions to any step in this procedure require written approval from the Detection & Response lead in consultation with the designated audit and accountability official.
+
+## Related Standard
+
+This procedure operationalizes the requirements in the *Example Org Logging, Monitoring & Alerting Standard*, which contains the full requirement text, the control rationale, and the underlying framework mappings.

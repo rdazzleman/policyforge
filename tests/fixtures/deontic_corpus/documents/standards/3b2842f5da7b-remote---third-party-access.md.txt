@@ -1,0 +1,197 @@
+# Acme Health Remote and Wireless Access Control Standard
+
+## 1. Purpose and Scope
+
+This Standard establishes mandatory requirements for remote access, wireless access, mobile device use, external system connections, workstation use, and publicly accessible information at Acme Health. This Standard applies to all systems, personnel, contractors, and third parties requiring or providing such access to Acme Health information and systems.
+
+## 2. Remote Access Control
+
+### 2.1 Access Authorization and Documentation
+
+Acme Health shall establish and document usage restrictions, configuration/connection requirements, and implementation guidance for each type of remote access allowed. [NIST 800-53 AC-17 Low, Moderate, High | ARC-AMPE AC-17 AE Mandatory]
+
+Acme Health shall authorize each type of remote access to the system prior to allowing such connections. [NIST 800-53 AC-17 Low, Moderate, High | ARC-AMPE AC-17 AE Mandatory]
+
+### 2.2 Automated Monitoring and Control
+
+Acme Health shall employ automated mechanisms to monitor and control remote access methods. [NIST 800-53 AC-17(1) Moderate, High | ARC-AMPE AC-17(1) AE Mandatory]
+
+### 2.3 Cryptographic Protection
+
+Acme Health shall implement cryptographic mechanisms to protect the confidentiality and integrity of remote access sessions. [NIST 800-53 AC-17(2) Moderate, High | ARC-AMPE AC-17(2) AE Mandatory]
+
+### 2.4 Managed Network Access Points
+
+Acme Health shall route remote accesses through authorized and managed network access control points. [NIST 800-53 AC-17(3) Moderate, High | ARC-AMPE AC-17(3) AE Mandatory]
+
+### 2.5 Privileged Commands and Security-Relevant Information
+
+Acme Health shall authorize the execution of privileged commands and access to security-relevant information via remote access only in a format that provides assessable evidence and for [Assignment: organization-defined needs], and document the rationale for remote access in the security plan for the system. [NIST 800-53 AC-17(4) Moderate, High]
+
+Acme Health shall authorize the execution of privileged commands and access to security-relevant information via remote access only in a format that provides assessable evidence and for compelling operational needs, and document the rationale for remote access in the security plan for the system. [ARC-AMPE AC-17(4) AE Mandatory]
+
+### 2.6 Protection of Remote Access Mechanism Information
+
+Acme Health shall protect information about remote access mechanisms from unauthorized use and disclosure. [NIST 800-53 AC-17(6)]
+
+### 2.7 Disconnect and Disable Capability
+
+Acme Health shall provide the capability to disconnect or disable remote access to the system within [Assignment: organization-defined time period]. [NIST 800-53 AC-17(9)]
+
+Acme Health shall provide the capability to disconnect or disable remote access to the system within one (1) hour. [ARC-AMPE AC-17(9) AE Mandatory]
+
+### 2.8 Remote Command Authentication
+
+Acme Health shall implement [Assignment: organization-defined mechanisms] to authenticate [Assignment: organization-defined remote commands]. [NIST 800-53 AC-17(10)]
+
+### 2.9 Callback and Re-authentication
+
+Acme Health shall require callback capability with re-authentication to verify connections from authorized locations when the Multi-Protocol Label Switching (MPLS) service network cannot be used. [ARC-AMPE AC-17 AE Mandatory]
+
+### 2.10 Vendor Remote Access
+
+For application systems and turnkey systems that require the vendor to log on, Acme Health shall assign the vendor a User ID and password and have them enter the network through the standard authentication process, with access authorized and logged; Acme Health shall recertify User IDs assigned to vendors within every one (1) year. [ARC-AMPE AC-17 AE Mandatory]
+
+### 2.11 Remote Access Solutions and E-Authentication
+
+For remote access solutions (e.g., e-authentication), Acme Health shall refer to the latest published NIST SP 800-63. [ARC-AMPE AC-17 AE Mandatory]
+
+### 2.12 Remote Access Device Security Requirements
+
+Acme Health shall ensure that all computers and devices, whether government furnished equipment (GFE), contractor furnished equipment (CFE), or personal, that require any network access to an organization network or system are securely configured and meet, as a minimum, the following security requirements: up-to-date system patches; current anti-virus software; host-based intrusion detection system; functionality that provides the capability for automatic execution of code disabled; and employs the latest published FIPS 140-compliant encryption standards. [ARC-AMPE AC-17 AE Mandatory]
+
+### 2.13 Remote Access Policies and Procedures
+
+For organizations supporting remote access (including teleworking), Acme Health shall ensure the latest published NIST SP 800-46 guidelines are followed by establishing policies and procedures that define: forms of permitted remote access; types of devices permissible for remote access; types of access granted to remote users; and handling of remote user account provisioning. [ARC-AMPE AC-17 AE Mandatory]
+
+## 3. Wireless Access Control
+
+### 3.1 Wireless Access Authorization and Documentation
+
+Acme Health shall establish configuration requirements, connection requirements, and implementation guidance for each type of wireless access. [NIST 800-53 AC-18 Low, Moderate, High | ARC-AMPE AC-18 AE Mandatory]
+
+Acme Health shall authorize each type of wireless access to the system prior to allowing such connections. [NIST 800-53 AC-18 Low, Moderate, High | ARC-AMPE AC-18 AE Mandatory]
+
+### 3.2 Wireless Access Protection
+
+Acme Health shall protect wireless access to the system using authentication of [Selection (one or more): users; devices] and encryption. [NIST 800-53 AC-18(1) Moderate, High]
+
+Acme Health shall protect wireless access to the system using authentication of users, devices, and encryption. [ARC-AMPE AC-18(1) AE Mandatory]
+
+Acme Health shall ensure all communications via the wireless access device are encrypted using the latest published FIPS 140-compliant encryption standards. [ARC-AMPE AC-18(1) AE Mandatory]
+
+### 3.3 Disable Wireless Capabilities
+
+Acme Health shall disable, when not intended for use, wireless networking capabilities embedded within system components prior to issuance and deployment. [NIST 800-53 AC-18(3) Moderate, High | ARC-AMPE AC-18(3) AE Mandatory]
+
+### 3.4 User Authorization for Wireless Configuration
+
+Acme Health shall identify and explicitly authorize users allowed to independently configure wireless networking capabilities. [NIST 800-53 AC-18(4) High]
+
+### 3.5 Wireless Signal Attenuation
+
+Acme Health shall select radio antennas and calibrate transmission power levels to reduce the probability that signals from wireless access points can be received outside of organization-controlled boundaries. [NIST 800-53 AC-18(5) High]
+
+### 3.6 Approved Wireless Access Requirements
+
+If wireless access is explicitly approved, Acme Health shall disable wireless device service set identifier broadcasting and implement the following wireless restrictions and access controls: encryption protection is enabled; access points are placed in secure areas; access points are shut down when not in use (i.e., nights, weekends); a stateful inspection firewall is implemented between the wireless network and the wired infrastructure; Media Access Control (MAC) address authentication is utilized; static IP addresses, not Dynamic Host Configuration Protocol (DHCP), is utilized; personal firewalls are utilized on all wireless clients; file sharing is disabled on all wireless clients; intrusion detection agents are deployed on the wireless side of the firewall; wireless activity is monitored and recorded, and the records are reviewed on a regular basis (defined in applicable security/privacy plans); and adheres to the latest published IEEE 802.11 Wireless Local Area Network (WLAN) standard. [ARC-AMPE AC-18 AE Mandatory]
+
+## 4. Mobile Device Control
+
+### 4.1 Mobile Device Configuration and Authorization
+
+Acme Health shall establish configuration requirements, connection requirements, and implementation guidance for organization-controlled mobile devices, to include when such devices are outside of controlled areas. [NIST 800-53 AC-19 Low, Moderate, High | ARC-AMPE AC-19 AE Mandatory]
+
+Acme Health shall authorize the connection of mobile devices to organizational systems. [NIST 800-53 AC-19 Low, Moderate, High | ARC-AMPE AC-19 AE Mandatory]
+
+Acme Health shall obtain authorization from the system Business Owner for the use of mobile devices. [ARC-AMPE AC-19 AE Mandatory]
+
+### 4.2 Mobile Device Use in Facilities with Classified Systems
+
+Acme Health shall prohibit the use of unclassified mobile devices in facilities containing systems processing, storing, or transmitting classified information unless specifically permitted by the authorizing official, and enforce restrictions including: connection of unclassified mobile devices to classified systems is prohibited; connection of unclassified mobile devices to unclassified systems requires approval from the authorizing official; use of internal or external modems or wireless interfaces within the unclassified mobile devices is prohibited; and unclassified mobile devices and the information stored on those devices are subject to random reviews and inspections by [Assignment: organization-defined security officials], and if classified information is found, the incident handling policy is followed. [NIST 800-53 AC-19(4)]
+
+Acme Health shall restrict the connection of classified mobile devices to classified systems in accordance with [Assignment: organization-defined security policies]. [NIST 800-53 AC-19(4)]
+
+### 4.3 Mobile Device Encryption
+
+Acme Health shall employ [Selection: full-device encryption; container-based encryption] to protect the confidentiality and integrity of information on [Assignment: organization-defined mobile devices]. [NIST 800-53 AC-19(5) Moderate, High]
+
+Acme Health shall employ full device encryption or container encryption using the latest published FIPS 140-compliant encryption standards to protect the confidentiality and integrity of information on approved mobile devices. [ARC-AMPE AC-19(5) AE Mandatory]
+
+Acme Health shall encrypt information on all mobile devices that contain Personally Identifiable Information (PII). [ARC-AMPE AC-19(5) AE Mandatory]
+
+### 4.4 Mobile Device Management for PII
+
+Acme Health shall use only organization-owned mobile devices and software to process, access, and store Personally Identifiable Information (PII). [ARC-AMPE AC-19 AE Mandatory]
+
+Acme Health shall ensure mobile devices are configured to protect the storage and transmission of information on the device and implement scanning of the device using a virus protection application. [ARC-AMPE AC-19 AE Mandatory]
+
+## 5. External System Use
+
+### 5.1 External System Use Authorization
+
+Acme Health shall either [Selection (one or more): establish [Assignment: organization-defined terms and conditions]; identify [Assignment: organization-defined controls asserted]], consistent with the trust relationships established with other organizations owning, operating, and/or maintaining external systems, allowing authorized individuals to: (1) access the system from external systems; and (2) process, store, or transmit organization-controlled information using external systems; or prohibit the use of [Assignment: organization-defined prohibited types of external systems]. [NIST 800-53 AC-20 Low, Moderate, High | FedRAMP AC-20]
+
+Acme Health shall establish organization-defined terms and conditions and identify organization-defined controls asserted to be implemented on external systems, consistent with the trust relationships established with other organizations owning, operating, and/or maintaining external systems, allowing authorized individuals to: (1) access the system from external systems; and (2) process, store, or transmit organization-controlled information using external systems; or prohibit the use of organizationally defined types of external systems. [ARC-AMPE AC-20 AE Mandatory]
+
+### 5.2 Terms and Conditions for External System Use
+
+Acme Health shall ensure that terms and conditions address, at a minimum: the types of applications that can be accessed from external information systems; the maximum FIPS 199 security category of information that can be processed, stored, and transmitted; how other users of the external information system will be prevented from accessing federal information; the use of Virtual Private Network (VPN) and stateful inspection firewall technologies; the use of and protection against the vulnerabilities of wireless technologies; the maintenance of adequate physical security controls; the use of virus and spyware protection software; and how often the security capabilities of installed software are to be updated. [ARC-AMPE AC-20 AE Mandatory]
+
+### 5.3 Verification of External System Controls
+
+Acme Health shall permit authorized individuals to use an external system to access the system or to process, store, or transmit organization-controlled information only after: (a) verification of the implementation of controls on the external system as specified in the organization's security and privacy policies and security and privacy plans; or (b) retention of approved system connection or processing agreements with the organizational entity hosting the external system. [NIST 800-53 AC-20(1) Moderate, High | ARC-AMPE AC-20(1) AE Mandatory]
+
+### 5.4 Portable Storage Device Restrictions on External Systems
+
+Acme Health shall restrict the use of organization-controlled portable storage devices by authorized individuals on external systems using [Assignment: organization-defined restrictions]. [NIST 800-53 AC-20(2) Moderate, High]
+
+Acme Health shall restrict the use of organization-controlled portable storage devices by authorized individuals on external systems using organization-defined restrictions. [ARC-AMPE AC-20(2) AE Mandatory]
+
+Acme Health shall restrict the use of organization-controlled portable storage devices by authorized individuals on external systems unless: the use is documented within appropriate security/privacy plans; the use is explicitly authorized, in writing, by the Authorizing Official (AO) or his/her designated representative; personally owned devices to which organization-controlled portable storage devices are to be attached comply with organization policies and directives on use of personally owned systems and components; and security and privacy safeguards are employed that are appropriate for the sensitivity of the data. [ARC-AMPE AC-20(2) AE Mandatory]
+
+### 5.5 Non-Organizationally Owned System Use
+
+Acme Health shall restrict the use of non-organizationally owned systems or system components to process, store, or transmit organizational information using [Assignment: organization-defined restrictions]. [NIST 800-53 AC-20(3)]
+
+Acme Health shall restrict the use of non-organizationally owned systems or system components to process, store, or transmit organization information unless: (a) the use of contractor-owned devices are: (1) documented within the contract and appropriate security and privacy plans; and (2) explicitly authorized, in writing, by the Authorizing Official (AO) or his/her designated representative; and (b) the use of personally owned devices must comply with organizational policies and directives on use of personally-owned systems and components; and (c) security and privacy safeguards are employed that are appropriate for the sensitivity of the data; and (d) implements either full-device or virtual container encryption to reduce the vulnerability to sensitive information processed, stored, or transmitted by non-organizationally owned systems or system components (devices). [ARC-AMPE AC-20(3) AE Mandatory]
+
+Acme Health shall, prior to being provided access to Personally Identifiable Information (PII) on remote devices, require device users to acknowledge through a binding agreement their responsibilities to safeguard the PII accessible from the device and that they are aware of and agree to the organization's capabilities to manage the organization's PII on the device, including confiscation, in consultation with the organization's counsel, if necessary to remove the PII. [ARC-AMPE AC-20(3) AE Mandatory]
+
+### 5.6 Prohibition of Network-Accessible Storage Devices
+
+Acme Health shall prohibit the use of [Assignment: organization-defined network-accessible storage devices] in external systems. [NIST 800-53 AC-20(4)]
+
+Acme Health shall prohibit the use of organization-controlled portable storage devices by authorized individuals on external systems. [NIST 800-53 AC-20(5)]
+
+### 5.7 Differentiation of Related Controls
+
+Acme Health shall differentiate the interrelated controls of AC-20, CA-3, and SA-9 as follows: AC-20 describes system access to and from external systems; CA-3 describes documentation of an agreement between the respective system owners when data is exchanged between the CSO and an external system; SA-9 describes the responsibilities of external system owners, which would typically be captured in the agreement required by CA-3. [FedRAMP AC-20]
+
+## 6. Workstation Use
+
+Acme Health shall implement policies and procedures that specify the proper functions to be performed, the manner in which those functions are to be performed, and the physical attributes of the surroundings of a specific workstation or class of workstation that can access electronic protected health information. [HIPAA Security Rule 164.310(b)]
+
+## 7. Publicly Accessible Information
+
+### 7.1 Designation of Authorized Individuals
+
+Acme Health shall designate individuals authorized to make information publicly accessible. [NIST 800-53 AC-22 Low, Moderate, High | ARC-AMPE AC-22 AE Mandatory]
+
+### 7.2 Training
+
+Acme Health shall train authorized individuals to ensure that publicly accessible information does not contain nonpublic information. [NIST 800-53 AC-22 Low, Moderate, High | ARC-AMPE AC-22 AE Mandatory]
+
+### 7.3 Review Prior to Posting
+
+Acme Health shall review the proposed content of information prior to posting onto the publicly accessible system to ensure that nonpublic information is not included. [NIST 800-53 AC-22 Low, Moderate, High | ARC-AMPE AC-22 AE Mandatory]
+
+### 7.4 Review of Posted Content
+
+Acme Health shall review the content on the publicly accessible system for nonpublic information [Assignment: organization-defined frequency] and remove such information, if discovered. [NIST 800-53 AC-22 Low, Moderate, High]
+
+Acme Health shall review the content on the publicly accessible system for nonpublic information bi-weekly (no less often than fourteen [14] days) and remove such information, if discovered. [ARC-AMPE AC-22 AE Mandatory]
+
+### 7.5 Protection of PII
+
+Acme Health shall recognize that a system of records maintaining Personally Identifiable Information (PII) that is not approved for release under the Freedom of Information Act (FOIA) is nonpublic information, and when agencies consider sharing or posting PII, they must do so in a way that fully protects individual privacy. [ARC-AMPE AC-22 AE Mandatory]

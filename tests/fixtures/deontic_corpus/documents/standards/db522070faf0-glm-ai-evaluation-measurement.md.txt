@@ -1,0 +1,139 @@
+# Acme Health AI Evaluation & Measurement Standard
+
+## 1. Purpose and Scope
+
+This Standard defines the requirements for measuring, evaluating, and tracking the risks and trustworthiness characteristics of AI systems at Acme Health. It applies to all AI systems developed, deployed, or operated by Acme Health, across the AI lifecycle from pre-deployment evaluation through production monitoring. The requirements in this Standard are drawn from the NIST AI Risk Management Framework (AI RMF) Measure function.
+
+## 2. Roles and Responsibilities
+
+The AI / ML Engineering team is accountable for the AI evaluation and measurement process end to end, including the selection and application of metrics, the execution and documentation of evaluations, the tracking of identified risks, and the handoffs between evaluation activities and other teams. Domain experts, end users, AI actors external to the developing or deploying team, affected communities, and subject-matter specialists (for example, in privacy, security, human factors, and socio-technical analysis) participate in individual evaluation steps as specified in the sections below, but AI / ML Engineering owns the process and answers for its outcomes.
+
+## 3. Measurement Methods and Metrics
+
+### 3.1 Selection and Application of Methods and Metrics
+
+Appropriate methods and metrics for measuring AI risks must be identified and applied by AI / ML Engineering, with approaches and metrics for the risks enumerated during the Map function selected for implementation starting with the most significant AI risks. [NIST AI RMF Measure 1 | NIST AI RMF Measure 1.1]
+
+AI risks or trustworthiness characteristics that will not — or cannot — be measured must be properly documented by AI / ML Engineering. [NIST AI RMF Measure 1.1]
+
+### 3.2 Independent and Consultative Assessment
+
+Internal experts who did not serve as front-line developers for the system and/or independent assessors must be involved by AI / ML Engineering in regular assessments and updates, with domain experts, users, AI actors external to the developing or deploying team, and affected communities consulted as necessary per organizational risk tolerance. [NIST AI RMF Measure 1.3]
+
+NIST suggests, among its 8 actions for Measure 1.3, utilizing separate testing teams to enable independent decisions and course-correction for AI systems with tracked processes and documented change in performance, planning and evaluating AI system prototypes with end user populations early and continuously in the AI lifecycle, assessing the independence and stature of TEVV and oversight AI actors to ensure they have the required levels of independence and resources, and evaluating the effectiveness of external stakeholder feedback mechanisms for eliciting, evaluating, and integrating input from diverse groups. [NIST AI RMF Playbook Measure 1.3 Action 2 | NIST AI RMF Playbook Measure 1.3 Action 3 | NIST AI RMF Playbook Measure 1.3 Action 4 | NIST AI RMF Playbook Measure 1.3 Action 6]
+
+NIST suggests, among its 12 actions for Measure 1.1, establishing approaches for detecting, tracking and measuring known risks, errors, incidents or negative impacts, identifying testing procedures and metrics to demonstrate whether the system is fit for purpose and functioning as claimed and to demonstrate AI system trustworthiness, defining acceptable limits for system performance with course-correction suggestions when the system performs beyond those limits, documenting metric selection criteria including considered but unused metrics, and documenting risks or trustworthiness characteristics identified in the Map function that will not be measured, including justification for non-measurement. [NIST AI RMF Playbook Measure 1.1 Action 1 | NIST AI RMF Playbook Measure 1.1 Action 2 | NIST AI RMF Playbook Measure 1.1 Action 3 | NIST AI RMF Playbook Measure 1.1 Action 4 | NIST AI RMF Playbook Measure 1.1 Action 8 | NIST AI RMF Playbook Measure 1.1 Action 12]
+
+## 4. Evaluation of Trustworthiness Characteristics
+
+AI systems must be evaluated for trustworthy characteristics by AI / ML Engineering. [NIST AI RMF Measure 2]
+
+### 4.1 Documentation of Test Sets, Metrics, and TEVV Tools
+
+Test sets, metrics, and details about the tools used during TEVV must be documented by AI / ML Engineering. [NIST AI RMF Measure 2.1]
+
+NIST suggests, among its 3 actions for Measure 2.1, leveraging existing industry best practices for transparency and documentation of all possible aspects of measurements, such as data sheets for data sets and model cards, regularly assessing the effectiveness of the tools used to document measurement approaches, test sets, metrics, processes and materials, and updating those tools as needed. [NIST AI RMF Playbook Measure 2.1 Action 1 | NIST AI RMF Playbook Measure 2.1 Action 2 | NIST AI RMF Playbook Measure 2.1 Action 3]
+
+### 4.2 Evaluations Involving Human Subjects
+
+Evaluations involving human subjects must meet applicable requirements, including human subject protection, and must be representative of the relevant population. [NIST AI RMF Measure 2.2]
+
+NIST suggests, among its 8 actions for Measure 2.2, following human subjects research requirements established by organizational and disciplinary requirements, including informed consent and compensation, during dataset collection activities, analyzing differences between the intended and actual population of users or data subjects including likelihood for errors, incidents or negative impacts, utilizing disaggregated evaluation methods (for example by race, age, gender, ethnicity, ability, region) to improve AI system performance in real-world settings, and evaluating data representativeness through investigating known failure modes, assessing data quality and diverse sourcing, applying public benchmarks, traditional bias testing, chaos engineering, and stakeholder feedback. [NIST AI RMF Playbook Measure 2.2 Action 1 | NIST AI RMF Playbook Measure 2.2 Action 2 | NIST AI RMF Playbook Measure 2.2 Action 3 | NIST AI RMF Playbook Measure 2.2 Action 7]
+
+### 4.3 Performance and Assurance Criteria
+
+AI system performance or assurance criteria must be measured qualitatively or quantitatively and demonstrated for conditions similar to the deployment setting(s), with the measures documented by AI / ML Engineering. [NIST AI RMF Measure 2.3]
+
+NIST suggests, among its 9 actions for Measure 2.3, measuring AI systems prior to deployment in conditions similar to expected scenarios, measuring and documenting performance criteria such as validity (false positive rate, false negative rate) and efficiency (training times, prediction latency) related to ground truth within the deployment context of use, measuring assurance criteria such as AI actor competency and experience, and documenting differences between the measurement setting and the deployment environment(s). [NIST AI RMF Playbook Measure 2.3 Action 6 | NIST AI RMF Playbook Measure 2.3 Action 7 | NIST AI RMF Playbook Measure 2.3 Action 8 | NIST AI RMF Playbook Measure 2.3 Action 9]
+
+### 4.4 Production Monitoring
+
+The functionality and behavior of the AI system and its components — as identified in the Map function — must be monitored when in production by AI / ML Engineering. [NIST AI RMF Measure 2.4]
+
+NIST suggests, among its 7 actions for Measure 2.4, monitoring and documenting how metrics and performance indicators observed in production differ from the same metrics collected during pre-deployment testing and considering error propagation and feedback loop risks when differences are observed, monitoring for anomalies using approaches such as control limits, confidence intervals, integrity constraints and ML algorithms, verifying that alerts are in place for when distributions in new input data or generated predictions differ from pre-deployment test outcomes or when anomalies are detected, and utilizing human review to track processing of unexpected data and reliability of generated outputs, warning system users when outputs may be unreliable, and verifying that human overseers have clearly defined responsibilities and training. [NIST AI RMF Playbook Measure 2.4 Action 1 | NIST AI RMF Playbook Measure 2.4 Action 3 | NIST AI RMF Playbook Measure 2.4 Action 4 | NIST AI RMF Playbook Measure 2.4 Action 6]
+
+### 4.5 Validity and Reliability
+
+The AI system to be deployed must be demonstrated to be valid and reliable, and limitations of its generalizability beyond the conditions under which it was developed must be documented by AI / ML Engineering. [NIST AI RMF Measure 2.5]
+
+NIST suggests, among its 15 actions for Measure 2.5, defining the operating conditions and socio-technical context under which the AI system will be validated, establishing or identifying and documenting approaches to measure forms of validity including construct, internal, and external validity, assessing and documenting system variance using standard approaches such as confidence intervals, standard deviation, standard error, bootstrapping, or cross-validation, monitoring operating conditions for system performance outside of defined limits, and logging input data and relevant system configuration information whenever there is an attempt to use the system beyond its well-defined range of system validity. [NIST AI RMF Playbook Measure 2.5 Action 1 | NIST AI RMF Playbook Measure 2.5 Action 3 | NIST AI RMF Playbook Measure 2.5 Action 4 | NIST AI RMF Playbook Measure 2.5 Action 11 | NIST AI RMF Playbook Measure 2.5 Action 14]
+
+### 4.6 Safety
+
+The AI system must be evaluated regularly for safety risks as identified in the Map function by AI / ML Engineering; the system to be deployed must be demonstrated to be safe, its residual negative risk must not exceed the risk tolerance, and it must be able to fail safely — particularly if made to operate beyond its knowledge limits — with safety metrics reflecting system reliability and robustness, real-time monitoring, and response times for AI system failures. [NIST AI RMF Measure 2.6]
+
+NIST suggests, among its 7 actions for Measure 2.6, thoroughly measuring system performance in development and deployment contexts and under stress conditions, including stress-testing under likely scenarios such as concept drift and high load and beyond known limitations in consultation with domain experts, and documenting the range of conditions under which the system has been tested and demonstrated to fail safely, measuring and monitoring system performance in real-time to enable rapid response when AI system incidents are detected, collecting pertinent safety statistics such as out-of-range performance, incident response times, system down time and injuries, and documenting, practicing and measuring incident response plans for AI system incidents, including measuring response and down times. [NIST AI RMF Playbook Measure 2.6 Action 1 | NIST AI RMF Playbook Measure 2.6 Action 2 | NIST AI RMF Playbook Measure 2.6 Action 3 | NIST AI RMF Playbook Measure 2.6 Action 5]
+
+### 4.7 Security and Resilience
+
+AI system security and resilience — as identified in the Map function — must be evaluated and documented by AI / ML Engineering. [NIST AI RMF Measure 2.7]
+
+NIST suggests, among its 10 actions for Measure 2.7, establishing and tracking AI system security tests and metrics such as red-teaming activities, frequency and rate of anomalous events, system down-time, incident response times and time-to-bypass, using red-team exercises to actively test the system under adversarial or stress conditions and assess failure modes, documenting red-team exercise results as part of continuous improvement efforts, and verifying that third-party AI resources and personnel undergo security audits and screenings. [NIST AI RMF Playbook Measure 2.7 Action 1 | NIST AI RMF Playbook Measure 2.7 Action 2 | NIST AI RMF Playbook Measure 2.7 Action 3 | NIST AI RMF Playbook Measure 2.7 Action 9]
+
+### 4.8 Transparency and Accountability
+
+Risks associated with transparency and accountability — as identified in the Map function — must be examined and documented by AI / ML Engineering. [NIST AI RMF Measure 2.8]
+
+NIST suggests, among its 6 actions for Measure 2.8, instrumenting the system for measurement and tracking by maintaining histories, audit logs and other information usable by AI actors to review and evaluate possible sources of error, bias, or vulnerability, testing provided explanations for calibration with different audiences including operators, end users, decision makers and decision subjects, measuring and documenting human oversight of AI systems including the degree of oversight provided and statistics about downstream actions such as system overrides, and tracking, documenting and measuring organizational accountability regarding AI systems via policy exceptions and escalations and documenting "go" and "no/go" decisions made by accountable parties. [NIST AI RMF Playbook Measure 2.8 Action 1 | NIST AI RMF Playbook Measure 2.8 Action 3 | NIST AI RMF Playbook Measure 2.8 Action 4 | NIST AI RMF Playbook Measure 2.8 Action 5]
+
+### 4.9 Explainability and Interpretation
+
+The AI model must be explained, validated, and documented by AI / ML Engineering, and AI system output must be interpreted within its context — as identified in the Map function — to inform responsible use and governance. [NIST AI RMF Measure 2.9]
+
+NIST suggests, among its 11 actions for Measure 2.9, verifying systems are developed to produce explainable models, post-hoc explanations and audit logs, documenting AI model details including model type, data features, training algorithms, proposed uses, decision thresholds, training data, evaluation data and ethical considerations, explaining systems using a variety of methods and testing explanations according to properties such as fidelity, consistency, robustness and interpretability, and using transparency tools such as data statements and model cards to document explanatory and validation information. [NIST AI RMF Playbook Measure 2.9 Action 1 | NIST AI RMF Playbook Measure 2.9 Action 4 | NIST AI RMF Playbook Measure 2.9 Action 6 | NIST AI RMF Playbook Measure 2.9 Action 11]
+
+### 4.10 Privacy
+
+The privacy risk of the AI system — as identified in the Map function — must be examined and documented by AI / ML Engineering. [NIST AI RMF Measure 2.10]
+
+NIST suggests, among its 8 actions for Measure 2.10, documenting collection, use, management and disclosure of personally sensitive information in datasets in accordance with privacy and data governance policies, quantifying privacy-level data aspects such as the ability to identify individuals or groups using metrics such as k-anonymity, l-diversity and t-closeness, establishing and documenting protocols (authorization, duration, type) and access controls for training sets or production data containing personally sensitive information, and using privacy-enhancing techniques such as differential privacy when publicly sharing dataset information. [NIST AI RMF Playbook Measure 2.10 Action 2 | NIST AI RMF Playbook Measure 2.10 Action 3 | NIST AI RMF Playbook Measure 2.10 Action 4 | NIST AI RMF Playbook Measure 2.10 Action 7]
+
+### 4.11 Fairness and Bias
+
+Fairness and bias — as identified in the Map function — must be evaluated by AI / ML Engineering and the results documented. [NIST AI RMF Measure 2.11]
+
+NIST suggests, among its 24 actions for Measure 2.11, conducting fairness assessments that identify types of harms, identify across, within, and intersecting groups that might be harmed, and quantify harms using general fairness metrics and custom context-specific metrics developed in collaboration with affected communities, defining acceptable levels of difference in performance in accordance with organizational governance policies, business requirements, regulatory compliance, legal frameworks and ethical standards, defining the actions to be taken if disparity levels rise above acceptable levels, monitoring system outputs for performance or bias issues that exceed established tolerance levels, and evaluating practices along the lifecycle to identify potential sources of human-cognitive bias such as availability, observational, and confirmation bias. [NIST AI RMF Playbook Measure 2.11 Action 1 | NIST AI RMF Playbook Measure 2.11 Action 9 | NIST AI RMF Playbook Measure 2.11 Action 10 | NIST AI RMF Playbook Measure 2.11 Action 13 | NIST AI RMF Playbook Measure 2.11 Action 22]
+
+### 4.12 Environmental Impact and Sustainability
+
+The environmental impact and sustainability of AI model training and management activities — as identified in the Map function — must be assessed and documented by AI / ML Engineering. [NIST AI RMF Measure 2.12]
+
+NIST suggests, among its 6 actions for Measure 2.12, identifying and implementing key indicators of AI system energy and water consumption and efficiency and/or GHG emissions, establishing measurable baselines for sustainable AI system operation in accordance with organizational policies, regulatory compliance, legal frameworks, and environmental protection and sustainability norms, and estimating AI system emissions levels throughout the AI lifecycle via carbon calculators or a similar process. [NIST AI RMF Playbook Measure 2.12 Action 2 | NIST AI RMF Playbook Measure 2.12 Action 3 | NIST AI RMF Playbook Measure 2.12 Action 6]
+
+### 4.13 Effectiveness of Metrics and TEVV Processes
+
+The appropriateness of AI metrics and the effectiveness of existing controls must be regularly assessed and updated by AI / ML Engineering, incorporating reports of errors and potential impacts on affected communities; the effectiveness of the employed TEVV metrics and processes must be evaluated and documented, and feedback about the efficacy of measurement approaches must be gathered and assessed. [NIST AI RMF Measure 1.2 | NIST AI RMF Measure 2.13 | NIST AI RMF Measure 4]
+
+NIST suggests, among its 8 actions for Measure 1.2, assessing external validity of all measurements, assessing effectiveness of existing metrics and controls on a regular basis throughout the AI system lifecycle, documenting reports of errors, incidents and negative impacts and assessing the sufficiency and efficacy of existing metrics for repairs and upgrades, developing new metrics when existing metrics are insufficient or ineffective, and collecting and reporting software quality metrics such as rates of bug occurrence and severity, time to response, and time to repair. [NIST AI RMF Playbook Measure 1.2 Action 1 | NIST AI RMF Playbook Measure 1.2 Action 2 | NIST AI RMF Playbook Measure 1.2 Action 3 | NIST AI RMF Playbook Measure 1.2 Action 4 | NIST AI RMF Playbook Measure 1.2 Action 8]
+
+NIST suggests, among its 4 actions for Measure 2.13, reviewing selected system metrics and associated TEVV processes to determine if they are able to sustain system improvements including the identification and removal of errors, regularly evaluating system metrics for utility and considering descriptive approaches in place of overly complex methods, and assessing effectiveness of metrics for identifying and measuring risks. [NIST AI RMF Playbook Measure 2.13 Action 1 | NIST AI RMF Playbook Measure 2.13 Action 2 | NIST AI RMF Playbook Measure 2.13 Action 4]
+
+## 5. Tracking of Identified AI Risks
+
+Mechanisms for tracking identified AI risks over time must be in place, owned by AI / ML Engineering. [NIST AI RMF Measure 3]
+
+Approaches, personnel, and documentation must be in place to regularly identify and track existing, unanticipated, and emergent AI risks, based on factors such as intended and actual performance in deployed contexts. [NIST AI RMF Measure 3.1]
+
+Risk tracking approaches must be considered for settings where AI risks are difficult to assess using currently available measurement techniques or where metrics are not yet available. [NIST AI RMF Measure 3.2]
+
+Feedback processes for end users and impacted communities to report problems and appeal system outcomes must be established by AI / ML Engineering and integrated into AI system evaluation metrics. [NIST AI RMF Measure 3.3]
+
+NIST suggests, among its 6 actions for Measure 3.1, comparing AI system risks with simpler or traditional models, human baseline performance, and other manual performance benchmarks, assessing effectiveness of metrics for identifying and measuring emergent risks, and measuring error response times and tracking response quality. [NIST AI RMF Playbook Measure 3.1 Action 1 | NIST AI RMF Playbook Measure 3.1 Action 3 | NIST AI RMF Playbook Measure 3.1 Action 4]
+
+NIST suggests, among its 3 actions for Measure 3.2, establishing processes for tracking emergent risks that may not be measurable with current approaches — including recourse mechanisms for faulty AI system outputs, bug bounties, human-centered design approaches, user-interaction and experience research, and participatory stakeholder engagement — identifying the AI actors responsible for tracking emergent risks and inventorying methods, and determining and documenting the rate of occurrence and severity level for complex or difficult-to-measure risks when prioritizing new measurement approaches, allocating risk management resources, evaluating system improvements, and making go/no-go decisions for subsequent system iterations. [NIST AI RMF Playbook Measure 3.2 Action 1 | NIST AI RMF Playbook Measure 3.2 Action 2 | NIST AI RMF Playbook Measure 3.2 Action 3]
+
+NIST suggests, among its 6 actions for Measure 3.3, measuring efficacy of end user and operator error reporting processes, categorizing and analyzing the type and rate of end user appeal requests and results, measuring feedback activity participation rates and awareness of feedback activity availability, and analyzing end user and community feedback in close collaboration with domain experts. [NIST AI RMF Playbook Measure 3.3 Action 1 | NIST AI RMF Playbook Measure 3.3 Action 2 | NIST AI RMF Playbook Measure 3.3 Action 3 | NIST AI RMF Playbook Measure 3.3 Action 6]
+
+## 6. Deployment Context and Consultation
+
+Measurement approaches for identifying AI risks must be connected to deployment context(s) and informed through consultation with domain experts and other end users, with the approaches documented by AI / ML Engineering. [NIST AI RMF Measure 4.1]
+
+Measurement results regarding AI system trustworthiness in deployment context(s) and across the AI lifecycle must be informed by input from domain experts and relevant AI actors to validate whether the system is performing consistently as intended, with the results documented by AI / ML Engineering. [NIST AI RMF Measure 4.2]
+
+Measurable performance improvements or declines — based on consultations with relevant AI actors, including affected communities, and field data about context-relevant risks and trustworthiness characteristics — must be identified and documented by AI / ML Engineering. [NIST AI RMF Measure 4.3]
+
+NIST suggests, among its 6 actions for Measure 4.1, supporting mechanisms for capturing feedback from system end users — including domain experts, operators, and practitioners — conducted in settings where end users are able to openly share their doubts and insights about AI system output in connection to their specific context of use, identifying and documenting approaches for evaluating and integrating elicited feedback in collaboration with human-factors and socio-technical domain experts to actively inform continual improvement, and identifying and implementing approaches to measure effectiveness and satisfaction with end user elicitation techniques and documenting results. [NIST AI RMF Playbook Measure 4.1 Action 1 | NIST AI RMF Playbook Measure 4.1 Action 2 | NIST AI RMF Playbook Measure 4.1 Action 6]
+
+NIST suggests, among its 6 actions for Measure 4.2, integrating feedback from end users, operators, and affected individuals and communities as inputs to assess AI system trustworthiness characteristics and ensuring both positive and negative feedback is assessed, evaluating feedback regarding end user satisfaction with, and confidence in, AI system performance including whether output is considered valid and reliable and explainable and interpretable, and measuring the frequency of AI systems' override decisions, evaluating and documenting results, and feeding insights back into continual improvement processes. [NIST AI RMF Playbook Measure 4.2 Action 1 | NIST AI RMF Playbook Measure 4.2 Action 3 | NIST AI RMF Playbook Measure 4.2 Action 5]
+
+NIST suggests, among its 6 actions for Measure 4.3, developing baseline quantitative measures for trustworthy characteristics, utilizing qualitative approaches to augment and complement quantitative baseline measures in close coordination with impact assessment, human factors and socio-technical AI actors, and performing and documenting sensitivity analysis to characterize actual and expected variance in performance after applying system or procedural updates. [NIST AI RMF Playbook Measure 4.3 Action 1 | NIST AI RMF Playbook Measure 4.3 Action 3 | NIST AI RMF Playbook Measure 4.3 Action 5]

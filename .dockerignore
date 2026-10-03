@@ -1,0 +1,32 @@
+# An allowlist, not a denylist. Everything is excluded, and the image gets back
+# only what it needs. A denylist has to anticipate every private file, while an
+# allowlist fails closed: a new file under local_content/ or a new
+# config.<env>.yaml never reaches the build context, let alone the image.
+#
+# What must never be in an image, since an image is a thing people push:
+# licensed catalogs (local_content/, BYOC HITRUST and GovRAMP), secrets (.env),
+# the organization's own config and topic registry, and generated drafts
+# (output/). tests/test_container.py fails if one of those becomes reachable.
+*
+
+!pyproject.toml
+!README.md
+!LICENSE
+!requirements/runtime.txt
+!src/
+# The four public catalogs by name. HITRUST and GovRAMP are bring-your-own
+# and licensed: only their READMEs come in, so a controls.json someone copied
+# into data/frameworks/hitrust-csf/ by hand still stays out.
+!data/frameworks/nist-800-53-r5/
+!data/frameworks/fedramp/
+!data/frameworks/arc-ampe/
+!data/frameworks/hipaa-security-rule/
+!data/frameworks/*/README.md
+!config/config.example.yaml
+!config/topics.example.yaml
+
+# Re-excluded inside what was let back in.
+**/__pycache__
+**/*.py[cod]
+**/*.egg-info
+data/frameworks/crosswalk.json

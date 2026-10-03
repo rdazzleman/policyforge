@@ -1,0 +1,537 @@
+# Audit and Accountability Standard
+
+## 1. Purpose
+
+This Standard establishes requirements for audit and accountability controls within Acme Health information systems. It defines how the organization shall generate, protect, review, and retain audit records to support security monitoring, incident response, forensic analysis, and regulatory compliance with applicable laws and regulations governing healthcare information security.
+
+## 2. Scope
+
+This Standard applies to all information systems and system components that process, store, or transmit electronic protected health information (ePHI) and other sensitive organizational data, including systems at the organization-level, mission/business process-level, and system-level. This Standard covers audit event configuration, audit record content and protection, audit review and analysis, audit retention, and continuous system monitoring capabilities.
+
+## 3. Roles and Responsibilities
+
+### 3.1 Policy Management
+
+Acme Health shall designate an [Designated Official] to manage the development, documentation, and dissemination of the audit and accountability policy and procedures. [NIST 800-53 AU-1 Low, Moderate, High | ARC-AMPE AU-1 AE Mandatory]
+
+### 3.2 Implementation and Oversight
+
+The [Designated Personnel or Roles] shall be responsible for implementing the audit and accountability controls defined in this Standard, reviewing audit records, responding to audit failures, and ensuring compliance with retention requirements.
+
+## 4. Audit and Accountability Policy Framework
+
+### 4.1 Policy Development and Dissemination
+
+Acme Health shall develop, document, and disseminate to [Designated Personnel or Roles] an audit and accountability policy at [Selection: organization-level; mission/business process-level; system-level] that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 AU-1 Low, Moderate, High | ARC-AMPE AU-1 AE Mandatory]
+
+Acme Health shall develop, document, and disseminate an organization-level audit and accountability policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines. [ARC-AMPE AU-1 AE Mandatory]
+
+### 4.2 Procedures
+
+Acme Health shall develop, document, and disseminate to [Designated Personnel or Roles] procedures to facilitate the implementation of the audit and accountability policy and the associated audit and accountability controls. [NIST 800-53 AU-1 Low, Moderate, High | ARC-AMPE AU-1 AE Mandatory]
+
+### 4.3 Policy Review and Update
+
+Acme Health shall review and update the current audit and accountability policy [Review Frequency] and following [Triggering Events]. [NIST 800-53 AU-1 Low, Moderate, High]
+
+Acme Health shall review and update the current audit and accountability policy at least every one (1) year and following organization-defined events. [ARC-AMPE AU-1 AE Mandatory]
+
+Acme Health shall review and update the current audit and accountability procedures [Review Frequency] and following [Triggering Events]. [NIST 800-53 AU-1 Low, Moderate, High]
+
+Acme Health shall review and update the current audit and accountability procedures at least every one (1) year and following organization-defined events. [ARC-AMPE AU-1 AE Mandatory]
+
+## 5. Documentation Requirements
+
+### 5.1 Form and Maintenance
+
+Acme Health shall maintain the policies and procedures implemented to comply with HIPAA Security Rule in written (which may be electronic) form. [HIPAA Security Rule 164.316(b)(1)]
+
+Acme Health shall maintain a written (which may be electronic) record of required actions, activities, or assessments. [HIPAA Security Rule 164.316(b)(1)]
+
+### 5.2 Retention Period
+
+Acme Health shall retain documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+
+### 5.3 Availability
+
+Acme Health shall make documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+### 5.4 Periodic Review
+
+Acme Health shall review documentation periodically, and update as needed, in response to environmental or operational changes affecting the security of the electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+## 6. Audit Event Configuration
+
+### 6.1 Audit-Capable Events
+
+Acme Health shall implement hardware, software, and/or procedural mechanisms that record and examine activity in information systems that contain or use electronic protected health information. [HIPAA Security Rule 164.312(b)]
+
+Acme Health shall identify the types of events that the system is capable of logging in support of the audit function: [Audit-Capable Event Types]. [NIST 800-53 AU-2 Low, Moderate, High]
+
+Acme Health shall identify the types of events that the system is capable of logging in support of the audit function: organization-defined event types based on a risk assessment of organization-defined mission/business needs. [ARC-AMPE AU-2 AE Mandatory]
+
+### 6.2 Coordination
+
+Acme Health shall coordinate the event logging function with other organizational entities requiring audit-related information to guide and inform the selection criteria for events to be logged. [NIST 800-53 AU-2 Low, Moderate, High | ARC-AMPE AU-2 AE Mandatory]
+
+### 6.3 Event Types for Logging
+
+Acme Health shall specify the following event types for logging within the system: [Specified Event Types and Frequencies]. [NIST 800-53 AU-2 Low, Moderate, High]
+
+Acme Health shall specify the following event types for logging within the system: organization-defined event types along with organization-defined frequency or situation for each identified event type. [ARC-AMPE AU-2 AE Mandatory]
+
+Acme Health shall include the following minimum set of event types for logging within the system: user log-on and log-off (successful or unsuccessful); configuration changes; application alerts and error messages; all system administration (including privileged user) activities; modification of privileges and access; account creation, modification, or deletion; concurrent log-on from different work stations; and override of access control mechanisms. [ARC-AMPE AU-2 AE Mandatory]
+
+### 6.4 Rationale
+
+Acme Health shall provide a rationale for why the event types selected for logging are deemed to be adequate to support after-the-fact investigations of incidents. [NIST 800-53 AU-2 Low, Moderate, High | ARC-AMPE AU-2 AE Mandatory]
+
+### 6.5 Event Type Review
+
+Acme Health shall review and update the event types selected for logging [Review Frequency]. [NIST 800-53 AU-2 Low, Moderate, High]
+
+Acme Health shall review and update the event types selected for logging at least every one (1) year and whenever there is a significant system modification or change in the system environment. [ARC-AMPE AU-2 AE Mandatory]
+
+## 7. Audit Record Content and Format
+
+### 7.1 Required Audit Record Content
+
+Acme Health shall ensure that audit records contain information that establishes what type of event occurred. [NIST 800-53 AU-3 Low, Moderate, High | ARC-AMPE AU-3 AE Mandatory]
+
+Acme Health shall ensure that audit records contain information that establishes when the event occurred. [NIST 800-53 AU-3 Low, Moderate, High | ARC-AMPE AU-3 AE Mandatory]
+
+Acme Health shall ensure that audit records contain information that establishes where the event occurred. [NIST 800-53 AU-3 Low, Moderate, High | ARC-AMPE AU-3 AE Mandatory]
+
+Acme Health shall ensure that audit records contain information that establishes the source of the event. [NIST 800-53 AU-3 Low, Moderate, High | ARC-AMPE AU-3 AE Mandatory]
+
+Acme Health shall ensure that audit records contain information that establishes the outcome of the event. [NIST 800-53 AU-3 Low, Moderate, High | ARC-AMPE AU-3 AE Mandatory]
+
+Acme Health shall ensure that audit records contain information that establishes the identity of any individuals, subjects, or objects/entities associated with the event. [NIST 800-53 AU-3 Low, Moderate, High | ARC-AMPE AU-3 AE Mandatory]
+
+### 7.2 Disclosure Logging
+
+Acme Health shall record disclosures of sensitive information, including Protected Health Information (PHI) and financial information, logging the information type, date, time, receiving party, and releasing party. [ARC-AMPE AU-3 AE Mandatory]
+
+### 7.3 Additional Audit Record Information
+
+Acme Health shall generate audit records containing [Additional Audit Information]. [NIST 800-53 AU-3(1) Moderate, High]
+
+Acme Health shall generate audit records containing the following additional information and event details: session, connection, transaction, or activity duration; for client-server transactions, the number of bytes received and bytes sent; additional informational messages to diagnose or identify the event; characteristics that describe or identify the object or resource being acted upon; individual identities of group account users; and full-text of privileged commands. [ARC-AMPE AU-3(1) AE Mandatory]
+
+### 7.4 Personally Identifiable Information in Audit Records
+
+Acme Health shall limit personally identifiable information contained in audit records to the following elements identified in the privacy risk assessment: [PII Elements from Privacy Risk Assessment]. [NIST 800-53 AU-3(3)]
+
+Acme Health shall limit Personally Identifiable Information (PII) contained in audit records to the defined elements identified in the privacy risk assessment: system-defined elements in the Privacy Impact Assessment (PIA). [ARC-AMPE AU-3(3) AE Mandatory]
+
+Acme Health shall identify the minimum Personally Identifiable Information (PII) elements that are relevant and necessary to accomplish the purpose of collection, and where a collection of certain PII requires legal authorization, ensure that such collection is legally authorized. [ARC-AMPE AU-3(3) AE Mandatory]
+
+Acme Health shall document in the audit policy the justification for inclusion of PII in audit logs. [ARC-AMPE AU-3(3) AE Mandatory]
+
+## 8. Audit Storage and Capacity Management
+
+### 8.1 Storage Capacity Allocation
+
+Acme Health shall allocate audit log storage capacity to accommodate [Audit Retention Requirements]. [NIST 800-53 AU-4 Low, Moderate, High]
+
+Acme Health shall allocate audit log storage capacity to accommodate, at a minimum, storage capacity of ninety (90) days and any other organization-defined audit log retention requirements. [ARC-AMPE AU-4 AE Mandatory]
+
+Acme Health shall allocate capacity sufficient to handle auditing records during peak performance times (e.g., open enrollment). [ARC-AMPE AU-4 AE Mandatory]
+
+### 8.2 Off-System Audit Record Transfer
+
+Acme Health shall transfer audit logs [Transfer Frequency] to a different system, system component, or media other than the system or system component conducting the logging. [NIST 800-53 AU-4(1)]
+
+## 9. Audit Failure Response
+
+### 9.1 Alerting
+
+Acme Health shall alert [Designated Personnel or Roles] within [Alert Time Period] in the event of an audit logging process failure. [NIST 800-53 AU-5 Low, Moderate, High]
+
+Acme Health shall alert organization-defined personnel or roles within near real-time in the event of an audit logging process failure. [ARC-AMPE AU-5 AE Mandatory]
+
+### 9.2 Additional Actions on Failure
+
+Acme Health shall take the following additional actions in the event of an audit logging process failure: [Additional Failure Actions]. [NIST 800-53 AU-5 Low, Moderate, High]
+
+Acme Health shall shut down the system or halt processing immediately in the event of an audit logging process failure; or shut down systems that do not support automatic shutdown within one (1) hour of the audit processing failure. [ARC-AMPE AU-5 AE Mandatory]
+
+### 9.3 Storage Capacity Warnings
+
+Acme Health shall provide a warning to [Designated Personnel, Roles, or Locations] within [Warning Time Period] when allocated audit log storage volume reaches [Storage Threshold Percentage] of repository maximum audit log storage capacity. [NIST 800-53 AU-5(1) High]
+
+### 9.4 Real-Time Alerting
+
+Acme Health shall provide an alert within [Real-Time Period] to [Designated Personnel, Roles, or Locations] when the following audit failure events occur: [Real-Time Alert Triggering Events]. [NIST 800-53 AU-5(2) High]
+
+### 9.5 Network Traffic Management
+
+Acme Health shall enforce configurable network communications traffic volume thresholds reflecting limits on audit log storage capacity and [Selection: reject; delay] network traffic above those thresholds. [NIST 800-53 AU-5(3)]
+
+### 9.6 System Shutdown on Audit Failure
+
+Acme Health shall invoke a [Selection: full system shutdown; partial system shutdown; degraded operational mode with limited mission or business functionality available] in the event of [Audit Logging Failures Warranting Shutdown], unless an alternate audit logging capability exists. [NIST 800-53 AU-5(4)]
+
+### 9.7 Alternate Audit Logging Capability
+
+Acme Health shall provide an alternate audit logging capability in the event of a failure in primary audit logging capability that implements [Alternate Audit Logging Functionality]. [NIST 800-53 AU-5(5)]
+
+## 10. Audit Review, Analysis, and Reporting
+
+### 10.1 Record Review and Analysis
+
+Acme Health shall review and analyze system audit records [Review Frequency] for indications of [Inappropriate or Unusual Activity Indicators] and the potential impact of the inappropriate or unusual activity. [NIST 800-53 AU-6 Low, Moderate, High | FedRAMP AU-6]
+
+Acme Health shall review and analyze system audit records no less often than weekly (every seven [7] days) for indications of organization-defined inappropriate or unusual activity and the potential impact of the inappropriate or unusual activity. [ARC-AMPE AU-6 AE Mandatory]
+
+Acme Health shall report findings to [Designated Personnel or Roles]. [NIST 800-53 AU-6 Low, Moderate, High | FedRAMP AU-6 | ARC-AMPE AU-6 AE Mandatory]
+
+### 10.2 Risk-Based Adjustment
+
+Acme Health shall adjust the level of audit record review, analysis, and reporting within the system when there is a change in risk based on law enforcement information, intelligence information, or other credible sources of information. [NIST 800-53 AU-6 Low, Moderate, High | FedRAMP AU-6 | ARC-AMPE AU-6 AE Mandatory]
+
+### 10.3 HIPAA Review Requirements
+
+Acme Health shall implement procedures to regularly review records of information system activity, such as audit logs, access reports, and security incident tracking reports. [HIPAA Security Rule 164.308(a)(1)(ii)(D)]
+
+Acme Health shall implement procedures for monitoring log-in attempts and reporting discrepancies. [HIPAA Security Rule 164.308(a)(5)(ii)(C)]
+
+### 10.4 Automated Integration
+
+Acme Health shall integrate audit record review, analysis, and reporting processes using [Automated Mechanisms]. [NIST 800-53 AU-6(1) Moderate, High]
+
+Acme Health shall integrate audit record review, analysis, and reporting processes using automated mechanisms to the fullest extent possible. [ARC-AMPE AU-6(1) AE Mandatory]
+
+Acme Health shall ensure that integrated audit records from automated information security capabilities and service tools are searchable, with sources including systems, appliances, devices, services, and applications (including databases). [ARC-AMPE AU-6(1) AE Mandatory]
+
+### 10.5 Correlation Across Repositories
+
+Acme Health shall analyze and correlate audit records across different repositories to gain organization-wide situational awareness. [NIST 800-53 AU-6(3) Moderate, High | ARC-AMPE AU-6(3) AE Mandatory]
+
+### 10.6 Centralized Review and Analysis
+
+Acme Health shall provide and implement the capability to centrally review and analyze audit records from multiple components within the system. [NIST 800-53 AU-6(4)]
+
+### 10.7 Integration with Other Monitoring Data
+
+Acme Health shall integrate analysis of audit records with analysis of [Selection: vulnerability scanning information; performance data; system monitoring information; [Other Data Sources]] to further enhance the ability to identify inappropriate or unusual activity. [NIST 800-53 AU-6(5) High | FedRAMP AU-6(5)]
+
+### 10.8 Physical Access Correlation
+
+Acme Health shall correlate information from audit records with information obtained from monitoring physical access to further enhance the ability to identify suspicious, inappropriate, unusual, or malevolent activity. [NIST 800-53 AU-6(6) High]
+
+### 10.9 Permitted Actions
+
+Acme Health shall specify the permitted actions for each [Selection: system process; role; user] associated with the review, analysis, and reporting of audit record information. [NIST 800-53 AU-6(7)]
+
+### 10.10 Full Text Analysis of Privileged Commands
+
+Acme Health shall perform a full text analysis of logged privileged commands in a physically distinct component or subsystem of the system, or other system that is dedicated to that analysis. [NIST 800-53 AU-6(8)]
+
+### 10.11 Nontechnical Source Correlation
+
+Acme Health shall correlate information from nontechnical sources with audit record information to enhance organization-wide situational awareness. [NIST 800-53 AU-6(9)]
+
+## 11. Audit Record Reduction and Report Generation
+
+### 11.1 Reduction and Reporting Capability
+
+Acme Health shall provide and implement an audit record reduction and report generation capability that supports on-demand audit record review, analysis, and reporting requirements and after-the-fact investigations of incidents. [NIST 800-53 AU-7 Moderate, High | ARC-AMPE AU-7 AE Mandatory]
+
+Acme Health shall provide and implement an audit record reduction and report generation capability that does not alter the original content or time ordering of audit records. [NIST 800-53 AU-7 Moderate, High | ARC-AMPE AU-7 AE Mandatory]
+
+### 11.2 Processing, Sorting, and Searching
+
+Acme Health shall provide and implement the capability to process, sort, and search audit records for events of interest based on the following content: [Audit Record Fields for Sorting]. [NIST 800-53 AU-7(1) Moderate, High]
+
+Acme Health shall provide and implement the capability to process, sort, and search audit records for events of interest based on the following content: organization-defined selectable event criteria and fields within audit records. [ARC-AMPE AU-7(1) AE Mandatory]
+
+## 12. Time Stamps
+
+### 12.1 Internal System Clocks
+
+Acme Health shall use internal system clocks to generate time stamps for audit records. [NIST 800-53 AU-8 Low, Moderate, High | ARC-AMPE AU-8 AE Mandatory]
+
+### 12.2 Time Stamp Requirements
+
+Acme Health shall record time stamps for audit records that meet [Time Measurement Granularity] and that use Coordinated Universal Time, have a fixed local time offset from Coordinated Universal Time, or that include the local time offset as part of the time stamp. [NIST 800-53 AU-8 Low, Moderate, High]
+
+Acme Health shall record time stamps for audit records that can be mapped to Coordinated Universal Time (UTC) or Greenwich Mean Time (GMT) and are accurate to within one hundred (100) milliseconds. [ARC-AMPE AU-8 AE Mandatory]
+
+## 13. Audit Record Protection
+
+### 13.1 Protection from Unauthorized Actions
+
+Acme Health shall protect audit information and audit logging tools from unauthorized access, modification, and deletion. [NIST 800-53 AU-9 Low, Moderate, High | ARC-AMPE AU-9 AE Mandatory]
+
+Acme Health shall alert [Designated Personnel or Roles] upon detection of unauthorized access, modification, or deletion of audit information. [NIST 800-53 AU-9 Low, Moderate, High | ARC-AMPE AU-9 AE Mandatory]
+
+### 13.2 Write-Once Media
+
+Acme Health shall write audit trails to hardware-enforced, write-once media. [NIST 800-53 AU-9(1)]
+
+### 13.3 Storage in Separate Repository
+
+Acme Health shall store audit records [Storage Transfer Frequency] in a repository that is part of a physically different system or system component than the system or component being audited. [NIST 800-53 AU-9(2) High]
+
+### 13.4 Cryptographic Protection
+
+Acme Health shall implement cryptographic mechanisms to protect the integrity of audit information and audit tools. [NIST 800-53 AU-9(3) High]
+
+### 13.5 Access Authorization to Audit Management
+
+Acme Health shall authorize access to management of audit logging functionality to only [Authorized Privileged Users or Roles]. [NIST 800-53 AU-9(4) Moderate, High | ARC-AMPE AU-9(4) AE Mandatory]
+
+### 13.6 Dual Authorization
+
+Acme Health shall enforce dual authorization for [Selection: movement; deletion] of [Audit Information Requiring Dual Authorization]. [NIST 800-53 AU-9(5)]
+
+### 13.7 Read-Only Access
+
+Acme Health shall authorize read-only access to audit information to [Authorized Privileged Users or Roles with Read-Only Access]. [NIST 800-53 AU-9(6)]
+
+### 13.8 Storage on Different Operating System
+
+Acme Health shall store audit information on a component running a different operating system than the system or component being audited. [NIST 800-53 AU-9(7)]
+
+## 14. Non-Repudiation
+
+### 14.1 Non-Repudiation Capability
+
+Acme Health shall provide irrefutable evidence that an individual (or process acting on behalf of an individual) has performed [Actions Requiring Non-Repudiation]. [NIST 800-53 AU-10 High]
+
+Acme Health shall provide irrefutable evidence that an individual (or process acting on behalf of an individual) has performed at least actions including the addition, modification, deletion, approval, sending, or receiving of data. [FedRAMP AU-10]
+
+Acme Health shall provide irrefutable evidence that an individual (or process acting on behalf of an individual) has performed organization-defined actions to be covered by non-repudiation. [ARC-AMPE AU-10 AE Mandatory]
+
+### 14.2 Producer Identity Binding
+
+Acme Health shall bind the identity of the information producer with the information to [Binding Strength] and provide the means for authorized individuals to determine the identity of the producer of the information. [NIST 800-53 AU-10(1)]
+
+### 14.3 Producer Identity Validation
+
+Acme Health shall validate the binding of the information producer identity to the information at [Validation Frequency] and perform [Validation Error Actions] in the event of a validation error. [NIST 800-53 AU-10(2)]
+
+### 14.4 Chain of Custody
+
+Acme Health shall maintain reviewer or releaser credentials within the established chain of custody for information reviewed or released. [NIST 800-53 AU-10(3)]
+
+### 14.5 Reviewer Identity Validation
+
+Acme Health shall validate the binding of the information reviewer identity to the information at the transfer or release points prior to release or transfer between [Security Domains] and perform [Validation Error Actions] in the event of a validation error. [NIST 800-53 AU-10(4)]
+
+## 15. Audit Retention
+
+### 15.1 Retention Period
+
+Acme Health shall retain audit records for [Audit Record Retention Period] to provide support for after-the-fact investigations of incidents and to meet regulatory and organizational information retention requirements. [NIST 800-53 AU-11 Low, Moderate, High]
+
+Acme Health shall retain audit records for ninety (90) days and archive old records for ten (10) years consistent with records retention policy to provide support for after-the-fact investigations of incidents and to meet regulatory and organizational information retention requirements. [ARC-AMPE AU-11 AE Mandatory]
+
+### 15.2 Legal Investigation Holds
+
+Acme Health shall maintain audit records until released by the investigating authority when subject to a legal investigation (e.g., Insider Threat). [ARC-AMPE AU-11 AE Mandatory]
+
+### 15.3 Audit Inspection Reports
+
+Acme Health shall retain audit inspection reports, including a record of corrective actions, for a minimum of three (3) years from the date the inspection was completed. [ARC-AMPE AU-11 AE Mandatory]
+
+### 15.4 Long-Term Retrieval
+
+Acme Health shall employ [Long-Term Audit Record Retrieval Measures] to ensure that long-term audit records generated by the system can be retrieved. [NIST 800-53 AU-11(1) | ARC-AMPE AU-11(1) AE Mandatory]
+
+## 16. Audit Record Generation
+
+### 16.1 Generation Capability
+
+Acme Health shall provide audit record generation capability for the event types the system is capable of auditing as defined in AU-2a on [System Components with Audit Capability]. [NIST 800-53 AU-12 Low, Moderate, High]
+
+Acme Health shall provide audit record generation capability for the event types the system is capable of auditing as defined in AU-2a on at least all information system and network components where audit capability is deployed/available. [FedRAMP AU-12 | ARC-AMPE AU-12 AE Mandatory]
+
+### 16.2 Event Type Selection
+
+Acme Health shall allow [Authorized Personnel or Roles] to select the event types that are to be logged by specific components of the system. [NIST 800-53 AU-12 Low, Moderate, High | FedRAMP AU-12 | ARC-AMPE AU-12 AE Mandatory]
+
+### 16.3 Record Generation
+
+Acme Health shall generate audit records for the event types defined in AU-2c that include the audit record content defined in AU-3. [NIST 800-53 AU-12 Low, Moderate, High | FedRAMP AU-12 | ARC-AMPE AU-12 AE Mandatory]
+
+### 16.4 Time-Correlated Audit Trail
+
+Acme Health shall compile audit records from [System Components] into a system-wide (logical or physical) audit trail that is time-correlated to within [Time Correlation Tolerance]. [NIST 800-53 AU-12(1) High]
+
+### 16.5 Standardized Format
+
+Acme Health shall produce a system-wide (logical or physical) audit trail composed of audit records in a standardized format. [NIST 800-53 AU-12(2)]
+
+### 16.6 Configurable Logging Changes
+
+Acme Health shall provide and implement the capability for [Authorized Individuals or Roles] to change the logging to be performed on [System Components Subject to Configuration] based on [Selectable Event Criteria] within [Configuration Change Time Threshold]. [NIST 800-53 AU-12(3) High]
+
+### 16.7 PII Query Auditing
+
+Acme Health shall provide and implement the capability for auditing the parameters of user query events for data sets containing personally identifiable information. [NIST 800-53 AU-12(4)]
+
+## 17. System and Information Monitoring
+
+### 17.1 Attack Detection and Monitoring
+
+Acme Health shall monitor the system to detect attacks and indicators of potential attacks in accordance with the following monitoring objectives: [Monitoring Objectives]. [NIST 800-53 SI-4 Low, Moderate, High | FedRAMP SI-4]
+
+Acme Health shall monitor the system to detect attacks and indicators of potential attacks in accordance with the organization's incident response policy and procedures. [ARC-AMPE SI-4 AE Mandatory]
+
+### 17.2 Unauthorized Connection Detection
+
+Acme Health shall monitor the system to detect unauthorized local, network, and remote connections. [NIST 800-53 SI-4 Low, Moderate, High | FedRAMP SI-4 | ARC-AMPE SI-4 AE Mandatory]
+
+### 17.3 Unauthorized Use Identification
+
+Acme Health shall identify unauthorized use of the system through the following techniques and methods: [Unauthorized Use Detection Techniques and Methods]. [NIST 800-53 SI-4 Low, Moderate, High | FedRAMP SI-4 | ARC-AMPE SI-4 AE Mandatory]
+
+### 17.4 Monitoring Device Deployment
+
+Acme Health shall invoke internal monitoring capabilities or deploy monitoring devices strategically within the system to collect organization-determined essential information. [NIST 800-53 SI-4 Low, Moderate, High | FedRAMP SI-4 | ARC-AMPE SI-4 AE Mandatory]
+
+Acme Health shall invoke internal monitoring capabilities or deploy monitoring devices at ad hoc locations within the system to track specific types of transactions of interest to the organization. [NIST 800-53 SI-4 Low, Moderate, High | FedRAMP SI-4 | ARC-AMPE SI-4 AE Mandatory]
+
+### 17.5 Event and Anomaly Analysis
+
+Acme Health shall analyze detected events and anomalies. [NIST 800-53 SI-4 Low, Moderate, High | FedRAMP SI-4 | ARC-AMPE SI-4 AE Mandatory]
+
+### 17.6 Risk-Based Adjustment of Monitoring
+
+Acme Health shall adjust the level of system monitoring activity when there is a change in risk to organizational operations and assets, individuals, other organizations, or the Nation. [NIST 800-53 SI-4 Low, Moderate, High | FedRAMP SI-4 | ARC-AMPE SI-4 AE Mandatory]
+
+### 17.7 Legal Opinion
+
+Acme Health shall obtain legal opinion regarding system monitoring activities. [NIST 800-53 SI-4 Low, Moderate, High | FedRAMP SI-4 | ARC-AMPE SI-4 AE Mandatory]
+
+### 17.8 Distribution of Monitoring Information
+
+Acme Health shall provide [Monitoring Information] to [Designated Personnel or Roles] [Selection: as needed; [Distribution Frequency]]. [NIST 800-53 SI-4 Low, Moderate, High | FedRAMP SI-4 | ARC-AMPE SI-4 AE Mandatory]
+
+### 17.9 Centralized IDS/IPS
+
+Acme Health shall implement a centrally managed Intrusion detection system / intrusion protection system (IDS/IPS) capability to monitor network communications on all networks and subnets. [ARC-AMPE SI-4 AE Mandatory]
+
+### 17.10 Remote Connection Monitoring
+
+Acme Health shall monitor for unauthorized remote connections to the information system continuously, in real-time and take appropriate action if an unauthorized connection is discovered. [ARC-AMPE SI-4 AE Mandatory]
+
+### 17.11 System-Wide Intrusion Detection Integration
+
+Acme Health shall connect and configure individual intrusion detection tools into a system-wide intrusion detection system. [NIST 800-53 SI-4(1) | FedRAMP SI-4(1) | ARC-AMPE SI-4(1) AE Mandatory]
+
+### 17.12 Automated Event Analysis
+
+Acme Health shall employ automated tools and mechanisms to support near real-time analysis of events. [NIST 800-53 SI-4(2) Moderate, High | FedRAMP SI-4(2) | ARC-AMPE SI-4(2) AE Mandatory]
+
+### 17.13 Raw and Aggregated Intrusion Detection Information
+
+Acme Health shall ensure that raw intrusion detection information is available in an unaltered format. [ARC-AMPE SI-4(1) AE Mandatory | ARC-AMPE SI-4(2) AE Mandatory]
+
+Acme Health shall ensure that aggregated intrusion detection information is searchable, with information provided in a format compliant with organization-defined requirements and information sources including all network- and host-based intrusion detection system (IDS) / intrusion protection system (IPS) capabilities. [ARC-AMPE SI-4(2) AE Mandatory]
+
+### 17.14 Access and Flow Control Integration
+
+Acme Health shall employ automated tools and mechanisms to integrate intrusion detection tools and mechanisms into access control and flow control mechanisms. [NIST 800-53 SI-4(3)]
+
+### 17.15 Communications Traffic Monitoring
+
+Acme Health shall determine criteria for unusual or unauthorized activities or conditions for inbound and outbound communications traffic. [NIST 800-53 SI-4(4) Moderate, High | FedRAMP SI-4(4) | ARC-AMPE SI-4(4) AE Mandatory]
+
+Acme Health shall monitor inbound and outbound communications traffic [Traffic Monitoring Frequency] for [Unusual or Unauthorized Activities or Conditions]. [NIST 800-53 SI-4(4) Moderate, High | FedRAMP SI-4(4)]
+
+Acme Health shall monitor inbound and outbound communications traffic continuously for organization-defined unusual or unauthorized activities or conditions. [ARC-AMPE SI-4(4) AE Mandatory]
+
+### 17.16 Compromise Indicator Alerting
+
+Acme Health shall alert [Designated Personnel or Roles] when the following system-generated indications of compromise or potential compromise occur: [Compromise Indicators]. [NIST 800-53 SI-4(5) Moderate, High | FedRAMP SI-4(5)]
+
+Acme Health shall alert organization-defined personnel or roles when the following system-generated indications of compromise or potential compromise occur: presence of malicious code, unauthorized export of information, signaling to an external information system, or potential intrusions. [ARC-AMPE SI-4(5) AE Mandatory]
+
+### 17.17 Suspicious Event Response
+
+Acme Health shall notify [Incident Response Personnel] of detected suspicious events and take the following actions upon detection: [Least-Disruptive Actions]. [NIST 800-53 SI-4(7)]
+
+### 17.18 Intrusion Monitoring Tool Testing
+
+Acme Health shall test intrusion-monitoring tools and mechanisms [Testing Frequency]. [NIST 800-53 SI-4(9)]
+
+### 17.19 Encrypted Communications Visibility
+
+Acme Health shall make provisions so that [Encrypted Communications Traffic Subject to Monitoring] is visible to [System Monitoring Tools and Mechanisms]. [NIST 800-53 SI-4(10) High]
+
+### 17.20 Outbound Traffic Analysis for Anomalies
+
+Acme Health shall analyze outbound communications traffic at the external interfaces to the system and selected [Interior Analysis Points] to discover anomalies. [NIST 800-53 SI-4(11) | ARC-AMPE SI-4(11) AE Mandatory]
+
+### 17.21 Automated Alerting for Unusual Activities
+
+Acme Health shall alert [Designated Personnel or Roles] using [Automated Alert Mechanisms] when the following indications of inappropriate or unusual activities with security or privacy implications occur: [Alert Triggering Activities]. [NIST 800-53 SI-4(12) High]
+
+### 17.22 Traffic and Event Profile Analysis
+
+Acme Health shall analyze communications traffic and event patterns for the system; develop profiles representing common traffic and event patterns; and use the traffic and event profiles in tuning system-monitoring devices. [NIST 800-53 SI-4(13)]
+
+### 17.23 Wireless Intrusion Detection
+
+Acme Health shall employ a wireless intrusion detection system to identify rogue wireless devices and to detect attack attempts and potential compromises or breaches to the system. [NIST 800-53 SI-4(14) High | ARC-AMPE SI-4(14) AE Mandatory]
+
+### 17.24 Wireless Traffic Monitoring
+
+Acme Health shall employ an intrusion detection system to monitor wireless communications traffic as the traffic passes from wireless to wireline networks. [NIST 800-53 SI-4(15)]
+
+### 17.25 Monitoring Tool Correlation
+
+Acme Health shall correlate information from monitoring tools and mechanisms employed throughout the system. [NIST 800-53 SI-4(16)]
+
+### 17.26 Integrated Situational Awareness
+
+Acme Health shall correlate information from monitoring physical, cyber, and supply chain activities to achieve integrated, organization-wide situational awareness. [NIST 800-53 SI-4(17)]
+
+### 17.27 Covert Exfiltration Detection
+
+Acme Health shall analyze outbound communications traffic at external interfaces to the system and at the following interior points to detect covert exfiltration of information: [Interior Monitoring Points for Exfiltration Detection]. [NIST 800-53 SI-4(18)]
+
+### 17.28 Enhanced Monitoring for High-Risk Individuals
+
+Acme Health shall implement [Additional Monitoring for High-Risk Individuals] of individuals who have been identified by [Risk Identification Sources] as posing an increased level of risk. [NIST 800-53 SI-4(19)]
+
+### 17.29 Privileged User Monitoring
+
+Acme Health shall implement the following additional monitoring of privileged users: [Additional Privileged User Monitoring]. [NIST 800-53 SI-4(20) High]
+
+### 17.30 Probationary Period Monitoring
+
+Acme Health shall implement the following additional monitoring of individuals during [Probationary Period]: [Additional Probationary Monitoring]. [NIST 800-53 SI-4(21)]
+
+### 17.31 Unauthorized Network Service Detection
+
+Acme Health shall detect network services that have not been authorized or approved by [Authorization or Approval Processes] and [Selection: audit; alert [Designated Personnel or Roles]] when detected. [NIST 800-53 SI-4(22) High]
+
+### 17.32 Host-Based Monitoring
+
+Acme Health shall implement the following host-based monitoring mechanisms at [System Components for Host-Based Monitoring]: [Host-Based Monitoring Mechanisms]. [NIST 800-53 SI-4(23)]
+
+Acme Health shall implement host-based monitoring mechanisms at organization system components: intrusion detection system / intrusion prevention system (IDS/IPS). [ARC-AMPE SI-4(23) AE Mandatory]
+
+### 17.33 Indicators of Compromise Distribution
+
+Acme Health shall discover, collect, and distribute to [Designated Personnel or Roles], indicators of compromise provided by [Compromise Indicator Sources]. [NIST 800-53 SI-4(24)]
+
+### 17.34 Network Traffic Visibility
+
+Acme Health shall provide visibility into network traffic at external and key internal system interfaces to optimize the effectiveness of monitoring devices. [NIST 800-53 SI-4(25)]
+
+## 18. Review and Maintenance
+
+This Standard shall be reviewed and updated in accordance with the requirements specified in Section 4.3. All reviews shall be documented, and any changes shall be approved by the [Designated Official] responsible for audit and accountability policy management and communicated to affected personnel.
+
+---
+
+**Document Control**
+
+| Version | Date | Description | Approved By |
+|---------|------|-------------|-------------|
+| 1.0 | [Date] | Initial Release | [Approver Name/Role] |

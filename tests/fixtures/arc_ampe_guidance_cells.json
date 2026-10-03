@@ -1,0 +1,552 @@
+[
+  {
+    "control_id": "AC-02(02)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-02(03)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-02(04)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-02(09)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-02(13)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-06(07)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-06(09)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-06(10)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-07(02)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-17(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-17(03)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-18(03)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AC-20(01)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AT-04",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AU-07",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AU-07(01)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AU-08",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CA-09",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CM-03(02)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CM-04(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CM-05(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CM-05(05)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CM-06(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CM-08(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CM-08(03)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CM-10",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "CM-12(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IA-02(05)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IA-02(06)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IA-02(08)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IA-05(06)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IA-05(07)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IA-06",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IR-05",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IR-07(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IR-07(02)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "IR-08(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "MA-03(01)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "MA-04(04)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "MA-04(07)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "MP-05",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "MP-06(02)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PE-02",
+    "guidance": "•  There are no supplemental control requireandents and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PE-05",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PE-06(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PE-13(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PE-16",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PE-23",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PL-04(01)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-02",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-03",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-05",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-06",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-07",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-09",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-10",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-11",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-12",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-14",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-15",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-16",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PM-26",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "PT-05(02)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "RA-05(02)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "RA-05(11)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "RA-08",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-03(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-04(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-04(09)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-08(23)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-08(32)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-09(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-09(02)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-10",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-10(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-11(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-11(02)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-11(08)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-15(12)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SA-17",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SC-08(02)",
+    "guidance": "•  There are no supplemental control requirements & guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SC-17",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SC-20",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SC-21",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SC-22",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SC-23",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-02(06)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-04(04)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-04(11)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-06",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-07",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-07(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-07(07)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-08",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-08(02)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "SI-12(01)",
+    "guidance": "•  There are no supplemental control requirements and guidance at this time.",
+    "sentinel": true
+  },
+  {
+    "control_id": "AU-02",
+    "guidance": "Note: Ensure that all three bullets of this Supplemental Control Requirements & Guidance are reviewed.  Because of software limitations, the cell may be not visible unless the user expands the cell manually). \n\n•  The risk assessment should at least include the following auditable events: \n    - Server events and error messages;\n    - User log-on and log-off (successful or unsuccessful); \n    - All system administration (including privileged user) activities; \n    - Modification of privileges and access; \n    - Start up and shut down; \n    - Application modifications; \n    - Application alerts and error messages; \n    - Configuration changes;\n    - Account creation, modification, or deletion;\n    - File access, creation, modification, or deletion;\n    - Read access to sensitive information;\n    - Modification to sensitive information;\n    - Printing sensitive information;\n    - Anomalous (e.g., non-attributable) activity;\n    - Data as required for privacy monitoring privacy controls;\n    - Concurrent log-on from different work stations;\n    - Override of access control mechanisms; and\n    - Process creation\n\n•  For event types for logging within the system, the organization- defined frequency or situation requiring logging should be documented in the System Security and Privacy Plan (SSPP). The following are a minimum set of event types:\n    - User log-on and log-off (successful or unsuccessful);\n    - Configuration changes;\n    - Application alerts and error messages:\n    - All system administration (including privileged user) activities;\n    - Modification of privileges and access;\n    - Account creation, modification, or deletion;\n    - Concurrent log-on from different work stations; and\n    - Override of access control mechanisms.\n\n•  For Cloud environments, the organization defines the events to be audited. The events to be audited are accepted and approved by the Authorizing Official (AO).",
+    "sentinel": false
+  },
+  {
+    "control_id": "AC-01",
+    "guidance": "•  Organization-defined personnel and roles include the organization-level, mission/business-level, and system-level.\n\n•  Organization-level personnel and roles must be defined in the organization System Security and Privacy Plan (SSPP). Organization-level personnel and roles include, but are not limited to, organization Senior Management such as the Chief Information Security Officer (CISO) and/or senior official for privacy. Mission/Business-level personnel and roles and System-level personnel and roles include, but are not limited to, Business Owner, System Owner, and/or Information System Security Officer (ISSO). \n\n•  The organization must designate officials to be responsible for the management of access control of systems. These officials must be named in the appropriate security and privacy documents. \n\n•  Security and privacy program policies and procedures at the organization level are preferable and may reduce or eliminate the need for mission- or system-specific policies and procedures.\n\n•  Actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect access control policies and review at least every one (1) year to ensure the organization and Mission/Business/System access control policies remain effective.\n\n•  Ensure access control policies and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and the information on that system. \n\n•  Organization-defined events include assessment or audit findings; security or privacy incidents; and changes to applicable laws (to include privacy laws), Executive Orders, directives, regulations, policies, standards, and guidelines.",
+    "sentinel": false
+  },
+  {
+    "control_id": "AC-17",
+    "guidance": "•  The organization must require callback capability with re-authentication to verify connections from authorized locations when the Multi-Protocol Label Switching (MPLS) service network cannot be used. For application systems and turnkey systems that require the vendor to log on, the vendor will be assigned a User ID and password and enter the network through the standard authentication process. Access to such systems will be authorized and logged. User IDs assigned to vendors will be recertified within every one (1) year. \n\n•  For remote access solutions (e.g., e-authentication), refer to the latest published NIST SP 800-63.\n\n•  All computers and devices, whether government furnished equipment (GFE), contractor furnished equipment (CFE), or personal, that require any network access to an organization network or system, are securely configured and meet, as a minimum, the following security requirements: \n    - Up-to-date system patches; \n    - Current anti-virus software;\n    - Host-based intrusion detection system;  \n    - Functionality that provides the capability for automatic execution of code disabled; and \n    - Employs the latest published FIPS 140-compliant encryption standards.\n\n•  For organizations supporting remote access (including teleworking), ensure the latest published NIST SP 800-46 guidelines are followed by establishing policies and procedures that define:\n    - Forms of permitted remote access;\n    - Types of devices permissible for remote access;\n    - Types of access granted to remote users; and\n    - Handling of remote user account provisioning.",
+    "sentinel": false
+  },
+  {
+    "control_id": "AU-03(03)",
+    "guidance": "•  The organization must identify the minimum Personally Identifiable Information (PII) elements that are relevant and necessary to accomplish the purpose of collection, and where a collection of certain PII requires legal authorization, the organization must ensure that such collection is legally authorized.  \n\n•  The audit policy should document the justification for inclusion of PII in audit logs.",
+    "sentinel": false
+  },
+  {
+    "control_id": "CM-02(02)",
+    "guidance": "•  The organization must configure the access controls, as needed, to allow automation support to have access to the information that it needs.\n\n•  The organization must run automated mechanisms to gather hardware and software configurations as part of the Continuous Monitoring Program.\n\n•  Examples of automated mechanisms include, but are not limited to, hardware asset management systems, software asset management systems, and centralized configuration management software.",
+    "sentinel": false
+  },
+  {
+    "control_id": "CP-03",
+    "guidance": "•  The organization-defined role or personnel must identify and designate appropriate Contingency Plan (CP) team members to be trained to implement the system CP strategy. \n\n•  Each team must be trained and ready to respond in the event of a disruptive situation requiring plan activation consistent with their assigned roles and responsibilities.\n                                                          \n•  Recovery personnel are assigned to the specific team(s) that will respond to the event, recover capabilities, and return the system to normal operations.     \n                                                   \n•  Recovery team members need to clearly understand the team’s recovery effort goal, individual procedures the team will execute, and how interdependencies between recovery teams may affect overall strategies.     \n\n•  Organization-defined events are defined in CP-1.",
+    "sentinel": false
+  },
+  {
+    "control_id": "IA-05",
+    "guidance": "•  Organizations must comply with the latest published NIST SP 800-63B.\n\n•  It is strongly recommended that Organizational ACA Consumer Account passwords are paired with the use of multi-factor authentication (MFA) solutions.  MFA use is consistent with IA-02(01).\n\n•  Organizational System/User Accounts passwords must be paired with the use of multi-factor authentication (MFA) solutions.  MFA enforcement is consistent with IA-02(01).\n \n•  It is strongly recommended organizations enforce a policy requiring Organizational System/User Account passwords be changed or refreshed at least once every six (6) months.  \n\n•  Organizations may have additional requirements for changing non-password authenticators. \n\n•  Authenticators include passwords, cryptographic devices, biometrics, certificates, one-time password devices, and ID badges. Device authenticators include certificates and passwords. Initial authenticator content is the actual content of the authenticator (e.g., the initial password). \n\n•  Actions can be taken to safeguard individual authenticators, including maintaining possession of authenticators, not sharing authenticators with others, and immediately reporting lost, stolen, or compromised authenticators.\n\n",
+    "sentinel": false
+  },
+  {
+    "control_id": "MA-03",
+    "guidance": "•  Ensure that all maintenance tools with the capability of retaining information are checked to ensure that information is not saved on the tool and that the tool is appropriately sanitized, using approved sanitization methods discussed in the latest published NIST SP 800-88.",
+    "sentinel": false
+  },
+  {
+    "control_id": "PE-11",
+    "guidance": "•  The organization must test the equipment on a schedule that complies with manufacturer recommendations and local, state, and federal requirements. Testing must be performed no less often than every three (3) years.",
+    "sentinel": false
+  },
+  {
+    "control_id": "PM-31",
+    "guidance": "•  For program-specific continuous monitoring frequencies, refer to the program's System Security and Privacy Plan (SSPP) or continuous monitoring strategy.\n\n•  Monitoring requirements, including the need for specific monitoring, may be referenced in other controls and control enhancements, for example, AC-2, AC-17, AT-4, AU-13, CA-7, CM-3, CM-6, CM-11, IR-5, MA-2, MA-3, MA-4, PE-3, PE-6, PE-14, PE-16, PE-20, PM-6, PM-23, PS-7, SA-9, SC-5, SC-7, SC-18, and SI-4.\n\n•  Review organization-defined frequencies to determine whether  a more stringent monitoring frequency is needed for system-level continuous monitoring.\n\n",
+    "sentinel": false
+  },
+  {
+    "control_id": "RA-05(05)",
+    "guidance": "•  Components that support authentication may include system components, operating systems, telecommunications, and configuration components. \n\n•  If the organization uses automated scanning tool functionality, the functionality must perform credentialed scans. To the extent possible, credentials should be compliant with organizational policy.\n",
+    "sentinel": false
+  },
+  {
+    "control_id": "SC-02(01)",
+    "guidance": "•  Preventing the presentation of system management functionality at interfaces to non-privileged users ensures that system administration options, including administrator privileges, are not available to the general user population. Restricting user access also prohibits the use of the grey-out option commonly used to eliminate accessibility to such information. One potential solution is to withhold system administration options until users establish sessions with administrator privileges.",
+    "sentinel": false
+  },
+  {
+    "control_id": "SC-39",
+    "guidance": "•  Maintaining separate execution domains for executing processes can be achieved, for example, by implementing separate address spaces. Process isolation technologies, including sandboxing or virtualization, logically separate software and firmware from other software, firmware, and data.",
+    "sentinel": false
+  },
+  {
+    "control_id": "SR-01",
+    "guidance": "•  Organization-defined personnel and roles include the organization-level, mission/business-level, and system-level.\n\n•  Organization-level personnel and roles should be defined in the organization System Security and Privacy Plan (SSPP). Organization-level personnel and roles include, but are not limited to, organization Senior Management such as the Chief Information Security Officer (CISO) and/or senior official for privacy. Mission/Business-level personnel and roles and System-level personnel and roles include, but are not limited to, Business Owner, System Owner, and/or Information System Security Officer (ISSO). \n\n•  The organization must designate officials to be responsible for the management of supply chain risk management of systems. These officials must be named in the appropriate security and privacy documents. \n\n•  Security and privacy program policies and procedures at the organization level are preferable and may reduce or eliminate the need for mission- or system-specific policies and procedures.\n\n•  Actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect supply chain risk management policies and review at least every one (1) year to ensure the organization and Mission/Business/System supply chain risk management policies remain effective.\n\n•  Ensure supply chain risk management policies and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and the information on that system. \n\n•  Organization defined events include assessment or audit findings; security or privacy incidents; changes to applicable laws (to include privacy laws), Executive Orders, directives, regulations, policies, standards, and guidelines.\n",
+    "sentinel": false
+  }
+]

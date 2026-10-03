@@ -1,0 +1,57 @@
+# Generated rewordings of selected answering questions, committed so the
+# set is fixed and reviewable.
+#
+# Retrieval is pinned to the original wording: each case keeps the
+# `retrieve` string its parent used, so the passages are identical
+# across every phrasing and only the answering varies. Grading two
+# stochastic stages at once would make a failure impossible to
+# attribute.
+#
+# Expectations are inherited from the parent case in cases.yaml.
+
+answers-and-cites:
+  retrieve: how often are accounts recertified?
+  phrasings:
+  - account recert frequency?
+  - Could you please advise on the frequency with which accounts are recertified?
+  - how often do accounts get recertified, like every quarter or what?
+  - how ofen are accounts recertifed?
+  - We're updating our compliance documentation and I need to confirm one detail for the audit team —
+    what's the recertification schedule for accounts, i.e., how frequently does that process happen?
+refuses-what-the-passages-do-not-cover:
+  retrieve: how much annual leave do staff get?
+  phrasings:
+  - annual leave amount for staff?
+  - Could you please advise how many days of annual leave staff are entitled to?
+  - hey how much annual leave do we get each year?
+  - how much anual leave do staff recieve?
+  - I'm putting together an onboarding doc for new hires and want to make sure I get this right — do you
+    know how much annual leave staff are actually given per year?
+a-well-known-fact-absent-from-the-passages:
+  retrieve: what are the credential complexity requirements?
+  phrasings:
+  - credential complexity rules?
+  - Could you please specify the requirements for credential complexity?
+  - hey what's the deal with password complexity requirements
+  - wat are teh credental complexity requirments
+  - I'm setting up our new access policy document and need to fill in a section on authentication standards
+    — what exactly are the complexity requirements for credentials in this system?
+an-undecided-parameter-is-reported-as-undecided:
+  retrieve: how often are media sanitization records reviewed?
+  phrasings:
+  - media sanitization records review frequency?
+  - Could you advise on the frequency with which media sanitization records are reviewed?
+  - so how often do they actually check the media sanitization records?
+  - how often are media saniziation records reviewd?
+  - We're updating our compliance documentation and I need to confirm the review cycle — like, is there
+    a set schedule for going back over the media sanitization records, and if so how frequently does that
+    happen?
+an-answer-can-come-from-a-table:
+  retrieve: what evidence proves that media was destroyed?
+  phrasings:
+  - Proof media was destroyed?
+  - Could you specify what evidence demonstrates that the media was destroyed?
+  - so like whats the actual proof the media got destroyed?
+  - wht evidnce proves the media was destroyd?
+  - I've heard claims going around that some media got destroyed, but nobody seems to back it up — what's
+    the actual evidence proving it was destroyed?

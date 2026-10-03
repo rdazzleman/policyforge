@@ -1,0 +1,4 @@
+# The sdist builds the package; it is not a test distribution. setuptools
+# otherwise adds tests/*.py by default but not tests/fixtures/, so a suite
+# run from it fails. Test from a clone. See CONTRIBUTING.md.
+prune tests

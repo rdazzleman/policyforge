@@ -1,0 +1,75 @@
+name: scorecard
+
+# OpenSSF Scorecard grades the things this repo already does — SHA-pinned
+# actions, a dependency update tool with a cooldown, SAST in CI, a published
+# security policy, least-privilege workflow permissions — and publishes the
+# result where somebody evaluating the project can read it without taking
+# docs/commitments.md on trust.
+#
+# That is the whole reason it is here. The commitments doc argues that a
+# claim nobody can check is worth little; a self-graded scorecard would be
+# the same mistake one level up. This one is scored by a third party against
+# published criteria.
+#
+# Findings land in the repo's Security tab alongside CodeQL.
+
+on:
+  branch_protection_rule:
+  schedule:
+    # Weekly, like codeql.yml. Most of what Scorecard measures is repository
+    # configuration rather than code, so it changes on settings edits that
+    # no push would otherwise trigger a re-score for.
+    - cron: "41 4 * * 1"
+  push:
+    branches: ["main"]
+
+# Least privilege, as every other workflow here declares. `id-token: write`
+# is what lets Scorecard publish a signed, verifiable result rather than an
+# unattributable one; it grants no repository write access.
+permissions: read-all
+
+jobs:
+  analysis:
+    name: Scorecard analysis
+    # OSSF Scorecard reads GitHub's API and publishes to GitHub. On the
+    # team's Forgejo this job failed on the push to main and on every
+    # scheduled run (#7), so it runs on github.com alone, unchanged there.
+    # 80's scope ruling on #30: it must be green on the mirrored release
+    # head before any main merge.
+    if: ${{ github.server_url == 'https://github.com' }}
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write  # upload SARIF to the Security tab
+      id-token: write         # publish a signed result
+      contents: read
+      actions: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run analysis
+        uses: ossf/scorecard-action@2d1146689b8cda280b9bc96326124645441f03bc  # v2.4.4
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          # `publish_results: true` requires the repository to be public and
+          # opts into the public dataset, which is the point — an externally
+          # verifiable score. Turn it off if this repo is ever made private.
+          publish_results: true
+
+      # Kept for 5 days so a failed upload is still diagnosable, rather than
+      # the default 90 — this holds no content worth retaining.
+      - name: Upload artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+        with:
+          name: SARIF file
+          path: results.sarif
+          retention-days: 5
+
+      - name: Upload to code-scanning
+        uses: github/codeql-action/upload-sarif@1c5b675653bb5c22dbe9b12b556ec555138e09fd  # v4.38.1
+        with:
+          sarif_file: results.sarif

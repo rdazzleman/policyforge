@@ -1,0 +1,109 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001665
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 04df359f744074b9
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Physical & Environmental Security Operational Procedure
+
+## Purpose
+
+Executing this procedure implements the operational controls required by the Example Org Physical & Environmental Security Standard: it limits, authorizes, monitors, and documents physical access to Example Org facilities and the electronic information systems housed within them, and it keeps the governing policy, procedures, and supporting documentation current and retrievable.
+
+## Scope
+
+This procedure is performed by the Facilities / Physical Security team on all Example Org facilities that house electronic information systems, including data centre environments, and applies to all employees, contractors, and visitors seeking physical access to those facilities. Facilities / Physical Security owns this process end to end; other teams participate only in the specific steps where named.
+
+## Prerequisites
+
+- Administrative access to the badge/access control platform used at Example Org facilities ([Badge Access Control System])
+- Access to the system of record for the facility authorized-access list ([Access Control Records System])
+- A ticketing system for logging access requests, visitor authorizations, repairs, and modifications ([Ticketing System])
+- A system for storing and retaining policy and procedure documentation ([Document Management System])
+- Identification of the official designated to manage the physical and environmental protection policy and procedures ([Designated Official])
+- An approved list of acceptable forms of identification ([Assignment: organization-defined list of acceptable forms of identification])
+- Current copies of the Example Org Physical & Environmental Security Standard, the disaster recovery plan, and the emergency mode operations plan
+- Approval authority for access-list changes and exceptions, held by Facilities / Physical Security leadership
+
+## Procedure Steps
+
+### 1. Maintain and disseminate the physical and environmental protection policy and procedures [NIST 800-53 PE-1 Low/Moderate/High | ARC-AMPE PE-1]
+
+1. Confirm the physical and environmental protection policy is documented in [Document Management System] and addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance.
+1. Verify the policy and these procedures are consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines; where a conflict is found, raise it with the [Designated Official] for resolution before proceeding.
+1. Confirm a designated official ([Designated Official]) is named as responsible for the development, documentation, and dissemination of the policy and procedures; if the designation has changed, update the policy and record the change in [Ticketing System].
+1. Disseminate the current policy and procedures to all applicable personnel and roles, using the distribution mechanism recorded in [Document Management System], and record the dissemination date and audience.
+1. Ensure these procedures themselves are documented, approved, and published alongside the policy so that personnel can execute the associated physical and environmental protection controls.
+
+### 2. Review and update the policy and procedures [NIST 800-53 PE-1 Low/Moderate/High | ARC-AMPE PE-1 | HIPAA 164.316(b)(2)(iii) Required | ARC-AMPE PE-1]
+
+1. On the quarterly process cycle, Facilities / Physical Security reviews the physical and environmental protection policy and procedures; additionally, complete a full review at least every one (1) year.
+1. Trigger an out-of-cycle review following any of: assessment or audit findings; security or privacy incidents; or changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect physical and environmental protection, using the monitoring source recorded in [Document Management System], and review the monitoring results at least every one (1) year to confirm the policies and procedures remain effective.
+1. Record each review — its date, reviewer (Facilities / Physical Security), findings, and any resulting updates — in [Document Management System].
+1. Where updates are required, the [Designated Official] approves the revised policy or procedures before republishing and re-disseminating per Step 1.4.
+
+### 3. Support privacy and limit unnecessary access to PII [ARC-AMPE PE-1]
+
+1. During each review under Step 2, verify that the physical and environmental protection policy and associated controls support privacy to the greatest extent feasible throughout the system life cycle.
+1. Verify that physical access controls, visitor procedures, and monitoring practices do not permit unnecessary or inappropriate access to Personally Identifiable Information (PII) held within the facilities or systems in scope.
+1. Where a gap is identified, log it in [Ticketing System], assign remediation to Facilities / Physical Security, and obtain [Designated Official] approval for the remediation plan.
+
+### 4. Limit and authorize physical access to facilities and systems [HIPAA 164.310(a)(1)]
+
+1. Apply the access-limiting policies and procedures documented under the Standard to all electronic information systems and the facilities in which they are housed.
+1. Grant physical access only through the authorization workflow defined in Step 8; no access is permitted without a completed authorization record.
+1. Verify on each quarterly cycle that properly authorized individuals are able to access the facilities using their issued credentials, and that unauthorized access attempts are denied and logged by the [Badge Access Control System].
+
+### 5. Emergency facility access for disaster recovery and emergency operations [HIPAA 164.310(a)(2)(i) Addressable]
+
+1. Document procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan, and store them with the plans in [Document Management System].
+1. Implement these procedures when an emergency occurs: verify the identity and role of responders against the facility authorized-access list (Step 8), grant emergency access under the documented emergency provisions, and record each emergency access event in [Ticketing System].
+1. After the emergency, Facilities / Physical Security reconciles the emergency access events against the authorized-access list and restores normal access controls.
+
+### 6. Safeguard the facility and equipment from unauthorized access, tampering, and theft [HIPAA 164.310(a)(2)(ii)]
+
+1. Maintain the physical safeguards described in the Standard — locks, controlled entry points, and monitoring — for the facility and the equipment therein.
+1. Confirm on the quarterly cycle that entry points and equipment enclosures are intact and that no unauthorized physical access, tampering, or theft has occurred; log any findings in [Ticketing System].
+1. Route any suspected tampering or theft incident to incident response per the coordination mechanism defined in the physical and environmental protection policy, and carry the resulting changes into the Step 2 review triggers.
+
+### 7. Role-based physical access control and visitor control [NIST 800-53 PE-2(1) | HIPAA 164.310(a)(2)(iii) Addressable]
+
+1. Authorize physical access to the facility where a system resides based on the individual's position or role; validate each request against the requester's documented role before granting access.
+1. For visitors, implement the visitor control procedures: escort requirements, visitor credential issuance through the [Badge Access Control System], and logging of visitor entry and exit in [Ticketing System].
+1. Control access to software programs held at the facility for testing and revision using the same role-based validation, and record each such access grant in [Ticketing System].
+
+### 8. Maintain the authorized facility access list and issue credentials [NIST 800-53 PE-2 Low/Moderate/High | ARC-AMPE PE-2]
+
+1. Develop, obtain approval for, and maintain in [Access Control Records System] a list of individuals with authorized access to the facility where the system resides.
+1. Issue authorization credentials for facility access through the [Badge Access Control System] only after the individual appears on the approved access list.
+1. Review the access list detailing authorized facility access by individuals at least every six (6) months — performed on the quarterly process cycle, which satisfies this minimum — and produce the Badge access review artifact documenting the review date, reviewer, and outcomes.
+1. Remove individuals from the facility access list when access is no longer required, and revoke their credentials in the [Badge Access Control System] as part of the same action; record the removal in [Ticketing System].
+1. Require two forms of identification, drawn from the [Assignment: organization-defined list of acceptable forms of identification], before adding any individual to the access list or issuing credentials.
+
+### 9. Document repairs and modifications to facility security components [HIPAA 164.310(a)(2)(iv)]
+
+1. Log every repair or modification to the physical components of a facility related to security — for example hardware, walls, doors, and locks — in [Ticketing System] at the time the work is performed.
+1. Record in each ticket the component affected, the nature of the repair or modification, the date, and the party performing the work.
+1. Facilities / Physical Security reviews the repair and modification records on the quarterly cycle to confirm completeness and to identify any change that should trigger a policy or procedure review under Step 2.
+
+### 10. Maintain, retain, and make documentation available [HIPAA 164.316(b)(1) | HIPAA 164.316(b)(2)(i) Required | HIPAA 164.316(b)(2)(ii) Required]
+
+1. Maintain the policies, procedures, and documentation of actions, activities, and assessments produced by this procedure — including the Badge access review and the Data centre environmental monitoring records — in written (which may be electronic) form in [Document Management System].
+1. Retain all required documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later; configure the [Document Management System] retention settings to enforce this period before disposing of anything.
+1. Make each document available to the persons responsible for implementing the procedures to which it pertains, using the access permissions in [Document Management System]; Facilities / Physical Security verifies this availability during the quarterly cycle.
+
+## Roles & Responsibilities
+
+Facilities / Physical Security performs every step of this procedure, reviews the resulting evidence artifacts, and answers for the outcome of the process end to end. Other teams (such as system owners and visitors' sponsors) participate in individual steps where named, and exceptions to any step in this procedure require the review and approval of Facilities / Physical Security leadership in consultation with the [Designated Official].
+
+## Related Standard
+
+This procedure operationalizes the *Example Org Physical & Environmental Security Standard*, which contains the underlying requirement text and the rationale for each control described above.

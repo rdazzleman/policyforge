@@ -1,0 +1,22 @@
+id: arc-ampe
+name: ARC-AMPE Volume II (ACA Administering Entity baseline)
+framework_id: arc-ampe
+licence: public-domain
+source: CMS ARC-AMPE Volume II SSPP workbook, via policyforge etl-arc-ampe
+version: v1.02
+notes: 'Published by CMS, a federal agency, with no copyright notice or redistribution restriction
+  found in the source documents — a US government work, so freely redistributable. Bundled
+  with this project and safe to commit to any repository.
+
+  The mandatory control baseline for an ACA Administering Entity, read from Volume II''s `AE
+  Mandatory Baseline` sheet. Volume I is the narrative PDF and holds no controls. CMS''s parameter
+  decisions are written into the control text here rather than carried in a parameter table,
+  because ARC-AMPE states its controls already tailored.
+
+  CMS publishes a second, smaller baseline for Direct Enrollment Entities. It is distributed
+  through CMS zONE, which requires requested access, so it is not fetched and not bundled
+  — pass it to `etl-arc-ampe --export` if you have it.'
+source_ref: v1.02
+source_url: https://www.cms.gov/files/document/arc-ampevol2sspp-aca-aev102-50803212025.xlsx
+content_sha256: 6d86644d0c7b779c816d98f20d6009827bee766b9bacfe55a97a6935d7cdd169
+fetched_at: '2026-09-20'

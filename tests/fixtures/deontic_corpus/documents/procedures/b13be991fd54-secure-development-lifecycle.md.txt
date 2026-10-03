@@ -1,0 +1,232 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.00511
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - b47610fa6229b1c1
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org — Secure Development Lifecycle Procedure
+
+## Purpose
+
+Executing this procedure embeds information security and privacy controls into every phase of Example Org's system development life cycle — from requirements definition and acquisition through development, testing, operation, and disposal — and produces the evidence required by the Secure Development Lifecycle Standard, including SAST/DAST results per release and dependency and supply-chain scan output.
+
+## Scope
+
+This procedure is performed by the Application Security team, with participation from Development Teams, the Privacy Office, Procurement/Contracting, System Owners, and supply chain personnel, on all systems, components, and services that Example Org develops, acquires, integrates, or maintains. It runs continuously across the system development life cycle; each subsection below applies at the life-cycle phase indicated by its steps.
+
+## Prerequisites
+
+- Named individuals identified for all security and privacy roles in the development life cycle (see Procedure Steps 1), recorded in [Documentation Repository].
+- Access to [Source Code Repository], [CI/CD Pipeline], [Ticketing System], [Vulnerability Management Platform], [Documentation Repository], [Risk Acceptance Register], and [POA&M System].
+- An executed or in-progress acquisition contract with each developer, containing the security and privacy terms required by Procedure Steps 4 and 9.
+- Approval from the Senior Official for Privacy before any PII is used in testing, training, or research.
+- A designated independent assessment agent meeting [Independence Criteria] for developer assessment verification.
+- Access to the FedRAMP Secure Configuration Guide and the latest published NIST SP 800-88.
+- Developer deliverables: functional properties of controls, design documentation, assessment plans, continuous monitoring plan, and training materials as specified below.
+
+## Procedure Steps
+
+### Establish and Maintain the Secure Development Life Cycle [NIST 800-53 SA-3 | ARC-AMPE SA-3]
+
+1. Application Security maintains the formally defined, documented system development life cycle in [Documentation Repository], incorporating information security and privacy considerations at each phase.
+1. Application Security documents the security and privacy roles and responsibilities for each life-cycle phase and records the names of the individuals holding those roles; review and update this roster whenever personnel changes occur.
+1. Application Security integrates the organizational risk management process into life-cycle activities by requiring a risk determination at each phase gate, recorded in [Ticketing System].
+1. Before each phase gate, Application Security provides the security and privacy offices an opportunity to review the requirements and confirm that PII protection requirements are appropriately considered; record their sign-off in [Ticketing System].
+
+### Protect Preproduction Environments and Control Live Data [NIST 800-53 SA-3(1) | ARC-AMPE SA-3(1) | NIST 800-53 SA-3(2) | ARC-AMPE SA-3(2)]
+
+1. Application Security classifies each preproduction environment and applies protections commensurate with its risk, documented in [Documentation Repository].
+1. Before any live data is loaded into a preproduction environment, Application Security obtains approval, documents the approval in [Ticketing System], and applies controls over that use.
+1. Set the preproduction environment's protection level to the same impact or classification level as any live data within it; verify this mapping at each environment change.
+1. If PII is used in the test environment, apply the same controls required for systems containing PII to that environment, and use synthetic PII to the maximum extent practicable.
+1. Limit the creation, collection, use, and disclosure of PII in development and test to only what is necessary for the specified, authorized purpose; coordinate with the Senior Official for Privacy.
+1. Obtain the Senior Official for Privacy's approval for any use of PII in testing, training, or research; prefer synthetic or de-identified data and record the approval in [Ticketing System].
+
+### Plan Technology Refresh [NIST 800-53 SA-3(3)]
+
+1. Application Security develops and maintains a technology refresh schedule for each system in [Documentation Repository], updated at each life-cycle phase.
+1. Review the refresh schedule at each phase gate and record changes in [Ticketing System].
+
+### Build Security and Privacy Terms into Acquisition Contracts [NIST 800-53 SA-4 | ARC-AMPE SA-4]
+
+1. Application Security, with [Procurement/Contracting], includes in every acquisition contract, explicitly or by reference using standardized contract language: security and privacy functional requirements; strength of mechanism requirements; security and privacy assurance requirements; controls needed to satisfy those requirements; security and privacy documentation requirements; requirements for protecting that documentation; a description of the development environment and intended operating environment; allocation of responsibility for information security, privacy, and supply chain risk management; and acceptance criteria.
+1. For each contract or Statement of Work involving development of, or access to, systems containing PII, include language requiring adherence to Example Org's security and privacy policies and standards (consistent with 45 CFR §155.260(b)), define security and privacy roles and responsibilities, and obtain the System Owner's approval before execution.
+1. For systems, components, or services that store, process, or transmit PII, consult the Privacy Office and include in the contract: a list of security and privacy controls necessary to protect PII (and, if appropriate, enforce applicable privacy requirements); privacy requirements including privacy training and awareness and rules of behavior; and privacy functional requirements.
+
+### Include HIPAA Business Associate Provisions [HIPAA 164.308(b)(1) | HIPAA 164.308(b)(3) Required | HIPAA 164.314(a)(2)(i) Required | HIPAA 164.314(a)(2)(iii) Required]
+
+1. Before permitting a business associate to create, receive, maintain, or transmit electronic protected health information on Example Org's behalf, obtain satisfactory assurances in accordance with § 164.314(a) that the business associate will appropriately safeguard the information.
+1. Document the satisfactory assurances through a written contract or other arrangement meeting the applicable requirements of § 164.314(a).
+1. Ensure the business associate contract requires the business associate to comply with the applicable requirements of the subpart, to flow down compliant contracts to any subcontractors handling electronic protected health information on its behalf, and to report any security incident of which it becomes aware, including breaches of unsecured protected health information as required by § 164.410.
+1. Apply the same contract requirements to the arrangement between a business associate and its subcontractor; verify flow-down language before the subcontractor begins handling information.
+
+### Obtain Developer Control Descriptions and Design Evidence [NIST 800-53 SA-4(1) | ARC-AMPE SA-4(1) | NIST 800-53 SA-4(2) | ARC-AMPE SA-4(2)]
+
+1. Require the developer to provide a description of the functional properties of the security and privacy controls to be implemented; file it in [Documentation Repository].
+1. Require the developer to provide design and implementation information — security-relevant external system interfaces, high-level design documentation, and source code or hardware schematics — at [Organization-Defined Level of Detail] sufficient to prove control implementation.
+1. Verify that the functional properties description covers only functionality visible at the control interfaces and excludes internal functionality and data structures; reject and return descriptions that expose or rely on internal detail.
+
+### Enforce Developer Methods, Configurations, and Delivery Requirements [NIST 800-53 SA-4(3) | NIST 800-53 SA-4(5) High]
+
+1. Require the developer to follow Example Org's defined systems engineering, security/privacy engineering, software development, testing/evaluation/verification/validation, and quality control methods; record the requirement in the contract per Procedure Steps 4.
+1. Require delivery of the system, component, or service with [Organization-Defined Security Configurations] implemented, and designate those configurations as the default for any subsequent reinstallation or upgrade.
+
+### Select and Validate Information Assurance Products [NIST 800-53 SA-4(6) | NIST 800-53 SA-4(7) | NIST 800-53 SA-4(10)]
+
+1. To protect classified information transmitted over networks at a lower classification level, employ only government off-the-shelf or commercial off-the-shelf information assurance (and IA-enabled) products that compose an NSA-approved solution, evaluated and/or validated by NSA or in accordance with NSA-approved procedures.
+1. For commercially provided information assurance products, verify evaluation against a NIAP-approved Protection Profile for the technology type if one exists; if no profile exists and the product relies on cryptographic functionality to enforce its security policy, require a FIPS-validated or NSA-approved cryptographic module.
+1. For Personal Identity Verification (PIV) capability, employ only information technology products on the FIPS 201-approved products list.
+
+### Require Developer Monitoring Plans and Interface Identification [NIST 800-53 SA-4(8) | NIST 800-53 SA-4(9) | ARC-AMPE SA-4(9)]
+
+1. Require the developer to produce a plan for continuous monitoring of control effectiveness consistent with Example Org's continuous monitoring program; review and file it in [Documentation Repository].
+1. Require the developer to identify the functions, ports, protocols, and services intended for organizational use; record the list in [Documentation Repository] and verify it against the delivered system at acceptance.
+
+### Include Privacy Act and Data Ownership Terms [NIST 800-53 SA-4(11) | NIST 800-53 SA-4(12)]
+
+1. For contracts to operate a system of records on Example Org's behalf, include [Organization-Defined Privacy Act Requirements] in the acquisition contract.
+1. Include organizational data ownership requirements in the acquisition contract, and require all data to be removed from the contractor's system and returned to Example Org within [Data Return Time Frame].
+
+### Obtain, Maintain, and Distribute System Documentation [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5]
+
+1. Obtain or develop administrator documentation describing the secure configuration, installation, and operation of the system; the effective use and maintenance of security and privacy functions and mechanisms; and known vulnerabilities regarding configuration and use of administrative or privileged functions.
+1. Obtain or develop user documentation describing user-accessible security and privacy functions and how to use them effectively; methods for user interaction that enable more secure use and protect individual privacy; and user responsibilities for maintaining system security and individual privacy.
+1. When documentation is unavailable or nonexistent, document the attempts to obtain it in [Ticketing System] and take [Organization-Defined Response Actions].
+1. Distribute documentation to [Organization-Defined Personnel or Roles] and maintain an updated list of related system operations and security documentation in [Documentation Repository].
+1. Apply the FedRAMP Secure Configuration Guide rules to configuration documentation and baselines.
+1. Develop system documentation describing the system's purpose, technical operation, access, maintenance, and required training for administrators and users.
+1. Upon changes in system functions or processes, update the relevant documentation, ensuring each document carries a date and version number.
+1. Evaluate documentation against the risk management strategy and its essentiality to security control implementation or operation, and protect it accordingly.
+
+### Apply Security and Privacy Engineering Principles [NIST 800-53 SA-8 | ARC-AMPE SA-8 | NIST 800-53 SA-8(1)–SA-8(32) | NIST 800-53 SA-8(33) | ARC-AMPE SA-8(33)]
+
+1. Apply Example Org's defined systems security and privacy engineering principles in the specification, design, development, implementation, and modification of the system and its components.
+1. In design reviews, verify application of the NIST-defined security design principles as applicable: clear abstractions; least common mechanism; modularity and layering; partially ordered dependencies; efficiently mediated access; minimized sharing; reduced complexity; secure evolvability; trusted components; hierarchical trust; inverse modification threshold; hierarchical protection; minimized security elements; least privilege; predicate permission; self-reliant trustworthiness; secure distributed composition; trusted communications channels; continuous protection; secure metadata management; self-analysis; accountability and traceability; secure defaults; secure failure and recovery; economic security; performance security; human factored security; acceptable security; repeatable and documented procedures; procedural rigor; secure system modification; and sufficient documentation.
+1. Verify least privilege is reflected in all aspects of the design, consistent with AC-6.
+1. Verify trusted communications channels restrict access to the channel and employ end-to-end protections for data transmitted over it.
+1. Verify accountability and traceability: security-relevant subject-object interactions must trace to the entity on whose behalf the action is taken, supported by a trustworthy infrastructure recording details of actions affecting system security.
+1. Verify secure defaults are implemented in all shipped configurations.
+1. Require that all system changes are accompanied by a Security Impact Analysis (SIA) and a Privacy Impact Assessment (PIA) before approval; file both in [Ticketing System].
+1. Verify sufficient documentation accompanies each component per Procedure Steps 11.
+1. Implement the privacy principle of minimization using [Organization-Defined Minimization Processes], driven by business needs, coordinated with the Senior Official for Privacy, and consistent with PM-25, PT-2, and SI-12.
+
+### Enforce Developer Configuration Management [NIST 800-53 SA-10 | ARC-AMPE SA-10 | NIST 800-53 SA-10(1) | NIST 800-53 SA-10(2) | NIST 800-53 SA-10(3) | NIST 800-53 SA-10(4) | NIST 800-53 SA-10(5) | NIST 800-53 SA-10(6) | NIST 800-53 SA-10(7)]
+
+1. Require the developer to perform configuration management during design, development, implementation, operation, and disposal; document, manage, and control the integrity of changes to [Organization-Defined Configuration Items]; implement only Example Org-approved changes; and document approved changes and their potential security and privacy impacts.
+1. Require the developer to track security flaws and flaw resolution within the system, component, or service and report findings to [Organization-Defined Personnel or Roles].
+1. Require the developer to enable integrity verification of software, firmware, and hardware components.
+1. Where no dedicated developer configuration management team exists, Application Security provides an alternate configuration management process using organizational personnel.
+1. Require the developer to employ tools for comparing newly generated versions of security-relevant hardware descriptions, source code, and object code with previous versions, to maintain the integrity of the mapping between master build data for the current version and the on-site master copy, and to execute procedures ensuring updates distributed to Example Org are exactly as specified by the master copies.
+1. Include [Organization-Defined Security and Privacy Representatives] — designated by Application Security — in the configuration change management and control process.
+
+### Execute Developer Testing, Assessment, and Flaw Remediation [NIST 800-53 SA-11 | ARC-AMPE SA-11 | ARC-AMPE SA-11 (non-production data) | ARC-AMPE SA-11 (isolated network)]
+
+1. Require the developer, at all post-design stages, to develop and implement a plan for ongoing security and privacy control assessments; review the plan at each assessment cycle.
+1. Require the developer to perform unit, integration, system, and regression testing/evaluation at [Organization-Defined Frequency, Depth, and Coverage], to produce evidence of execution of the assessment plan and the results, and to verify the scope of testing provides complete coverage of required controls at that breadth and depth.
+1. Require the developer to implement a verifiable flaw remediation process and to correct flaws identified during testing and evaluation; track corrections in [Ticketing System].
+1. Prohibit security-relevant modifications of the information system after the assessment; if a modification is required, re-assess before acceptance.
+1. Use non-production data when executing test scripts, or configure the test environment to comply with the security controls as though it were a production environment.
+1. Connect all systems supporting development and pre-production testing to an isolated network separated from production systems; permit network traffic into and out of that environment only to facilitate system testing, restricted by source and destination access control lists as well as ports and protocols.
+1. Require the developer to employ static code analysis tools to identify common flaws and document the results; retain the SAST results per release as evidence in [Documentation Repository].
+1. Require the developer to perform threat modeling and vulnerability analyses during development and subsequent testing and evaluation, using [Organization-Defined Contextual Information] (impact, environment of operations, known or assumed threats, acceptable risk levels), [Organization-Defined Tools and Methods], at [Organization-Defined Breadth and Depth], producing evidence meeting [Organization-Defined Acceptance Criteria].
+1. Require an independent agent satisfying [Independence Criteria] to verify correct implementation of the developer's assessment plans and the evidence produced; confirm the agent is provided sufficient information or granted authority to obtain it.
+1. Require the developer to perform a manual code review of [Organization-Defined Specific Code] using [Organization-Defined Processes, Procedures, and/or Techniques].
+1. Require the developer to perform penetration testing at [Organization-Defined Breadth and Depth] under [Organization-Defined Constraints].
+1. Require the developer to perform attack surface reviews and to employ interactive application security testing tools to identify flaws and document the results.
+1. Require the developer to employ dynamic code analysis tools to identify common flaws and document the results; retain the DAST results per release as evidence in [Documentation Repository].
+
+### Govern the Development Process, Standards, and Tools [NIST 800-53 SA-15 | ARC-AMPE SA-15 | NIST 800-53 SA-15(1) | NIST 800-53 SA-15(2) | NIST 800-53 SA-15(3) Moderate, High | NIST 800-53 SA-15(5) | NIST 800-53 SA-15(6) | NIST 800-53 SA-15(7) | NIST 800-53 SA-15(8) | NIST 800-53 SA-15(10) | NIST 800-53 SA-15(11) | NIST 800-53 SA-15(12) | NIST 800-53 SA-15(13) | ARC-AMPE SA-15(12)]
+
+1. Require the developer to follow a documented development process that explicitly addresses security and privacy requirements, identifies the standards and tools used, documents the specific tool options and tool configurations used, and documents, manages, and ensures the integrity of changes to the process and/or tools.
+1. Review the development process, standards, tools, tool options, and tool configurations at least every one (1) year or as needed, to determine whether they can satisfy [Organization-Defined Security and Privacy Requirements]; base those requirements on the ARC-AMPE security and privacy controls or their equivalent, including all applicable System Acquisition (SA) and Configuration Management (CM) controls.
+1. Define quality metrics at the beginning of the development process and require evidence of meeting them at [Organization-Defined Frequency], program review, and/or upon delivery.
+1. Require the developer to select and employ security and privacy tracking tools for use during the development process.
+1. Perform criticality analysis at [Organization-Defined Decision Points] in the life cycle at [Organization-Defined Breadth and Depth of Analysis].
+1. Require the developer to reduce attack surfaces to [Organization-Defined Thresholds] and to implement an explicit process to continuously improve the development process.
+1. Perform automated vulnerability analysis using [Organization-Defined Tools]; determine the exploitation potential and potential risk mitigations for discovered vulnerabilities; deliver the tool outputs and analysis results to [Organization-Defined Personnel or Roles]. Retain dependency and supply-chain scan output as evidence in [Documentation Repository].
+1. Require the developer to use threat modeling and vulnerability analyses from similar systems, components, or services to inform the current development process.
+1. Require the developer to provide, implement, and test an incident response plan, and to archive the system or component to be released or delivered together with the corresponding evidence supporting the final security and privacy review.
+1. Require the developer to minimize the use of personally identifiable information in development and test environments.
+
+### Obtain Developer Training Deliverables [NIST 800-53 SA-16 High]
+
+1. Require the developer to provide [Organization-Defined Training] on the correct use and operation of the implemented security and privacy functions, controls, and/or mechanisms; schedule delivery before system acceptance.
+
+### Obtain Security Architecture and Specification Artifacts [NIST 800-53 SA-17 | ARC-AMPE SA-17 | NIST 800-53 SA-17(1) | NIST 800-53 SA-17(2) | NIST 800-53 SA-17(3) | NIST 800-53 SA-17(4) | NIST 800-53 SA-17(5) | NIST 800-53 SA-17(6) | NIST 800-53 SA-17(7) | NIST 800-53 SA-17(8) | NIST 800-53 SA-17(9)]
+
+1. Require the developer to produce a design specification and security and privacy architecture consistent with Example Org's security and privacy architecture (an integral part of the enterprise architecture), accurately and completely describing required functionality, the allocation of controls among physical and logical components, and how individual functions, mechanisms, and services work together to provide a unified approach to protection.
+1. Require production, as an integral part of development, of a formal policy model describing [Organization-Defined Elements] of organizational security and privacy policy to be enforced, with proof that the model is internally consistent and sufficient to enforce those elements when implemented.
+1. Require the developer to define security-relevant hardware, software, and firmware and provide a rationale that the definition is complete.
+1. Require a formal top-level specification of the interfaces to security-relevant hardware, software, and firmware in terms of exceptions, error messages, and effects, with demonstration of its consistency with the formal policy model, complete coverage of those interfaces, and accuracy as a description of the implemented components, plus description of security-relevant internal mechanisms not addressed in the specification.
+1. Require an informal descriptive top-level specification meeting the same consistency, coverage, accuracy, and internal-mechanism description requirements.
+1. Require that security-relevant hardware, software, and firmware be designed and structured around a complete, conceptually simple protection mechanism with precisely defined semantics, internally structured with specific regard for this mechanism, structured to facilitate testing, and structured to facilitate controlling access with least privilege.
+1. For [Organization-Defined Critical Systems], require coordinated behavior to implement [Organization-Defined Capabilities] and require different designs to satisfy a common set of requirements or provide equivalent functionality.
+
+### Screen Developer Personnel [NIST 800-53 SA-21 High | ARC-AMPE SA-21]
+
+1. Before granting developer access, verify with the assigned Authorizing Official (or designee) that the developer of the systems, components, or services has appropriate access authorizations and satisfies personnel screening criteria consistent with PS-3; record the verification in [Ticketing System].
+
+### Manage Unsupported Components [NIST 800-53 SA-22 | ARC-AMPE SA-22]
+
+1. Monitor vendor support status continuously; replace system components when support is no longer available from the developer, vendor, or manufacturer.
+1. Provide alternative sources for continued support for unsupported components, such as in-house support or support from [Organization-Defined External Providers].
+1. Where unsupported components are retained to satisfy mission/business needs, document the justification and approval in a risk acceptance form in [Risk Acceptance Register] and update the related POA&M finding in [POA&M System].
+1. Establish plans to mitigate or remove unsupported systems, applications, operating systems, or software once identified, and upgrade, retire, or stop use of the component before end of life or vendor discontinuation of product support.
+1. If removal is not feasible, Application Security maintains a governance process to review unsupported system components and make a risk-based decision on their continued use.
+
+### Validate and Control Information Inputs [NIST 800-53 SI-10 | ARC-AMPE SI-10 | NIST 800-53 SI-10(1) | NIST 800-53 SI-10(2) | NIST 800-53 SI-10(3) | NIST 800-53 SI-10(4) | NIST 800-53 SI-10(5) | NIST 800-53 SI-10(6)]
+
+1. Check the validity of all information inputs to web/application servers, database servers, and any system or application input that might receive a crafted exploit toward executing code or causing a buffer overflow, verifying that inputs match specified definitions for format and content.
+1. When PII is entered, use validation techniques that support data quality (e.g., ensuring the PII entered is the expected type and format), provide the capability to limit or exclude entering PII in fields that should not contain it, and take reasonable steps to ensure PII is complete, accurate, and up to date as required by laws and regulations.
+1. Provide a manual override capability for input validation of [Organization-Defined Information Inputs], restrict its use to [Organization-Defined Authorized Individuals], and audit its use.
+1. Review and resolve input validation errors within [Input Validation Error Resolution Period].
+1. Verify that the system behaves in a predictable and documented manner when invalid inputs are received, and account for timing interactions among system components in determining appropriate responses for invalid inputs.
+1. Restrict the use of information inputs to [Organization-Defined Trusted Sources] and/or [Organization-Defined Formats], and prevent untrusted data injections.
+
+### Generate and Restrict Error Messages [NIST 800-53 SI-11 | ARC-AMPE SI-11]
+
+1. Generate error messages that provide information necessary for corrective actions without revealing information that could be exploited — such as user name and password combinations, password-reset validation attributes, PII, biometric or authentication data, sensitive financial records, or content related to internal security functions.
+1. Reveal error messages only to [Organization-Defined Personnel or Roles] documented in the applicable System Security and Privacy Plan — authorized individuals with a need for the information in the performance of their duties.
+
+### Manage Supply Chain Risk [NIST 800-53 SR-3 | FedRAMP SR-3 | ARC-AMPE SR-3 | NIST 800-53 SR-3(1) | NIST 800-53 SR-3(2) | NIST 800-53 SR-3(3) | NIST 800-53 SR-5 | NIST 800-53 SR-5(1) | NIST 800-53 SR-5(2)]
+
+1. Establish a process, in coordination with [Organization-Defined Supply Chain Personnel], to identify and address weaknesses or deficiencies in the supply chain elements and processes of [Organization-Defined Systems or Components].
+1. Employ [Organization-Defined Supply Chain Controls] to protect against supply chain risks and to limit the harm or consequences from supply chain-related events; these controls are not limited to those defined in ARC-AMPE and may include other NIST SP 800-53 Rev. 5 supply chain controls as appropriate.
+1. Document the selected and implemented supply chain processes and controls in security and privacy plans, the supply chain risk management plan, and [Other Organization-Defined Documents].
+1. The CSO documents and maintains supply chain custody, including replacement devices, to ensure the integrity of devices before they are introduced to the boundary.
+1. Employ a diverse set of sources for [Organization-Defined System Components and Services], and employ [Organization-Defined Controls] to limit harm from potential adversaries identifying and targeting the organizational supply chain.
+1. Ensure the controls included in the contracts of prime contractors are also included in the contracts of subcontractors.
+1. Employ [Organization-Defined Acquisition Strategies, Contract Tools, and Procurement Methods] to protect against, identify, and mitigate supply chain risks, and employ [Organization-Defined Controls] to ensure an adequate supply of [Organization-Defined Critical System Components].
+1. Assess the system, component, or service prior to selection, acceptance, modification, or update; retain dependency and supply-chain scan output as evidence in [Documentation Repository].
+
+### Implement Tamper Protection and Inspection [NIST 800-53 SR-9 High | NIST 800-53 SR-9(1) High | NIST 800-53 SR-10]
+
+1. Implement a tamper protection program for the system, component, or service, and employ anti-tamper technologies, tools, and techniques throughout the system development life cycle.
+1. Inspect [Organization-Defined Systems or System Components] at random, at [Inspection Frequency], and/or upon [Organization-Defined Indications of Need for Inspection] to detect tampering; record inspection results in [Ticketing System].
+
+### Prevent, Detect, and Report Counterfeit Components [NIST 800-53 SR-11 | NIST 800-53 SR-11(1) | NIST 800-53 SR-11(2) | NIST 800-53 SR-11(3)]
+
+1. Develop and implement anti-counterfeit policy and procedures that include the means to detect and prevent counterfeit components from entering the system.
+1. Report counterfeit system components to the source of the counterfeit component, [Organization-Defined External Reporting Organizations], and/or [Organization-Defined Personnel or Roles].
+1. Train [Organization-Defined Personnel or Roles] to detect counterfeit system components, including hardware, software, and firmware.
+1. Maintain configuration control over [Organization-Defined System Components] awaiting service or repair and serviced or repaired components awaiting return to service.
+1. Scan for counterfeit system components at [Counterfeit Scan Frequency].
+
+### Sanitize Media at Disposal [NIST 800-53 SR-12 | ARC-AMPE SR-12]
+
+1. Dispose of [Organization-Defined Data, Documentation, Tools, or System Components] using techniques and methods in accordance with the latest published NIST SP 800-88, Guidelines for Media Sanitization, consistent with MP-6 Media Sanitization; record sanitization results in [Ticketing System].
+
+## Roles & Responsibilities
+
+The Application Security team owns this procedure end to end: it performs the reviews, approvals, and verifications described above, coordinates Development Teams, the Privacy Office, Procurement/Contracting, System Owners, and supply chain personnel as participants, and answers for the outcome and evidence of each step. Exceptions — including retention of unsupported components and use of live data or PII in preproduction — require Application Security review and, where specified, approval by the Senior Official for Privacy or the Authorizing Official (or designee).
+
+## Related Standard
+
+Example Org — Secure Development Lifecycle Standard

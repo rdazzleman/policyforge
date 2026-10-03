@@ -1,0 +1,16 @@
+id: nist-800-171-r3
+name: NIST SP 800-171 Rev 3
+framework_id: nist-800-171
+licence: public-domain
+source: NIST usnistgov/oscal-content, via policyforge etl-800-171
+notes: A US government work, so freely redistributable. Bundled with this project and safe
+  to commit to any repository. REV 3 - the revision NIST publishes machine-readable. CMMC
+  Level 2 currently assesses against R2, a different revision whose identifiers are shaped
+  differently (3.1.1 there against 03.01.01 here), so a citation to this catalog is a citation
+  to rev 3. Rev 3 publishes no Low/Moderate/High baseline profiles, so every control's baseline
+  is empty - that is the source, not a parse that came up short. Read README.md before using
+  this to prepare for a CMMC assessment.
+source_ref: 1.1.0
+source_url: https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json
+content_sha256: e07316513ad9936f56416bb022406490369cffffff560ea424cb632f8a731068
+fetched_at: '2026-09-25'

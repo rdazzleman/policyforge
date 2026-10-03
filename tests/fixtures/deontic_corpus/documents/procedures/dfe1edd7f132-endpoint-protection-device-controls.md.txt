@@ -1,0 +1,192 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002331
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 47f0898033816960
+  provider: litellm
+  provider_class: third-party
+---
+
+# Endpoint Protection & Device Controls Procedure
+
+## Purpose
+
+This procedure provides the operational instructions Endpoint Engineering follows to deploy, configure, and continuously verify malicious code protection, spam protection, memory protection, mobile code controls, and device/media restrictions across Example Org systems. Executing it produces the evidence artifacts — the EDR deployment coverage report and the removable media policy configuration — required to demonstrate conformance to the Endpoint Protection & Device Controls Standard.
+
+## Scope
+
+This procedure is performed by Endpoint Engineering on all organization-owned endpoints (workstations, notebook computers, mobile devices) and on system entry and exit points including firewalls, remote-access servers, email servers, web servers, and proxy servers. It applies continuously, from initial deployment through ongoing configuration, testing, and response activities.
+
+## Prerequisites
+
+- Administrative access to the organization's [Endpoint Protection Platform] management console.
+- Administrative access to the organization's [Email Security Gateway].
+- Administrative access to the organization's [Endpoint Configuration Management Tool] for policy push and enforcement.
+- Access to the [Ticketing System] for change requests, exception tracking, and incident handoffs.
+- Access to the [Identity Provider] to confirm privileged-role membership for update and verification actions.
+- A current copy of the applicable System Security and Privacy Plan (SSPP) for documenting alternative actions and mobile code definitions.
+- Approval from Endpoint Engineering for any policy change executed under this procedure.
+
+## Procedure Steps
+
+### Deploy Malicious Code Protection at Entry and Exit Points [NIST SI-3 (Low, Moderate, High)]
+
+1. Endpoint Engineering identifies all system entry and exit points in scope — firewalls, remote-access servers, workstations, email servers, web servers, proxy servers, notebook computers, and mobile devices — using the [Endpoint Configuration Management Tool] inventory.
+1. Install the malicious code protection agent from the [Endpoint Protection Platform] on every identified system, pushing via the [Endpoint Configuration Management Tool].
+1. Verify agent installation and health on each system from the [Endpoint Protection Platform] console.
+1. Generate the EDR deployment coverage report from the [Endpoint Protection Platform] and reconcile it against the inventory; investigate and remediate any gap on a system that reports no agent.
+1. Retain the EDR deployment coverage report as evidence of implementation.
+
+### Enable Both Signature-Based and Non-Signature-Based Detection [ARC-AMPE SI-3 (AE Mandatory)]
+
+1. In the [Endpoint Protection Platform], enable the signature-based detection engine on all managed endpoints and entry/exit point systems.
+1. Enable the non-signature-based detection engine (behavioral/heuristic analysis) alongside the signature engine on the same systems.
+1. Confirm both engines show as active — not disabled or in passive mode — for every system in the deployment coverage report.
+
+### Update Malicious Code Protection Mechanisms [NIST SI-3 (Low, Moderate, High) | ARC-AMPE SI-3 (AE Mandatory) | NIST SI-3(4)]
+
+1. In the [Endpoint Protection Platform], enable automatic signature and engine updates so that protection mechanisms update as new releases become available, in accordance with organizational configuration management policies and procedures.
+1. Restrict the ability to approve or manually trigger protection mechanism updates to users holding the privileged role in the [Identity Provider]; updates occur only when directed by such a privileged user.
+1. Route any request for a non-standard update (delayed rollback, deferred deployment) through the [Ticketing System] as a change request reviewed and approved by Endpoint Engineering.
+
+### Configure Periodic Scans [NIST SI-3 (Low, Moderate, High) | ARC-AMPE SI-3 (AE Mandatory)]
+
+1. In the [Endpoint Protection Platform], set the scheduled scan policy for all managed systems to run at a minimum of every one (1) week.
+1. Apply the scan schedule consistently across the full endpoint fleet via the [Endpoint Configuration Management Tool].
+1. Review scan completion status in the [Endpoint Protection Platform] console and follow up on systems that miss their scheduled scan.
+
+### Configure Real-Time Scanning of Files from External Sources [NIST SI-3 (Low, Moderate, High) | ARC-AMPE SI-3 (AE Mandatory)]
+
+1. In the [Endpoint Protection Platform], enable real-time, on-access scanning of files downloaded, opened, or executed from external sources on all endpoints.
+1. On the network entry and exit points (firewalls, email servers, web servers, proxy servers, remote-access servers), enable equivalent real-time file scanning at the [Email Security Gateway] and [Endpoint Protection Platform] network components.
+1. Verify both endpoint-level and network-level real-time scanning are active for each system in the EDR deployment coverage report, satisfying the requirement that external-source files are scanned at both locations.
+
+### Configure Block, Quarantine, and Alerting on Detection [NIST SI-3 (Low, Moderate, High) | ARC-AMPE SI-3 (AE Mandatory)]
+
+1. In the [Endpoint Protection Platform], set the detection response policy to **both** block and quarantine detected malicious code.
+1. Configure the alerting policy to send a near real-time alert on every malicious code detection to the administrator and organization-defined security personnel — at minimum, [Security Operations].
+1. Test the alert path by validating that a detection event generates the alert in the [Security Operations] alert queue.
+1. Any action other than block-and-quarantine for a specific detection requires Endpoint Engineering approval, recorded in the [Ticketing System].
+
+### Address False Positives [NIST SI-3 (Low, Moderate, High) | ARC-AMPE SI-3 (AE Mandatory)]
+
+1. When a false positive is reported or observed, [Security Operations] or the system owner opens a ticket in the [Ticketing System] identifying the affected file, system, and detection rule.
+1. Endpoint Engineering assesses the potential availability impact on the affected system and, if necessary, applies a narrowly scoped exclusion or rule exception in the [Endpoint Protection Platform].
+1. Record the false positive, its analysis, and the remediation decision in the [Ticketing System]; review exclusions periodically to confirm each remains necessary.
+1. Submit confirmed false positives to the protection vendor through its designated submission channel.
+
+### Test Malicious Code Protection Mechanisms [NIST SI-3(6)]
+
+1. At the [Testing Frequency], Endpoint Engineering introduces a known benign test file (e.g., an industry-standard test signature) into a managed system.
+1. Verify that the [Endpoint Protection Platform] detects the test file, blocks or quarantines it per policy, and generates the associated alert to [Security Operations].
+1. Confirm the detection produced the expected incident reporting in the alert queue; if detection or alerting fails, open a ticket in the [Ticketing System] and remediate before the next test cycle.
+1. Record the test outcome as evidence of mechanism verification.
+
+### Detect Unauthorized Operating System Commands via the Kernel API [NIST SI-3(8)]
+
+1. In the [Endpoint Protection Platform], enable kernel-level behavioral monitoring on the organization-defined system hardware components.
+1. Configure the policy to detect the organization-defined unauthorized operating system commands through the kernel API.
+1. Set the response action to issue a warning, audit the command execution, and/or prevent execution of the command, per the organization-defined response for each command class.
+1. Verify detections and audit records are flowing to the [Security Operations] alert queue.
+
+### Analyze Malicious Code Characteristics and Behavior [NIST SI-3(10)]
+
+1. When malicious code is detected that warrants deeper analysis, Endpoint Engineering employs the organization-defined analysis tools and techniques — including sandbox detonation and behavioral analysis in the [Endpoint Protection Platform] — to characterize the code.
+1. Incorporate the analysis results into the organizational incident response process by attaching findings to the incident record in the [Incident Response Platform].
+1. Incorporate the analysis results into the flaw remediation process by opening or updating the corresponding remediation item in the [Ticketing System], including any indicated patch or configuration change.
+
+### Verify the Correct Operation of Security and Privacy Functions [NIST SI-6 (High) | ARC-AMPE SI-6 (AE Mandatory)]
+
+1. In the [Endpoint Protection Platform], enable the self-verification capability so that security and privacy functions (e.g., agent integrity, policy enforcement, scanning engine health) are checked automatically upon system startup and/or restart.
+1. Perform verification upon command by a user with appropriate privileges (via the [Identity Provider] privileged role) whenever a manual check is needed, and on a scheduled basis at least monthly.
+1. Confirm that scheduled and startup verifications run on all in-scope systems and that results are captured by the platform.
+
+### Alert on Failed Security and Privacy Verification Tests [NIST SI-6 (High) | ARC-AMPE SI-6 (AE Mandatory)]
+
+1. Configure the [Endpoint Protection Platform] to send an alert to organization-defined personnel or roles — at a minimum, the system/security administrator — whenever a security or privacy verification test fails.
+1. Validate the alert path to the administrator and [Security Operations] queues.
+
+### Take Corrective Action on Verification Anomalies [NIST SI-6 (High) | ARC-AMPE SI-6 (AE Mandatory)]
+
+1. When verification reveals anomalies, shut the system down, restart the system, or perform the organization-defined alternative action, as directed by Endpoint Engineering.
+1. Under ARC-AMPE, if an alternative action (other than shutdown or restart) is selected, document that action in the applicable System Security and Privacy Plan (SSPP) before relying on it.
+1. Record the anomaly, the action taken, and the disposition in the [Ticketing System].
+
+### Support Distributed Security Function Testing [NIST SI-6(2)]
+
+1. Employ the automated mechanisms in the [Endpoint Protection Platform] and [Endpoint Configuration Management Tool] to orchestrate and manage security and privacy function testing across the distributed fleet, rather than per-system manual testing.
+1. Use the central consoles to schedule tests, collect results, and track systems whose tests have not run.
+
+### Report Security and Privacy Function Verification Results [NIST SI-6(3)]
+
+1. Report the results of security and privacy function verification to organization-defined personnel or roles — at minimum, the system/security administrator and Endpoint Engineering leadership.
+1. Deliver results through the reporting capability of the [Endpoint Protection Platform] and record delivery in the [Ticketing System].
+
+### Implement and Maintain Spam Protection [NIST SI-8 (Moderate, High) | FedRAMP SI-8 | ARC-AMPE SI-8 (AE Mandatory) | NIST SI-8(2) | ARC-AMPE SI-8(2) | NIST SI-8(3)]
+
+1. Endpoint Engineering implements spam protection mechanisms at the system entry and exit points — firewalls, remote-access servers, email servers, web servers, proxy servers, workstations, notebook computers, and mobile devices — using the [Email Security Gateway] and the endpoint protection policy in the [Endpoint Protection Platform].
+1. Configure the mechanisms to detect and act on unsolicited messages (quarantine, tag, or reject per the gateway policy).
+1. Enable automatic updates of the spam protection mechanisms — filter rules and reputation feeds — as new releases are available, in accordance with organizational configuration management policies and procedures, at an automatic update frequency of at least every one (1) week.
+1. Enable the learning capability of the spam protection mechanisms (e.g., Bayesian/adaptive filtering and user feedback) so the mechanisms more effectively identify legitimate communications traffic over time.
+1. Verify in the [Email Security Gateway] console that update jobs complete successfully and that learning features are active.
+
+### Implement and Verify DMARC for Government-Sent Email [FedRAMP SI-8]
+
+1. Where Example Org sends email on behalf of the government as part of the business offering, implement Domain-based Message Authentication, Reporting & Conformance (DMARC) on the sending domain for outgoing messages as described in DHS Binding Operational Directive (BOD) 18-01.
+1. Confirm the DMARC DNS configuration for each sending domain: the policy is set to `p=reject` and the `rua` parameter includes `reports@dmarc.cyber.dhs.gov`.
+1. Document DMARC compliance in the SI-08 control implementation solution description.
+1. List the FROM: domain(s) used when emails are sent on behalf of the government in the same control implementation documentation.
+
+### Protect System Memory from Unauthorized Code Execution [NIST SI-16 (Moderate, High) | ARC-AMPE SI-16 (AE Mandatory)]
+
+1. In the [Endpoint Protection Platform] and via the [Endpoint Configuration Management Tool], enable exploit mitigation controls on all in-scope systems, including at a minimum data execution prevention (DEP) and address space layout randomization (ASLR).
+1. Apply the organization-defined additional memory protection controls defined for this control set where supported by the platform.
+1. Verify the settings are applied and not overridable by standard users, and record the applied configuration as evidence.
+
+### Restrict and Prohibit System Media Types [NIST MP-7 (Low, Moderate, High) | ARC-AMPE MP-7 (AE Mandatory) | NIST MP-7(2)]
+
+1. Endpoint Engineering defines the organization-defined prohibited media types and systems in the device control policy within the [Endpoint Protection Platform].
+1. Configure the device control policy to restrict or prohibit the use of those media types on the organization-defined systems and system components, and retain the resulting removable media policy configuration as evidence.
+1. Prohibit the use of personally owned media — flash drives, external hard disk drives, and other portable storage and media devices — on organization-defined systems and networks, enforced by the same device control safeguards.
+1. Prohibit the use of portable storage devices that have no identifiable owner on organizational systems.
+1. Prohibit the use of sanitization-resistant media in organizational systems under the device control policy.
+1. Route any request for a media-use exception through the [Ticketing System]; Endpoint Engineering reviews and approves or denies each exception and records the decision.
+
+### Define and Control Mobile Code [NIST SC-18 (Moderate, High) | ARC-AMPE SC-18 (AE Mandatory) | ARC-AMPE SC-18 SSPP]
+
+1. Endpoint Engineering defines the acceptable and unacceptable mobile code and mobile code technologies for the system (e.g., permitted scripting environments, prohibited plugin technologies).
+1. Under ARC-AMPE, document the acceptable and unacceptable mobile code definitions in the applicable System Security and Privacy Plan (SSPP).
+1. Authorize, monitor, and control the use of acceptable mobile code within the system through browser/application policy and the [Endpoint Protection Platform].
+
+### Detect and Act on Unacceptable Mobile Code [NIST SC-18(1)]
+
+1. Configure the [Endpoint Protection Platform] to identify the organization-defined unacceptable mobile code types on managed systems and at entry/exit points.
+1. Configure the organization-defined corrective actions — block, alert [Security Operations], and open a ticket in the [Ticketing System] — to execute automatically upon detection.
+
+### Verify Mobile Code Before Deployment [NIST SC-18(2)]
+
+1. Before any mobile code is acquired, developed, or deployed into the system, Endpoint Engineering verifies that it meets the organization-defined mobile code requirements established in the SSPP.
+1. Record the verification and approval in the [Ticketing System] prior to deployment.
+
+### Prevent Download and Execution of Unacceptable Mobile Code [NIST SC-18(3) | NIST SC-18(4)]
+
+1. Configure web filtering and the [Endpoint Protection Platform] to prevent the download of the organization-defined unacceptable mobile code at network entry and exit points and on endpoints.
+1. Configure the organization-defined software applications to prevent the automatic execution of mobile code, and enforce the organization-defined actions (e.g., user prompt, administrator approval) prior to any execution of mobile code.
+1. Verify enforcement by attempting to load a known-blocked mobile code sample in a controlled test and confirming it is prevented.
+
+### Confine Permitted Mobile Code Execution [NIST SC-18(5)]
+
+1. Configure the environment so that permitted mobile code executes only within confined virtual machine environments.
+1. Verify that no permitted mobile code executes outside the confined environment and that confinement settings cannot be modified by standard users.
+
+## Roles & Responsibilities
+
+Endpoint Engineering is accountable for this procedure end to end: it deploys, configures, tests, and reports on all malicious code protection, spam protection, memory protection, mobile code, and device control mechanisms, and it owns the handoffs to [Security Operations] and the [Incident Response Platform]. [Security Operations] and system/security administrators act on alerts and participate in testing and verification, and Endpoint Engineering reviews and approves all exceptions — false positive exclusions, media-use exceptions, alternative anomaly actions, and mobile code authorizations.
+
+## Related Standard
+
+This procedure operationalizes the **Endpoint Protection & Device Controls Standard**, which contains the full requirement text, the rationale for each control, and the framework mappings ([NIST], [FedRAMP], [ARC-AMPE]) referenced above.

@@ -1,0 +1,325 @@
+# System Maintenance and Facility Security Standard
+
+## 1. Purpose
+
+This Standard establishes requirements for the maintenance of Acme Health information systems and the physical security of facilities housing those systems, to ensure the continued secure operation of systems processing protected health information and to maintain compliance with applicable regulatory requirements.
+
+## 2. Scope
+
+This Standard applies to all Acme Health information systems, system components, facilities housing information systems, and personnel performing maintenance activities on or near those systems, whether performed on-site or remotely.
+
+## 3. Roles and Responsibilities
+
+### 3.1 Maintenance Policy and Procedure Owner
+
+Acme Health shall designate an [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the maintenance policy and procedures. [NIST 800-53 MA-1 Low | NIST 800-53 MA-1 Moderate | NIST 800-53 MA-1 High | ARC-AMPE MA-1 AE Mandatory]
+
+### 3.2 Maintenance Personnel Authorization
+
+Acme Health shall establish a process for maintenance personnel authorization and maintain a list of authorized maintenance organizations or personnel. [NIST 800-53 MA-5 Low | NIST 800-53 MA-5 Moderate | NIST 800-53 MA-5 High | FedRAMP MA-5 | ARC-AMPE MA-5 AE Mandatory]
+
+Acme Health shall clearly document nationality requirements (or lack of) for maintenance personnel where applicable. [FedRAMP MA-5]
+
+### 3.3 Supervisory Personnel
+
+Acme Health shall designate organizational personnel with required access authorizations and technical competence to supervise the maintenance activities of personnel who do not possess the required access authorizations. [NIST 800-53 MA-5 Low | NIST 800-53 MA-5 Moderate | NIST 800-53 MA-5 High | FedRAMP MA-5 | ARC-AMPE MA-5 AE Mandatory]
+
+Acme Health shall ensure that any organizational personnel who supervise maintenance activities of personnel without access authorizations have been trained on supervisory and escorting responsibilities. [ARC-AMPE MA-5 AE Mandatory]
+
+## 4. Policy and Procedure Development
+
+### 4.1 Maintenance Policy
+
+Acme Health shall develop, document, and disseminate to applicable personnel or roles a maintenance policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 MA-1 Low | NIST 800-53 MA-1 Moderate | NIST 800-53 MA-1 High | ARC-AMPE MA-1 AE Mandatory]
+
+### 4.2 Maintenance Procedures
+
+Acme Health shall develop, document, and disseminate procedures to facilitate the implementation of the maintenance policy and associated maintenance controls. [NIST 800-53 MA-1 Low | NIST 800-53 MA-1 Moderate | NIST 800-53 MA-1 High | ARC-AMPE MA-1 AE Mandatory]
+
+### 4.3 Policy Review and Updates
+
+Acme Health shall review and update the maintenance policy [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 MA-1 Low | NIST 800-53 MA-1 Moderate | NIST 800-53 MA-1 High]
+
+Acme Health shall review and update the maintenance policy at least every one (1) year and following organization-defined events. [ARC-AMPE MA-1 AE Mandatory]
+
+### 4.4 Procedure Review and Updates
+
+Acme Health shall review and update the maintenance procedures [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 MA-1 Low | NIST 800-53 MA-1 Moderate | NIST 800-53 MA-1 High]
+
+Acme Health shall review and update the maintenance procedures at least every one (1) year and following organization-defined events. [ARC-AMPE MA-1 AE Mandatory]
+
+## 5. Controlled Maintenance
+
+### 5.1 Maintenance Scheduling and Documentation
+
+Acme Health shall schedule, document, and review records of maintenance, repair, and replacement on system components in accordance with manufacturer or vendor specifications and/or organizational requirements. [NIST 800-53 MA-2 Low | NIST 800-53 MA-2 Moderate | NIST 800-53 MA-2 High | ARC-AMPE MA-2 AE Mandatory]
+
+### 5.2 Maintenance Approval and Monitoring
+
+Acme Health shall approve and monitor all maintenance activities, whether performed on site or remotely and whether the system or system components are serviced on site or removed to another location. [NIST 800-53 MA-2 Low | NIST 800-53 MA-2 Moderate | NIST 800-53 MA-2 High | ARC-AMPE MA-2 AE Mandatory]
+
+### 5.3 Off-Site Maintenance Approval
+
+Acme Health shall require that [Assignment: organization-defined personnel or roles] explicitly approve the removal of the system or system components from organizational facilities for off-site maintenance, repair, or replacement. [NIST 800-53 MA-2 Low | NIST 800-53 MA-2 Moderate | NIST 800-53 MA-2 High | ARC-AMPE MA-2 AE Mandatory]
+
+### 5.4 Equipment Sanitization for Off-Site Maintenance
+
+Acme Health shall sanitize equipment to remove [Assignment: organization-defined information] from associated media prior to removal from organizational facilities for off-site maintenance, repair, or replacement. [NIST 800-53 MA-2 Low | NIST 800-53 MA-2 Moderate | NIST 800-53 MA-2 High]
+
+Acme Health shall sanitize equipment to remove all organizational information from associated media prior to removal from organizational facilities for off-site maintenance, repair, or replacement, in accordance with the latest published NIST SP 800-88. [ARC-AMPE MA-2 AE Mandatory]
+
+### 5.5 Post-Maintenance Verification
+
+Acme Health shall check all potentially impacted controls to verify that the controls are still functioning properly following maintenance, repair, or replacement actions. [NIST 800-53 MA-2 Low | NIST 800-53 MA-2 Moderate | NIST 800-53 MA-2 High | ARC-AMPE MA-2 AE Mandatory]
+
+### 5.6 Maintenance Records
+
+Acme Health shall include [Assignment: organization-defined information] in organizational maintenance records. [NIST 800-53 MA-2 Low | NIST 800-53 MA-2 Moderate | NIST 800-53 MA-2 High]
+
+Acme Health shall include maintenance-related information in organizational maintenance records. [ARC-AMPE MA-2 AE Mandatory]
+
+On organizational systems where Personally Identifiable Information (PII) is stored or accessed, Acme Health shall document all repairs and modifications to the system components. [ARC-AMPE MA-2 AE Mandatory]
+
+### 5.7 Automated Maintenance Management
+
+Acme Health shall schedule, conduct, and document maintenance, repair, and replacement actions for the system using [Assignment: organization-defined automated mechanisms]; and produce up-to-date, accurate, and complete records of all maintenance, repair, and replacement actions requested, scheduled, in process, and completed. [NIST 800-53 MA-2(2) High]
+
+## 6. Maintenance Tools
+
+### 6.1 Maintenance Tool Approval and Control
+
+Acme Health shall approve, control, and monitor the use of system maintenance tools. [NIST 800-53 MA-3 Moderate | NIST 800-53 MA-3 High | ARC-AMPE MA-3 AE Mandatory]
+
+### 6.2 Maintenance Tool Review
+
+Acme Health shall review previously approved system maintenance tools [Assignment: organization-defined frequency]. [NIST 800-53 MA-3 Moderate | NIST 800-53 MA-3 High]
+
+Acme Health shall review previously approved system maintenance tools at least every one (1) year. [ARC-AMPE MA-3 AE Mandatory]
+
+### 6.3 Maintenance Tool Sanitization
+
+Acme Health shall ensure that all maintenance tools with the capability of retaining information are checked to ensure that information is not saved on the tool and that the tool is appropriately sanitized using approved methods discussed in the latest published NIST SP 800-88. [ARC-AMPE MA-3 AE Mandatory]
+
+### 6.4 Maintenance Tool Inspection
+
+Acme Health shall inspect maintenance tools used by maintenance personnel for improper or unauthorized modifications. [NIST 800-53 MA-3(1) Moderate | NIST 800-53 MA-3(1) High | ARC-AMPE MA-3(1) AE Mandatory]
+
+### 6.5 Malicious Code Protection
+
+Acme Health shall check media containing diagnostic and test programs for malicious code before the media are used in the system. [NIST 800-53 MA-3(2) Moderate | NIST 800-53 MA-3(2) High | ARC-AMPE MA-3(2) AE Mandatory]
+
+If malware or unauthorized changes are discovered during inspection of maintenance media, Acme Health shall treat this discovery consistent with organizational policies and procedures for incident handling. [ARC-AMPE MA-3(2) AE Mandatory]
+
+### 6.6 Prevention of Unauthorized Equipment Removal
+
+Acme Health shall prevent the removal of maintenance equipment containing organizational information by: (a) verifying that there is no organizational information contained on the equipment; (b) sanitizing or destroying the equipment; (c) retaining the equipment within the facility; or (d) obtaining an exemption from [Assignment: organization-defined personnel or roles] explicitly authorizing removal of the equipment from the facility. [NIST 800-53 MA-3(3) Moderate | NIST 800-53 MA-3(3) High | ARC-AMPE MA-3(3) AE Mandatory]
+
+Acme Health shall check all maintenance tools with the capability of retaining information to ensure that information is not saved on the tool and that the tool is appropriately sanitized using approved methods discussed in the latest published NIST SP 800-88 before allowing removal. [ARC-AMPE MA-3(3) AE Mandatory]
+
+### 6.7 Restricted Tool Use
+
+Acme Health shall restrict the use of maintenance tools to authorized personnel only. [NIST 800-53 MA-3(4)]
+
+### 6.8 Privileged Maintenance Tool Monitoring
+
+Acme Health shall monitor the use of maintenance tools that execute with increased privilege. [NIST 800-53 MA-3(5) | ARC-AMPE MA-3(5) AE Mandatory]
+
+Acme Health shall monitor maintenance tools to detect unauthorized access to information and assets as a result of increased system privileges to information that would otherwise be inaccessible to individuals. [ARC-AMPE MA-3(5) AE Mandatory]
+
+### 6.9 Maintenance Tool Software Updates
+
+Acme Health shall inspect maintenance tools to ensure the latest software updates and patches are installed. [NIST 800-53 MA-3(6) | ARC-AMPE MA-3(6) AE Mandatory]
+
+To the extent possible, Acme Health shall install software updates and patches on organizational systems to minimize vulnerabilities and maintain cyber hygiene on organizational systems. [ARC-AMPE MA-3(6) AE Mandatory]
+
+Acme Health shall ensure the organization's installation of updates in support of daily operations has minimal impact to organizational systems. [ARC-AMPE MA-3(6) AE Mandatory]
+
+## 7. Nonlocal Maintenance
+
+### 7.1 Approval and Monitoring
+
+Acme Health shall approve and monitor nonlocal maintenance and diagnostic activities. [NIST 800-53 MA-4 Low | NIST 800-53 MA-4 Moderate | NIST 800-53 MA-4 High | ARC-AMPE MA-4 AE Mandatory]
+
+Acme Health shall allow the use of nonlocal maintenance and diagnostic tools only as consistent with organizational policy and documented in the security plan for the system. [NIST 800-53 MA-4 Low | NIST 800-53 MA-4 Moderate | NIST 800-53 MA-4 High | ARC-AMPE MA-4 AE Mandatory]
+
+### 7.2 Authentication for Nonlocal Maintenance
+
+Acme Health shall employ strong authentication in the establishment of nonlocal maintenance and diagnostic sessions. [NIST 800-53 MA-4 Low | NIST 800-53 MA-4 Moderate | NIST 800-53 MA-4 High | ARC-AMPE MA-4 AE Mandatory]
+
+Acme Health shall ensure authentication and authenticators used during nonlocal maintenance are in accordance with the latest published NIST SP 800-63B, Digital Identity Guidelines. [ARC-AMPE MA-4 AE Mandatory]
+
+If password-based authentication is used during remote maintenance, Acme Health shall change the passwords following each remote maintenance service. [ARC-AMPE MA-4 AE Mandatory]
+
+### 7.3 Nonlocal Maintenance Records
+
+Acme Health shall maintain records for nonlocal maintenance and diagnostic activities. [NIST 800-53 MA-4 Low | NIST 800-53 MA-4 Moderate | NIST 800-53 MA-4 High | ARC-AMPE MA-4 AE Mandatory]
+
+### 7.4 Session Termination
+
+Acme Health shall terminate session and network connections when nonlocal maintenance is completed. [NIST 800-53 MA-4 Low | NIST 800-53 MA-4 Moderate | NIST 800-53 MA-4 High | ARC-AMPE MA-4 AE Mandatory]
+
+### 7.5 Media Sanitization
+
+Acme Health shall sanitize media used during remote nonlocal maintenance in accordance with the latest published NIST SP 800-88, Guidelines for Media Sanitization. [ARC-AMPE MA-4 AE Mandatory]
+
+### 7.6 Nonlocal Maintenance Audit Logging
+
+Acme Health shall log [Assignment: organization-defined audit events] for nonlocal maintenance and diagnostic sessions, and review the audit records of the maintenance and diagnostic sessions to detect anomalous behavior. [NIST 800-53 MA-4(1)]
+
+Acme Health shall log organization-defined audit events, as defined in the organization's formal audit policy, for nonlocal maintenance and diagnostic sessions. [ARC-AMPE MA-4(1) AE Mandatory]
+
+Acme Health shall ensure audit events for nonlocal maintenance and diagnostic sessions are logged and collected. [ARC-AMPE MA-4(1) AE Mandatory]
+
+Acme Health shall review the audit records of the maintenance and diagnostic sessions to detect anomalous behavior. [ARC-AMPE MA-4(1) AE Mandatory]
+
+### 7.7 Comparable Security Capability
+
+Acme Health shall require that nonlocal maintenance and diagnostic services be performed from a system that implements a security capability comparable to the capability implemented on the system being serviced; or remove the component to be serviced from the system prior to nonlocal maintenance or diagnostic services, sanitize the component (for organizational information), and after the service is performed, inspect and sanitize the component (for potentially malicious software) before reconnecting the component to the system. [NIST 800-53 MA-4(3) High]
+
+### 7.8 Session Protection
+
+Acme Health shall protect nonlocal maintenance sessions by: (a) employing [Assignment: organization-defined authenticators that are replay resistant]; and (b) separating the maintenance sessions from other network sessions with the system by either (1) physically separated communications paths or (2) logically separated communications paths. [NIST 800-53 MA-4(4) | ARC-AMPE MA-4(4) AE Mandatory]
+
+### 7.9 Session Approval and Notification
+
+Acme Health shall require the approval of each nonlocal maintenance session by [Assignment: organization-defined personnel or roles]; and notify [Assignment: organization-defined personnel and roles] of the date and time of planned nonlocal maintenance. [NIST 800-53 MA-4(5)]
+
+### 7.10 Cryptographic Protection
+
+Acme Health shall implement [Assignment: organization-defined cryptographic mechanisms] to protect the integrity and confidentiality of nonlocal maintenance and diagnostic communications. [NIST 800-53 MA-4(6)]
+
+### 7.11 Termination Verification
+
+Acme Health shall verify session and network connection termination after the completion of nonlocal maintenance and diagnostic sessions. [NIST 800-53 MA-4(7) | ARC-AMPE MA-4(7) AE Mandatory]
+
+## 8. Maintenance Personnel
+
+### 8.1 Access Authorization Verification
+
+Acme Health shall verify that non-escorted personnel performing maintenance on the system possess the required access authorizations. [NIST 800-53 MA-5 Low | NIST 800-53 MA-5 Moderate | NIST 800-53 MA-5 High | FedRAMP MA-5 | ARC-AMPE MA-5 AE Mandatory]
+
+Acme Health shall ensure non-escorted personnel performing maintenance on the system possess the required access authorizations and security credentials. [ARC-AMPE MA-5 AE Mandatory]
+
+### 8.2 Visitor Logging and Escort Protocols
+
+Acme Health shall follow organization-established visitor logging and escort security protocols and ensure that any organizational personnel who supervise maintenance activities of personnel without access authorizations have been trained on supervisory and escorting responsibilities. [ARC-AMPE MA-5 AE Mandatory]
+
+### 8.3 Personnel Without Security Clearances
+
+Acme Health shall implement procedures for the use of maintenance personnel that lack appropriate security clearances or are not U.S. citizens, requiring: (1) maintenance personnel who do not have needed access authorizations, clearances, or formal access approvals are escorted and supervised during the performance of maintenance and diagnostic activities on the system by approved organizational personnel who are fully cleared, have appropriate access authorizations, and are technically qualified; and (2) prior to initiating maintenance or diagnostic activities by personnel who do not have needed access authorizations, clearances or formal access approvals, all volatile information storage components within the system are sanitized and all nonvolatile storage media are removed or physically disconnected from the system and secured. [NIST 800-53 MA-5(1) High | FedRAMP MA-5(1) | ARC-AMPE MA-5(1) AE Mandatory]
+
+### 8.4 Alternate Controls for Non-Sanitizable Components
+
+Acme Health shall develop and implement [Assignment: organization-defined alternate controls] in the event a system component cannot be sanitized, removed, or disconnected from the system. [NIST 800-53 MA-5(1) High | FedRAMP MA-5(1) | ARC-AMPE MA-5(1) AE Mandatory]
+
+Acme Health shall identify in the System Security and Privacy Plan (SSPP) alternate controls that are within acceptable risk limits that should be implemented in the event a system component cannot be sanitized, removed, or disconnected from the system. [ARC-AMPE MA-5(1) AE Mandatory]
+
+### 8.5 Security Clearances for Classified Systems
+
+Acme Health shall verify that personnel performing maintenance and diagnostic activities on a system processing, storing, or transmitting classified information possess security clearances and formal access approvals for at least the highest classification level and for compartments of information on the system. [NIST 800-53 MA-5(2)]
+
+### 8.6 Citizenship Requirements for Classified Systems
+
+Acme Health shall verify that personnel performing maintenance and diagnostic activities on a system processing, storing, or transmitting classified information are U.S. citizens. [NIST 800-53 MA-5(3)]
+
+### 8.7 Foreign Nationals
+
+Acme Health shall ensure foreign nationals with appropriate security clearances are used to conduct maintenance and diagnostic activities on classified systems only when the systems are jointly owned and operated by the United States and foreign allied governments, or owned and operated solely by foreign allied governments; and ensure approvals, consents, and detailed operational conditions regarding the use of foreign nationals to conduct maintenance and diagnostic activities on classified systems are fully documented within Memoranda of Agreements. [NIST 800-53 MA-5(4)]
+
+### 8.8 Personnel in Physical Proximity
+
+Acme Health shall ensure that non-escorted personnel performing maintenance activities not directly associated with the system but in the physical proximity of the system have required access authorizations. [NIST 800-53 MA-5(5)]
+
+## 9. Timely Maintenance
+
+### 9.1 Maintenance Support and Spare Parts
+
+Acme Health shall obtain maintenance support and/or spare parts for [Assignment: organization-defined system components] within [Assignment: organization-defined time period] of failure. [NIST 800-53 MA-6 Moderate | NIST 800-53 MA-6 High]
+
+Acme Health shall obtain maintenance support and/or spare parts for organization-defined information system components within the applicable Recovery Time Objective (RTO) specified in the system Contingency Plan of failure. [ARC-AMPE MA-6 AE Mandatory]
+
+### 9.2 Preventive Maintenance
+
+Acme Health shall perform preventive maintenance on [Assignment: organization-defined system components] at [Assignment: organization-defined time intervals]. [NIST 800-53 MA-6(1)]
+
+Acme Health shall perform preventive maintenance on system components at applicable Recovery Time Objective (RTO) time intervals specified in the system Contingency Plan. [ARC-AMPE MA-6(1) AE Mandatory]
+
+### 9.3 Predictive Maintenance
+
+Acme Health shall perform predictive maintenance on [Assignment: organization-defined system components] at [Assignment: organization-defined time intervals]. [NIST 800-53 MA-6(2)]
+
+### 9.4 Automated Data Transfer
+
+Acme Health shall transfer predictive maintenance data to a maintenance management system using [Assignment: organization-defined automated mechanisms]. [NIST 800-53 MA-6(3)]
+
+## 10. Physical Access and Facility Security
+
+### 10.1 Physical Access Controls
+
+Acme Health shall implement policies and procedures to limit physical access to electronic information systems and the facilities in which they are housed, while ensuring properly authorized access is allowed. [HIPAA Security Rule 164.310(a)(1)]
+
+### 10.2 Contingency Operations Access
+
+Acme Health shall establish and implement as needed procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan in the event of an emergency. [HIPAA Security Rule 164.310(a)(2)(i)]
+
+### 10.3 Facility Security Safeguards
+
+Acme Health shall implement policies and procedures to safeguard the facility and equipment from unauthorized physical access, tampering, and theft. [HIPAA Security Rule 164.310(a)(2)(ii)]
+
+### 10.4 Access Control and Validation
+
+Acme Health shall implement procedures to control and validate a person's access to facilities based on their role or function, including visitor control, and control of access to software programs for testing and revision. [HIPAA Security Rule 164.310(a)(2)(iii)]
+
+### 10.5 Facility Modification Documentation
+
+Acme Health shall implement policies and procedures to document repairs and modifications to the physical components of a facility which are related to security (for example, hardware, walls, doors, and locks). [HIPAA Security Rule 164.310(a)(2)(iv)]
+
+## 11. Workforce Access Management
+
+### 11.1 Access Authorization
+
+Acme Health shall implement policies and procedures to ensure that all members of the workforce have appropriate access to electronic protected health information, and to prevent those workforce members who do not have access from obtaining access to electronic protected health information. [HIPAA Security Rule 164.308(a)(3)(i)]
+
+### 11.2 Workforce Authorization and Supervision
+
+Acme Health shall implement procedures for the authorization and/or supervision of workforce members who work with electronic protected health information or in locations where it might be accessed. [HIPAA Security Rule 164.308(a)(3)(ii)(A)]
+
+### 11.3 Workforce Clearance
+
+Acme Health shall implement procedures to determine that the access of a workforce member to electronic protected health information is appropriate. [HIPAA Security Rule 164.308(a)(3)(ii)(B)]
+
+### 11.4 Access Termination
+
+Acme Health shall implement procedures for terminating access to electronic protected health information when the employment of, or other arrangement with, a workforce member ends or as required by determinations made under workforce clearance procedures. [HIPAA Security Rule 164.308(a)(3)(ii)(C)]
+
+## 12. Documentation and Records Management
+
+### 12.1 Written Policies and Procedures
+
+Acme Health shall maintain policies and procedures implemented to comply with applicable security requirements in written (which may be electronic) form, and maintain a written (which may be electronic) record of any required action, activity, or assessment. [HIPAA Security Rule 164.316(b)(1)]
+
+### 12.2 Documentation Retention
+
+Acme Health shall retain documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+
+### 12.3 Documentation Availability
+
+Acme Health shall make documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+### 12.4 Documentation Review and Updates
+
+Acme Health shall review documentation periodically, and update as needed, in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+## 13. Compliance
+
+All Acme Health personnel, contractors, and third parties performing maintenance activities or having access to facilities housing information systems are responsible for understanding and complying with this Standard. Violations of this Standard may result in disciplinary action up to and including termination of employment or contract, and may result in civil and criminal penalties.
+
+## 14. Document Control
+
+| Version | Date | Author | Description |
+|---------|------|--------|-------------|
+| 1.0 | [Document Date] | [Author Name] | Initial release |
+
+**Review and Approval:**
+
+This Standard shall be reviewed and updated in accordance with the frequencies specified in Section 4.3 and Section 4.4 of this document.

@@ -1,0 +1,114 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.002386
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - e3ae1bf0bb69e17a
+  provider: litellm
+  provider_class: third-party
+---
+
+# PII Processing, Transparency, and Data Lifecycle Management Procedure
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions for executing the PII processing and transparency, information management and retention, PII quality, and PII inventory requirements defined in the Example Org Data Protection and Privacy Standard. Executing this procedure produces and maintains the Data inventory and classification register and the Retention schedule as evidence of compliance.
+
+## Scope
+
+This procedure is performed by Data Governance, with participation from the Senior Official for Privacy, Legal Counsel, [System Owners], and [Security Operations], and applies to all Example Org systems, applications, and projects that create, collect, use, disclose, store, or transmit PII (and, where applicable, PHI). It covers the full information life cycle from collection through disposal.
+
+## Prerequisites
+
+- Access to the [Document Management System] where policies, procedures, and compliance records are maintained.
+- Access to the [Data Catalog / Inventory Tool] used to maintain the Data inventory and classification register.
+- Access to the [Ticketing System] for logging correction, deletion, and data-sharing requests.
+- Access to the [Data Tagging / Policy Enforcement Tool] used to attach and enforce data tags.
+- Named Senior Official for Privacy and designated Data Governance policy official, identified in the appropriate security and privacy documents.
+- Current copies of applicable laws, regulations, and the Example Org Data Protection and Privacy Standard.
+- Approval from the Senior Official for Privacy before any use of PII in testing, training, or research.
+
+## Procedure Steps
+
+### Develop, Document, and Disseminate the PII Processing and Transparency Policy and Procedures [NIST 800-53 PT-1 | ARC-AMPE PT-1 AE Mandatory | HIPAA Security Rule 164.316(b)(1)]
+
+1. Data Governance drafts the organization-level PII processing and transparency policy, addressing purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and verifying consistency with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines.
+1. Data Governance drafts supporting procedures that facilitate implementation of the policy and the associated PII processing and transparency controls.
+1. Data Governance submits the draft policy and procedures to the Senior Official for Privacy and Legal Counsel for review, and obtains management sign-off.
+1. Data Governance disseminates the approved policy and procedures to organization-defined personnel and roles via the [Document Management System], obtaining acknowledgment of receipt.
+1. Data Governance designates and documents the official responsible for managing the development, documentation, and dissemination of the policy and procedures, and records that designation in the appropriate security and privacy documents.
+1. Data Governance maintains the policy, procedures, and all required records of actions, activities, and assessments in written (electronic) form in the [Document Management System].
+1. Data Governance retains all documentation produced under this procedure for 6 years from the date of its creation or the date it was last in effect, whichever is later.
+1. Data Governance makes the documentation available to persons responsible for implementing the procedures to which it pertains, and to appropriate authorities upon request.
+1. Data Governance reviews and updates the policy and procedures at least every 1 year, and additionally following organization-defined events such as assessment or audit findings, security or privacy incidents, breaches, or changes to applicable laws, regulations, or overarching policy.
+1. Data Governance actively monitors for changes to applicable privacy laws, regulations, and overarching policy — including periodic review of documentation in response to environmental or operational changes affecting the security of electronic protected health information — and updates the policy and procedures as needed.
+1. Data Governance verifies that the policy and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system life cycle and for the information on the system, and includes operational guidance for compliance with the PII inventory control (see the PM-5 subsection below).
+
+### Determine and Document Authority for PII Processing [NIST 800-53 PT-2 | ARC-AMPE PT-2 AE Mandatory]
+
+1. Data Governance determines and documents the authority that permits the processing of PII, consulting with the Senior Official for Privacy and Legal Counsel, particularly where multiple jurisdictions or sources of authority apply.
+1. Data Governance documents the policies and procedures regarding the creation, collection, use, and disclosure of PII, identifies the applicable law governing that collection, use, and disclosure, and makes the documentation available to appropriate authorities upon request.
+1. Data Governance restricts processing of PII to only that which is authorized under the documented authority.
+1. Data Governance coordinates with [Training Team] to train personnel on authorized processing of PII.
+1. Data Governance coordinates with [Security Operations] to monitor and audit organizational use of PII against the documented authority.
+1. Data Governance attaches data tags containing the authorized processing to the organization-defined elements of PII using the [Data Tagging / Policy Enforcement Tool] [NIST 800-53 PT-2(1)].
+1. Data Governance configures and manages enforcement of authorized processing using the organization-defined automated mechanisms in the [Data Tagging / Policy Enforcement Tool], and verifies enforcement is active [NIST 800-53 PT-2(2)].
+
+### Identify, Document, and Restrict PII Processing Purposes [NIST 800-53 PT-3 | ARC-AMPE PT-3 AE Mandatory]
+
+1. Data Governance identifies and documents the purpose(s) for processing PII. Where ARC-AMPE applies, authorized purposes are limited to determining eligibility for enrollment in a qualified health plan, determining eligibility for other insurance affordability programs (as defined in 45 CFR §155.300), and determining eligibility for exemptions from the individual shared responsibility provisions in Code section 5000A.
+1. Data Governance describes the processing purpose(s) in the organization's public privacy notices and policies, and in related privacy compliance documentation such as privacy impact assessments and system of records notices, publishing via the [Privacy Notice Publication Platform].
+1. Data Governance restricts processing of PII to only that which is compatible with the identified purpose(s). Where ARC-AMPE applies, the Exchange may only use or disclose PII to the extent necessary to carry out functions described in 45 CFR §155.200; other functions the Secretary determines to be in compliance with the ACA and for which the individual provides consent; or other functions pursuant to the substantive and procedural requirements in 45 CFR §155.260(a)(iii).
+1. Data Governance monitors changes in PII processing and implements mechanisms to ensure changes are made in accordance with organization-defined requirements, logging each change in the [Ticketing System].
+1. Data Governance attaches data tags containing the processing purposes to the organization-defined elements of PII using the [Data Tagging / Policy Enforcement Tool] [NIST 800-53 PT-3(1)].
+1. Data Governance configures the organization-defined automated mechanisms to track processing purposes of PII and verifies tracking is active [NIST 800-53 PT-3(2)].
+
+### Govern Information Sharing and Collaboration Decisions [NIST 800-53 AC-21 Moderate, High | ARC-AMPE AC-21 AE Mandatory]
+
+1. Data Governance confirms, before any sharing, that the share is authorized, there is a need to know, and adequate assurances of protection have been provided by the sharing partner.
+1. Data Governance enables authorized users to determine whether access authorizations assigned to a sharing partner match the information's access and use restrictions for the organization-defined information-sharing circumstances — including, per ARC-AMPE, circumstances where user discretion is required as defined in data sharing agreements such as Computer Matching Agreements or Information Exchange Agreements, consistent with 45 CFR §155.260(e).
+1. Data Governance employs the organization-defined automated mechanisms — or, where ARC-AMPE permits, manual processes — to assist users in making information-sharing and collaboration decisions.
+1. Data Governance employs the organization-defined automated mechanisms to enforce information-sharing decisions based on the access authorizations of sharing partners and the access restrictions on the information to be shared [NIST 800-53 AC-21(1)].
+1. Data Governance implements and verifies that the organization's information search and retrieval services enforce the organization-defined information-sharing restrictions [NIST 800-53 AC-21(2)].
+
+### Manage and Retain Information Across the Life Cycle [NIST 800-53 SI-12 Low, Moderate, High | ARC-AMPE SI-12 AE Mandatory | HIPAA Security Rule 164.316(b)(2)(i)]
+
+1. Data Governance manages and retains information within the system and information output from the system in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines, and operational requirements, covering the full information life cycle.
+1. Data Governance records in the Retention schedule that system output — including audit records, system reports, business and financial reports, and business records — is retained for 10 years per 45 CFR §155.1210 and 45 CFR §156.705, or in accordance with organizational policy; where NARA policy applies to federal data held by Enrollment Partners, Data Governance records that applicability in the Retention schedule.
+1. For systems processing, storing, or transmitting PHI, Data Governance documents and retains for at least 6 years from creation or last effective date, whichever is later: decisions regarding addressable implementation specifications (including why a specification would not be reasonable and appropriate); a user's right of access to a workstation, transaction, program, or process; security incidents and their outcomes; satisfactory assurances that a business associate will safeguard PHI (recorded in a written contract or other arrangement meeting business associate agreement requirements, with documented attempts and reasons if satisfactory assurances cannot be obtained); repairs and modifications to physical components of a facility related to security (e.g., hardware, walls, doors, locks); and changes to organizational policies and procedures.
+1. Data Governance limits the PII being processed in the information life cycle to the minimum PII elements necessary to accomplish the legally authorized purpose of collection, and records the organization-defined minimum elements in the Data inventory and classification register [NIST 800-53 SI-12(1) | ARC-AMPE SI-12(1) AE Mandatory].
+1. Data Governance applies the organization-defined techniques, in accordance with organizational standards and applicable federal and state laws and regulations, to minimize the use of PII for research, testing, or training, and limits the creation, collection, use, and/or disclosure of PII only to the extent necessary to accomplish a specified and authorized purpose [NIST 800-53 SI-12(2) | ARC-AMPE SI-12(2) AE Mandatory].
+1. If PII is used in the test environment, Data Governance verifies with [System Owners] that the same controls required for systems containing PII are applied to the test environment, and that synthetic PII is used to the maximum extent practicable when testing system functionality.
+1. Data Governance obtains the Senior Official for Privacy's approval before any use of PII in testing, training, or research, and records the approval in the [Document Management System]; using synthetic or de-identified data is preferred.
+1. At the end of the retention period recorded in the Retention schedule, Data Governance uses the organization-defined techniques to dispose of, destroy, or erase the information in a manner that prevents loss, theft, misuse, or unauthorized access [NIST 800-53 SI-12(3) | ARC-AMPE SI-12(3) AE Mandatory].
+1. Data Governance consults the latest published NIST SP 800-88, Guidelines for Media Sanitization, when selecting disposal techniques.
+1. Data Governance uses the latest published FIPS 140-compliant encryption standards to ensure secure deletion or destruction of PII, including originals, copies, and archived records.
+
+### Check, Correct, and Delete PII [NIST 800-53 SI-18 | ARC-AMPE SI-18 AE Mandatory]
+
+1. Data Governance checks the accuracy, relevance, timeliness, and completeness of PII across the information life cycle at least every 1 year, recording the results against the Data inventory and classification register.
+1. Data Governance corrects or deletes inaccurate or outdated PII identified by the check.
+1. Data Governance maintains each individual's record in accordance with the Retention schedule regardless of that individual's activity or inactivity, and maintains a log of corrections and deletions in the [Ticketing System] so that correcting or deleting inaccurate data does not violate retention rules.
+1. Data Governance corrects or deletes PII that is inaccurate or outdated, incorrectly determined regarding impact, or incorrectly de-identified, using the organization-defined automated mechanisms [NIST 800-53 SI-18(1)].
+1. Data Governance employs data tags to automate the correction or deletion of PII across the information life cycle within organizational systems [NIST 800-53 SI-18(2)].
+1. Data Governance collects PII directly from the individual wherever collection occurs [NIST 800-53 SI-18(3)].
+1. Upon request by an individual or their designated representative, logged in the [Ticketing System], Data Governance corrects or deletes the requested PII, noting that certain PII may not be permitted to be deleted regardless of the individual's preference [NIST 800-53 SI-18(4) | ARC-AMPE SI-18(4) AE Mandatory].
+1. If the request is denied because the organization is legally required to maintain the PII, Data Governance communicates that reason in the written denial to the individual.
+1. Data Governance notifies the organization-defined recipients of the PII and the individuals whose PII has been corrected or deleted [NIST 800-53 SI-18(5) | ARC-AMPE SI-18(5) AE Mandatory].
+
+### Maintain the Systems, Applications, and Projects PII Inventory [NIST 800-53 PM-5 | ARC-AMPE PM-5 AE Mandatory]
+
+1. Data Governance develops and updates the inventory of organizational systems at least every 1 year, and whenever there is a significant change to the inventory, recording it in the Data inventory and classification register.
+1. Data Governance establishes, maintains, and updates — continuously or when there is a significant change to the systems, applications, and projects involved — the inventory of all systems, applications, and projects that process PII, in the Data inventory and classification register [NIST 800-53 PM-5(1) | ARC-AMPE PM-5(1) AE Mandatory].
+1. Data Governance verifies that the policies and procedures required by PM-1 include operational guidance for compliance with the PII inventory control, updating that guidance whenever the inventory process changes.
+
+## Roles & Responsibilities
+
+Data Governance owns this procedure end to end, including policy development, inventory and retention schedule maintenance, quality checks, and all handoffs to participating teams. The Senior Official for Privacy and Legal Counsel review and approve policy content, processing authority, and PII use in testing, training, and research; exceptions to any step in this procedure require their documented approval.
+
+## Related Standard
+
+Example Org Data Protection and Privacy Standard

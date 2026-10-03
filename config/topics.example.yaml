@@ -1,0 +1,341 @@
+# Topic registry — copy to config/topics.yaml (gitignored) and set `owner`
+# to your own team names.
+#
+# A topic is a coherent operational process that ONE team can comfortably own
+# end to end. Cross-team steps are expected — user lifecycle touches HR, IAM,
+# IT support and app owners — and that's still one topic, because one team
+# owns the process and is accountable for the handoffs working. What breaks a
+# topic is split *accountability*, not multiple contributors.
+#
+# `nist_controls` are anchors, not an exhaustive list: anchoring a control
+# also claims its enhancements, so AC-2 covers AC-2(1)..AC-2(13) too. Anchor
+# an enhancement directly only when it genuinely belongs to a different team
+# than its parent — a direct claim beats an inherited one.
+#
+# An optional `confluence:` block records where a topic's documents are
+# published, so one instruction can be applied across the whole set:
+#
+#     policyforge edit-topic --topic-name "Identity Lifecycle & Access Review" #         --instruction "Access reviews move from quarterly to monthly." #         --host https://yourco.atlassian.net/wiki
+#
+# Each page is planned separately and told which tier it is, so a cadence
+# change lands in the Standard and the Procedure and leaves the Policy alone.
+# Only the first topic below carries the block, as an example — add it to the
+# others as you publish them.
+#
+# Check your work with:
+#     policyforge coverage --baseline moderate
+#
+# which reports controls no topic claims (orphaned) and controls two topics
+# claim (contested). Roughly 25 topics is the practical ceiling; past that,
+# processes start getting sliced apart and accountability blurs again.
+#
+# THIS FILE IS A MENU, NOT A REGISTRY. It ships more topics than most
+# organisations should keep, so that the common shapes are here to be
+# recognised and cut down rather than invented from nothing. Delete freely:
+# a topic you keep because it was in the example is worse than one you never
+# had, because it owns requirements nobody is actually accountable for.
+#
+# The ceiling above applies to what you KEEP. This file is at it, which is
+# why it cannot grow without something going — and why it is a starting
+# point rather than a target.
+#
+# Most organisations will not need all five AI topics, and many will need
+# none. They are here because the NIST AI RMF is bundled and anchorable, and
+# an anchorable catalog nobody owns is worth showing how to own. If you do
+# no AI, delete all five: `/coverage` then leaves the AI RMF out of your
+# numbers entirely and says so under the report, rather than counting 91
+# requirements against you that you never took on.
+
+topics:
+  - name: Security Program Governance
+    owner: Security Program / GRC
+    cadence: annual
+    description: >-
+      Policy set, roles, program plan and the risk management strategy. Owned
+      by the program rather than an engineering team — these are
+      organizational obligations, not system ones.
+    nist_controls: [PM-1, PM-2, PM-9, PL-1, PL-2, PL-4, PL-8, PL-10, PL-11,
+                    PS-1, PS-6, PS-7, PS-8, SA-1, SA-2]
+    evidence:
+      - Approved policy set with review dates
+      - Program plan and org chart
+
+  - name: Risk Assessment & Authorization
+    owner: Security Program / GRC
+    cadence: annual
+    description: >-
+      System categorization, risk assessment, authorization and continuous
+      monitoring strategy.
+    nist_controls: [RA-1, RA-2, RA-3, RA-7, RA-9, CA-1, CA-2, CA-5, CA-6, CA-7, CA-8]
+    evidence:
+      - Risk register
+      - Authorization decision record
+
+  - name: Identity Lifecycle & Access Review
+    owner: IAM Engineering
+    cadence: quarterly
+    description: >-
+      Joiner/mover/leaver, entitlement assignment and periodic access
+      recertification. Spans HR, IAM and app owners; IAM owns the process.
+    nist_controls: [AC-1, AC-2, AC-3, AC-5, AC-6, AC-14, IA-4, IA-12, PS-4, PS-5]
+    evidence:
+      - Identity provider user export
+      - HR active-employee roster
+      - Access review tickets with sign-off
+    confluence:
+      space: SEC
+      pages:
+        policy: Access Control Policy
+        standard: Access Control Standard
+        procedure: Access Review Procedure
+
+  - name: Authentication & Credential Management
+    owner: IAM Engineering
+    cadence: continuous
+    nist_controls: [AC-7, AC-8, AC-10, AC-11, AC-12, IA-1, IA-2, IA-3, IA-5, IA-6,
+                    IA-7, IA-8, IA-11]
+    evidence:
+      - MFA enrolment report
+      - Authentication policy configuration export
+
+  - name: Remote & Third-Party Access
+    owner: Network Security
+    cadence: quarterly
+    nist_controls: [AC-17, AC-18, AC-19, AC-20, AC-22]
+    evidence:
+      - VPN and remote-access configuration
+      - Third-party access register
+
+  - name: Network & Boundary Protection
+    owner: Network Security
+    cadence: continuous
+    nist_controls: [AC-4, CA-9, SC-1, SC-2, SC-3, SC-4, SC-5, SC-7, SC-8, SC-10,
+                    SC-15, SC-20, SC-21, SC-22, SC-23, SC-24, SC-39]
+    evidence:
+      - Firewall and segmentation rule review
+      - External attack-surface scan
+
+  - name: Encryption & Key Management
+    owner: Platform Security
+    cadence: annual
+    nist_controls: [SC-12, SC-13, SC-17, SC-28]
+    evidence:
+      - Key inventory and rotation log
+      - Encryption-at-rest and in-transit configuration
+
+  - name: Logging, Monitoring & Alerting
+    owner: Detection & Response
+    cadence: continuous
+    nist_controls: [AU-1, AU-2, AU-3, AU-4, AU-5, AU-6, AU-7, AU-8, AU-9, AU-10,
+                    AU-11, AU-12, SI-4]
+    evidence:
+      - Log source inventory and coverage report
+      - Alert tuning and review records
+
+  - name: Incident Response
+    owner: Security Operations
+    cadence: continuous
+    nist_controls: [IR-1, IR-2, IR-3, IR-4, IR-5, IR-6, IR-7, IR-8]
+    evidence:
+      - Incident tickets with timelines
+      - Tabletop exercise report
+
+  - name: Vulnerability & Patch Management
+    owner: Infrastructure Security
+    cadence: monthly
+    nist_controls: [SI-1, RA-5, SI-2, SI-5]
+    evidence:
+      - Scan results with remediation SLAs
+      - Patch compliance report
+
+  - name: Endpoint Protection & Device Controls
+    owner: Endpoint Engineering
+    cadence: continuous
+    nist_controls: [SI-3, SI-6, SI-8, SI-16, MP-7, SC-18]
+    evidence:
+      - EDR deployment coverage report
+      - Removable media policy configuration
+
+  - name: Change & Configuration Management
+    owner: Platform Engineering
+    cadence: continuous
+    nist_controls: [CM-1, CM-2, CM-3, CM-4, CM-5, CM-6, CM-7, CM-8, CM-9, CM-10,
+                    CM-11, CM-12, SI-7]
+    evidence:
+      - Change tickets with approvals
+      - Baseline configuration and drift report
+
+  - name: Secure Development Lifecycle
+    owner: Application Security
+    cadence: continuous
+    nist_controls: [SA-3, SA-4, SA-5, SA-8, SA-10, SA-11, SA-15, SA-16, SA-17,
+                    SA-21, SA-22, SI-10, SI-11, SR-3, SR-5, SR-9, SR-10, SR-11,
+                    SR-12]
+    evidence:
+      - SAST/DAST results per release
+      - Dependency and supply-chain scan output
+
+  - name: Backup, Restore & Contingency
+    owner: Site Reliability Engineering
+    cadence: quarterly
+    nist_controls: [CP-1, CP-2, CP-3, CP-4, CP-6, CP-7, CP-8, CP-9, CP-10]
+    evidence:
+      - Restore test results
+      - Backup job success report
+
+  - name: Media Handling & Disposal
+    owner: IT Asset Management
+    cadence: continuous
+    nist_controls: [MP-1, MP-2, MP-3, MP-4, MP-5, MP-6]
+    evidence:
+      - Certificates of destruction
+      - Media transport log
+
+  - name: Physical & Environmental Security
+    owner: Facilities / Physical Security
+    cadence: quarterly
+    nist_controls: [PE-1, PE-2, PE-3, PE-4, PE-5, PE-6, PE-8, PE-9, PE-10, PE-11,
+                    PE-12, PE-13, PE-14, PE-15, PE-16, PE-17, PE-18]
+    evidence:
+      - Badge access review
+      - Data centre environmental monitoring records
+
+  - name: System Maintenance
+    owner: Infrastructure Security
+    cadence: continuous
+    nist_controls: [MA-1, MA-2, MA-3, MA-4, MA-5, MA-6]
+    evidence:
+      - Maintenance records with authorization
+      - Remote maintenance session logs
+
+  - name: Business Associate & Vendor Risk
+    owner: Third-Party Risk
+    cadence: annual
+    description: >-
+      Due diligence, contracts and ongoing monitoring for vendors and
+      business associates handling ePHI.
+    nist_controls: [CA-3, SA-9, SR-1, SR-2, SR-6, SR-8]
+    evidence:
+      - Executed business associate agreements
+      - Vendor security review records
+
+  - name: Workforce Security Training
+    owner: Security Awareness
+    cadence: annual
+    nist_controls: [AT-1, AT-2, AT-3, AT-4, PS-2, PS-3, PS-9]
+    evidence:
+      - Training completion report
+      - Phishing simulation results
+
+  - name: Data Protection & Privacy
+    owner: Data Governance
+    cadence: annual
+    description: >-
+      Data classification, minimization, retention and the privacy controls
+      that sit alongside the HIPAA Privacy Rule.
+    nist_controls: [PT-1, PT-2, PT-3, AC-21, SI-12, SI-18, PM-5]
+    evidence:
+      - Data inventory and classification register
+      - Retention schedule
+
+  # ---- AI risk management (NIST AI RMF 1.0) --------------------------------
+  #
+  # Cut by PROCESS, not by the framework's four functions. A function-per-
+  # topic split is the obvious move and this file's own rule forbids it:
+  # "what breaks a topic is split accountability". Third-party AI is the
+  # proof - it lives in Govern 6, Map 4 and Manage 3, one accountability
+  # spread across three functions, so it is one topic here rather than a
+  # third of each of three.
+  #
+  # These anchor AI RMF identifiers directly rather than 800-53 ones. The
+  # AI RMF states OUTCOMES rather than obligations, so a document citing
+  # `[NIST AI RMF Govern 1.1]` can be perfectly traceable and still commit
+  # nobody to anything - read data/frameworks/nist-ai-rmf/README.md before
+  # writing against these, and judge a draft by what someone would have to
+  # do differently tomorrow.
+  #
+  # So a document generated from one of these topics describes OUTCOMES:
+  # what good AI risk management looks like. It does not, by itself, tell
+  # anyone what they must do. The obligations an AI programme draws on come
+  # from the security topics above that own the 800-53 controls, for
+  # example Security Program Governance, Risk Assessment & Authorization,
+  # Secure Development Lifecycle, Workforce Security Training, Business
+  # Associate & Vendor Risk and Incident Response. They are not anchored
+  # here as well because every control has exactly one owning topic.
+  #
+  # PolicyForge does NOT claim those controls achieve the AI RMF outcomes.
+  # NIST declined to make that claim, and there is deliberately no
+  # crosswalk. Which obligations serve which outcome is your organisation's
+  # decision (#188).
+
+  - name: AI Governance & Accountability
+    owner: AI Risk / GRC
+    cadence: annual
+    description: >-
+      The AI policy set, who is accountable for what, the workforce and
+      culture expectations around AI risk, and engagement with affected AI
+      actors. Organizational obligations rather than system ones, which is
+      why they sit with the programme and not with a model team.
+    nist_controls: [Govern 1, Govern 2, Govern 3, Govern 4, Govern 5]
+    evidence:
+      - Approved AI policy set with review dates
+      - AI accountability matrix (who signs off a deployment)
+      - AI risk training completion records
+
+  - name: AI System Inventory & Impact Assessment
+    owner: AI Risk / Product
+    cadence: per-system, reviewed quarterly
+    description: >-
+      Establishing what an AI system is for before it ships - context,
+      categorization, claimed capabilities against benchmarks, and the
+      impacts on people and communities. The process that produces the
+      record everything downstream measures against.
+    nist_controls: [Map 1, Map 2, Map 3, Map 5]
+    evidence:
+      - AI system inventory with categorization
+      - Impact assessments, per system
+      - Benchmark results against stated capability claims
+
+  - name: AI Evaluation & Measurement
+    owner: AI / ML Engineering
+    cadence: per-release
+    description: >-
+      Choosing evaluation methods, evaluating systems for trustworthy
+      characteristics, tracking identified risks over time, and asking
+      whether the measurements are any good. Owned by the team that can
+      actually run an evaluation.
+    nist_controls: [Measure 1, Measure 2, Measure 3, Measure 4]
+    evidence:
+      - Evaluation plan and metric definitions per system
+      - Evaluation results with dates and model versions
+      - Record of measurement methods reviewed or retired
+
+  - name: AI Risk Treatment & Incident Response
+    owner: AI Risk / Incident Response
+    cadence: continuous
+    description: >-
+      Prioritizing the risks MAP and MEASURE surfaced, deciding and
+      documenting what is done about each, and responding, recovering and
+      communicating when an AI system causes harm. Spans the model team and
+      incident response; incident response owns the process.
+    nist_controls: [Manage 1, Manage 2, Manage 4]
+    evidence:
+      - AI risk register with treatment decisions and owners
+      - AI incident runbook
+      - Post-incident reviews for AI-caused incidents
+
+  - name: Third-Party AI & Data Supply Chain
+    owner: Vendor Risk / AI Risk
+    cadence: per-vendor, reviewed annually
+    description: >-
+      AI risk that arrives with someone else's model, API, or training
+      data - the policies that govern acquiring it, the mapping of what it
+      brings, and the management of it in production. **One topic across
+      three AI RMF functions on purpose:** the framework files this under
+      Govern, Map and Manage separately, but one team is accountable for a
+      vendor model end to end, and splitting it would split that.
+    nist_controls: [Govern 6, Map 4, Manage 3]
+    evidence:
+      - Third-party AI inventory (models, APIs, datasets)
+      - Vendor AI due-diligence records
+      - Contractual terms covering model change and data use

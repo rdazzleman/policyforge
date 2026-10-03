@@ -1,0 +1,175 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.004701
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - d01a99082ef2f8ba
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Information Security Standard: Risk Assessment & Authorization
+
+**Standard ID:** SEC-STD-RAA
+**Owner:** Security Program / GRC
+**Review Cadence:** Annual
+**Evidence Artifacts:** Risk register; Authorization decision record
+
+## 1. Purpose and Scope
+
+This standard establishes the requirements for conducting risk assessments, categorizing systems, performing security and privacy control assessments, authorizing systems to operate, and monitoring security and privacy posture at Example Org. It applies to all systems, system components, and system services owned or operated by Example Org, and to all personnel involved in the risk assessment, authorization, and continuous monitoring processes.
+
+The **Security Program / GRC** team is accountable for this process end to end, including all handoffs described in this document.
+
+## 2. Policy and Procedure Governance
+
+### 2.1 Risk Assessment Policy and Procedures
+
+- The Security Program / GRC team shall develop, document, and disseminate to [Designated Personnel or Roles] a risk assessment policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 RA-1 Low, Moderate, High | ARC-AMPE RA-1 AE Mandatory]
+- The Security Program / GRC team shall develop, document, and disseminate procedures to facilitate the implementation of the risk assessment policy and the associated risk assessment controls. [NIST 800-53 RA-1 Low, Moderate, High | ARC-AMPE RA-1 AE Mandatory]
+- The Security Program / GRC team shall designate an official to manage the development, documentation, and dissemination of the risk assessment policy and procedures. [NIST 800-53 RA-1 Low, Moderate, High | ARC-AMPE RA-1 AE Mandatory]
+- The Security Program / GRC team shall review and update the risk assessment policy and procedures at least every one (1) year and following [Organization-Defined Events] (such as assessment or audit findings; security or privacy incidents; and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines). [NIST 800-53 RA-1 Low, Moderate, High | ARC-AMPE RA-1 AE Mandatory]
+
+### 2.2 Assessment, Authorization, and Monitoring Policy and Procedures
+
+- The Security Program / GRC team shall develop, document, and disseminate to [Designated Personnel or Roles] an assessment, authorization, and monitoring policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 CA-1 Low, Moderate, High | ARC-AMPE CA-1 AE Mandatory]
+- The Security Program / GRC team shall develop, document, and disseminate procedures to facilitate the implementation of the assessment, authorization, and monitoring policy and the associated controls. [NIST 800-53 CA-1 Low, Moderate, High | ARC-AMPE CA-1 AE Mandatory]
+- The Security Program / GRC team shall designate an official to manage the development, documentation, and dissemination of the assessment, authorization, and monitoring policy and procedures, named in the appropriate security and privacy documents. [NIST 800-53 CA-1 Low, Moderate, High | ARC-AMPE CA-1 AE Mandatory]
+- The Security Program / GRC team shall review and update the assessment, authorization, and monitoring policy and procedures at least every one (1) year and following [Organization-Defined Events] (such as assessment or audit findings; security or privacy incidents; and changes to applicable laws, executive orders, directives, regulations, policies, standards, and guidelines). [NIST 800-53 CA-1 Low, Moderate, High | ARC-AMPE CA-1 AE Mandatory]
+
+### 2.3 Documentation Management
+
+- Example Org shall implement reasonable and appropriate policies and procedures to comply with the applicable standards and requirements, and shall document any changes to those policies and procedures. [HIPAA 164.316(a)]
+- The Security Program / GRC team shall maintain required policies, procedures, and documented actions, activities, or assessments in written (which may be electronic) form. [HIPAA 164.316(b)(1)]
+- Required documentation shall be retained for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA 164.316(b)(2)(i)]
+- Documentation shall be made available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii)]
+- The Security Program / GRC team shall periodically review documentation and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii)]
+- Example Org identifies the head of the Security Program / GRC team as the security official responsible for the development and implementation of the required security policies and procedures. [HIPAA 164.308(a)(2)]
+
+## 3. Security Categorization
+
+- The Security Program / GRC team shall categorize the system and the information it processes, stores, and transmits. [NIST 800-53 RA-2 Low, Moderate, High | ARC-AMPE RA-2 AE Mandatory]
+- The Security Program / GRC team shall document the security categorization results, including supporting rationale, in the security plan for the system. [NIST 800-53 RA-2 Low, Moderate, High | ARC-AMPE RA-2 AE Mandatory]
+- The authorizing official or the authorizing official's designated representative shall review and approve the security categorization decision. [NIST 800-53 RA-2 Low, Moderate, High | ARC-AMPE RA-2 AE Mandatory]
+- The Security Program / GRC team shall involve the senior official for privacy, or their designee, when conducting the security categorization process. [ARC-AMPE RA-2 AE Mandatory]
+- The Security Program / GRC team shall conduct an impact-level prioritization of organizational systems to obtain additional granularity on system impact levels. [NIST 800-53 RA-2(1) Low, Moderate, High]
+
+## 4. Risk Assessment
+
+### 4.1 Core Risk Assessment Requirements
+
+- The Security Program / GRC team shall conduct a risk assessment that includes identifying threats to and vulnerabilities in the system; determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system and the information it processes, stores, or transmits, and any related information; and determining the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information. [NIST 800-53 RA-3 Low, Moderate, High | ARC-AMPE RA-3 AE Mandatory | HIPAA 164.308(a)(1)(ii)(A)]
+- The Security Program / GRC team shall integrate risk assessment results and risk management decisions from the organization and mission or business process perspectives with system-level risk assessments. [NIST 800-53 RA-3 Low, Moderate, High | ARC-AMPE RA-3 AE Mandatory]
+- The Security Program / GRC team shall document risk assessment results in security and privacy plans, a risk assessment report, the risk register, and any additional organization-defined documents. [NIST 800-53 RA-3 Low, Moderate, High | ARC-AMPE RA-3 AE Mandatory]
+- The Security Program / GRC team shall review risk assessment results at least every one (1) year or when a significant change occurs. [NIST 800-53 RA-3 Low, Moderate, High | ARC-AMPE RA-3 AE Mandatory]
+- The Security Program / GRC team shall disseminate risk assessment results to [Designated Personnel or Roles]. [NIST 800-53 RA-3 Low, Moderate, High | ARC-AMPE RA-3 AE Mandatory]
+- The Security Program / GRC team shall update the risk assessment at least every three (3) years for internal, organization-specific authorization, and whenever there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system. [NIST 800-53 RA-3 Low, Moderate, High | ARC-AMPE RA-3 AE Mandatory]
+- The Security Program / GRC team shall document and implement a privacy risk management process that assesses privacy risk to individuals resulting from the collection, sharing, storing, transmitting, use, and disposal of personally identifiable information. [ARC-AMPE RA-3 AE Mandatory]
+
+### 4.2 Risk Assessment Enhancements
+
+- The Security Program / GRC team shall assess supply chain risks associated with [Defined Systems, System Components, and System Services], and shall update the supply chain risk assessment at [Supply Chain Risk Assessment Frequency], when there are significant changes to the relevant supply chain, or when changes to the system, environments of operation, or other conditions may necessitate a change in the supply chain. [NIST 800-53 RA-3(1) Low, Moderate, High]
+- The Security Program / GRC team shall use all-source intelligence, including publicly available or open-source information, to assist in the analysis of risk, including the risk of vulnerabilities (both intentional and unintentional) from development, manufacturing, and delivery processes, people, and the environment, and to inform engineering, acquisition, and risk management decisions. [NIST 800-53 RA-3(2) | ARC-AMPE RA-3(2) AE Mandatory]
+- The Security Program / GRC team shall determine the current cyber threat environment on an ongoing basis using [Defined Means]. [NIST 800-53 RA-3(3)]
+- The Security Program / GRC team shall employ [Advanced Automation and Analytics Capabilities] to predict and identify risks to [Defined Systems or System Components]. [NIST 800-53 RA-3(4)]
+
+### 4.3 Risk Response and Operational Risk Management
+
+- Example Org shall implement security measures sufficient to reduce risks and vulnerabilities to a reasonable and appropriate level. [HIPAA 164.308(a)(1)(ii)(B)]
+- Example Org shall apply appropriate sanctions against workforce members who fail to comply with the security policies and procedures of the covered entity or business associate. [HIPAA 164.308(a)(1)(ii)(C)]
+- The Security Program / GRC team shall implement procedures to regularly review records of information system activity, such as audit logs, access reports, and security incident tracking reports. [HIPAA 164.308(a)(1)(ii)(D)]
+- The Security Program / GRC team shall respond to findings from security and privacy assessments, monitoring, and audits in accordance with organizational risk tolerance. [NIST 800-53 RA-7 Low, Moderate, High | FedRAMP RA-7 | ARC-AMPE RA-7 AE Mandatory]
+- The Security Program / GRC team shall follow the FedRAMP Vulnerability Detection and Response and Vulnerability Evaluation and Reporting rules when responding to risk findings. [FedRAMP RA-7]
+- The Security Program / GRC team shall discuss risk acceptance with CMS prior to actual acceptance, and shall document and track risk-accepted findings in the Plan of Action & Milestones (POA&M) with full detail in the risk acceptance form. [ARC-AMPE RA-7 AE Mandatory]
+
+### 4.4 Criticality Analysis
+
+- The Security Program / GRC team shall identify critical system components and functions by performing a criticality analysis for [Defined Systems, System Components, or System Services] at [System Development Life Cycle Decision Points]. [NIST 800-53 RA-9 Moderate, High | ARC-AMPE RA-9 AE Mandatory]
+- The Security Program / GRC team shall treat all system components within the CMS Authority to Connect (ATC)/Request to Connect (RTC) boundary as critical. [ARC-AMPE RA-9 AE Mandatory]
+
+## 5. Contingency Planning for Electronic Protected Health Information
+
+- Example Org shall establish (and implement as needed) policies and procedures for responding to an emergency or other occurrence (for example, fire, vandalism, system failure, and natural disaster) that damages systems containing electronic protected health information. [HIPAA 164.308(a)(7)(i)]
+- Example Org shall establish and implement procedures to create and maintain retrievable exact copies of electronic protected health information, maintained by the [Backup System]. [HIPAA 164.308(a)(7)(ii)(A)]
+- Example Org shall establish (and implement as needed) procedures to restore any loss of data. [HIPAA 164.308(a)(7)(ii)(B)]
+- Example Org shall establish (and implement as needed) procedures to enable continuation of critical business processes for protection of the security of electronic protected health information while operating in emergency mode. [HIPAA 164.308(a)(7)(ii)(C)]
+- Example Org shall implement procedures for periodic testing and revision of contingency plans (addressable). [HIPAA 164.308(a)(7)(ii)(D)]
+- Example Org shall assess the relative criticality of specific applications and data in support of other contingency plan components (addressable). [HIPAA 164.308(a)(7)(ii)(E)]
+
+## 6. Security and Privacy Control Assessments
+
+### 6.1 Assessment Planning and Execution
+
+- The Security Program / GRC team shall select the appropriate assessor or assessment team for the type of assessment to be conducted. [NIST 800-53 CA-2 Low, Moderate, High | FedRAMP CA-2 | ARC-AMPE CA-2 AE Mandatory]
+- The Security Program / GRC team shall develop a control assessment plan describing the scope of the assessment, including the controls and control enhancements under assessment, the assessment procedures to be used to determine control effectiveness, and the assessment environment, assessment team, and assessment roles and responsibilities. [NIST 800-53 CA-2 Low, Moderate, High | FedRAMP CA-2 | ARC-AMPE CA-2 AE Mandatory]
+- The control assessment plan shall be reviewed and approved by the authorizing official or designated representative prior to conducting the assessment. [NIST 800-53 CA-2 Low, Moderate, High | FedRAMP CA-2 | ARC-AMPE CA-2 AE Mandatory]
+- The Security Program / GRC team shall assess the controls in the system and its environment of operation at [Control Assessment Frequency] to determine the extent to which the controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting established security and privacy requirements. [NIST 800-53 CA-2 Low, Moderate, High | FedRAMP CA-2 | ARC-AMPE CA-2 AE Mandatory]
+- The Security Program / GRC team shall conduct a complete independent assessment of all security and privacy controls over a three (3) year period — either via a full controls assessment, annual assessments of the controls designated for years one through three, or per CMS guidance on testing for each significant system change — with the complete and final ATC package delivered to CMS no less than ninety (90) days prior to ATC expiration. [ARC-AMPE CA-2 AE Mandatory]
+- Example Org shall perform a periodic technical and nontechnical evaluation, based initially upon the implemented standards and subsequently in response to environmental or operational changes affecting the security of electronic protected health information, that establishes the extent to which the entity's security policies and procedures meet the applicable requirements. [HIPAA 164.308(a)(8)]
+
+### 6.2 Assessment Reporting and Documentation Updates
+
+- The Security Program / GRC team shall produce a control assessment report that documents the results of the assessment. [NIST 800-53 CA-2 Low, Moderate, High | FedRAMP CA-2 | ARC-AMPE CA-2 AE Mandatory]
+- The Security Program / GRC team shall provide the results of the control assessment to [Designated Individuals or Roles], which for FedRAMP include FedRAMP and agency customers, and for ARC-AMPE include the Business Owner responsible for the system and personnel responsible for reviewing assessment documentation, in writing within thirty (30) days after the assessment's completion. [NIST 800-53 CA-2 Low, Moderate, High | FedRAMP CA-2 | ARC-AMPE CA-2 AE Mandatory]
+- The Security Program / GRC team shall update relevant security and privacy documentation to reflect any changes to the system within thirty (30) days of the changes or within thirty (30) days of the control assessment results, and shall notify CMS within thirty (30) days whenever updates are made to system security and privacy authorization artifacts or when significant role changes occur. [ARC-AMPE CA-2 AE Mandatory]
+
+### 6.3 Assessment Enhancements
+
+- The Security Program / GRC team shall employ independent assessors or assessment teams to conduct control assessments, following the CMS Framework for Independent Assessment of Security and Privacy Controls where applicable. [NIST 800-53 CA-2(1) Moderate, High | ARC-AMPE CA-2(1) AE Mandatory]
+- The Security Program / GRC team shall include as part of control assessments, at [Specialized Assessment Frequency], announced or unannounced specialized assessments such as in-depth monitoring, security instrumentation, automated security test cases, vulnerability scanning, malicious user testing, insider threat assessment, performance and load testing, data leakage or data loss assessment, or other organization-defined forms of assessment. [NIST 800-53 CA-2(2) High]
+- The Security Program / GRC team shall leverage the results of control assessments performed by [External Organizations] on [Defined Systems] when the assessment meets [Organization-Defined Requirements]; for FedRAMP, any FedRAMP-recognized independent assessment service qualifies. [NIST 800-53 CA-2(3) | FedRAMP CA-2(3)]
+
+## 7. Plan of Action and Milestones (POA&M)
+
+- The Security Program / GRC team shall develop a plan of action and milestones (POA&M) for the system to document the planned remediation actions of the organization to correct weaknesses or deficiencies noted during the assessment of the controls and to reduce or eliminate known vulnerabilities in the system. [NIST 800-53 CA-5 Low, Moderate, High | ARC-AMPE CA-5 AE Mandatory]
+- The Security Program / GRC team shall update the existing POA&M in accordance with the frequency documented in the organization's Information Security Continuous Monitoring (ISCM) strategy, based on findings from control assessments, independent audits or reviews, and continuous monitoring activities. [NIST 800-53 CA-5 Low, Moderate, High | ARC-AMPE CA-5 AE Mandatory]
+- The Security Program / GRC team shall establish and maintain the POA&M throughout the system lifecycle starting with development, including scheduled completion dates, milestones with dates, appropriate risk levels, as-detailed-as-possible weakness descriptions, and all findings whether self-discovered or identified through assessments. [ARC-AMPE CA-5 AE Mandatory]
+- The Security Program / GRC team shall develop the POA&M based on the CMS Standard for POA&M Management and Reporting using the CMS-provided template, and shall remediate POA&M entries consistent with SI-2. [ARC-AMPE CA-5 AE Mandatory]
+- The Security Program / GRC team shall deliver a fully updated and accurate POA&M to CMS quarterly on 31 January, 30 April, 31 July, and 31 October. [ARC-AMPE CA-5 AE Mandatory]
+- Example Org shall ensure the accuracy, currency, and availability of the plan of action and milestones for the system using [Automated Mechanism]. [NIST 800-53 CA-5(1)]
+
+## 8. System Authorization
+
+### 8.1 Authorizing Officials
+
+- Example Org shall assign a senior official as the authorizing official for the system. [NIST 800-53 CA-6 Low, Moderate, High | ARC-AMPE CA-6 AE Mandatory]
+- Example Org shall assign a senior official as the authorizing official for common controls available for inheritance by organizational systems. [NIST 800-53 CA-6 Low, Moderate, High | ARC-AMPE CA-6 AE Mandatory]
+- Before commencing operations, the authorizing official for the system shall accept the use of common controls inherited by the system and shall authorize the system to operate; the outcome shall be recorded in the Authorization decision record. [NIST 800-53 CA-6 Low, Moderate, High | ARC-AMPE CA-6 AE Mandatory]
+- The authorizing official for common controls shall authorize the use of those controls for inheritance by organizational systems. [NIST 800-53 CA-6 Low, Moderate, High | ARC-AMPE CA-6 AE Mandatory]
+
+### 8.2 Authorization Updates and Notifications
+
+- Example Org shall update authorizations at [Authorization Update Frequency]; for ARC-AMPE, this means at least every three (3) years for all entities (except Direct Enrollment Technology Providers, which must update at least every one (1) year), when significant security breaches occur, whenever there is a significant change to the system or its operating environment, or prior to expiration of the current authorization. [NIST 800-53 CA-6 Low, Moderate, High | ARC-AMPE CA-6 AE Mandatory]
+- The Security Program / GRC team shall notify CMS of significant or major changes to architecture, security and privacy posture, or other items that could cause degradation or unexpected results in security and privacy monitoring, detection, response, and mitigation activities, prior to making the change. [ARC-AMPE CA-6 AE Mandatory]
+
+### 8.3 Joint Authorization
+
+- Example Org shall employ a joint authorization process for the system that includes multiple authorizing officials from the same organization conducting the authorization. [NIST 800-53 CA-6(1)]
+- Example Org shall employ a joint authorization process for the system that includes multiple authorizing officials with at least one authorizing official from an organization external to the organization conducting the authorization. [NIST 800-53 CA-6(2)]
+
+## 9. Continuous Monitoring
+
+### 9.1 Strategy and Metrics
+
+- The Security Program / GRC team shall develop a system-level continuous monitoring strategy and shall implement continuous monitoring in accordance with the organization-level continuous monitoring strategy, including the organization's Information Security Continuous Monitoring (ISCM) strategy considerations. [NIST 800-53 CA-7 Low, Moderate, High | FedRAMP CA-7 | ARC-AMPE CA-7 AE Mandatory]
+- The Security Program / GRC team shall establish system-level metrics to be monitored, based on the organization's security and privacy goals and ISCM strategy. [NIST 800-53 CA-7 Low, Moderate, High | FedRAMP CA-7 | ARC-AMPE CA-7 AE Mandatory]
+- The Security Program / GRC team shall establish frequencies for monitoring and for assessment of control effectiveness; for ARC-AMPE, this includes at least once-a-month scans of operating systems, databases, and web applications, and control effectiveness assessment no less than at least every one (1) year. [NIST 800-53 CA-7 Low, Moderate, High | FedRAMP CA-7 | ARC-AMPE CA-7 AE Mandatory]
+
+### 9.2 Ongoing Assessment and Monitoring
+
+- The Security Program / GRC team shall conduct ongoing control assessments in accordance with the continuous monitoring strategy. [NIST 800-53 CA-7 Low, Moderate, High | FedRAMP CA-7 | ARC-AMPE CA-7 AE Mandatory]
+- The Security Program / GRC team shall conduct ongoing monitoring of system and [Defined Metrics] in accordance with the continuous monitoring strategy, including monitoring of systems, appliances, devices, and applications (including databases). [NIST 800-53 CA-7 Low, Moderate, High | FedRAMP CA-7 | ARC-AMPE CA-7 AE Mandatory]
+- The Security Program / GRC team shall perform correlation and analysis of information generated by control assessments and monitoring. [NIST 800-53 CA-7 Low, Moderate, High | FedRAMP CA-7 | ARC-AMPE CA-7 AE Mandatory]
+- The Security Program / GRC team shall take response actions to address the results of the analysis of control assessment and monitoring information. [NIST 800-53 CA-7 Low, Moderate, High | FedRAMP CA-7 | ARC-AMPE CA-7 AE Mandatory]
+- The Security Program / GRC team shall report the security and privacy status of the system to [Designated Personnel or Roles] at [Status Reporting Frequency]; for ARC-AMPE, at least every thirty (30) days (monthly). [NIST 800-53 CA-7 Low, Moderate, High | FedRAMP CA-7 | ARC-AMPE CA-7 AE Mandatory]
+- Continuous monitoring records shall be maintained until released by the investigating authority when subject to a legal investigation (e.g., of an insider threat), and the Security Program / GRC team shall provide oversight of information security and privacy, including Security Information and Event Management (SIEM) as applicable, for each system. [ARC-AMPE CA-7 AE Mandatory]
+- The Security Program / GRC team shall follow the FedRAMP Continuous Collaborative Monitoring, Significant Change Notification, Vulnerability Detection and Response, and Vulnerability Evaluation and Reporting rules. [FedRAMP CA-7]
+
+### 9.3 Monitoring Enhancements
+
+- The Security Program / GRC team shall employ independent assessors or assessment teams to monitor the controls in the system on an ongoing basis, following the CMS Framework for Independent Assessment of Security and Privacy Controls where applicable. [NIST 800-53 CA-7(1) Moderate, High | ARC-AMPE CA-7(1) AE Mandatory]
+- The Security Program / GRC team shall employ trend analyses to determine if control implementations, the frequency of continuous monitoring activities, and the types of activities used in the continuous monitoring process need to be modified based on empirical data. [NIST 800-53 CA-7(3)]
+- The Security Program / GRC team shall make risk

@@ -1,0 +1,132 @@
+version: 2
+updates:
+  # Python dependencies: pyproject.toml and the two hashed locks generated from
+  # it (requirements/ci.txt for CI, requirements/runtime.txt for the container
+  # image). Catches routine bumps and, more importantly, the moment a new CVE
+  # lands against something this project depends on -- continuous, unlike
+  # pip-audit's point-in-time CI checks.
+  #
+  # **ONE entry over both directories, grouped per dependency (#414).** This
+  # used to be two entries, "/" and "/requirements". Both reached the locks,
+  # so one upstream release arrived as TWO pull requests with the same bump
+  # (1.7 batch: platformdirs #404/#402, filelock #401/#397, wcwidth
+  # #398/#396), and neither entry was redundant: "/" alone proposed ruff and
+  # python-discovery, "/requirements" alone virtualenv and anthropic. GitHub
+  # forbids overlapping directories across blocks of one ecosystem; the
+  # documented remedy is one block listing both directories, with
+  # `group-by: dependency-name` -- "a single pull request for each dependency
+  # update across all specified directories". `exclude-paths` was rejected:
+  # excluding the locks from either entry risks losing the bumps only that
+  # entry proposed. Applies to version updates; a security update may still
+  # arrive per directory. VERIFIED ONLY BY A LIVE RUN, and Dependabot reads
+  # this file from the default branch, so the first check is the first run
+  # after this reaches main: one pull request per bump.
+  - package-ecosystem: "pip"
+    directories:
+      - "/"
+      - "/requirements"
+    # pydantic pins pydantic-core exactly, so a minor or major bump of the core
+    # alone can never install. It moves when pydantic does. Patch bumps still
+    # come. (semgrep's pins live in their own lock, below.)
+    ignore:
+      - dependency-name: "pydantic-core"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      # mcp 2 removed the server decorators serve() uses; held below 2 in
+      # pyproject until the port lands. Remove with that pin.
+      - dependency-name: "mcp"
+        update-types: ["version-update:semver-major"]
+    schedule:
+      interval: "weekly"
+    # Wait before proposing an update to a newly published version -- gives
+    # the ecosystem time to catch a malicious or broken release before this
+    # repo pulls it in. The locks make it meaningful: CI installs what
+    # Dependabot proposed and a person merged.
+    cooldown:
+      default-days: 7
+    groups:
+      python:
+        patterns: ["*"]
+        group-by: dependency-name
+    #
+    # **Its lock edits are never merged as they stand.** Both locks are uv
+    # universal locks and Dependabot rewrites them for Linux only: PR #45
+    # dropped a Windows-only pin that way while CI stayed green. The locks are
+    # regenerated with the command in each header, together, and the pull
+    # request is closed in favour of that.
+    #
+    # **Pin the regeneration to the version Dependabot proposed.** The header
+    # command alone moves nothing -- uv keeps the pins already in the output
+    # file. The obvious fix, `--upgrade-package <name>`, upgrades to the
+    # LATEST release, which ignores the cooldown entirely. Measured on
+    # 2026-09-23 against the filelock/virtualenv bumps (#239-#242):
+    #
+    #     --upgrade-package filelock     -> 4.0.3   a MAJOR bump, uploaded TODAY
+    #     --upgrade-package virtualenv   -> 21.11.1             uploaded TODAY
+    #     what Dependabot proposed       -> 3.32.7 / 21.7.10, 7-8 days old
+    #
+    # So this remedy, followed the natural way, is more dangerous than the edit
+    # it replaces. Name the version:
+    #
+    #     --upgrade-package "filelock==3.32.7"
+    #
+    # which reproduced Dependabot's edit byte-for-byte then, and again for every
+    # block of the 1.7 batch (#427).
+
+  # semgrep's own lock. Only semgrep itself is proposed: everything else in
+  # this file is whatever that semgrep release pins, and bumping one of those
+  # alone is exactly the pull request that can never install. A semgrep bump
+  # recompiles the lock, which moves its dependencies with it.
+  - package-ecosystem: "pip"
+    directory: "/requirements/semgrep"
+    allow:
+      - dependency-name: "semgrep"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+
+  # The base image of the runtime Dockerfile and of the dev container, pinned
+  # by digest. A digest never moves by itself, which is the point of pinning
+  # it and also why it goes stale: this entry is what brings in a rebuilt
+  # python:3.12-slim with its security fixes. The two must stay the same digest
+  # (tests/test_container.py fails otherwise), so they are one entry and one
+  # group, and move in a single pull request. Same cooldown as the rest.
+  - package-ecosystem: "docker"
+    directories:
+      - "/"
+      - "/.devcontainer"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    # Digest updates within 3.12 only. The image is "the environment CI runs
+    # in", and CI runs 3.12, so a new Python is a decision made in ci.yml
+    # first, not a base-image bump: #54 moved both Dockerfiles to 3.14-slim
+    # and tests/test_container.py rightly failed it.
+    ignore:
+      - dependency-name: "python"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+    groups:
+      base-image:
+        patterns:
+          - "python"
+
+  # GitHub Actions used in ci.yml. Actions here are pinned to commit SHAs
+  # (see ci.yml) rather than mutable version tags, for supply-chain
+  # hardening — Dependabot still tracks SHA-pinned actions and opens PRs
+  # that bump the SHA (and its trailing version comment) when a new release
+  # ships, so pinning doesn't mean going stale.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    # codeql-action's init, analyze and upload-sarif must run the same
+    # version: CodeQL refuses a config written by one release and read by
+    # another. Bumped one per pull request, every one of those PRs failed
+    # CodeQL, so they are proposed together.
+    groups:
+      codeql-action:
+        patterns:
+          - "github/codeql-action*"

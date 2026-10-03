@@ -1,0 +1,503 @@
+# Information Flow and System Protection Standard
+
+## 1. Purpose and Scope
+
+This standard establishes requirements for controlling information flows, protecting system boundaries, and maintaining secure communications within Acme Health systems. This standard applies to all information systems that process, store, or transmit organizational data, including electronic protected health information.
+
+## 2. Policy Foundation and Governance
+
+### 2.1 System and Communications Protection Policy
+
+Acme Health shall develop, document, and disseminate to [Assignment: organization-defined personnel or roles] a [Selection (one or more): organization-level; mission/business-process-level; system-level] system and communications protection policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines; and includes procedures to facilitate the implementation of the system and communications protection policy and the associated system and communications protection controls. [NIST 800-53 SC-1 Low, Moderate, High]
+
+Acme Health shall develop, document, and disseminate to organization-defined personnel and roles an organization-level system and communications protection policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines; and includes procedures to facilitate the implementation of the system and communications protection policy and associated system and communications protection controls. [ARC-AMPE SC-1]
+
+Acme Health shall designate an [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the system and communications protection policy and procedures. [NIST 800-53 SC-1 Low, Moderate, High | ARC-AMPE SC-1]
+
+### 2.2 Policy and Procedure Review
+
+Acme Health shall review and update the current system and communications protection policy [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 SC-1 Low, Moderate, High]
+
+Acme Health shall review and update the current system and communications protection policy at least every one (1) year and following organization-defined events. [ARC-AMPE SC-1]
+
+Acme Health shall review and update the current system and communications protection procedures [Assignment: organization-defined frequency] and following [Assignment: organization-defined events]. [NIST 800-53 SC-1 Low, Moderate, High]
+
+Acme Health shall review and update the current system and communications protection procedures at least every one (1) year and following organization-defined events. [ARC-AMPE SC-1]
+
+### 2.3 Documentation Requirements
+
+Acme Health shall maintain the policies and procedures implemented to comply with HIPAA Security Rule requirements in written (which may be electronic) form, and maintain a written (which may be electronic) record of required actions, activities, or assessments. [HIPAA Security Rule 164.316(b)(1)]
+
+Acme Health shall retain documentation required by HIPAA for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA Security Rule 164.316(b)(2)(i)]
+
+Acme Health shall make documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA Security Rule 164.316(b)(2)(ii)]
+
+Acme Health shall review documentation periodically, and update as needed, in response to environmental or operational changes affecting the security of the electronic protected health information. [HIPAA Security Rule 164.316(b)(2)(iii)]
+
+## 3. Information Flow Control
+
+### 3.1 General Information Flow Control
+
+Acme Health shall enforce approved authorizations for controlling the flow of information within the system and between connected systems based on [Assignment: organization-defined information flow control policies]. [NIST 800-53 AC-4 Moderate, High | ARC-AMPE AC-4]
+
+Acme Health shall use [Assignment: organization-defined security and privacy attributes] associated with [Assignment: organization-defined information, source, and destination objects] to enforce [Assignment: organization-defined information flow control policies] as a basis for flow control decisions. [NIST 800-53 AC-4(1)]
+
+Acme Health shall use protected processing domains to enforce [Assignment: organization-defined information flow control policies] as a basis for flow control decisions. [NIST 800-53 AC-4(2)]
+
+Acme Health shall enforce [Assignment: organization-defined information flow control policies] dynamically. [NIST 800-53 AC-4(3)]
+
+Acme Health shall prevent encrypted information from bypassing [Assignment: organization-defined information flow control mechanisms] by [Selection (one or more): decrypting the information; blocking the flow of the encrypted information; terminating communications sessions attempting to pass encrypted information; [Assignment: organization-defined procedure or method]]. [NIST 800-53 AC-4(4) High]
+
+Acme Health shall enforce [Assignment: organization-defined limitations] on embedding data types within other data types. [NIST 800-53 AC-4(5)]
+
+Acme Health shall enforce information flow control based on [Assignment: organization-defined metadata]. [NIST 800-53 AC-4(6)]
+
+Acme Health shall enforce one-way information flows through hardware-based flow control mechanisms. [NIST 800-53 AC-4(7)]
+
+### 3.2 Information Flow Control Filters and Policy Enforcement
+
+Acme Health shall enforce information flow control using [Assignment: organization-defined security or privacy policy filters] as a basis for flow control decisions for [Assignment: organization-defined information flows], and [Selection (one or more): block; strip; modify; quarantine] data after a filter processing failure in accordance with [Assignment: organization-defined security or privacy policy]. [NIST 800-53 AC-4(8)]
+
+Acme Health shall enforce the use of human reviews for [Assignment: organization-defined information flows] under the following conditions: [Assignment: organization-defined conditions]. [NIST 800-53 AC-4(9)]
+
+Acme Health shall provide the capability for privileged administrators to enable and disable [Assignment: organization-defined security or privacy policy filters] under the following conditions: [Assignment: organization-defined conditions]. [NIST 800-53 AC-4(10)]
+
+Acme Health shall provide the capability for privileged administrators to configure [Assignment: organization-defined security or privacy policy filters] to support different security or privacy policies. [NIST 800-53 AC-4(11)]
+
+### 3.3 Inter-Domain Information Transfer
+
+When transferring information between different security domains, Acme Health shall:
+
+- Use [Assignment: organization-defined data type identifiers] to validate data essential for information flow decisions. [NIST 800-53 AC-4(12)]
+
+- Decompose information into [Assignment: organization-defined policy-relevant subcomponents] for submission to policy enforcement mechanisms. [NIST 800-53 AC-4(13)]
+
+- Implement [Assignment: organization-defined security or privacy policy filters] requiring fully enumerated formats that restrict data structure and content. [NIST 800-53 AC-4(14)]
+
+- Examine the information for the presence of [Assignment: organization-defined unsanctioned information] and prohibit the transfer of such information in accordance with the [Assignment: organization-defined security or privacy policy]. [NIST 800-53 AC-4(15)]
+
+- Implement [Assignment: organization-defined security or privacy policy filters] on metadata. [NIST 800-53 AC-4(19)]
+
+- Modify non-releasable information by implementing [Assignment: organization-defined modification action]. [NIST 800-53 AC-4(23)]
+
+- Parse incoming data into an internal normalized format and regenerate the data to be consistent with its intended specification. [NIST 800-53 AC-4(24)]
+
+- Sanitize data to minimize [Selection (one or more): delivery of malicious content, command and control of malicious code, malicious code augmentation, and steganography-encoded data; spillage of sensitive information] in accordance with [Assignment: organization-defined policy]. [NIST 800-53 AC-4(25)]
+
+- Record and audit content filtering actions and results for the information being filtered. [NIST 800-53 AC-4(26)]
+
+- Implement content filtering solutions that provide redundant and independent filtering mechanisms for each data type. [NIST 800-53 AC-4(27)]
+
+- Implement a linear content filter pipeline that is enforced with discretionary and mandatory access controls. [NIST 800-53 AC-4(28)]
+
+- Ensure content filtering mechanisms successfully complete execution without errors and that content filtering actions occur in the correct order and comply with [Assignment: organization-defined policy]. [NIST 800-53 AC-4(29)]
+
+- Implement content filtering mechanisms using multiple processes. [NIST 800-53 AC-4(30)]
+
+- Prevent the transfer of failed content to the receiving domain. [NIST 800-53 AC-4(31)]
+
+- Implement processes that do not filter message content, validate filtering metadata, ensure the content associated with the filtering metadata has successfully completed filtering, and transfer the content to the destination filter pipeline. [NIST 800-53 AC-4(32)]
+
+### 3.4 Information Transfer Authentication and Cross-Domain Controls
+
+Acme Health shall uniquely identify and authenticate source and destination points by [Selection (one or more): organization, system, application, service, individual] for information transfer. [NIST 800-53 AC-4(17)]
+
+Acme Health shall employ [Assignment: organization-defined solutions in approved configurations] to control the flow of [Assignment: organization-defined information] across security domains. [NIST 800-53 AC-4(20)]
+
+Acme Health shall separate information flows logically or physically using [Assignment: organization-defined mechanisms and/or techniques] to accomplish [Assignment: organization-defined required separations]. [NIST 800-53 AC-4(21)]
+
+Acme Health shall provide access from a single device to computing platforms, applications, or data residing in multiple different security domains, while preventing information flow between the different security domains. [NIST 800-53 AC-4(22)]
+
+### 3.5 Interconnection Risk Management
+
+Acme Health shall define in the System Security and Privacy Plan the authority to order the immediate termination and/or suspension of any interconnection, with the Authorizing Official making risk-informed decisions in consultation with the system owner if an interconnection presents an unacceptable level of risk. [ARC-AMPE AC-4]
+
+## 4. Workforce Access to Electronic Protected Health Information
+
+### 4.1 Access Management
+
+Acme Health shall implement policies and procedures to ensure that all members of the workforce have appropriate access to electronic protected health information and to prevent those workforce members who do not have access from obtaining access to electronic protected health information. [HIPAA Security Rule 164.308(a)(3)(i)]
+
+### 4.2 Authorization and Supervision
+
+Acme Health shall implement procedures for the authorization and/or supervision of workforce members who work with electronic protected health information or in locations where it might be accessed. [HIPAA Security Rule 164.308(a)(3)(ii)(A)]
+
+Acme Health shall implement procedures to determine that the access of a workforce member to electronic protected health information is appropriate. [HIPAA Security Rule 164.308(a)(3)(ii)(B)]
+
+### 4.3 Access Termination
+
+Acme Health shall implement procedures for terminating access to electronic protected health information when the employment of, or other arrangement with, a workforce member ends or as required by determinations made regarding appropriateness of access. [HIPAA Security Rule 164.308(a)(3)(ii)(C)]
+
+### 4.4 Access Authorization and Establishment
+
+Acme Health shall implement policies and procedures for authorizing access to electronic protected health information that are consistent with applicable requirements. [HIPAA Security Rule 164.308(a)(4)(i)]
+
+If a health care clearinghouse is part of a larger organization, the clearinghouse must implement policies and procedures that protect the electronic protected health information of the clearinghouse from unauthorized access by the larger organization. [HIPAA Security Rule 164.308(a)(4)(ii)(A)]
+
+Acme Health shall implement policies and procedures for granting access to electronic protected health information, for example, through access to a workstation, transaction, program, process, or other mechanism. [HIPAA Security Rule 164.308(a)(4)(ii)(B)]
+
+Acme Health shall implement policies and procedures that, based upon the covered entity's or business associate's access authorization policies, establish, document, review, and modify a user's right of access to a workstation, transaction, program, or process. [HIPAA Security Rule 164.308(a)(4)(ii)(C)]
+
+### 4.5 Workstation Security
+
+Acme Health shall implement policies and procedures that specify the proper functions to be performed, the manner in which those functions are to be performed, and the physical attributes of the surroundings of a specific workstation or class of workstation that can access electronic protected health information. [HIPAA Security Rule 164.310(b)]
+
+## 5. Internal System Connections
+
+### 5.1 Connection Authorization
+
+Acme Health shall authorize internal connections of [Assignment: organization-defined system components] to the system. [NIST 800-53 CA-9 Low, Moderate, High]
+
+Acme Health shall authorize internal connections of organization-defined system components or classes of components to the system. [ARC-AMPE CA-9]
+
+### 5.2 Connection Documentation
+
+Acme Health shall document, for each internal connection, the interface characteristics, security and privacy requirements, and the nature of the information communicated. [NIST 800-53 CA-9 Low, Moderate, High | ARC-AMPE CA-9]
+
+### 5.3 Connection Termination
+
+Acme Health shall terminate internal system connections after [Assignment: organization-defined conditions]. [NIST 800-53 CA-9 Low, Moderate, High]
+
+Acme Health shall terminate internal system connections after issuance of an order by the organization's Chief Information Officer (CIO), Chief Information Security Officer (CISO), or senior privacy official and when such internal system connections no longer support the organization's missions or business functions. [ARC-AMPE CA-9]
+
+### 5.4 Connection Review
+
+Acme Health shall review [Assignment: organization-defined frequency] the continued need for each internal connection. [NIST 800-53 CA-9 Low, Moderate, High]
+
+Acme Health shall review at least every one (1) year the continued need for each internal connection. [ARC-AMPE CA-9]
+
+### 5.5 Compliance Verification
+
+Acme Health shall perform security and privacy compliance checks on constituent system components prior to the establishment of the internal connection. [NIST 800-53 CA-9(1)]
+
+## 6. System Segregation and Isolation
+
+### 6.1 Separation of User and Management Functionality
+
+Acme Health shall separate user functionality, including user interface services, from system management functionality. [NIST 800-53 SC-2 Moderate, High | ARC-AMPE SC-2]
+
+Acme Health shall prevent the presentation of system management functionality at interfaces to non-privileged users. [NIST 800-53 SC-2(1) | ARC-AMPE SC-2(1)]
+
+Acme Health shall withhold system administration options until users establish sessions with administrator privileges, rather than using grey-out options to eliminate accessibility. [ARC-AMPE SC-2(1)]
+
+Acme Health shall store state information from applications and software separately. [NIST 800-53 SC-2(2)]
+
+### 6.2 Security Function Isolation
+
+Acme Health shall isolate security functions from nonsecurity functions. [NIST 800-53 SC-3 High]
+
+Acme Health shall employ hardware separation mechanisms to implement security function isolation. [NIST 800-53 SC-3(1)]
+
+Acme Health shall isolate security functions enforcing access and information flow control from nonsecurity functions and from other security functions. [NIST 800-53 SC-3(2)]
+
+Acme Health shall minimize the number of nonsecurity functions included within the isolation boundary containing security functions. [NIST 800-53 SC-3(3)]
+
+Acme Health shall implement security functions as largely independent modules that maximize internal cohesiveness within modules and minimize coupling between modules. [NIST 800-53 SC-3(4)]
+
+Acme Health shall implement security functions as a layered structure minimizing interactions between layers of the design and avoiding any dependence by lower layers on the functionality or correctness of higher layers. [NIST 800-53 SC-3(5)]
+
+### 6.3 Information Residue Protection
+
+Acme Health shall prevent unauthorized and unintended information transfer via shared system resources. [NIST 800-53 SC-4 Moderate, High | ARC-AMPE SC-4]
+
+Acme Health shall prevent unauthorized information transfer via shared resources in accordance with [Assignment: organization-defined procedures] when system processing explicitly switches between different information classification levels or security categories. [NIST 800-53 SC-4(2)]
+
+## 7. Denial-of-Service Protection
+
+### 7.1 General Denial-of-Service Protections
+
+Acme Health shall [Selection: protect against; limit] the effects of the following types of denial-of-service events: [Assignment: organization-defined types of denial-of-service events]. [NIST 800-53 SC-5 Low, Moderate, High]
+
+Acme Health shall protect against the effects of the following denial-of-service event types: at a minimum, Internet Control Message Protocol (ICMP) flood, SYN flood, slowloris, buffer overflow attack, and volume attack. [ARC-AMPE SC-5]
+
+Acme Health shall employ the following controls to achieve the denial-of-service objective: [Assignment: organization-defined controls by type of denial-of-service event]. [NIST 800-53 SC-5 Low, Moderate, High | ARC-AMPE SC-5]
+
+### 7.2 Denial-of-Service Attack Prevention and Resource Management
+
+Acme Health shall restrict the ability of individuals to launch the following denial-of-service attacks against other systems: [Assignment: organization-defined denial-of-service attacks]. [NIST 800-53 SC-5(1) | ARC-AMPE SC-5(1)]
+
+Acme Health shall manage capacity, bandwidth, or other redundancy to limit the effects of information flooding denial-of-service attacks. [NIST 800-53 SC-5(2) | ARC-AMPE SC-5(2)]
+
+### 7.3 Denial-of-Service Monitoring
+
+Acme Health shall employ the following monitoring tools to detect indicators of denial-of-service attacks against, or launched from, the system: [Assignment: organization-defined monitoring tools]. [NIST 800-53 SC-5(3)]
+
+Acme Health shall employ organization-defined monitoring tools to detect indicators of denial-of-service attacks against, or launched from, the system. [ARC-AMPE SC-5(3)]
+
+Acme Health shall monitor the following system resources to determine if sufficient resources exist to prevent effective denial-of-service attacks: [Assignment: organization-defined system resources]. [NIST 800-53 SC-5(3)]
+
+Acme Health shall monitor organization-defined system resources to determine if sufficient resources exist to prevent effective denial-of-service attacks. [ARC-AMPE SC-5(3)]
+
+## 8. Boundary Protection
+
+### 8.1 Managed Interface Monitoring and Architecture
+
+Acme Health shall monitor and control communications at the external managed interfaces to the system and at key internal managed interfaces within the system. [NIST 800-53 SC-7 Low, Moderate, High | FedRAMP SC-7 | ARC-AMPE SC-7]
+
+Acme Health shall implement subnetworks for publicly accessible system components that are [Selection: physically; logically] separated from internal organizational networks. [NIST 800-53 SC-7 Low, Moderate, High | FedRAMP SC-7]
+
+Acme Health shall implement subnetworks for publicly accessible system components that are logically separated from internal organizational networks. [ARC-AMPE SC-7]
+
+Acme Health shall ensure logical separation between publicly accessible components and internal networks prevents traversal without inspection and authorization, such that traffic may not flow unrestricted from publicly accessible components to internal networks. [FedRAMP SC-7]
+
+Acme Health shall connect to external networks or systems only through managed interfaces consisting of boundary protection devices arranged in accordance with an organizational security and privacy architecture. [NIST 800-53 SC-7 Low, Moderate, High | FedRAMP SC-7 | ARC-AMPE SC-7]
+
+### 8.2 Access Control at Boundaries
+
+Acme Health shall ensure that access to all proxies is denied, except for those hosts, ports, and services that are explicitly required. [ARC-AMPE SC-7]
+
+Acme Health shall utilize stateful inspection/application firewall hardware and software, using firewalls from at least two (2) or more different vendors at the various levels within the network to reduce the possibility of compromising the entire network. [ARC-AMPE SC-7]
+
+### 8.3 Advanced Threat Detection
+
+If Acme Health has an outward-facing web or email presence to the public internet, Acme Health shall implement and support a technical capability to detect malware in web traffic traversing the organization's boundary by monitoring assets without the need to deploy software agents, dynamically generating actionable malware intelligence, detecting and stopping web-based and email attacks, and sending alert data to the organization's Security Information and Event Management (SIEM) system as applicable. [ARC-AMPE SC-7]
+
+Acme Health shall ensure aggregated boundary protection device information is searchable. [ARC-AMPE SC-7]
+
+### 8.4 External Connection Limitations and Management
+
+Acme Health shall limit the number of external network connections to the system. [NIST 800-53 SC-7(3) Moderate, High | ARC-AMPE SC-7(3)]
+
+Acme Health shall implement a managed interface for each external telecommunication service. [NIST 800-53 SC-7(4) Moderate, High | ARC-AMPE SC-7(4)]
+
+Acme Health shall establish a traffic flow policy for each managed interface. [NIST 800-53 SC-7(4) Moderate, High | ARC-AMPE SC-7(4)]
+
+Acme Health shall protect the confidentiality and integrity of the information being transmitted across each interface. [NIST 800-53 SC-7(4) Moderate, High | ARC-AMPE SC-7(4)]
+
+Acme Health shall document each exception to the traffic flow policy with a supporting mission or business need and duration of that need. [NIST 800-53 SC-7(4) Moderate, High | ARC-AMPE SC-7(4)]
+
+Acme Health shall review exceptions to the traffic flow policy [Assignment: organization-defined frequency] and remove exceptions that are no longer supported by an explicit mission or business need. [NIST 800-53 SC-7(4) Moderate, High]
+
+Acme Health shall review exceptions to the traffic flow policy within every one (1) year or whenever there is a change in the threat environment that warrants a review of the exceptions and remove exceptions that are no longer supported by an explicit mission or business need. [ARC-AMPE SC-7(4)]
+
+### 8.5 Control Plane Traffic Protection
+
+Acme Health shall prevent unauthorized exchange of control plane traffic with external networks. [NIST 800-53 SC-7(4) Moderate, High | ARC-AMPE SC-7(4)]
+
+Acme Health shall publish information to enable remote networks to detect unauthorized control plane traffic from internal networks. [NIST 800-53 SC-7(4) Moderate, High | ARC-AMPE SC-7(4)]
+
+Acme Health shall filter unauthorized control plane traffic from external networks. [NIST 800-53 SC-7(4) Moderate, High | ARC-AMPE SC-7(4)]
+
+### 8.6 Deny-by-Default and Split Tunneling
+
+Acme Health shall deny network communications traffic by default and allow network communications traffic by exception [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]]. [NIST 800-53 SC-7(5) Moderate, High]
+
+Acme Health shall deny network communications traffic by default and allow network communications traffic by exception at managed interfaces as documented in the applicable System Security and Privacy Plan (SSPP). [ARC-AMPE SC-7(5)]
+
+Acme Health shall prevent split tunneling for remote devices connecting to organizational systems unless the split tunnel is securely provisioned using [Assignment: organization-defined safeguards]. [NIST 800-53 SC-7(7) Moderate, High]
+
+Acme Health shall prevent split tunneling for remote devices connecting to organizational systems unless the split tunnel is securely provisioned using organization-defined security safeguards (such as Virtual Private Networks (VPN) with appropriate security and privacy controls). [ARC-AMPE SC-7(7)]
+
+### 8.7 Proxy Server and Traffic Routing
+
+Acme Health shall route [Assignment: organization-defined internal communications traffic] to [Assignment: organization-defined external networks] through authenticated proxy servers at managed interfaces. [NIST 800-53 SC-7(8) Moderate, High]
+
+Acme Health shall route organization-defined internal communications traffic to organization-defined external networks through authenticated proxy servers at managed interfaces, noting that proxy servers may inhibit the use of Virtual Private Networks (VPN) and create the potential for "man-in-the-middle" attacks. [ARC-AMPE SC-7(8)]
+
+### 8.8 Threat Detection and Exfiltration Prevention
+
+Acme Health shall detect and deny outgoing communications traffic posing a threat to external systems. [NIST 800-53 SC-7(9)]
+
+Acme Health shall audit the identity of internal users associated with denied communications. [NIST 800-53 SC-7(9)]
+
+Acme Health shall prevent the exfiltration of information. [NIST 800-53 SC-7(10)]
+
+Acme Health shall conduct exfiltration tests [Assignment: organization-defined frequency]. [NIST 800-53 SC-7(10)]
+
+### 8.9 Authorized Source and Destination Routing
+
+Acme Health shall only allow incoming communications from [Assignment: organization-defined authorized sources] to be routed to [Assignment: organization-defined authorized destinations]. [NIST 800-53 SC-7(11)]
+
+### 8.10 Host-Based Boundary Protection
+
+Acme Health shall implement [Assignment: organization-defined host-based boundary protection mechanisms] at [Assignment: organization-defined system components]. [NIST 800-53 SC-7(12)]
+
+Acme Health shall implement Host Intrusion Prevention System (HIPS), Host Intrusion Detection System (HIDS), or at a minimum a host-based firewall at organization-defined system components (including all system components capable of supporting host-based boundary protection mechanisms, such as servers, workstations, and those subject to operation outside of the organizational boundary). [ARC-AMPE SC-7(12)]
+
+### 8.11 Security Tool Isolation
+
+Acme Health shall isolate [Assignment: organization-defined information security tools, mechanisms, and support components] from other internal system components by implementing physically separate subnetworks with managed interfaces to other components of the system. [NIST 800-53 SC-7(13)]
+
+### 8.12 Additional Boundary Protection Measures
+
+Acme Health shall protect against unauthorized physical connections at [Assignment: organization-defined managed interfaces]. [NIST 800-53 SC-7(14)]
+
+Acme Health shall route networked, privileged accesses through a dedicated, managed interface for purposes of access control and auditing. [NIST 800-53 SC-7(15)]
+
+Acme Health shall prevent the discovery of specific system components that represent a managed interface. [NIST 800-53 SC-7(16)]
+
+Acme Health shall enforce adherence to protocol formats. [NIST 800-53 SC-7(17)]
+
+Acme Health shall prevent systems from entering unsecure states in the event of an operational failure of a boundary protection device. [NIST 800-53 SC-7(18) High | ARC-AMPE SC-7(18)]
+
+Acme Health shall block inbound and outbound communications traffic between [Assignment: organization-defined communication clients] that are independently configured by end users and external service providers. [NIST 800-53 SC-7(19)]
+
+### 8.13 Dynamic Isolation and Mission-Based Protection
+
+Acme Health shall provide the capability to dynamically isolate [Assignment: organization-defined system components] from other system components. [NIST 800-53 SC-7(20)]
+
+Acme Health shall employ boundary protection mechanisms to isolate [Assignment: organization-defined system components] supporting [Assignment: organization-defined missions and/or business functions]. [NIST 800-53 SC-7(21) High]
+
+Acme Health shall implement separate network addresses to connect to systems in different security domains. [NIST 800-53 SC-7(22)]
+
+Acme Health shall disable feedback to senders on protocol format validation failure. [NIST 800-53 SC-7(23)]
+
+### 8.14 Personally Identifiable Information Processing Rules
+
+Acme Health shall apply the following processing rules to data elements of personally identifiable information: [Assignment: organization-defined processing rules]. [NIST 800-53 SC-7(24)]
+
+For systems that process Personally Identifiable Information (PII), Acme Health shall apply the following processing rules to data elements of PII: processing rules for compliance with ACA, Privacy Act, and other applicable PII processing laws and regulations. [ARC-AMPE SC-7(24)]
+
+Acme Health shall monitor for permitted processing at the external interfaces to the system and at key internal boundaries within the system. [NIST 800-53 SC-7(24) | ARC-AMPE SC-7(24)]
+
+Acme Health shall document each processing exception. [NIST 800-53 SC-7(24) | ARC-AMPE SC-7(24)]
+
+Acme Health shall review and remove exceptions that are no longer supported. [NIST 800-53 SC-7(24) | ARC-AMPE SC-7(24)]
+
+### 8.15 Network Connection Restrictions
+
+Acme Health shall prohibit the direct connection of [Assignment: organization-defined unclassified national security system] to an external network without the use of [Assignment: organization-defined boundary protection device]. [NIST 800-53 SC-7(25)]
+
+Acme Health shall prohibit the direct connection of a classified national security system to an external network without the use of [Assignment: organization-defined boundary protection device]. [NIST 800-53 SC-7(26)]
+
+Acme Health shall prohibit the direct connection of [Assignment: organization-defined unclassified, non-national security system] to an external network without the use of [Assignment: organization-defined boundary protection device]. [NIST 800-53 SC-7(27)]
+
+Acme Health shall prohibit the direct connection of [Assignment: organization-defined system] to a public network. [NIST 800-53 SC-7(28)]
+
+### 8.16 Critical System Subnetwork Isolation
+
+Acme Health shall implement [Selection: physically; logically] separate subnetworks to isolate the following critical system components and functions: [Assignment: organization-defined critical system components and functions]. [NIST 800-53 SC-7(29)]
+
+Acme Health shall implement physically or logically separate subnetworks to isolate organization-defined critical system components and functions. [ARC-AMPE SC-7(29)]
+
+## 9. Transmission Confidentiality and Integrity
+
+### 9.1 General Transmission Protection
+
+Acme Health shall protect the [Selection (one or more): confidentiality; integrity] of transmitted information. [NIST 800-53 SC-8 Moderate, High]
+
+Acme Health shall protect the confidentiality and integrity of transmitted information. [ARC-AMPE SC-8]
+
+### 9.2 Cryptographic Protection
+
+Acme Health shall implement cryptographic mechanisms to [Selection (one or more): prevent unauthorized disclosure of information; detect changes to information] during transmission. [NIST 800-53 SC-8(1) Moderate, High]
+
+Acme Health shall implement cryptographic mechanisms to prevent unauthorized disclosure of information and detect changes to information during transmission, using the latest published FIPS 140-compliant encryption standards. [ARC-AMPE SC-8(1)]
+
+Acme Health shall maintain the [Selection (one or more): confidentiality; integrity] of information during preparation for transmission and during reception. [NIST 800-53 SC-8(2)]
+
+Acme Health shall maintain the confidentiality and integrity of information during preparation for transmission and during reception. [ARC-AMPE SC-8(2)]
+
+Acme Health shall implement cryptographic mechanisms to protect message externals unless otherwise protected by [Assignment: organization-defined alternative physical controls]. [NIST 800-53 SC-8(3)]
+
+Acme Health shall implement cryptographic mechanisms to conceal or randomize communication patterns unless otherwise protected by [Assignment: organization-defined alternative physical controls]. [NIST 800-53 SC-8(4)]
+
+Acme Health shall implement [Assignment: organization-defined protected distribution system] to [Selection (one or more): prevent unauthorized disclosure of information; detect changes to information] during transmission. [NIST 800-53 SC-8(5)]
+
+### 9.3 Sensitive Information Encryption
+
+Acme Health shall encrypt any transmitted data containing sensitive information (e.g., Personally Identifiable Information [PII], proprietary, financial, and legal) using the latest published FIPS 140-compliant encryption standards. [ARC-AMPE SC-8]
+
+Acme Health shall place all sensitive information in an encrypted attachment prior to sending electronic email. [ARC-AMPE SC-8]
+
+Acme Health shall encrypt email and attachments containing sensitive information when transmitted outside and outside of the organization using the latest published FIPS 140-compliant encryption standards. [ARC-AMPE SC-8]
+
+Acme Health shall provide passwords and/or encryption keys to recipients separately via text message, verbally, or another out-of-band solution rather than including them in the same email or a separate email. [ARC-AMPE SC-8]
+
+### 9.4 HIPAA Transmission Security
+
+Acme Health shall implement policies and procedures to protect electronic protected health information from improper alteration or destruction. [HIPAA Security Rule 164.312(c)(1)]
+
+Acme Health shall implement electronic mechanisms to corroborate that electronic protected health information has not been altered or destroyed in an unauthorized manner. [HIPAA Security Rule 164.312(c)(2)]
+
+Acme Health shall implement technical security measures to guard against unauthorized access to electronic protected health information that is being transmitted over an electronic communications network. [HIPAA Security Rule 164.312(e)(1)]
+
+Acme Health shall implement security measures to ensure that electronically transmitted electronic protected health information is not improperly modified without detection until disposed of. [HIPAA Security Rule 164.312(e)(2)(i)]
+
+Acme Health shall implement a mechanism to encrypt electronic protected health information whenever deemed appropriate. [HIPAA Security Rule 164.312(e)(2)(ii)]
+
+## 10. Session Management
+
+### 10.1 Session Termination
+
+Acme Health shall terminate the network connection associated with a communications session at the end of the session or after [Assignment: organization-defined time period] of inactivity. [NIST 800-53 SC-10 Moderate, High]
+
+Acme Health shall terminate the network connection associated with a communications session at the end of the session or after thirty (30) minutes for privileged sessions and no longer than sixty (60) minutes for general user sessions of inactivity. [ARC-AMPE SC-10]
+
+### 10.2 Collaborative Computing Device Controls
+
+Acme Health shall prohibit remote activation of collaborative computing devices and applications with the following exceptions: [Assignment: organization-defined exceptions where remote activation is to be allowed]. [NIST 800-53 SC-15 Low, Moderate, High]
+
+Acme Health shall prohibit remote activation of collaborative computing devices and applications with the following exceptions: no exceptions unless explicitly authorized, in writing, by the organization Chief Information Officer (CIO) or their designated representative. [ARC-AMPE SC-15]
+
+Acme Health shall provide an explicit indication of use to users physically present at the devices. [NIST 800-53 SC-15 Low, Moderate, High | ARC-AMPE SC-15]
+
+Acme Health shall provide [Selection (one or more): physical; logical] disconnect of collaborative computing devices in a manner that supports ease of use. [NIST 800-53 SC-15(1)]
+
+Acme Health shall disable or remove collaborative computing devices and applications from [Assignment: organization-defined systems or system components] in [Assignment: organization-defined secure work areas]. [NIST 800-53 SC-15(3)]
+
+Acme Health shall provide an explicit indication of current participants in [Assignment: organization-defined online meetings and teleconferences]. [NIST 800-53 SC-15(4)]
+
+### 10.3 Session Authenticity
+
+Acme Health shall protect the authenticity of communications sessions. [NIST 800-53 SC-23 Moderate, High | ARC-AMPE SC-23]
+
+Acme Health shall invalidate session identifiers upon user logout or other session termination. [NIST 800-53 SC-23(1)]
+
+Acme Health shall generate a unique session identifier for each session with [Assignment: organization-defined randomness requirements] and recognize only session identifiers that are system-generated. [NIST 800-53 SC-23(3)]
+
+Acme Health shall only allow the use of [Assignment: organization-defined certificated authorities] for verification of the establishment of protected sessions. [NIST 800-53 SC-23(5)]
+
+## 11. Name Resolution and Trustworthy Communications
+
+### 11.1 Authoritative Name Resolution
+
+Acme Health shall provide additional data origin authentication and integrity verification artifacts along with the authoritative name resolution data the system returns in response to external name/address resolution queries. [NIST 800-53 SC-20 Low, Moderate, High | ARC-AMPE SC-20]
+
+Acme Health shall provide the means to indicate the security status of child zones and (if the child supports secure resolution services) to enable verification of a chain of trust among parent and child domains, when operating as part of a distributed, hierarchical namespace. [NIST 800-53 SC-20 Low, Moderate, High | ARC-AMPE SC-20]
+
+Acme Health shall provide data origin and integrity protection artifacts for internal name/address resolution queries. [NIST 800-53 SC-20(2)]
+
+### 11.2 Recursive Name Resolution
+
+Acme Health shall request and perform data origin authentication and data integrity verification on the name/address resolution responses the system receives from authoritative sources. [NIST 800-53 SC-21 Low, Moderate, High | ARC-AMPE SC-21]
+
+### 11.3 Architecture and Provisioning
+
+Acme Health shall ensure the systems that collectively provide name/address resolution service for an organization are fault-tolerant and implement internal and external role separation. [NIST 800-53 SC-22 Low, Moderate, High | ARC-AMPE SC-22]
+
+## 12. Fail-Safe Operations
+
+Acme Health shall fail to a [Assignment: organization-defined known system state] for the following failures on the indicated components while preserving [Assignment: organization-defined system state information] in failure: [Assignment: organization-defined types of system failures on system components]. [NIST 800-53 SC-24 High]
+
+## 13. Process Isolation
+
+### 13.1 Execution Domain Separation
+
+Acme Health shall maintain a separate execution domain for each executing system process. [NIST 800-53 SC-39 Low, Moderate, High | ARC-AMPE SC-39]
+
+Acme Health shall implement hardware separation mechanisms to facilitate process isolation. [NIST 800-53 SC-39(1)]
+
+Acme Health shall maintain a separate execution domain for each thread in [Assignment: organization-defined multi-threaded processing]. [NIST 800-53 SC-39(2)]
+
+## 14. Roles and Responsibilities
+
+The implementation and maintenance of controls specified in this standard shall be the responsibility of designated personnel as defined in relevant organizational policies, with oversight by the [Assignment: organization-defined official] designated under Section 2.1.
+
+The Chief Information Officer (CIO), Chief Information Security Officer (CISO), and senior privacy official maintain authority for terminating internal system connections and interconnections as specified in Sections 3.5 and 5.3.
+
+## 15. Exceptions and Waivers
+
+Any exceptions to the requirements of this standard must be documented with supporting mission or business need and duration of need as specified in the applicable control requirements. Exceptions shall be reviewed at the frequencies specified in this standard and removed when no longer supported by an explicit mission or business need.
+
+## 16. Review and Maintenance
+
+This standard shall be reviewed and updated in accordance with the frequencies specified in Section 2.2 and following organizational events as defined in organizational policy.
+
+---
+
+**Document Control:**
+
+- **Document Owner:** [Assignment: organization-defined official per Section 2.1]
+- **Classification:** Internal Use Only
+- **Next Review Date:** [Review Frequency per Section 2.2]

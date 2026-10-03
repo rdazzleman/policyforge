@@ -1,0 +1,226 @@
+# Publishing the content tree, driven by the repository.
+#
+# Three jobs, two privilege levels.
+#
+# `check` runs on every pull request with no credentials at all, which is
+# what lets it run on a fork's PR — exactly where you want a gate. It is the
+# one that can block a merge.
+#
+# `publish` and `publish-wiki` run only after a merge to the default
+# branch, only from this repository, and only when the tree actually
+# changed. Each needs a credential, so each lives behind its own
+# environment: a workflow that could write to a live wiki from an untrusted
+# pull request would be a supply chain problem, not a convenience. The
+# `pull_request` trigger above reaches `check` and nothing else, and every
+# writing job states `github.event_name == 'push'` itself rather than
+# relying on that — a trigger added later must not quietly hand a fork a
+# write path.
+name: content
+
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - "config/topics.yaml"
+      - ".github/workflows/content.yml"
+  # This workflow file is in the `pull_request` paths above and deliberately
+  # NOT in the `push` paths below. The asymmetry is a decision, not an
+  # oversight, so it is written down here rather than rediscovered:
+  #
+  # A push event evaluates the workflow as it exists in the pushed commit. If
+  # an edit to this file could trigger a push run, one commit could both
+  # weaken a fence and act under that fence in the same run. Today it cannot:
+  # a commit that changes the guard reaches main inert, and the guarded action
+  # only happens when content changes afterwards — a second change with its
+  # own review. That is the same escalation shape the publish job's comment
+  # already refuses for pull requests from forks.
+  #
+  # The trigger also follows the content rather than the machinery. A publish
+  # fired by a workflow edit would write pages nobody touched, and a wiki that
+  # churns for reasons nobody can name is a drift report people stop reading.
+  #
+  # What it costs, stated plainly: a merged change to this file is exercised
+  # on pull requests and then sits unexercised on the push path until the next
+  # commit touching docs/ or config/topics.yaml. There is no way to exercise
+  # the publish path on demand without weakening the fence — `workflow_dispatch`
+  # would not do it, since both publish jobs test `event_name == 'push'` and
+  # would skip; reaching them would mean widening that condition, which is a
+  # manually triggerable write path holding live credentials. We are choosing
+  # the fence and accepting the gap.
+  #
+  # Reopen this before the first real publish, not after: the day
+  # `CONFLUENCE_HOST` or `WIKI_REPOSITORY` is set, a broken workflow edit stops
+  # being inert and starts failing while holding credentials.
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "config/topics.yaml"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: check the content tree
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install project
+        run: |
+          # Hashed, as in ci.yml. The publish job holds the Confluence token,
+          # which makes it the job where a fresh resolve matters most.
+          pip install --require-hashes -r requirements/ci.txt
+          pip install --no-deps -e .
+
+      # No credentials, no network, no LLM. Errors fail the build: two files
+      # claiming one page, a link to a document that isn't there, a
+      # `confluence:` block with no space. Missing owners stay warnings —
+      # add --strict once the tree has finished migrating.
+      - name: policyforge check
+        run: policyforge check --content-dir docs
+
+  publish:
+    name: publish to Confluence
+    needs: check
+    # Only where a wiki is actually configured. This repository publishes
+    # nowhere: the `confluence` environment has no CONFLUENCE_HOST and no
+    # credentials, so every push touching docs/ failed at the Plan step with
+    # "No Confluence host" — the red job people learn to scroll past, which
+    # this project's own documents warn about twice. It is a fork's or an
+    # adopter's job to point this at their wiki.
+    #
+    # **Not a fork, rather than a named repository.** This read
+    # `github.repository == 'rdazzlebot/policyforge'` until the repository
+    # was transferred to `rdazzleman` (#244). A string comparison is not
+    # redirected, so from the transfer on it was false on every run and
+    # the job could never publish -- invisibly, because it also skips
+    # while no host is set. What keeps an untrusted pull request away from
+    # the token is `event_name == 'push'`: a fork's pull request is never a
+    # push here. The fork test only stops a fork's own pushes, and names no
+    # owner that can move again.
+    #
+    # **Publishing is off until `CONFLUENCE_HOST` is set.** A green run of
+    # this workflow with the job skipped means nothing was published, not
+    # that a publish succeeded. `check` above still runs on every pull
+    # request and still gates the tree.
+    if: >-
+      github.event_name == 'push'
+      && !github.event.repository.fork
+      && vars.CONFLUENCE_HOST != ''
+    runs-on: ubuntu-latest
+    # Gate the token behind an environment so a publish can require review
+    # and so the secret is not readable by every other job in the repo.
+    environment: confluence
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install project
+        run: |
+          # Hashed, as in ci.yml. The publish job holds the Confluence token,
+          # which makes it the job where a fresh resolve matters most.
+          pip install --require-hashes -r requirements/ci.txt
+          pip install --no-deps -e .
+
+      # Always plan first, into the job log. When a publish does something
+      # surprising, the plan is the record of what it believed it was doing,
+      # and it costs one run of a command that writes nothing.
+      - name: Plan
+        env:
+          CONFLUENCE_USERNAME: ${{ secrets.CONFLUENCE_USERNAME }}
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+        run: policyforge publish --content-dir docs --host "${{ vars.CONFLUENCE_HOST }}"
+
+      # No --allow-macros, deliberately. A page whose macros this tool cannot
+      # round-trip is skipped and named in the log; publishing over it would
+      # flatten work nobody agreed to lose, and that decision belongs to a
+      # person looking at the page rather than to a workflow default.
+      #
+      # No --force either, for the same reason. A page somebody edited on the
+      # wiki since this tool last wrote it is not overwritten: it is reported
+      # as moved and fails this job. A red run is the prompt to `policyforge
+      # pull` the page, review the edit as a diff, and merge it.
+      - name: Publish
+        env:
+          CONFLUENCE_USERNAME: ${{ secrets.CONFLUENCE_USERNAME }}
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+        run: policyforge publish --content-dir docs --host "${{ vars.CONFLUENCE_HOST }}" --apply
+
+  publish-wiki:
+    name: publish to a GitHub wiki
+    needs: check
+    # The same fence as the Confluence job, for the same reason, and one
+    # more: this job pushes to a git remote, so it is the shortest path from
+    # a pull request to a write anybody can see. `github.event_name ==
+    # 'push'` is stated here and not left to the trigger list; a
+    # `pull_request_target` or a `workflow_call` added later would otherwise
+    # inherit a write path and a token.
+    #
+    # **Publishing is off until `WIKI_REPOSITORY` is set**, and a green run
+    # with this job skipped means nothing was published rather than that a
+    # publish succeeded.
+    if: >-
+      github.event_name == 'push'
+      && !github.event.repository.fork
+      && vars.WIKI_REPOSITORY != ''
+    runs-on: ubuntu-latest
+    # Its own environment, separate from `confluence`: a repository
+    # publishing to both should be able to review, restrict and rotate each
+    # destination on its own, and the wiki token is a GitHub credential
+    # where the other is an Atlassian one.
+    environment: github-wiki
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install project
+        run: |
+          pip install --require-hashes -r requirements/ci.txt
+          pip install --no-deps -e .
+
+      # The plan first, into the job log, and it carries the wiki's
+      # visibility on its first line. That line is the record of what this
+      # job believed about who can read the pages it was about to write.
+      - name: Plan
+        env:
+          # `--token-env` names the variable; the token itself only ever
+          # lives in the environment below, and reaches git through
+          # GIT_CONFIG_* rather than any command line.
+          #
+          # A token from the environment's secrets, never the workflow's
+          # default GITHUB_TOKEN: that one is scoped to this repository and
+          # minted for every run, including runs this job should have no
+          # part in. A wiki publish should carry a credential somebody
+          # granted for publishing to that wiki.
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
+        run: >-
+          policyforge publish --content-dir docs --target github-wiki
+          --repository "${{ vars.WIKI_REPOSITORY }}" --token-env WIKI_TOKEN
+
+      # No --force and no --allow-macros, as above. No --allow-public
+      # either, and that one is not a default to change lightly: without it
+      # this job refuses a wiki that is public, or whose visibility could
+      # not be determined. A repository that means to publish policy to the
+      # world adds the flag here deliberately — and licensed catalog content
+      # is refused whether or not it is added.
+      - name: Publish
+        env:
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
+        run: >-
+          policyforge publish --content-dir docs --target github-wiki
+          --repository "${{ vars.WIKI_REPOSITORY }}" --token-env WIKI_TOKEN --apply

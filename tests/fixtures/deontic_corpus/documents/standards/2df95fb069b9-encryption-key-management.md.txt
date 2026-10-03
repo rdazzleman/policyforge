@@ -1,0 +1,121 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.001219
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 566653b856335ab4
+  provider: litellm
+  provider_class: third-party
+---
+
+# Encryption & Key Management Standard
+
+## 1. Purpose
+
+This Standard establishes the requirements for the use of cryptography and the management of cryptographic keys within Example Org. It ensures that cryptographic controls protecting organizational information — including key generation, distribution, storage, access, and destruction — are implemented consistently and in accordance with the frameworks cited throughout this document.
+
+## 2. Scope
+
+This Standard applies to all systems, applications, services, and media owned or operated by Example Org in which cryptography is employed, and to all personnel and service providers involved in the handling of cryptographic keys or encrypted information.
+
+## 3. Roles and Responsibilities
+
+Platform Security owns this process end to end, including key lifecycle management, cryptographic configuration standards, certificate and trust store governance, and the review of evidence produced under this Standard. Other teams (e.g., system owners, operations) may participate in individual implementation steps, but accountability for this process and its handoffs rests with Platform Security.
+
+## 4. Cryptographic Key Establishment and Management
+
+### 4.1 Key Management Requirements
+
+Platform Security must establish and manage cryptographic keys whenever cryptography is employed within the system, in accordance with organization-defined key management requirements. These key management requirements must cover key generation, distribution, storage, access, and destruction. [NIST 800-53 SC-12 Low, Moderate, High | ARC-AMPE SC-12 AE Mandatory]
+
+### 4.2 Key Loss and Recovery
+
+Platform Security must maintain availability of information in the event of the loss of cryptographic keys by users. [NIST 800-53 SC-12(1) High]
+
+### 4.3 Symmetric Key Management
+
+Platform Security must produce, control, and distribute symmetric cryptographic keys using [Selection: NIST FIPS-validated; NSA-approved] key management technology and processes. [NIST 800-53 SC-12(2)]
+
+### 4.4 Asymmetric Key Management
+
+Platform Security must produce, control, and distribute asymmetric cryptographic keys using [Selection: NSA-approved key management technology and processes; prepositioned keying material; DoD-approved or DoD-issued Medium Assurance PKI certificates; DoD-approved or DoD-issued Medium Hardware Assurance PKI certificates and hardware security tokens that protect the user's private key; certificates issued in accordance with organization-defined requirements]. [NIST 800-53 SC-12(3)]
+
+### 4.5 Keys Held by External Service Providers
+
+Platform Security must maintain physical control of cryptographic keys when stored information is encrypted by external service providers. [NIST 800-53 SC-12(6)]
+
+### 4.6 Protected Key Storage
+
+Platform Security must provide protected storage for cryptographic keys using \[Selection: [Assignment: organization-defined safeguards]; hardware-protected key store\]. [NIST 800-53 SC-28(3)]
+
+## 5. Cryptographic Use and Standards
+
+### 5.1 Cryptographic Uses
+
+Platform Security must determine the organization-defined cryptographic uses and implement the types of cryptography required for each specified cryptographic use. [NIST 800-53 SC-13 Low, Moderate, High | FedRAMP SC-13]
+
+### 5.2 Minimum Cryptographic Strength
+
+Cryptography implemented under this Standard must be, at a minimum, the latest published FIPS 140-compliant cryptography (FIPS 140-2 modules may remain active until September 21, 2026), in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards. [ARC-AMPE SC-13 AE Mandatory]
+
+### 5.3 FedRAMP Cryptographic Module Use
+
+Platform Security must follow the FedRAMP Cryptographic Module Use rules. [FedRAMP SC-13]
+
+### 5.4 Validated Encryption Products
+
+Platform Security must use encryption products that have been validated under the Cryptographic Module Validation Program (CMVP) to confirm compliance with the latest published FIPS 140-compliant encryption standards. [ARC-AMPE SC-12 AE Mandatory]
+
+## 6. Data Encryption Requirements
+
+### 6.1 Encryption of Sensitive Information
+
+All data containing sensitive information (e.g., Personally Identifiable Information [PII], proprietary, financial, and legal information) must be encrypted, wherever it resides in the system, using the latest published FIPS 140-compliant encryption standards. [ARC-AMPE SC-13 AE Mandatory | ARC-AMPE SC-28 AE Mandatory | ARC-AMPE SC-28(1) AE Mandatory]
+
+### 6.2 Information at Rest
+
+Platform Security must protect the [Selection (one or more): confidentiality; integrity] of the [Assignment: organization-defined information at rest]. ARC-AMPE requires protection of the confidentiality and integrity of all information at rest. [NIST 800-53 SC-28 Moderate, High | ARC-AMPE SC-28 AE Mandatory]
+
+### 6.3 Cryptographic Protection of Information at Rest
+
+Platform Security must implement cryptographic mechanisms to prevent unauthorized disclosure and modification of organization-defined information at rest on organization-defined system components or media. ARC-AMPE requires that the information protected under this section include, but not be limited to, PII and proprietary, financial, and legal information, encrypted using the latest published FIPS 140-compliant encryption standards. [NIST 800-53 SC-28(1) Moderate, High | ARC-AMPE SC-28(1) AE Mandatory]
+
+### 6.4 Offline Storage
+
+Platform Security must remove [Assignment: organization-defined information] from online storage and store it offline in a secure location. [NIST 800-53 SC-28(2)]
+
+### 6.5 ePHI Transmission Security
+
+- Platform Security must implement technical security measures to guard against unauthorized access to electronic protected health information (ePHI) that is being transmitted over an electronic communications network. [HIPAA 164.312(e)(1)]
+- Platform Security must implement security measures to ensure that electronically transmitted ePHI is not improperly modified without detection until disposed of. [HIPAA 164.312(e)(2)(i) Addressable]
+
+### 6.6 ePHI Encryption Mechanisms
+
+- Platform Security must implement a mechanism to encrypt ePHI whenever deemed appropriate. [HIPAA 164.312(e)(2)(ii) Addressable]
+- Platform Security must implement a mechanism to encrypt and decrypt ePHI. [HIPAA 164.312(a)(2)(iv) Addressable]
+
+## 7. Public Key Certificates and Trust Stores
+
+### 7.1 Certificate Issuance and Acquisition
+
+Public key certificates must be issued under an organization-defined certificate policy, or obtained from an approved service provider, under the governance of Platform Security. [NIST 800-53 SC-17 Moderate, High | ARC-AMPE SC-17 AE Mandatory]
+
+### 7.2 Trust Anchors
+
+Platform Security must include only approved trust anchors in trust stores or certificate stores managed by the organization. [NIST 800-53 SC-17 Moderate, High | ARC-AMPE SC-17 AE Mandatory]
+
+## 8. Evidence, Records, and Review
+
+Platform Security must maintain the following records as evidence of compliance with this Standard:
+
+- **Key inventory and rotation log** — recording the cryptographic keys in use, their lifecycle state, and rotation activity performed under Section 4.
+- **Encryption-at-rest and in-transit configuration** — recording the cryptographic configuration deployed under Sections 5, 6, and 7.
+
+Platform Security must review these artifacts annually to confirm that key management activity and cryptographic configurations remain in conformance with this Standard.
+
+## 9. Exceptions
+
+Any exception to this Standard must be documented, risk-assessed, and approved by Platform Security, and must be recorded alongside the artifacts identified in Section 8.

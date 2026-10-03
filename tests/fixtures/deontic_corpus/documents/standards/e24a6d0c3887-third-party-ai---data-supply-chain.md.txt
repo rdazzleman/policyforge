@@ -1,0 +1,31 @@
+# Acme Health Third-Party AI System Risk Management Standard
+
+## 1. Purpose and Scope
+
+This standard establishes requirements for managing risks and benefits associated with third-party artificial intelligence (AI) software, data, and systems within Acme Health.
+
+This standard applies to all AI systems that incorporate third-party components, including third-party AI software, third-party data, pre-trained models, and AI system components obtained through the supply chain.
+
+## 2. Governance and Policy
+
+2.1. Acme Health must establish and maintain policies and procedures to address AI risks and benefits arising from third-party software and data and other supply chain issues, including risks associated with third-party entities and infringement of third-party intellectual property or other rights. [NIST AI RMF Govern 6 | NIST AI RMF Govern 6.1]
+
+## 3. Risk Mapping and Assessment
+
+3.1. Risks and benefits must be mapped for all components of the AI system including third-party software and data. [NIST AI RMF Map 4]
+
+3.2. Approaches for mapping AI technology and legal risks of AI system components – including the use of third-party data or software – must be in place, followed, and documented, including documentation of risks of infringement of a third party's intellectual property or other rights. [NIST AI RMF Map 4.1]
+
+## 4. Risk Controls
+
+4.1. Internal risk controls for components of the AI system, including third-party AI technologies, must be identified and documented. [NIST AI RMF Map 4.2]
+
+## 5. Monitoring and Maintenance
+
+5.1. AI risks and benefits from third-party resources must be regularly monitored, and risk controls must be applied and documented. [NIST AI RMF Manage 3 | NIST AI RMF Manage 3.1]
+
+5.2. Pre-trained models which are used for development must be monitored as part of AI system regular monitoring and maintenance. [NIST AI RMF Manage 3.2]
+
+## 6. Contingency Planning
+
+6.1. Contingency processes must be in place to handle failures or incidents in third-party data or AI systems deemed to be high-risk. [NIST AI RMF Govern 6.2]

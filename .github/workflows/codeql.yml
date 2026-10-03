@@ -1,0 +1,45 @@
+name: codeql
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    # Weekly, independent of pushes — catches newly-published CodeQL query
+    # coverage (or a newly disclosed pattern) against code that hasn't
+    # otherwise changed.
+    - cron: "17 3 * * 1"
+
+# Read-only by default; the one job that uploads results asks for that
+# itself (Scorecard's Token-Permissions check).
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    # GitHub's code scanning only: the SARIF upload needs GitHub's API. On
+    # the team's Forgejo this job failed on the push to main and on every
+    # scheduled run (#7), so it runs on github.com alone, where it is
+    # unchanged. 80's scope ruling on #30: GitHub CI, this included, must be
+    # green on the mirrored release head before any main merge.
+    if: ${{ github.server_url == 'https://github.com' }}
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write  # required to upload results to the Security tab
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@1c5b675653bb5c22dbe9b12b556ec555138e09fd  # v4.38.1
+        with:
+          languages: python
+          # The default suite is tuned for a low false-positive rate on huge
+          # codebases. This repo is small enough to absorb the extra noise,
+          # and it handles compliance data and API credentials, so the wider
+          # net is worth it.
+          queries: security-extended
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@1c5b675653bb5c22dbe9b12b556ec555138e09fd  # v4.38.1

@@ -1,0 +1,21 @@
+id: cfr-42-part-2-sud-records
+name: Substance Use Disorder Patient Records (42 CFR Part 2)
+framework_id: cfr-42-part-2-sud-records
+licence: public-domain
+source: eCFR public API, via policyforge etl-part2
+notes: A US government work, so freely redistributable. Bundled with this project and safe
+  to commit to any repository. Only TWO of Part 2's thirty-eight sections are here - 2.16
+  (security for records and notification of breaches) and 2.19 (disposition of records by
+  discontinued programs). The rest of the part is conduct - when a disclosure is permitted,
+  what a consent must contain, what a court must find - and citing a conduct rule as a control
+  asserts a safeguard exists where the regulation says only that a disclosure was lawful.
+  The thinness is the correct answer rather than a parse failure. Read README.md for the test
+  that decided it and for the sections it rejected.
+source_ref: '2026-09-17'
+source_url: https://www.ecfr.gov/api/versioner/v1/full/2026-09-17/title-42.xml?part=2
+content_sha256: 203411ee34190d5b2288e5d4d9b5965844f7cd6d37ec03b933a69e10104f6f9d
+fetched_at: '2026-09-19'
+# The unit the regulation names as a requirement, for document reach (80's
+# ruling on #423): the section. 2.16 "Security for records ..." with its
+# paragraphs, so a change to 2.16(a) reaches a document citing 2.16(b).
+family: section

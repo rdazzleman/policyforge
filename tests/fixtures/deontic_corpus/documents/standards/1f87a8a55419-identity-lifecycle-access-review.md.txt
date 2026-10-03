@@ -1,0 +1,294 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.003034
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - fdab27df39ff3c04
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Identity Lifecycle & Access Review Standard
+
+**Document Owner:** IAM Engineering
+**Review Cycle:** At least every one (1) year, and following the events defined in Section 2
+**Applicability:** All Example Org personnel, contractors, and systems that store, process, or transmit organizational information, Personally Identifiable Information (PII), or electronic protected health information (ePHI)
+
+## 1. Purpose, Scope, Roles, and Responsibilities
+
+### 1.1 Access Control Policy
+
+Example Org shall develop, document, and disseminate to applicable personnel and roles an access control policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and that is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines. IAM Engineering shall develop and maintain procedures to facilitate implementation of the policy and associated access controls. The policy shall be maintained at the organization level. [NIST 800-53 AC-1 (Low, Moderate, High) | ARC-AMPE AC-1 | HIPAA 164.308(a)(4)(i)]
+
+IAM Engineering shall designate an official to manage the development, documentation, and dissemination of the access control policy and procedures. [NIST 800-53 AC-1 (Low, Moderate, High) | ARC-AMPE AC-1]
+
+### 1.2 Roles
+
+IAM Engineering is accountable for the identity lifecycle and access review process end to end, including all handoffs described in this Standard. Other teams — including Human Resources, System Owners, and the Authorizing Official — participate in individual steps as identified below.
+
+IAM Engineering shall assign account managers for the systems within scope of this Standard. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+## 2. Policy and Documentation Maintenance
+
+IAM Engineering shall review and update the access control policy and procedures at least every one (1) year and following the following events: assessment or audit findings; security or privacy incidents; and changes to applicable laws, including privacy laws, Executive Orders, directives, regulations, policies, standards, and guidelines. [NIST 800-53 AC-1 (Low, Moderate, High) | ARC-AMPE AC-1]
+
+IAM Engineering shall actively monitor for changes to applicable privacy laws, regulations, and overarching policy that affect access control policies, and shall ensure organization, mission/business, and system access control policies remain effective. [ARC-AMPE AC-1]
+
+IAM Engineering shall ensure access control policies and procedures support cybersecurity and privacy safeguards to the greatest extent feasible throughout the system's life cycle and the life cycle of the information on that system. [ARC-AMPE AC-1]
+
+IAM Engineering shall maintain the policies and procedures implemented to comply with the security requirements in written (which may be electronic) form, and shall maintain a written (which may be electronic) record of any action, activity, or assessment required to be documented. [HIPAA 164.316(b)(1) (Required)]
+
+IAM Engineering shall retain required documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later. [HIPAA 164.316(b)(2)(i) (Required)]
+
+IAM Engineering shall make documentation available to those persons responsible for implementing the procedures to which the documentation pertains. [HIPAA 164.316(b)(2)(ii) (Required)]
+
+IAM Engineering shall review documentation periodically and update it as needed in response to environmental or operational changes affecting the security of electronic protected health information. [HIPAA 164.316(b)(2)(iii) (Required)]
+
+## 3. Account Management
+
+### 3.1 Account Types and Criteria
+
+IAM Engineering shall define and document the types of accounts allowed and specifically prohibited for use within the system. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+IAM Engineering shall require organization-defined prerequisites and criteria for group and role membership. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+IAM Engineering shall specify the authorized users of the system, group and role membership, and the access authorizations (i.e., privileges) and required attributes for each account. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+### 3.2 Account Creation and Administration
+
+IAM Engineering shall require approvals by organization-defined personnel or roles for requests to create accounts. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+IAM Engineering shall create, enable, modify, disable, and remove accounts in accordance with organization-defined policy, procedures, prerequisites, and criteria. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+IAM Engineering shall authorize access to the system based on a valid access authorization, intended system usage, and other required attributes. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+IAM Engineering shall implement centralized control of user access administrator functions. [ARC-AMPE AC-2]
+
+IAM Engineering shall remove or disable default user accounts and rename active default accounts. [ARC-AMPE AC-2]
+
+IAM Engineering shall establish and implement a process for changing shared or group account authenticators (if deployed) when individuals are removed from the group. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+IAM Engineering shall permit the use of shared and group accounts only when organization-defined conditions are met; under ARC-AMPE, these conditions are a documented and approved business need (approved in advance by the Authorizing Official) and a system security plan that describes how the accounts are used and includes compensating processes and procedures to uniquely attribute account user activities. [NIST 800-53 AC-2(9) | ARC-AMPE AC-2(9)]
+
+### 3.3 Account Monitoring
+
+IAM Engineering shall monitor the use of accounts. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+IAM Engineering shall monitor system accounts for atypical usage (such as access at times of day or from locations inconsistent with normal usage patterns) and report atypical usage to organization-defined personnel or roles and, if necessary, any applicable incident response team(s). [NIST 800-53 AC-2(12) | ARC-AMPE AC-2(12)]
+
+### 3.4 Account Change Notifications
+
+IAM Engineering shall notify account managers and organization-defined personnel or roles when accounts are no longer required, when users are terminated or transferred, and when system usage or need-to-know changes for an individual, within the following time periods:
+
+| Event                                                  | Notification Time Period                      |
+| ------------------------------------------------------ | --------------------------------------------- |
+| Accounts no longer required                            | Within twenty-four (24) hours [ARC-AMPE AC-2] |
+| Users terminated or transferred                        | Within eight (8) hours [ARC-AMPE AC-2]        |
+| System usage or need-to-know changes for an individual | Within eight (8) hours [ARC-AMPE AC-2]        |
+
+[NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+### 3.5 Account Compliance Review
+
+IAM Engineering shall review accounts for compliance with account management requirements at least every ninety (90) days for all systems. This review shall be executed as part of the quarterly access review process defined in Section 12. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+### 3.6 Process Alignment and Contractor Access
+
+IAM Engineering shall align account management processes with personnel termination and transfer processes. [NIST 800-53 AC-2 (Low, Moderate, High) | ARC-AMPE AC-2]
+
+IAM Engineering shall regulate the access provided to contractors and define security requirements for contractors. [ARC-AMPE AC-2]
+
+IAM Engineering shall prohibit the use of guest, anonymous, and shared accounts for providing access to Personally Identifiable Information (PII), and shall provide access only to the minimum amount of PII necessary for users to perform their duties. [ARC-AMPE AC-2]
+
+### 3.7 Workforce Access to ePHI
+
+IAM Engineering shall implement policies and procedures to ensure that all members of the workforce have appropriate access to electronic protected health information and to prevent workforce members who do not have access from obtaining access to electronic protected health information. [HIPAA 164.308(a)(3)(i)]
+
+IAM Engineering shall implement procedures for the authorization and/or supervision of workforce members who work with electronic protected health information or in locations where it might be accessed. [HIPAA 164.308(a)(3)(ii)(A) (Addressable)]
+
+IAM Engineering shall implement procedures to determine that a workforce member's access to electronic protected health information is appropriate. [HIPAA 164.308(a)(3)(ii)(B) (Addressable)]
+
+IAM Engineering shall implement policies and procedures for granting access to electronic protected health information, for example through access to a workstation, transaction, program, process, or other mechanism. [HIPAA 164.308(a)(4)(ii)(B) (Addressable)]
+
+IAM Engineering shall implement policies and procedures that, based on the entity's access authorization policies, establish, document, review, and modify a user's right of access to a workstation, transaction, program, or process. [HIPAA 164.308(a)(4)(ii)(C) (Addressable)]
+
+If a health care clearinghouse is part of a larger organization, IAM Engineering shall implement policies and procedures that protect the electronic protected health information of the clearinghouse from unauthorized access by the larger organization. [HIPAA 164.308(a)(4)(ii)(A) (Required)]
+
+## 4. Account Management Enhancements
+
+### 4.1 Automated Account Management
+
+IAM Engineering shall support the management of system accounts using organization-defined automated mechanisms (which may include, for example, automatic notification of account managers when users are terminated or transferred, system monitoring of account usage, and notification mechanisms to report atypical account usage), implemented via the [Identity Provider]. [NIST 800-53 AC-2(1) (Moderate, High) | ARC-AMPE AC-2(1)]
+
+### 4.2 Temporary and Emergency Accounts
+
+IAM Engineering shall automatically remove or disable temporary and emergency accounts after an organization-defined time period. [NIST 800-53 AC-2(2) (Moderate, High)]
+
+IAM Engineering shall automatically disable temporary and emergency accounts after no more than ninety-six (96) hours from last use. [ARC-AMPE AC-2(2)]
+
+### 4.3 Disabled Accounts
+
+IAM Engineering shall disable accounts that have expired, are no longer associated with a user or individual, are in violation of organizational policy, or have been inactive for an organization-defined time period. [NIST 800-53 AC-2(3) (Moderate, High)]
+
+IAM Engineering shall disable non-consumer accounts within twenty-four (24) hours when the accounts have expired, are no longer associated with a user or individual, are in violation of organizational policy, or have been inactive for sixty (60) days. [ARC-AMPE AC-2(3)]
+
+### 4.4 Auditing of Account Actions
+
+IAM Engineering shall automatically audit account creation, modification, enabling, disabling, and removal actions. [NIST 800-53 AC-2(4) (Moderate, High) | ARC-AMPE AC-2(4)]
+
+### 4.5 Session Logout
+
+IAM Engineering shall require that users log out when an organization-defined time period of expected inactivity is exceeded or when otherwise described as requiring logout. [NIST 800-53 AC-2(5) (Moderate, High)]
+
+IAM Engineering shall require that users log out when the time period of inactivity will exceed twenty-four (24) hours; this is a user action required in organizational user policies and is not an automated control. [ARC-AMPE AC-2(5)]
+
+### 4.6 Privileged User Accounts
+
+IAM Engineering shall establish and administer privileged user accounts in accordance with a role-based access scheme, monitor privileged role or attribute assignments and changes to roles or attributes, and revoke access when privileged role or attribute assignments are no longer appropriate. [NIST 800-53 AC-2(7) | ARC-AMPE AC-2(7)]
+
+IAM Engineering shall establish and administer application-specific privileged user accounts in accordance with a role-based access scheme based on user responsibilities associated with application use; shall inspect administrator groups, root accounts, and other system-related accounts on demand and at least once every fourteen (14) days to ensure unauthorized accounts have not been created; and shall inspect application-specific privileged user roles every thirty (30) days. [ARC-AMPE AC-2(7)]
+
+### 4.7 Atypical Usage and Significant Risk
+
+IAM Engineering shall disable accounts of individuals within an organization-defined time period of discovery that the individual poses a significant risk. [NIST 800-53 AC-2(13) (Moderate, High)]
+
+IAM Engineering shall disable accounts of individuals within one (1) hour of discovery of an individual posing a significant risk. [ARC-AMPE AC-2(13)]
+
+## 5. Access Enforcement
+
+IAM Engineering shall enforce approved authorizations for logical access to information and system resources in accordance with applicable access control policies, using technical policies and procedures that allow access only to those persons or software programs that have been granted access rights. [NIST 800-53 AC-3 (Low, Moderate, High) | ARC-AMPE AC-3 | HIPAA 164.312(a)(1) (Required)]
+
+If encryption is used as an access control mechanism, it must meet the approved and latest published FIPS 140-compliant encryption standards. [ARC-AMPE AC-3]
+
+IAM Engineering shall configure operating system controls to disable public "read" and "write" access to all system-related files, objects, and directories that contain sensitive information. [ARC-AMPE AC-3]
+
+IAM Engineering shall protect data stored in the information system with system access controls and encrypt data residing in non-secure areas. [ARC-AMPE AC-3]
+
+When contracting with external service providers, IAM Engineering shall isolate PII, as well as software and services that receive, process, store, or transmit PII, within the service provider environment to the maximum extent possible so that other service provider customers sharing physical or virtual space cannot gain access to such data or applications. [ARC-AMPE AC-3]
+
+IAM Engineering shall enforce the revocation of access authorizations resulting from changes to the security attributes of subjects and objects based on organization-defined rules governing the timing of revocations ([Revocation Timing Rules]). [NIST 800-53 AC-3(8) | ARC-AMPE AC-3(8)]
+
+IAM Engineering shall release information outside of the system only if the receiving external organization (such as a department, agency, or commercial entity not managed by the organization) provides information security and privacy safeguards commensurate with those implemented by the organization, and organization-defined controls are used to validate the appropriateness of the information designated for release. [NIST 800-53 AC-3(9) | ARC-AMPE AC-3(9)]
+
+IAM Engineering shall provide organization-defined mechanisms (including individual authentication and identification, accounting of disclosures, notice of privacy practices, request forms and application interfaces, and other mechanisms developed in consultation with the senior privacy official and legal counsel) enabling individuals to access their PII/PHI elements defined in applicable security/privacy plans, in a readable form and format, consistent with published policies, procedures, and applicable federal and state privacy requirements for processing access requests. [NIST 800-53 AC-3(14) | ARC-AMPE AC-3(14)]
+
+## 6. Workstation Use
+
+IAM Engineering shall implement policies and procedures that specify the proper functions to be performed, the manner in which those functions are to be performed, and the physical attributes of the surroundings of a specific workstation or class of workstations that can access electronic protected health information. [HIPAA 164.310(b)]
+
+## 7. Separation of Duties
+
+IAM Engineering shall identify and document the organization-defined duties of individuals requiring separation, and define system access authorizations to support separation of duties. [NIST 800-53 AC-5 (Moderate, High) | ARC-AMPE AC-5]
+
+IAM Engineering shall divide critical mission functions and information system support functions (including separating information system testing functions such as user acceptance, quality assurance, and information security from production functions) among separate individuals or groups; shall ensure an independent entity — not the Business Owner, ISSO, System Developer(s)/Maintainer(s), or System Administrator(s) responsible for the system — conducts information security testing; and shall ensure audit functions are not performed by security personnel responsible for administering access control. [ARC-AMPE AC-5]
+
+## 8. Least Privilege
+
+### 8.1 Principle
+
+IAM Engineering shall employ the principle of least privilege, allowing only authorized accesses for users (or processes acting on behalf of users) that are necessary to accomplish assigned organizational tasks. [NIST 800-53 AC-6 (Moderate, High) | FedRAMP AC-6 | ARC-AMPE AC-6]
+
+IAM Engineering shall disable all file system access not explicitly required for system, application, and administrator functionality, and shall ensure only authorized users can access files, directories, drives, workstations, servers, network shares, ports, protocols, and services expressly required for the performance of job duties. [ARC-AMPE AC-6]
+
+IAM Engineering shall provide contractors with minimal system and physical access, shall require them to agree to and support organizational security requirements, and shall assess contractors' ability to adhere to and support the organization's security policy during the contractor selection process. [ARC-AMPE AC-6]
+
+IAM Engineering shall restrict the use of database management utilities to authorized database administrators, shall prevent users from accessing database data files at the logical data view, field, or field-value level, and shall implement table-level access control. [ARC-AMPE AC-6]
+
+IAM Engineering shall disable all system and removable media boot access unless explicitly authorized by the organization-defined Authorizing Official for compelling operational needs; if authorized, boot access must be password protected. [ARC-AMPE AC-6]
+
+### 8.2 Access to Security Functions
+
+IAM Engineering shall authorize access for organization-defined individuals or roles to security functions (deployed in hardware, software, and firmware) and to security-relevant information; under FedRAMP, this covers all functions not publicly accessible and all security-relevant information not publicly available, and under ARC-AMPE includes setting/modifying audit logs and auditing behavior, boundary protection system rules, access authorizations, authentication parameters, and system configurations and parameters, with the System Owner explicitly authorizing such access for authorized personnel (e.g., security administrators, system and network administrators, system security officers, system maintenance personnel, system programmers, and other privileged users). [NIST 800-53 AC-6(1) (Moderate, High) | FedRAMP AC-6(1) | ARC-AMPE AC-6(1)]
+
+IAM Engineering shall require that users of system accounts (or roles) with access to security functions or security-relevant information use non-privileged accounts or roles when accessing nonsecurity functions; under FedRAMP this applies to all security functions, and under ARC-AMPE, if feasible, any use of privileged accounts for such functions is audited. [NIST 800-53 AC-6(2) (Moderate, High) | FedRAMP AC-6(2) | ARC-AMPE AC-6(2)]
+
+IAM Engineering shall restrict privileged accounts on the system to organization-defined personnel or roles. [NIST 800-53 AC-6(5) (Moderate, High) | ARC-AMPE AC-6(5)]
+
+### 8.3 Privilege Review
+
+IAM Engineering shall review the privileges assigned to organization-defined roles and classes at an organization-defined frequency to validate the need for such privileges, and shall reassign or remove privileges as necessary to correctly reflect organizational mission and business needs. [NIST 800-53 AC-6(7) (Moderate, High)]
+
+IAM Engineering shall review the privileges assigned to all users with privileges no less often than every ninety (90) days to validate the need for such privileges, and shall reassign or remove privileges as necessary to correctly reflect organizational mission and business needs. This review shall be executed as part of the quarterly access review process defined in Section 12. [ARC-AMPE AC-6(7)]
+
+### 8.4 Privileged Execution Controls
+
+IAM Engineering shall prevent software from executing at higher privilege levels than the users executing the software; under FedRAMP this applies to any software except software explicitly documented. [NIST 800-53 AC-6(8) | FedRAMP AC-6(8)]
+
+IAM Engineering shall log the execution of privileged functions. [NIST 800-53 AC-6(9) (Moderate, High) | ARC-AMPE AC-6(9)]
+
+IAM Engineering shall prevent non-privileged users from executing privileged functions. [NIST 800-53 AC-6(10) (Moderate, High) | ARC-AMPE AC-6(10)]
+
+## 9. Identification and Authentication
+
+### 9.1 Publicly Accessible Actions
+
+IAM Engineering shall identify the organization-defined user actions that can be performed on the system without identification or authentication, consistent with organizational mission and business functions, and shall document and provide supporting rationale in the system security plan for those user actions not requiring identification or authentication. [NIST 800-53 AC-14 (Low, Moderate, High) | ARC-AMPE AC-14]
+
+### 9.2 Identifier Management
+
+IAM Engineering shall manage system identifiers by receiving authorization from organization-defined personnel or roles to assign an individual, group, role, service, or device identifier; selecting an identifier that identifies the intended individual, group, role, service, or device; and assigning the identifier to that intended party, including assigning a unique name and/or number for identifying and tracking user identity. [NIST 800-53 IA-4 (Low, Moderate, High) | FedRAMP IA-4 | ARC-AMPE IA-4 | HIPAA 164.312(a)(2)(i) (Required)]
+
+IAM Engineering shall prevent reuse of identifiers for an organization-defined time period. [NIST 800-53 IA-4 (Low, Moderate, High) | FedRAMP IA-4]
+
+IAM Engineering shall prevent reuse of identifiers for two (2) years, including ensuring previous identifier-based access authorizations (e.g., access to sensitive files or folders) are removed from the system before the identifier is reused. [ARC-AMPE IA-4]
+
+IAM Engineering shall manage individual identifiers by uniquely identifying each individual using organization-defined characteristics identifying individual status; under FedRAMP these characteristics are contractors and foreign nationals. [NIST 800-53 IA-4(4) (Moderate, High) | FedRAMP IA-4(4) | ARC-AMPE IA-4(4)]
+
+### 9.3 Person or Entity Authentication
+
+IAM Engineering shall implement procedures to verify that a person or entity seeking access to electronic protected health information is the one claimed. [HIPAA 164.312(d)]
+
+### 9.4 Identity Proofing
+
+IAM Engineering shall identity proof users who require accounts for logical access to systems based on appropriate identity assurance level requirements as specified in applicable standards and guidelines, resolve user identities to a unique individual, and collect, validate, and verify identity evidence. [NIST 800-53 IA-12 (Moderate, High) | ARC-AMPE IA-12]
+
+IAM Engineering shall identity proof all users who require logical access accounts — including non-privileged (i.e., consumer) accounts — to Identity Assurance Level 2 (IAL-2) or higher per the latest published NIST SP 800-63 Digital Identity Guidelines suite; for ACA Consumer Accounts, the Federal Data Services Hub (FDSH) Remote Identity Proofing (RIDP) Service may be used in lieu of otherwise meeting IAL-2. [ARC-AMPE IA-12]
+
+IAM Engineering shall require that the registration process to receive an account for logical access includes supervisor or sponsor authorization, for all accounts including non-privileged (i.e., consumer) accounts. [NIST 800-53 IA-12(1) | ARC-AMPE IA-12(1)]
+
+IAM Engineering shall require that evidence of individual identification be presented to the registration authority, for all accounts including non-privileged (i.e., consumer) accounts. [NIST 800-53 IA-12(2) (Moderate, High) | ARC-AMPE IA-12(2)]
+
+IAM Engineering shall require that the presented identity evidence be validated and verified through organization-approved methods of validation and verification, which under ARC-AMPE must comply with applicable agreements with CMS, for all accounts including non-privileged (i.e., consumer) accounts. [NIST 800-53 IA-12(3) (Moderate, High) | ARC-AMPE IA-12(3)]
+
+## 10. Personnel Termination
+
+### 10.1 Access Disablement
+
+Upon termination of individual employment, IAM Engineering shall disable system access within an organization-defined time period. [NIST 800-53 PS-4 (Low, Moderate, High)]
+
+Upon termination of individual employment, IAM Engineering shall disable system access within the same day as termination. [ARC-AMPE PS-4]
+
+IAM Engineering shall terminate or revoke any authenticators and credentials associated with the terminated individual. [NIST 800-53 PS-4 (Low, Moderate, High) | ARC-AMPE PS-4]
+
+IAM Engineering shall implement procedures for terminating access to electronic protected health information when the employment of, or other arrangement with, a workforce member ends, or as required by determinations made under the workforce clearance procedure. [HIPAA 164.308(a)(3)(ii)(C) (Addressable)]
+
+IAM Engineering shall execute termination actions in a timely manner — which is essential for individuals terminated for cause — and in certain situations shall consider disabling the system accounts of individuals being terminated before notifying the individuals of the termination actions. [ARC-AMPE PS-4]
+
+### 10.2 Exit Procedures
+
+IAM Engineering shall conduct exit interviews that include a discussion of information security topics; under ARC-AMPE, this discussion must address non-disclosure of information security and privacy information. [NIST 800-53 PS-4 (Low, Moderate, High) | ARC-AMPE PS-4]
+
+IAM Engineering shall retrieve all security-related organizational system-related property (including hardware authentication tokens, system administration technical manuals, keys, identification cards, and building passes) from the terminated individual. [NIST 800-53 PS-4 (Low, Moderate, High) | ARC-AMPE PS-4]
+
+IAM Engineering shall retain access to organizational information and systems formerly controlled by the terminated individual. [NIST 800-53 PS-4 (Low, Moderate, High) | ARC-AMPE PS-4]
+
+IAM Engineering shall notify terminated individuals of applicable, legally binding post-employment requirements for the protection of organizational information, and shall require terminated individuals to sign an acknowledgment of post-employment requirements as part of the organizational termination process. [NIST 800-53 PS-4(1)]
+
+### 10.3 Automated Termination Support
+
+IAM Engineering shall use organization-defined automated mechanisms to notify organization-defined personnel or roles of individual termination actions and/or disable access to system resources, implemented via the [Identity Provider] integrated with the [HR System]. [NIST 800-53 PS-4(2) (High)]
+
+## 11. Personnel Transfer and Reassignment
+
+IAM Engineering shall review and confirm the ongoing operational need for current logical and physical access authorizations to systems and facilities when individuals are reassigned or transferred to other positions within the organization. [NIST 800-53 PS-5 (Low, Moderate, High) | ARC-AMPE PS-5]
+
+IAM Engineering shall initiate organization-defined transfer or reassignment actions within an organization-defined time period following the formal transfer action. [NIST 800-53 PS-5 (Low, Moderate, High) | ARC-AMPE PS-5]
+
+IAM Engineering shall initiate reassignment actions to ensure all system accesses no longer required (e.g., need to know) are removed or disabled within twenty-four (24) hours. [ARC-AMPE PS-5]
+
+IAM Engineering shall modify access authorizations as needed to correspond with any changes in operational need due to reassignment or transfer. [NIST 800-53 PS-5 (Low, Moderate, High) | ARC-AMPE PS-5]
+
+IAM Engineering shall notify organization-defined personnel or roles within an organization-defined time period following transfer or reassignment. \[NIST 800-53 PS-5 (Low, Moderate, High) | ARC-AMPE

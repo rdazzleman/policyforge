@@ -1,0 +1,287 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.003754
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 3b75635373f50d8b
+  provider: litellm
+  provider_class: third-party
+---
+
+# System Maintenance Procedure — Example Org
+
+## Purpose
+
+This procedure provides the step-by-step operational instructions that Infrastructure Security and supporting personnel follow to schedule, authorize, perform, monitor, and record maintenance, repair, and replacement activities on Example Org systems, including on-site, off-site, and nonlocal (remote) maintenance. Executing this procedure produces the evidence artifacts this process is accountable for: **maintenance records with authorization** and **remote maintenance session logs**.
+
+## Scope
+
+This procedure is performed continuously by Infrastructure Security, which owns the process end to end, with participation from maintenance personnel, escorts, supervisors, and workforce members with access to electronic protected health information (ePHI). It applies to all organizational systems and components subject to maintenance, repair, or replacement, including facilities housing such systems and any tools used to service them.
+
+## Prerequisites
+
+- Access to the [Maintenance Management System] for scheduling, recording, and reviewing maintenance actions
+- Access to the [Ticketing System] for maintenance authorization and approval workflows
+- Access to the [Audit Log Platform]/[SIEM] for logging and reviewing nonlocal maintenance sessions
+- A current, approved copy of the *Example Org — System Maintenance Standard* and the maintenance policy maintained under this procedure
+- A current list of authorized maintenance organizations and personnel, maintained by Infrastructure Security
+- Named [Designated Policy Official] accountable for the maintenance policy and procedures
+- Access to the latest published NIST SP 800-88 (media sanitization) and NIST SP 800-63B (authenticator assurance) guidance
+- For each production system: the system's Contingency Plan, including its Recovery Time Objective (RTO), and its System Security and Privacy Plan
+- For classified systems: documented clearance, access approval, and citizenship verification records
+
+## Procedure Steps
+
+### Maintain, Disseminate, and Review the Maintenance Policy and Procedures [NIST 800-53 MA-1 | ARC-AMPE MA-1]
+
+1. Infrastructure Security develops and documents the maintenance policy, covering purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance, and aligns it with applicable laws, regulations, and organizational standards.
+1. Infrastructure Security documents the associated maintenance procedures (this document) to facilitate implementation of the policy and controls.
+1. The [Designated Policy Official] manages the development, documentation, and dissemination of the policy and procedures.
+1. Infrastructure Security disseminates the policy and procedures to all applicable personnel and roles and records dissemination in the [Ticketing System].
+1. Infrastructure Security reviews and updates the policy and procedures at least every one (1) year, per ARC-AMPE, and additionally following [Review Trigger Events] such as assessment or audit findings, security or privacy incidents, or changes to applicable laws, regulations, policies, standards, or guidelines.
+1. Infrastructure Security records each review and update as a maintenance record with authorization in the [Maintenance Management System].
+
+### Schedule, Document, and Approve All Maintenance Activities [NIST 800-53 MA-2 | ARC-AMPE MA-2]
+
+1. Infrastructure Security schedules every maintenance, repair, and replacement action in the [Maintenance Management System] in accordance with manufacturer or vendor specifications or organizational requirements.
+1. Before work begins, the requester opens a maintenance record in the [Ticketing System] containing the components involved, the scheduled date and time, and the personnel performing the work.
+1. Infrastructure Security reviews and explicitly approves the record on site or remotely, and for work performed off site or on components removed from organizational facilities.
+1. Infrastructure Security monitors the activity while it is in process, whether the system is serviced on site or removed to another location.
+1. On completion, Infrastructure Security reviews the maintenance record against the manufacturer or vendor specifications and organizational requirements before closing the ticket.
+
+### Approve and Sanitize Equipment Removed for Off-Site Maintenance [NIST 800-53 MA-2 | ARC-AMPE MA-2]
+
+1. [Authorized Approving Personnel] explicitly approves the removal of any system or component from organizational facilities for off-site maintenance, repair, or replacement, and records the approval in the [Ticketing System].
+1. Before removal, Infrastructure Security sanitizes the equipment to remove all organizational information from associated media, using sanitization methods from the latest published NIST SP 800-88.
+1. Infrastructure Security records the sanitization method used and the sanitizing individual in the maintenance record with authorization.
+
+### Verify Controls After Maintenance and Complete Maintenance Records [NIST 800-53 MA-2 | ARC-AMPE MA-2]
+
+1. After any maintenance, repair, or replacement action, Infrastructure Security identifies all potentially impacted security controls.
+1. Infrastructure Security checks each identified control to verify it is still functioning properly and records the verification result in the [Ticketing System].
+1. Infrastructure Security ensures each maintenance record includes the required maintenance-related information: date and time, description of maintenance performed, names of individuals performing it, escort name, and components removed or replaced.
+1. Infrastructure Security reviews each completed record for completeness and retains it as a maintenance record with authorization.
+
+### Document Repairs and Modifications on PII Systems and Physical Security Components [ARC-AMPE MA-2 | HIPAA 164.310(a)(2)(iv)]
+
+1. Infrastructure Security documents all repairs and modifications to system components on any system where Personally Identifiable Information (PII) is stored or accessed, in the [Maintenance Management System].
+1. Infrastructure Security documents repairs and modifications to security-related physical components of a facility — for example, hardware, walls, doors, and locks — under the facility maintenance documentation procedures.
+1. Infrastructure Security links each such record to the corresponding authorization ticket in the [Ticketing System].
+
+### Record Maintenance Actions Using Automated Mechanisms [NIST 800-53 MA-2(2)]
+
+1. Infrastructure Security schedules, conducts, and documents all maintenance, repair, and replacement actions using the [Maintenance Management System].
+1. Infrastructure Security verifies the [Maintenance Management System] produces up-to-date, accurate, and complete records of all actions requested, scheduled, in process, and completed.
+1. Infrastructure Security corrects any incomplete or inaccurate record before closing the associated action.
+
+### Approve, Control, and Review Maintenance Tools [NIST 800-53 MA-3 | ARC-AMPE MA-3]
+
+1. Infrastructure Security approves each maintenance tool before use and records the approval in the [Maintenance Management System].
+1. Infrastructure Security controls and monitors the use of all approved maintenance tools.
+1. Infrastructure Security reviews previously approved maintenance tools at least every one (1) year, per ARC-AMPE, and re-approves, updates, or revokes each tool as a result.
+
+### Sanitize Maintenance Tools Capable of Retaining Information [ARC-AMPE MA-3]
+
+1. Infrastructure Security checks every maintenance tool with information-retention capability to ensure no organizational information is saved on the tool.
+1. Infrastructure Security sanitizes each such tool using approved sanitization methods from the latest published NIST SP 800-88.
+1. Infrastructure Security records the sanitization check and result in the [Maintenance Management System].
+
+### Inspect Maintenance Tools for Unauthorized Modifications [NIST 800-53 MA-3(1) | ARC-AMPE MA-3(1)]
+
+1. Infrastructure Security inspects the maintenance tools used by maintenance personnel for improper or unauthorized modifications.
+1. If an unauthorized modification is found, Infrastructure Security removes the tool from service, records the finding in the [Ticketing System], and initiates remediation before the tool is reused.
+
+### Check Diagnostic and Test Media for Malicious Code [NIST 800-53 MA-3(2)]
+
+1. Before any media containing diagnostic or test programs is used in a system, Infrastructure Security checks the media for malicious code using the organization's approved anti-malware tooling.
+1. If malware or unauthorized changes are discovered, Infrastructure Security treats the discovery consistent with organizational policies and procedures for incident handling and escalates through the [Ticketing System].
+
+### Prevent Removal of Maintenance Equipment Containing Organizational Information [NIST 800-53 MA-3(3) | ARC-AMPE MA-3(3)]
+
+1. Before maintenance equipment leaves a facility, Infrastructure Security verifies there is no organizational information on the equipment.
+1. If organizational information is present, Infrastructure Security either sanitizes or destroys the equipment using NIST SP 800-88 methods, retains the equipment within the facility, or obtains a written exemption from [Authorized Approving Personnel] explicitly authorizing removal.
+1. For all such tools with information-retention capability, Infrastructure Security checks that no information is saved and sanitizes them per the latest published NIST SP 800-88.
+
+### Restrict Maintenance Tools to Authorized Personnel [NIST 800-53 MA-3(4)]
+
+1. Infrastructure Security restricts access to approved maintenance tools to personnel on the authorized maintenance personnel list.
+1. Infrastructure Security reviews tool access assignments against the authorized list and revokes access for any personnel no longer authorized.
+
+### Monitor Privileged Maintenance Tool Use [NIST 800-53 MA-3(5) | ARC-AMPE MA-3(5)]
+
+1. Infrastructure Security monitors all use of maintenance tools that execute with increased privilege through the [Audit Log Platform]/[SIEM].
+1. Infrastructure Security reviews the monitoring output to detect unauthorized access to information and assets that would otherwise be inaccessible to individuals as a result of the increased system privileges.
+1. Infrastructure Security escalates any detected unauthorized access through the [Ticketing System] for incident handling.
+
+### Keep Maintenance Tools Patched and Current [NIST 800-53 MA-3(6) | ARC-AMPE MA-3(6)]
+
+1. Infrastructure Security inspects maintenance tools to ensure the latest software updates and patches are installed.
+1. Infrastructure Security installs updates and patches on organizational systems to minimize vulnerabilities, to the extent possible, with minimal impact to organizational systems.
+1. Infrastructure Security records the patch status of each tool in the [Maintenance Management System].
+
+### Approve and Control Nonlocal Maintenance and Diagnostic Activities [NIST 800-53 MA-4 | ARC-AMPE MA-4]
+
+1. Infrastructure Security approves each nonlocal maintenance or diagnostic activity before it begins, recording the approval in the [Ticketing System].
+1. Infrastructure Security allows the use of nonlocal maintenance and diagnostic tools only as consistent with organizational policy and as documented in the security plan for the system being serviced.
+1. Infrastructure Security monitors the approved nonlocal activity for the duration of the session.
+
+### Authenticate Nonlocal Maintenance Sessions [NIST 800-53 MA-4 | ARC-AMPE MA-4]
+
+1. Infrastructure Security establishes each nonlocal maintenance and diagnostic session using strong authentication in accordance with the latest published NIST SP 800-63B.
+1. If password-based authentication is used during remote maintenance, the maintenance personnel change the passwords immediately following each remote maintenance service, and Infrastructure Security verifies the change.
+
+### Maintain Records of Nonlocal Maintenance [NIST 800-53 MA-4 | ARC-AMPE MA-4]
+
+1. Infrastructure Security maintains records for all nonlocal maintenance and diagnostic activities — these are the remote maintenance session logs.
+1. Infrastructure Security retains the remote maintenance session logs with the associated authorization records in the [Maintenance Management System].
+
+### Terminate Session and Network Connections After Nonlocal Maintenance [NIST 800-53 MA-4 | ARC-AMPE MA-4]
+
+1. When nonlocal maintenance is completed, the maintenance personnel terminate the session and all network connections to the system.
+1. Infrastructure Security confirms termination in the session record.
+
+### Sanitize Media Used During Remote Nonlocal Maintenance [ARC-AMPE MA-4]
+
+1. Infrastructure Security sanitizes all media used during remote nonlocal maintenance in accordance with the latest published NIST SP 800-88.
+1. Infrastructure Security records the sanitization action in the remote maintenance session log.
+
+### Log and Review Audit Events for Nonlocal Maintenance [NIST 800-53 MA-4(1) | ARC-AMPE MA-4(1)]
+
+1. Infrastructure Security configures the [Audit Log Platform]/[SIEM] to log the organization-defined audit events, as defined in the organization's formal audit policy (see AU-2), for all nonlocal maintenance and diagnostic sessions.
+1. Infrastructure Security reviews the audit records of those sessions to detect anomalous behavior.
+1. Infrastructure Security escalates any anomalies through the [Ticketing System] for incident handling.
+
+### Ensure Comparable Security for Nonlocal Maintenance Targets [NIST 800-53 MA-4(3)]
+
+1. Before nonlocal maintenance, Infrastructure Security verifies the maintenance is performed from a system implementing a security capability comparable to the system being serviced.
+1. If comparable security cannot be verified, Infrastructure Security removes the component to be serviced prior to nonlocal maintenance and sanitizes it for organizational information.
+1. After service, Infrastructure Security inspects and sanitizes the component for potentially malicious software before reconnecting it, and records the inspection in the [Maintenance Management System].
+
+### Protect Nonlocal Sessions with Replay-Resistant Authenticators and Separated Paths [NIST 800-53 MA-4(4) | ARC-AMPE MA-4(4)]
+
+1. Infrastructure Security configures nonlocal maintenance sessions to use organization-defined authenticators that are replay resistant.
+1. Infrastructure Security separates the maintenance sessions from other network sessions with the system using physically or logically separated communications paths.
+1. Infrastructure Security verifies the session separation configuration before each approved nonlocal maintenance session begins.
+
+### Approve and Notify for Each Nonlocal Maintenance Session [NIST 800-53 MA-4(5)]
+
+1. [Authorized Approving Personnel] approves each individual nonlocal maintenance session before it is established, recorded in the [Ticketing System].
+1. Infrastructure Security notifies [Notified Personnel and Roles] of the date and time of planned nonlocal maintenance before the session begins.
+
+### Encrypt Nonlocal Maintenance Communications [NIST 800-53 MA-4(6)]
+
+1. Infrastructure Security implements the organization-defined cryptographic mechanisms to protect the integrity and confidentiality of nonlocal maintenance and diagnostic communications.
+1. Infrastructure Security verifies the cryptographic protection is active on every approved nonlocal session.
+
+### Verify Termination of Nonlocal Sessions [NIST 800-53 MA-4(7) | ARC-AMPE MA-4(7)]
+
+1. After completion of each nonlocal maintenance and diagnostic session, Infrastructure Security verifies that the session and network connections have been terminated.
+1. Infrastructure Security records the termination verification in the remote maintenance session log.
+
+### Control Workforce Access to ePHI [HIPAA 164.308(a)(3)(i)]
+
+1. Infrastructure Security implements the policies and procedures of this document and the Standard to ensure all workforce members have appropriate access to electronic protected health information.
+1. Infrastructure Security verifies through access reviews that workforce members without appropriate access cannot obtain it.
+
+### Authorize Maintenance Personnel and Maintain the Authorized List [NIST 800-53 MA-5 | FedRAMP MA-5 | ARC-AMPE MA-5 | HIPAA 164.308(a)(3)(ii)(A)]
+
+1. Infrastructure Security maintains a list of authorized maintenance organizations and personnel, and updates it as authorizations are granted or revoked.
+1. Infrastructure Security executes the established process for maintenance personnel authorization, including authorization and supervision procedures for workforce members who work with ePHI or in locations where it might be accessed.
+1. Infrastructure Security records each authorization decision and its supporting basis in the [Ticketing System].
+
+### Verify Access Authorizations for Non-Escorted Maintenance Personnel [NIST 800-53 MA-5 | FedRAMP MA-5 | ARC-AMPE MA-5 | HIPAA 164.308(a)(3)(ii)(B)]
+
+1. Before any non-escorted maintenance on the system, Infrastructure Security verifies the personnel possess the required access authorizations and security credentials.
+1. Infrastructure Security applies the established procedures to determine that a workforce member's access to ePHI is appropriate before permitting non-escorted work.
+
+### Supervise and Escort Unauthorized Maintenance Personnel [NIST 800-53 MA-5 | FedRAMP MA-5 | ARC-AMPE MA-5]
+
+1. Infrastructure Security designates organizational personnel with the required access authorizations and technical competence to supervise the maintenance activities of personnel who do not possess the required authorizations.
+1. Infrastructure Security ensures supervisors are trained on supervisory and escorting responsibilities before assignment.
+1. Escorts follow the organization-established visitor logging and escort security protocols for the duration of the maintenance activity and record their names in the maintenance record.
+
+### Document Nationality Requirements for Maintenance Personnel [FedRAMP MA-5]
+
+1. Infrastructure Security clearly documents the nationality requirements — or the lack thereof — for maintenance personnel, where applicable, in the authorization record.
+1. Infrastructure Security includes the documented requirements in the list of authorized maintenance organizations and personnel.
+
+### Terminate Maintenance Access When Employment or Arrangements End [HIPAA 164.308(a)(3)(ii)(C)]
+
+1. Infrastructure Security executes the documented procedures for terminating access to ePHI when a workforce member's employment or other arrangement ends, or as required by clearance determinations.
+1. Infrastructure Security removes the individual from the authorized maintenance personnel list and verifies revocation of associated tool and system access.
+
+### Apply Escort and Sanitization Controls for Uncleared or Foreign Personnel [NIST 800-53 MA-5(1) | FedRAMP MA-5(1) | ARC-AMPE MA-5(1)]
+
+1. Infrastructure Security permits maintenance personnel who lack appropriate security clearances or are not U.S. citizens to work only when escorted and supervised during maintenance and diagnostic activities by approved organizational personnel who are fully cleared, have appropriate access authorizations, and are technically qualified.
+1. Before such maintenance begins, the escort sanitizes all volatile information storage components.
+1. The escort removes, or physically disconnects and secures, all nonvolatile storage media prior to the activity.
+1. Where a component cannot be sanitized, removed, or disconnected, Infrastructure Security develops and implements the organization-defined alternate controls identified in the System Security and Privacy Plan, and records their use in the maintenance record.
+
+### Verify Personnel Clearances on Classified Systems [NIST 800-53 MA-5(2), MA-5(3), MA-5(4)]
+
+1. Before performing maintenance or diagnostic activities on a system processing, storing, or transmitting classified information, Infrastructure Security verifies the personnel possess security clearances and formal access approvals for at least the highest classification level and for the compartments of information on the system.
+1. Infrastructure Security verifies the personnel are U.S. citizens.
+1. Foreign nationals with appropriate security clearances may conduct maintenance on classified systems only where the systems are jointly owned and operated by the United States and foreign allied governments, or owned and operated solely by foreign allied governments.
+1. Infrastructure Security confirms the approvals, consents, and operational conditions are fully documented within the applicable Memoranda of Agreements before authorizing such work.
+
+### Verify Authorizations for Personnel in Physical Proximity [NIST 800-53 MA-5(5)]
+
+1. Infrastructure Security verifies that non-escorted personnel performing maintenance activities not directly associated with the system but in its physical proximity have the required access authorizations.
+1. Personnel who cannot be verified are escorted per the escort procedures above or removed from the proximity area.
+
+### Obtain Spare Parts and Support Within the RTO [NIST 800-53 MA-6 | ARC-AMPE MA-6]
+
+1. Infrastructure Security identifies the system components for which maintenance support and spare parts must be available, per the Standard.
+1. On failure of a covered component, Infrastructure Security obtains maintenance support and/or spare parts within the applicable Recovery Time Objective (RTO) specified in the system Contingency Plan, consistent with the RTOs defined in CP-7(3) and CP-8.
+1. Infrastructure Security records the failure, the support or parts action, and the elapsed time against the RTO in the [Maintenance Management System].
+
+### Perform Preventive Maintenance on Schedule [NIST 800-53 MA-6(1) | ARC-AMPE MA-6(1)]
+
+1. Infrastructure Security schedules preventive maintenance on the organization-defined system components at the intervals derived from the applicable Recovery Time Objective (RTO) in the system Contingency Plan, consistent with CP-7(3) and CP-8.
+1. Infrastructure Security performs each scheduled preventive maintenance action and documents it as a maintenance record with authorization.
+
+### Perform and Transfer Predictive Maintenance [NIST 800-53 MA-6(2), MA-6(3)]
+
+1. Infrastructure Security performs predictive maintenance on the organization-defined system components at the intervals defined in the Standard.
+1. Infrastructure Security documents each predictive maintenance action in the [Maintenance Management System].
+1. Infrastructure Security transfers the predictive maintenance data to the [Maintenance Management System] using the organization's defined automated mechanisms, and verifies the transfer is complete and accurate.
+
+### Limit Physical Access to Systems and Facilities [HIPAA 164.310(a)(1)]
+
+1. Infrastructure Security implements the physical access controls of this document and the Standard to limit access to electronic information systems and the facilities in which they are housed.
+1. Infrastructure Security ensures properly authorized access is permitted, using the facility access mechanisms operated with the [Facilities/Physical Security Team].
+
+### Enable Emergency Facility Access for Recovery Operations [HIPAA 164.310(a)(2)(i)]
+
+1. Infrastructure Security establishes, and implements as needed, the procedures that allow facility access in support of restoration of lost data under the disaster recovery plan and emergency mode operations plan.
+1. Infrastructure Security validates the emergency access procedures during contingency testing and records the validation in the [Ticketing System].
+
+### Safeguard Facilities and Equipment from Unauthorized Physical Access, Tampering, and Theft [HIPAA 164.310(a)(2)(ii)]
+
+1. Infrastructure Security implements the policies and procedures of the Standard to safeguard the facility and the equipment therein from unauthorized physical access, tampering, and theft.
+1. Infrastructure Security coordinates with the [Facilities/Physical Security Team] on any detected tampering or theft and escalates through the [Ticketing System] for incident handling.
+
+### Control and Validate Role-Based Facility and Program Access [HIPAA 164.310(a)(2)(iii)]
+
+1. Infrastructure Security implements the procedures that control and validate a person's access to facilities based on their role or function.
+1. Infrastructure Security applies the visitor control procedures, including visitor logging and escort requirements, to all visitors entering facilities housing systems or ePHI.
+1. Infrastructure Security controls access to software programs for testing and revision, restricting program modification to authorized personnel.
+
+### Maintain, Retain, and Make Available Documentation [HIPAA 164.316(b)]
+
+1. Infrastructure Security maintains all policies and procedures implemented to comply with the rule in written (which may be electronic) form.
+1. Infrastructure Security maintains a written (which may be electronic) record of every action, activity, or assessment required to be documented under this procedure, including the maintenance records with authorization and remote maintenance session logs.
+1. Infrastructure Security retains the required documentation for 6 years from the date of its creation or the date when it last was in effect, whichever is later.
+1. Infrastructure Security makes the documentation available to the persons responsible for implementing the procedures to which it pertains.
+1. Infrastructure Security reviews the documentation periodically at [Review Frequency] and updates it as needed in response to environmental or operational changes affecting the security of ePHI.
+
+## Roles & Responsibilities
+
+Infrastructure Security is authorized and accountable to perform every step of this procedure end to end, including scheduling, approving, monitoring, recording, and reviewing maintenance activities, and owns all handoffs to participants such as maintenance personnel, escorts, supervisors, the [Facilities/Physical Security Team], and the [Maintenance Management System] administrators. Exceptions — including off-site removal exemptions, alternate controls under MA-5(1), and foreign national maintenance under Memoranda of Agreements — require explicit written approval by [Authorized Approving Personnel], with the [Designated Policy Official] accountable for policy-level exceptions.
+
+## Related Standard
+
+This procedure operationalizes the *Example Org — System Maintenance Standard*, which contains the requirement text, control rationale, and authoritative definitions referenced throughout this document.

@@ -1,0 +1,34 @@
+id: nist-csf-2-0
+name: NIST Cybersecurity Framework 2.0
+framework_id: nist-csf
+licence: public-domain
+source: NIST usnistgov/oscal-content and NIST OLIR 186, via policyforge etl-csf
+notes: A US government work, so freely redistributable. The CSF 2.0 Core - 6 functions, 22
+  categories, 106 subcategories - with the 91 withdrawn CSF 1.1 elements excluded. THIS CATALOG
+  STATES OUTCOMES RATHER THAN OBLIGATIONS, as the AI RMF Core does, so a citation to it supports
+  no obligation on its own. It is reached through NIST's mapping to 800-53 (OLIR 186), which
+  NIST publishes untyped and marks not comprehensive, so every link reads as partial coverage
+  and an unmapped subcategory is not mapped by NIST, not without an 800-53 equivalent. Read
+  README.md before citing this catalog.
+crosswalk_relationship: source-untyped
+crosswalk_relationship_reason: NIST's OLIR 186 record for this mapping says "comprehensive
+  No", and the workbook states no relationship for any link.
+crosswalk_source: NIST OLIR 186
+crosswalk_source_url: https://csrc.nist.gov/csrc/media/projects/olir/documents/submissions/Cybersecurity_Framework_v2-0_Concept_Crosswalk_800-53_5_2_0_draft.xlsx
+crosswalk_source_sha256: 5521fa73ace64d8a3014a7b1e971f0f20d32df5ff5e174632723bda09e7e908f
+source_sha256: 4836943f21d393f2821df85ada4e6f3c0617243b4ddf44263fe68205400210b4
+source_ref: 1.2.0
+source_url: https://raw.githubusercontent.com/usnistgov/oscal-content/v1.5.0/nist.gov/CSF/v2.0/json/NIST_CSF_v2.0_catalog.json
+content_sha256: 6dc232b30a15bc35c12ec6be4ca0d1eb7124882588929777c3a66cd13881a036
+fetched_at: '2026-09-26'
+family_links:
+  relationship: family
+  framework: nist-800-53
+  note: NIST links each of these CSF ids to a whole 800-53 family, not to any control in it.
+    Never expanded to the family's controls.
+  links:
+    GV.OC-03:
+    - PT
+    PR.IR-03:
+    - CP
+    - IR

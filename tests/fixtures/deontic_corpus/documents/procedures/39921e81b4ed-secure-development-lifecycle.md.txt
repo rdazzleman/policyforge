@@ -1,0 +1,429 @@
+---
+generated_by:
+  calls: 1
+  content_class: public-domain
+  cost_usd: 0.006415
+  models:
+    - z-ai/glm-5.3-flash
+  prompt_shas:
+    - 4bde11e3d5131c63
+  provider: litellm
+  provider_class: third-party
+---
+
+# Example Org Secure Development Lifecycle Operational Procedure
+
+## Purpose
+
+Executing this procedure implements Example Org's Secure Development Lifecycle Standard by embedding security, privacy, and supply chain risk management into the acquisition, development, testing, documentation, and disposition of systems, system components, and system services. Completion produces the evidence artifacts expected of this process — SAST/DAST results per release and dependency and supply-chain scan output — and demonstrates traceability to NIST 800-53, ARC-AMPE, FedRAMP, and HIPAA requirements.
+
+## Scope
+
+The Application Security team performs this procedure end to end, on a continuous basis, for all systems, components, and services developed in-house or acquired from external developers, including preproduction and test environments and the contracts governing them. Development teams, the privacy office, the senior official for privacy, system owners, and developers participate in individual steps as directed below.
+
+## Prerequisites
+
+- Access to the organization's [Ticketing System], [Source Repository], and [CI/CD Pipeline]
+- Access to the organization's [SAST Tool], [DAST Tool], [Dependency Scanning Tool], and [Supply Chain Scanning Tool]
+- Access to the organization's [Risk Acceptance Form], [POA&M Record], and the applicable System Security and Privacy Plan (SSPP)
+- Coordination contact and approval path to the senior official for privacy
+- The applicable acquisition contract(s), Statement(s) of Work, and business associate agreement(s) under review
+- Developer deliverables required under this procedure (assessment plans, documentation, threat models, evidence packages)
+- [Identity Provider] access for verifying developer personnel authorizations
+
+## Procedure Steps
+
+### Operate a Documented Secure Development Lifecycle Process [NIST 800-53 SA-3 | ARC-AMPE SA-3 AE Mandatory]
+
+1. Application Security maintains the formally defined SDLC process document, including information security and privacy considerations at each lifecycle phase (initiation, design, development, implementation, operation, disposal).
+1. Application Security documents the security and privacy roles and responsibilities required at each lifecycle phase in the SDLC process document.
+1. Application Security identifies, by name and contact, the individuals currently holding each documented security and privacy role, and records this roster in the SDLC process document.
+1. Application Security integrates the organizational risk management process into each SDLC phase, embedding risk assessment, Security Impact Analysis (SIA), and Privacy Impact Assessment (PIA) checkpoints into [Ticketing System] workflow templates.
+1. Application Security provides the security and privacy offices a formal review opportunity — via a scheduled gate in [Ticketing System] — to confirm PII protection requirements are considered at every lifecycle phase.
+
+### Protect Preproduction Environments [NIST 800-53 SA-3(1) | ARC-AMPE SA-3(1) AE Mandatory]
+
+1. Application Security, with [Infrastructure Team], inventories all preproduction environments (development, test, staging) supporting each system.
+1. Application Security assesses the risk of each preproduction environment and applies protections commensurate with that risk, recording the risk determination and applied protections in the environment's entry in [Ticketing System].
+1. Application Security verifies at each environment change that protections remain aligned with the current risk determination.
+
+### Approve and Control Live Data in Preproduction Environments [NIST 800-53 SA-3(2) | ARC-AMPE SA-3(2) AE Mandatory]
+
+1. Before any live data is placed into a preproduction environment, Application Security obtains written approval via [Ticketing System], documenting the data set, purpose, and requested duration.
+1. Application Security configures the preproduction environment to the same impact or classification level as any live data within it, coordinating with [Infrastructure Team] to enforce matching controls.
+1. Where PII is used in a test environment, Application Security applies the full set of controls required for systems containing PII to that environment and uses synthetic PII to the maximum extent practicable for functional testing.
+1. Application Security limits the creation, collection, use, and disclosure of PII in all development and testing to only what is necessary for the specified, authorized purpose.
+1. Application Security obtains approval from the senior official for privacy before using PII in testing, training, or research, presenting synthetic or de-identified alternatives as the preferred option in each request.
+
+### Plan Technology Refresh [NIST 800-53 SA-3(3)]
+
+1. Application Security, with [Infrastructure Team], develops and maintains a technology refresh plan for each system covering its full SDLC.
+1. Application Security reviews and updates the refresh plan at each major lifecycle phase change or system modification.
+
+### Incorporate Security and Privacy Requirements into Acquisition Contracts [NIST 800-53 SA-4 | ARC-AMPE SA-4 AE Mandatory]
+
+1. Application Security reviews each acquisition contract for a system, component, or service and confirms, explicitly or by reference using the organization's standardized contract language, inclusion of: security and privacy functional requirements; strength of mechanism requirements; security and privacy assurance requirements; controls needed to satisfy security and privacy requirements; security and privacy documentation requirements; requirements for protecting that documentation; a description of the development and intended operating environments; allocation of responsibility for information security, privacy, and supply chain risk management; and acceptance criteria.
+1. For each contract or Statement of Work involving development of, or access to, systems containing PII, Application Security confirms the contract includes language requiring adherence to the organization's security and privacy policies and standards (consistent with 45 CFR § 155.260(b)), defines security and privacy roles and responsibilities, and is approved by the system owner.
+1. When the acquisition stores, processes, or transmits PII, Application Security consults the privacy office and confirms the contract includes a list of controls necessary to protect PII (how data is stored, handled, and accessed within the provider environment), enforcement of applicable privacy requirements where appropriate, privacy training and awareness and rules-of-behavior requirements, and PII-specific privacy functional requirements.
+1. Application Security records contract review outcomes in [Ticketing System] and withholds acceptance of any deliverable until required clauses are confirmed.
+
+### Obtain Developer Descriptions of Control Functionality [NIST 800-53 SA-4(1) Moderate, High | ARC-AMPE SA-4(1) AE Mandatory]
+
+1. Application Security requires the developer to provide a description of the functional properties of the security and privacy controls to be implemented.
+1. Application Security reviews the description to confirm it describes only functionality visible at the control interfaces and explicitly excludes internal functionality and data structures, per ARC-AMPE.
+
+### Obtain Developer Design and Implementation Information [NIST 800-53 SA-4(2) Moderate, High | ARC-AMPE SA-4(2) AE Mandatory]
+
+1. Application Security requires the developer to provide design and implementation information for the controls, including security-relevant external system interfaces, high-level design documentation, and source code or hardware schematics, at [Assignment: organization-defined level of detail].
+1. Application Security reviews the submitted information to prove control implementation and records acceptance in [Ticketing System].
+
+### Require Defined Engineering and Development Methods [NIST 800-53 SA-4(3)]
+
+1. Application Security requires the developer to use [Assignment: organization-defined systems engineering methods]; \[Selection (one or more): [Assignment: organization-defined system security engineering methods]; [Assignment: organization-defined privacy engineering methods]\]; and \[Selection (one or more): [Assignment: organization-defined software development methods]; [Assignment: organization-defined testing, evaluation, assessment, verification, and validation methods]; [Assignment: organization-defined quality control processes]\].
+1. Application Security documents the required methods in the acquisition contract and verifies developer adherence during acceptance review.
+
+### Deliver with Approved Security Configurations as Defaults [NIST 800-53 SA-4(5) High]
+
+1. Application Security requires the developer to deliver the system, component, or service with [Assignment: organization-defined security configurations] implemented.
+1. Application Security designates those configurations as the default baseline for any subsequent reinstallation or upgrade and verifies the default is preserved during upgrade testing.
+
+### Restrict Products Protecting Classified Information to NSA-Approved Solutions [NIST 800-53 SA-4(6)]
+
+1. When classified information traverses networks at a lower classification level, Application Security permits only government off-the-shelf or commercial off-the-shelf information assurance (and information assurance-enabled) IT products that compose an NSA-approved solution.
+1. Application Security verifies each such product has been evaluated and/or validated by NSA or in accordance with NSA-approved procedures, recording the validation reference in the product record.
+
+### Require NIAP Evaluation or FIPS-Validated Cryptography [NIST 800-53 SA-4(7)]
+
+1. Application Security limits commercial information assurance (and information assurance-enabled) IT products to those successfully evaluated against a NIAP-approved Protection Profile for the specific technology type, where such a profile exists.
+1. Where no such profile exists but the product relies on cryptographic functionality to enforce its security policy, Application Security requires the cryptographic module to be FIPS-validated or NSA-approved before use.
+
+### Require a Developer Continuous Monitoring Plan [NIST 800-53 SA-4(8)]
+
+1. Application Security requires the developer to produce a plan for continuous monitoring of control effectiveness consistent with the organization's continuous monitoring program.
+1. Application Security reviews the plan against the organizational program and records acceptance or required revisions in [Ticketing System].
+
+### Require Identification of Functions, Ports, Protocols, and Services [NIST 800-53 SA-4(9) Moderate, High | ARC-AMPE SA-4(9) AE Mandatory]
+
+1. Application Security requires the developer to identify the functions, ports, protocols, and services intended for organizational use.
+1. Application Security reviews the inventory against the intended operating environment and documents approval in [Ticketing System] before connection to organizational networks.
+
+### Require FIPS 201-Approved Products for PIV [NIST 800-53 SA-4(10) Low, Moderate, High]
+
+1. Application Security verifies that any IT product implementing Personal Identity Verification (PIV) capability within organizational systems appears on the FIPS 201-approved products list.
+1. Application Security blocks procurement or deployment of non-listed PIV products and records the disposition in [Ticketing System].
+
+### Include Privacy Act Requirements for Systems of Records [NIST 800-53 SA-4(11)]
+
+1. For contracts covering operation of a system of records on behalf of the organization, Application Security confirms the contract includes [Assignment: organization-defined Privacy Act requirements].
+1. Application Security records the clause verification in the contract review record in [Ticketing System].
+
+### Include Data Ownership and Return Requirements [NIST 800-53 SA-4(12)]
+
+1. Application Security confirms each acquisition contract includes organizational data ownership requirements.
+1. Application Security confirms the contract requires all data to be removed from the contractor's system and returned to the organization within [Assignment: organization-defined time frame], and tracks that return at contract closeout in [Ticketing System].
+
+### Obtain Business Associate Assurances [HIPAA Security Rule 164.308(b)(1)]
+
+1. Application Security permits a business associate to create, receive, maintain, or transmit electronic protected health information on the organization's behalf only after satisfactory assurances are obtained in accordance with § 164.314(a).
+1. Application Security permits a business associate to engage a subcontractor for such information only when the business associate obtains equivalent satisfactory assurances from the subcontractor, and verifies the flow-down during contract review.
+
+### Document Business Associate Contracts [HIPAA Security Rule 164.308(b)(3) Required]
+
+1. Application Security documents the satisfactory assurances through a written contract or other arrangement meeting the applicable requirements of § 164.314(a).
+1. Application Security confirms each business associate contract requires the business associate to comply with the applicable Security Rule requirements, ensures subcontractors creating, receiving, maintaining, or transmitting electronic protected health information agree to comply by entering a compliant contract or arrangement, and requires reporting of any security incident of which it becomes aware, including breaches of unsecured protected health information as required by § 164.410.
+1. Application Security confirms the same contract requirements apply between the business associate and its subcontractor as between the covered entity and the business associate, per § 164.314(a)(2)(iii).
+
+### Obtain and Maintain Administrator and User Documentation [NIST 800-53 SA-5 | FedRAMP SA-5 | ARC-AMPE SA-5 AE Mandatory]
+
+1. Application Security obtains or develops administrator documentation describing secure configuration, installation, and operation; effective use and maintenance of security and privacy functions and mechanisms; and known vulnerabilities regarding configuration and use of administrative or privileged functions.
+1. Application Security obtains or develops user documentation describing user-accessible security and privacy functions and how to use them effectively; user interaction methods enabling more secure use and privacy protection; and user responsibilities for maintaining system security and individual privacy.
+1. When documentation is unavailable or nonexistent, Application Security documents each attempt to obtain it and takes [Assignment: organization-defined actions] in response, recording both in [Ticketing System].
+1. Application Security distributes system documentation to [Assignment: organization-defined personnel or roles].
+1. Application Security confirms the documentation describes the system and specifies the purpose, technical operation, access, maintenance, and required training for administrators and users.
+1. Application Security maintains an updated list of related system operations and security documentation, and updates relevant documentation upon changes in system functions or processes, ensuring each document carries a date and version number.
+1. Application Security evaluates whether each document is aligned with the risk management strategy or essential to control implementation or operation, and protects it accordingly.
+1. Application Security applies the FedRAMP Secure Configuration Guide rules for system documentation.
+
+### Apply Systems Security and Privacy Engineering Principles [NIST 800-53 SA-8 | ARC-AMPE SA-8 AE Mandatory]
+
+1. Application Security applies [Assignment: organization-defined systems security and privacy engineering principles] in the specification, design, development, implementation, and modification of the system and its components.
+1. Application Security records the applied principles and their mapping to design decisions in the system design documentation and reviews the mapping at each lifecycle gate.
+
+### Implement Structural Security Design Principles [NIST 800-53 SA-8(1)–SA-8(13)]
+
+1. Application Security implements the security design principle of clear abstractions, verifying during design review that component abstractions are well-defined and consistently maintained.
+1. Application Security implements the security design principle of least common mechanism in [Assignment: organization-defined systems or system components], reviewing designs to limit shared mechanisms.
+1. Application Security implements the security design principles of modularity and layering in [Assignment: organization-defined systems or system components], confirming layered, modular structure in design review.
+1. Application Security implements the security design principle of partially ordered dependencies in [Assignment: organization-defined systems or system components], verifying no circular dependencies exist.
+1. Application Security implements the security design principle of efficiently mediated access in [Assignment: organization-defined systems or system components], confirming all access is mediated without unnecessary overhead.
+1. Application Security implements the security design principle of minimized sharing in [Assignment: organization-defined systems or system components], identifying and reducing shared resources in design review.
+1. Application Security implements the security design principle of reduced complexity in [Assignment: organization-defined systems or system components], simplifying security-relevant design elements wherever feasible.
+1. Application Security implements the security design principle of secure evolvability in [Assignment: organization-defined systems or system components], confirming designs accommodate change without loss of security.
+1. Application Security implements the security design principle of trusted components in [Assignment: organization-defined systems or system components], confirming critical functions rely on trustworthy components.
+1. Application Security implements the security design principle of hierarchical trust in [Assignment: organization-defined systems or system components], structuring trust relationships hierarchically.
+1. Application Security implements the security design principle of inverse modification threshold in [Assignment: organization-defined systems or system components], confirming more trustworthy elements are harder to modify.
+1. Application Security implements the security design principle of hierarchical protection in [Assignment: organization-defined systems or system components], matching protection levels to component trustworthiness.
+1. Application Security implements the security design principle of minimized security elements in [Assignment: organization-defined systems or system components], minimizing the number of security-critical elements.
+
+### Implement Access, Trust, and Composition Design Principles [NIST 800-53 SA-8(14)–SA-8(24)]
+
+1. Application Security implements the security design principle of least privilege in [Assignment: organization-defined systems or system components], consistently with AC-6 and across all aspects of secure system design. [NIST 800-53 SA-8(14) | ARC-AMPE SA-8(14) AE Mandatory]
+1. Application Security implements the security design principle of predicate permission in [Assignment: organization-defined systems or system components], confirming permissions are granted only upon defined predicates.
+1. Application Security implements the security design principle of self-reliant trustworthiness in [Assignment: organization-defined systems or system components], minimizing dependence on external trustworthy behavior.
+1. Application Security implements the security design principle of secure distributed composition in [Assignment: organization-defined systems or system components], verifying security holds when components compose across distributed boundaries.
+1. Application Security implements the security design principle of trusted communications channels in [Assignment: organization-defined systems or system components], restricting access to the channel and employing end-to-end protections for data transmitted over it. [NIST 800-53 SA-8(18) | ARC-AMPE SA-8(18) AE Mandatory]
+1. Application Security implements the security design principle of continuous protection in [Assignment: organization-defined systems or system components], confirming protections remain effective for the data and resources throughout their lifecycle.
+1. Application Security implements the security design principle of secure metadata management in [Assignment: organization-defined systems or system components], protecting metadata with commensurate controls.
+1. Application Security implements the security design principle of self-analysis in [Assignment: organization-defined systems or system components], confirming components can assess their own trustworthy state.
+1. Application Security implements the security design principle of accountability and traceability in [Assignment: organization-defined systems or system components], enabling tracing of security-relevant subject-object interactions to the entity on whose behalf the action was taken, supported by a trustworthy infrastructure recording details of actions affecting system security. [NIST 800-53 SA-8(22) | ARC-AMPE SA-8(22) AE Mandatory]
+1. Application Security implements the security design principle of secure defaults in [Assignment: organization-defined systems or system components], confirming default behavior is secure out of the box. [NIST 800-53 SA-8(23) | ARC-AMPE SA-8(23) AE Mandatory]
+1. Application Security implements the security design principle of secure failure and recovery in [Assignment: organization-defined systems or system components], confirming failure states preserve security and recovery restores it.
+
+### Implement Process, Economic, and Modification Design Principles [NIST 800-53 SA-8(25)–SA-8(32)]
+
+1. Application Security implements the security design principle of economic security in [Assignment: organization-defined systems or system components], reducing the cost and complexity of security mechanisms relative to their benefit.
+1. Application Security implements the security design principle of performance security in [Assignment: organization-defined systems or system components], confirming security mechanisms meet performance requirements.
+1. Application Security implements the security design principle of human factored security in [Assignment: organization-defined systems or system components], ensuring security mechanisms are usable by the humans who operate them.
+1. Application Security implements the security design principle of acceptable security in [Assignment: organization-defined systems or system components], aligning security with operator and stakeholder acceptance.
+1. Application Security implements the security design principle of repeatable and documented procedures in [Assignment: organization-defined systems or system components].
+1. Application Security implements the security design principle of procedural rigor in [Assignment: organization-defined systems or system components].
+1. Application Security implements the security design principle of secure system modification in [Assignment: organization-defined systems or system components], accompanying every system change with a Security Impact Analysis (SIA) and a Privacy Impact Assessment (PIA) recorded in [Ticketing System]. [NIST 800-53 SA-8(31) | ARC-AMPE SA-8(31) AE Mandatory]
+1. Application Security implements the security design principle of sufficient documentation in [Assignment: organization-defined systems or system components], confirming documentation adequacy at each lifecycle gate. [NIST 800-53 SA-8(32) | ARC-AMPE SA-8(32) AE Mandatory]
+
+### Implement Privacy Minimization Processes [NIST 800-53 SA-8(33) | ARC-AMPE SA-8(33) AE Mandatory]
+
+1. Application Security implements the privacy principle of minimization using [Assignment: organization-defined processes].
+1. Application Security drives those processes from business needs, coordinates their implementation with the senior privacy officer, and confirms consistency with PM-25, PT-2, and SI-12.
+
+### Require Developer Configuration Management [NIST 800-53 SA-10 Moderate, High | ARC-AMPE SA-10 AE Mandatory]
+
+1. Application Security requires the developer to perform configuration management during design, development, implementation, operation, and disposal of the system, component, or service.
+1. Application Security requires the developer to document, manage, and control the integrity of changes to [Assignment: organization-defined configuration items].
+1. Application Security requires the developer to implement only organization-approved changes, verifying each change against the organization's approval record before acceptance.
+1. Application Security requires the developer to document approved changes and their potential security and privacy impacts, and reviews that documentation at delivery.
+1. Application Security requires the developer to track security flaws and flaw resolution within the system, component, or service and report findings to [Assignment: organization-defined personnel or roles].
+1. Application Security requires the developer to enable integrity verification of software and firmware components. [NIST 800-53 SA-10(1) | ARC-AMPE SA-10(1) AE Mandatory]
+1. Application Security requires the developer to enable integrity verification of hardware components. [NIST 800-53 SA-10(3)]
+1. Where no dedicated developer configuration management team exists, Application Security provides an alternate configuration management process using organizational personnel, and documents that arrangement in [Ticketing System]. [NIST 800-53 SA-10(2)]
+1. Application Security requires the developer to employ tools for comparing newly generated versions of security-relevant hardware descriptions, source code, and object code with previous versions. [NIST 800-53 SA-10(4)]
+1. Application Security requires the developer to maintain the integrity of the mapping between the master build data describing the current version of security-relevant hardware, software, and firmware and the on-site master copy of that data. [NIST 800-53 SA-10(5)]
+1. Application Security requires the developer to execute procedures ensuring that security-relevant hardware, software, and firmware updates distributed to the organization are exactly as specified by the master copies. [NIST 800-53 SA-10(6)]
+1. Application Security requires [Assignment: organization-defined security and privacy representatives] to be included in the [Assignment: organization-defined configuration change management and control process]. [NIST 800-53 SA-10(7)]
+
+### Require Developer Security and Privacy Assessment Plans and Testing [NIST 800-53 SA-11 Moderate, High | ARC-AMPE SA-11 AE Mandatory]
+
+1. Application Security requires the developer, at all post-design stages of the SDLC, to develop and implement a plan for ongoing security and privacy control assessments.
+1. Application Security requires the developer to perform unit, integration, system, and regression testing/evaluation at [Assignment: organization-defined frequency to conduct] and at [Assignment: organization-defined depth and coverage].
+1. Application Security requires the developer to produce evidence of the execution of the assessment plan and the results of the testing and evaluation, and retains that evidence with the release record.
+1. Application Security requires the developer to implement a verifiable flaw remediation process and to correct flaws identified during testing and evaluation, tracking closure in [Ticketing System].
+1. Application Security makes no security-relevant modifications to the information systems after the assessment.
+1. Application Security uses non-production data when executing test scripts, or uses a test environment configured to comply with the security controls as though it were a production environment.
+1. Application Security connects all systems supporting development and pre-production testing to an isolated network separated from production systems, permitting network traffic into and out of that environment only to facilitate system testing and restricting it by source and destination access control lists as well as ports and protocols, configured with [Infrastructure Team].
+
+### Require Static Code Analysis [NIST 800-53 SA-11(1) | ARC-AMPE SA-11(1) AE Mandatory]
+
+1. Application Security requires the developer, and runs the organization's [SAST Tool] in [CI/CD Pipeline] per release, to employ static code analysis tools to identify common flaws.
+1. Application Security documents the results of the analysis and retains the SAST results with each release's evidence package.
+
+### Require Threat Modeling and Vulnerability Analysis [NIST 800-53 SA-11(2) | ARC-AMPE SA-11(2) AE Mandatory]
+
+1. Application Security requires the developer to perform threat modeling and vulnerability analyses during development and subsequent testing and evaluation.
+1. Application Security requires those analyses to use [Assignment: organization-defined information] (impact, environment of operations, known or assumed threats, acceptable risk levels), employ [Assignment: organization-defined tools and methods], be conducted at [Assignment: organization-defined breadth and depth], and produce evidence meeting [Assignment: organization-defined acceptance criteria].
+1. Application Security reviews the threat model outputs and records acceptance in [Ticketing System].
+
+### Require Independent Verification of Developer Assessments [NIST 800-53 SA-11(3)]
+
+1. Application Security requires an independent agent satisfying [Assignment: organization-defined independence criteria] to verify the correct implementation of the developer security and privacy assessment plans and the evidence produced during testing and evaluation.
+1. Application Security verifies the independent agent is provided with sufficient information to complete the verification or granted the authority to obtain it, documenting either condition in [Ticketing System].
+
+### Require Manual Code Review [NIST 800-53 SA-11(4)]
+
+1. Application Security requires the developer to perform a manual code review of [Assignment: organization-defined specific code] using [Assignment: organization-defined processes, procedures, and/or techniques].
+1. Application Security obtains and reviews the review findings before release approval.
+
+### Require Penetration Testing [NIST 800-53 SA-11(5)]
+
+1. Application Security requires the developer to perform penetration testing at [Assignment: organization-defined breadth and depth of testing] under [Assignment: organization-defined constraints].
+1. Application Security retains the penetration test results with the release evidence package.
+
+### Require Attack Surface Reviews [NIST 800-53 SA-11(6)]
+
+1. Application Security requires the developer to perform attack surface reviews at each major development milestone.
+1. Application Security reviews the attack surface findings against the system's threat model and records the outcome in [Ticketing System].
+
+### Verify Testing Coverage [NIST 800-53 SA-11(7)]
+
+1. Application Security requires the developer to verify that the scope of testing and evaluation provides complete coverage of the required controls at [Assignment: organization-defined breadth and depth of testing and evaluation].
+1. Application Security reviews the coverage verification before accepting the assessment results.
+
+### Require Dynamic Code Analysis [NIST 800-53 SA-11(8) | ARC-AMPE SA-11(8) AE Mandatory]
+
+1. Application Security requires the developer, and runs the organization's [DAST Tool] in [CI/CD Pipeline] per release, to employ dynamic code analysis tools to identify common flaws.
+1. Application Security documents the results and retains the DAST results with each release's evidence package.
+
+### Require Interactive Application Security Testing [NIST 800-53 SA-11(9)]
+
+1. Application Security requires the developer to employ interactive application security testing tools to identify flaws and document the results.
+1. Application Security retains the IAST results with the release evidence package.
+
+### Require a Documented Development Process [NIST 800-53 SA-15 Moderate, High | ARC-AMPE SA-15 AE Mandatory]
+
+1. Application Security requires the developer to follow a documented development process that explicitly addresses security and privacy requirements, identifies the standards and tools used, documents the specific tool options and tool configurations used, and documents, manages, and ensures the integrity of changes to the process and/or tools.
+1. Application Security reviews the development process, standards, tools, tool options, and tool configurations at [Assignment: organization-defined frequency] — at least annually, or as needed per ARC-AMPE — to determine whether they can satisfy the [Assignment: organization-defined security and privacy requirements].
+
+### Require Developer Quality Metrics and Tracking Tools [NIST 800-53 SA-15(1), SA-15(2)]
+
+1. Application Security requires the developer to define quality metrics at the beginning of the development process and to provide evidence of meeting them at \[Selection (one or more): [Assignment: organization-defined frequency]; [Assignment: organization-defined program review]; upon delivery\].
+1. Application Security requires the developer to select and employ security and privacy tracking tools for use during the development process, and verifies the tooling is in use during milestone reviews.
+
+### Perform Criticality Analysis [NIST 800-53 SA-15(3) Moderate, High]
+
+1. Application Security performs criticality analysis at [Assignment: organization-defined decision points] in the SDLC and at [Assignment: organization-defined breadth and depth of criticality analysis].
+1. Application Security records the analysis results and uses them to prioritize security and privacy review effort.
+
+### Require Attack Surface Reduction [NIST 800-53 SA-15(5)]
+
+1. Application Security requires the developer to reduce attack surfaces to [Assignment: organization-defined thresholds].
+1. Application Security measures the attack surface against the thresholds at each milestone review before accepting the build.
+
+### Require Continuous Development Process Improvement [NIST 800-53 SA-15(6)]
+
+1. Application Security requires the developer to implement an explicit process to continuously improve the development process.
+1. Application Security reviews evidence of improvement activity during the periodic development process review (see the SA-15 subsection above).
+
+### Require Automated Vulnerability Analysis by the Developer [NIST 800-53 SA-15(7)]
+
+1. Application Security requires the developer to perform an automated vulnerability analysis using [Assignment: organization-defined tools], determine the exploitation potential for discovered vulnerabilities, and determine potential risk mitigations for delivered vulnerabilities.
+1. Application Security requires delivery of the tool outputs and analysis results to [Assignment: organization-defined personnel or roles], and retains the dependency and supply-chain scan output with the release evidence.
+
+### Leverage Analyses from Similar Systems [NIST 800-53 SA-15(8)]
+
+1. Application Security requires the developer to use threat modeling and vulnerability analyses from similar systems, components, or services to inform the current development process.
+1. Application Security reviews how prior analyses were incorporated at each design review.
+
+### Require Developer Incident Response Plan [NIST 800-53 SA-15(10)]
+
+1. Application Security requires the developer to provide, implement, and test an incident response plan.
+1. Application Security reviews the plan and its test evidence for consistency with the organization's incident response process before acceptance.
+
+### Require Archival of Release and Review Evidence [NIST 800-53 SA-15(11)]
+
+1. Application Security requires the developer to archive the system or component to be released or delivered together with the corresponding evidence supporting the final security and privacy review.
+1. Application Security verifies the archive contents at delivery and retains the archive record in [Ticketing System].
+
+### Minimize PII in Development and Test Environments [NIST 800-53 SA-15(12) | NIST 800-53 SA-15(13) | ARC-AMPE SA-15(12) AE Mandatory]
+
+1. Application Security requires the developer to minimize the use of personally identifiable information in development and test environments.
+1. Application Security audits development and test data stores on a continuous basis for unnecessary PII and directs removal where found.
+
+### Require Developer Security and Privacy Training [NIST 800-53 SA-16 High]
+
+1. Application Security requires the developer to provide [Assignment: organization-defined training] on the correct use and operation of the implemented security and privacy functions, controls, and/or mechanisms.
+1. Application Security obtains and retains the training materials and delivery evidence in the system documentation set.
+
+### Require Developer Architecture and Design Specification [NIST 800-53 SA-17 High | ARC-AMPE SA-17 AE Mandatory]
+
+1. Application Security requires the developer to produce a design specification and security and privacy architecture consistent with the organization's security and privacy architecture (an integral part of the enterprise architecture).
+1. Application Security verifies the specification accurately and completely describes the required security and privacy functionality and the allocation of controls among physical and logical components.
+1. Application Security verifies the specification expresses how individual security and privacy functions, mechanisms, and services work together to provide the required capabilities and a unified approach to protection.
+
+### Require a Formal Policy Model [NIST 800-53 SA-17(1)]
+
+1. Application Security requires the developer to produce, as an integral part of the development process, a formal policy model describing [Assignment: organization-defined elements of organizational security and privacy policy] to be enforced.
+1. Application Security requires the developer to prove the model is internally consistent and sufficient to enforce those elements when implemented, and reviews the proof before acceptance.
+
+### Require Definition and Specification of Security-Relevant Components [NIST 800-53 SA-17(2), SA-17(3), SA-17(4)]
+
+1. Application Security requires the developer to define security-relevant hardware, software, and firmware and provide a rationale that the definition is complete. [NIST 800-53 SA-17(2)]
+1. Application Security requires the developer to produce a formal top-level specification of the interfaces to security-relevant hardware, software, and firmware; demonstrate (to the extent feasible via proof, supplemented by informal demonstration) its consistency with the formal policy model and its complete coverage of those interfaces; show it accurately describes the implemented components; and describe internal mechanisms not addressed in the specification. [NIST 800-53 SA-17(3)]
+1. Application Security requires the developer to produce an informal descriptive top-level specification of those interfaces; demonstrate via [Selection: informal demonstration, convincing argument with formal methods as feasible] its consistency with the formal policy model and via informal demonstration its complete coverage of those interfaces; show it accurately describes those interfaces; and describe internal mechanisms not addressed in the specification. [NIST 800-53 SA-17(4)]
+
+### Require Structuring for Protection, Testing, and Least Privilege [NIST 800-53 SA-17(5), SA-17(6), SA-17(7)]
+
+1. Application Security requires the developer to design and structure security-relevant hardware, software, and firmware around a complete, conceptually simple protection mechanism with precisely defined semantics, and to internally structure them with specific regard for that mechanism.
+1. Application Security requires the developer to structure security-relevant hardware, software, and firmware to facilitate testing.
+1. Application Security requires the developer to structure security-relevant hardware, software, and firmware to facilitate controlling access with least privilege.
+
+### Require Coordinated and Diverse Designs for Critical Systems [NIST 800-53 SA-17(8), SA-17(9)]
+
+1. Application Security designs [Assignment: organization-defined critical systems] with coordinated behavior to implement [Assignment: organization-defined capabilities].
+1. Application Security uses different designs for [Assignment: organization-defined critical systems] to satisfy a common set of requirements or provide equivalent functionality.
+
+### Verify Developer Personnel Authorizations and Screening [NIST 800-53 SA-21 High | ARC-AMPE SA-21 AE Mandatory]
+
+1. Application Security requires that the developer of systems, components, or services has appropriate access authorizations as determined by assigned [Assignment: organization-defined official government duties] / the assigned Authorizing Official or designee, verified through [Identity Provider] records before access is granted.
+1. Application Security requires that the developer satisfies personnel screening criteria — [Assignment: organization-defined additional personnel screening criteria] per NIST, consistent with PS-3 per ARC-AMPE — and retains screening attestations in the contract file.
+
+### Replace or Support Unsupported Components [NIST 800-53 SA-22 | ARC-AMPE SA-22 AE Mandatory]
+
+1. Application Security replaces system components when support for the components is no longer available from the developer, vendor, or manufacturer.
+1. Where replacement is not done, Application Security provides alternative sources for continued support: \[Selection (one or more): in-house support; [Assignment: organization-defined support from external providers]\].
+1. Per ARC-AMPE, where continued use of an unsupported component is required to satisfy mission/business needs, Application Security justifies and documents its approval on a [Risk Acceptance Form] and updates the related POA&M finding in [POA&M Record].
+1. Application Security establishes plans to mitigate or remove the unsupported system, application, operating system, or software once identified, and upgrades, retires, or stops using the element or component before end of life or vendor discontinuation of product support.
+1. Where removal of unsupported components is not feasible, Application Security maintains a governance process to review them and make a risk-based decision on their continued use.
+
+### Validate Information Inputs [NIST 800-53 SI-10 Moderate, High | ARC-AMPE SI-10 AE Mandatory]
+
+1. Application Security implements validation of [Assignment: organization-defined information inputs] — per ARC-AMPE, all inputs to web/application servers, database servers, and any system or application input that might receive a crafted exploit aimed at executing code or causing a buffer overflow — checking accuracy, completeness, and validity (character set, length, numerical range, and acceptable values) to ensure inputs match the specified definitions for format and content.
+1. Where PII is entered, Application Security applies validation techniques supporting data quality (ensuring the PII entered is the expected type and format), provides the capability to limit or exclude entering PII within fields that should not contain it (recognizing restricted formats such as a Social Security Number), and takes reasonable steps to ensure PII is complete, accurate, and up to date as required by laws and regulations.
+1. Application Security provides a manual override capability for input validation of [Assignment: organization-defined information inputs], restricts its use to [Assignment: organization-defined authorized individuals], and audits its use. [NIST 800-53 SI-10(1)]
+1. Application Security reviews and resolves input validation errors within [Assignment: organization-defined time period]. [NIST 800-53 SI-10(2)]
+1. Application Security verifies that the system behaves in a predictable and documented manner when invalid inputs are received. [NIST 800-53 SI-10(3)]
+1. Application Security accounts for timing interactions among system components in determining appropriate responses for invalid inputs. [NIST 800-53 SI-10(4)]
+1. Application Security restricts the use of information inputs to [Assignment: organization-defined trusted sources] and/or [Assignment: organization-defined formats]. [NIST 800-53 SI-10(5)]
+1. Application Security prevents untrusted data injections, verifying injection defenses during DAST testing each release. [NIST 800-53 SI-10(6)]
+
+### Generate and Restrict Error Messages [NIST 800-53 SI-11 Moderate, High | ARC-AMPE SI-11 AE Mandatory]
+
+1. Application Security generates error messages that provide the information necessary for corrective actions without revealing information that could be exploited (e.g., user name/password combinations, password-reset validation attributes, PII, biometric or authenticator data, sensitive financial records, or content related to internal security functions such as private encryption keys, allow/deny-list rules, and object permission settings).
+1. Application Security restricts display of detailed error messages to [Assignment: organization-defined personnel or roles] — per ARC-AMPE, personnel or roles documented in the applicable System Security and Privacy Plan (SSPP), i.e., authorized individuals with a need for the information in the performance of their duties — and confirms external-facing error handling during DAST testing each release.
+
+### Identify and Address Supply Chain Weaknesses [NIST 800-53 SR-3 | FedRAMP SR-3 | ARC-AMPE SR-3 AE Mandatory]
+
+1. Application Security establishes a process to identify and address weaknesses or deficiencies in the supply chain elements and processes of [Assignment: organization-defined system or system component], in coordination with [Assignment: organization-defined supply chain personnel].
+1. Application Security employs [Assignment: organization-defined supply chain controls] to protect against supply chain risks and to limit the harm or consequences from supply chain-related events; these controls are not limited to those defined in ARC-AMPE and may include other NIST SP 800-53 Rev. 5 supply chain controls as appropriate.
+1. Application Security documents the selected and implemented supply chain processes and controls in \[Selection (one or more): security and privacy plans; supply chain risk management plan; [Assignment: organization-defined document]\].
+1. As Cloud Service Operator where applicable, Application Security documents and maintains supply chain custody — including replacement devices — to ensure the integrity of devices before they are introduced to the boundary, retaining the dependency and supply-chain scan output as supporting evidence.
+
+### Diversify Sources and Limit Supply Chain Targeting [NIST 800-53 SR-3(1)–SR-3(3)]
+
+1. Application Security employs a diverse set of sources for [Assignment: organization-defined system components and services]. [NIST 800-53 SR-3(1)]
+1. Application Security employs [Assignment: organization-defined controls] to limit harm from potential adversaries identifying and targeting the organizational supply chain. [NIST 800-53 SR-3(2)]
+1. Application Security ensures the controls included in the contracts of prime contractors are also included in the contracts of subcontractors, verifying flow-down during contract review. [NIST 800-53 SR-3(3)]
+
+### Apply Supply Chain Risk Acquisition Strategies [NIST 800-53 SR-5]
+
+1. Application Security employs [Assignment: organization-defined acquisition strategies, contract tools, and procurement methods] to protect against, identify, and mitigate supply chain risks.
+1. Application Security employs [Assignment: organization-defined controls] to ensure an adequate supply of [Assignment: organization-defined critical system components]. [NIST 800-53 SR-5(1)]
+1. Application Security assesses the system, system component, or system service prior to selection, acceptance, modification, or update, retaining the dependency and supply-chain scan output as assessment evidence. [NIST 800-53 SR-5(2)]
+
+### Implement Tamper Protection [NIST 800-53 SR-9 High, SR-9(1) High]
+
+1. Application Security implements a tamper protection program for the system, system component, or system service.
+1. Application Security employs anti-tamper technologies, tools, and techniques throughout the system development life cycle.
+
+### Inspect for Tampering [NIST 800-53 SR-10]
+
+1. Application Security inspects [Assignment: organization-defined systems or system components] for tampering \[Selection (one or more): at random; at [Assignment: organization-defined frequency]; upon [Assignment: organization-defined indications of need for inspection]\].
+1. Application Security records each inspection and its findings in [Ticketing System].
+
+### Detect and Prevent Counterfeit Components [NIST 800-53 SR-11]
+
+1. Application Security develops and implements anti-counterfeit policy and procedures that include the means to detect and prevent counterfeit components from entering the system.
+1. Application Security reports counterfeit system components to \[Selection (one or more): source of counterfeit component; [Assignment: organization-defined external reporting organizations]; [Assignment: organization-defined personnel or roles]\].
+1. Application Security trains [Assignment: organization-defined personnel or roles] to detect counterfeit system components, including hardware, software, and firmware. [NIST 800-53 SR-11(1) Low, Moderate, High]
+1. Application Security maintains configuration control over [Assignment: organization-defined system components] awaiting service or repair and serviced or repaired components awaiting return to service. [NIST 800-53 SR-11(2) Low, Moderate, High]
+1. Application Security scans for counterfeit system components at [Assignment: organization-defined frequency]. [NIST 800-53 SR-11(3)]
+
+### Dispose of Data and Components [NIST 800-53 SR-12 | ARC-AMPE SR-12 AE Mandatory]
+
+1. Application Security disposes of [Assignment: organization-defined data, documentation, tools, or system components] using [Assignment: organization-defined techniques and methods] — per ARC-AMPE, in accordance with the latest published NIST SP 800-88, Guidelines for Media Sanitization, with techniques consistent with MP-6 Media Sanitization.
+1. Application Security records the sanitization or disposal outcome in [Ticketing System].
+
+## Roles & Responsibilities
+
+The Application Security team is authorized to perform and accountable for every step of this procedure end to end, including contract review, developer oversight, environment controls, testing, and evidence retention; development teams, the privacy office, the senior official for privacy, system owners, [Infrastructure Team], and external developers act as participants in the specific steps named above. Exceptions to any step in this procedure require documented approval by Application Security, with risk acceptance recorded on the [Risk Acceptance Form] and, where applicable, the senior official for privacy or the Authorizing Official per the requirement concerned.
+
+## Related Standard
+
+Example Org Information Security Standard: Secure Development Lifecycle
