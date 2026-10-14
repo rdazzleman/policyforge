@@ -599,14 +599,17 @@ def test_an_abbreviation_resolves_when_it_names_exactly_one_loaded_catalog():
 
 
 def test_an_abbreviation_naming_two_catalogs_resolves_to_neither():
-    """With 800-53 and 800-171 both loaded, `NIST` names no one catalog.
+    """With two catalogs one abbreviation starts, it names neither.
 
     Picking one would attribute a citation to a framework the document
     never named. Reported as unknown instead, which is what it is.
     """
-    ids = {"nist-800-53": {"AC-2"}, "nist-800-171": {"3.1.1"}}
-    assert resolve_framework("NIST", ids) == ""
-    assert resolve_framework("NIST-800-53", ids) == "nist-800-53"
+    ids = {"acme-baseline": {"AC-2"}, "acme-cloud": {"3.1.1"}}
+    assert resolve_framework("ACME", ids) == ""
+    assert resolve_framework("ACME-baseline", ids) == "acme-baseline"
+    # The one exception: `NIST` alone names 800-53 (6044 on #17).
+    nist = {"nist-800-53": {"AC-2"}, "nist-800-171": {"3.1.1"}}
+    assert resolve_framework("NIST", nist) == "nist-800-53"
 
 
 def test_a_partial_token_is_not_an_abbreviation():
@@ -748,28 +751,23 @@ def _nist_800_171():
     ]
 
 
-def test_a_short_form_nist_citation_stops_resolving_when_a_second_nist_catalog_loads():
-    """`[NIST AC-2]` names one catalog until there are two, then it names neither.
+def test_a_short_form_nist_citation_names_800_53_when_a_second_nist_catalog_loads():
+    """`[NIST AC-2]` names 800-53 whatever else is loaded (6044 on #17).
 
-    This is the property the whole family-key change exists to protect, and
-    it is the one a reader is most likely to mistake for a regression. With
-    800-53 alone, `NIST` is an unambiguous abbreviation and resolves. Add
-    800-171 and it is ambiguous, so it resolves to nothing and the citation
-    is reported unknown — which is correct, because an assessor handed
-    `NIST AC-2` with two NIST catalogs in scope genuinely cannot tell which
-    one is meant.
+    It once stopped resolving as soon as 800-171 loaded (3512 on #214),
+    because `NIST` named two catalogs. The user's citation form writes
+    800-53's ids once, under `NIST`, so the bare name is 800-53's. The
+    family-key change's property still holds where it matters: 800-171's
+    own id under the bare name stays unknown, below.
     """
     one = _catalogs()
     two = _catalogs() + _nist_800_171()
-    body = "## Accounts\n\n[NIST AC-2]\n"
+    body = "## Accounts\n\n[NIST AC-2]\n[NIST 03.01.01]\n"
 
-    alone = _evidence(body, controls=one)
-    assert [c.requirement_id for c in alone.cited] == ["AC-2"]
-    assert alone.unknown == []
-
-    both = _evidence(body, controls=two)
-    assert both.cited == []
-    assert both.unknown == ["NIST AC-2"]
+    for controls in (one, two):
+        evidence = _evidence(body, controls=controls)
+        assert [c.key for c in evidence.cited] == [("nist-800-53", "AC-2")]
+        assert evidence.unknown == ["NIST 03.01.01"]
 
 
 def test_adding_a_catalog_makes_unknown_counts_rise_not_fall():
@@ -787,17 +785,21 @@ def test_adding_a_catalog_makes_unknown_counts_rise_not_fall():
     gate, because it is trusted.
 
     Now the direction reverses: adding a catalog can only make an ambiguous
-    citation unresolvable, so unknowns rise and `--strict` starts failing.
-    Anyone upgrading sees red, and the red is the point.
+    citation unresolvable, so unknowns rise or stay, and never fall into
+    evidence.
     """
-    body = "## Accounts\n\n[NIST AC-2]\n[NIST 800-53 AC-2]\n"
+    body = "## Accounts\n\n[NIST AC-2]\n[NIST 800-53 AC-2]\n[NIST 03.01.01]\n"
     alone = _evidence(body, controls=_catalogs())
     both = _evidence(body, controls=_catalogs() + _nist_800_171())
 
-    assert len(both.unknown) > len(alone.unknown), (
+    # Since 6044 on #17 `NIST` alone names 800-53, so adding 800-171 leaves
+    # the count where it was. It still must not fall: 800-171's own id
+    # under the bare name stays unknown with 800-171 loaded.
+    assert len(both.unknown) >= len(alone.unknown) > 0, (
         "adding a NIST-family catalog must not reduce the unknown count; "
         "a fall is the merged-key defect returning"
     )
+    assert "NIST 03.01.01" in both.unknown
     # the fully-qualified citation is unaffected by the second catalog
     assert ("nist-800-53", "AC-2") in {c.key for c in both.cited}
 

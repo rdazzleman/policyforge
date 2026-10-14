@@ -41,8 +41,8 @@
           }
         },
         {
-          "default": "<UNSET>",
-          "help": "Path to a controls.json. Repeatable - pass the framework the requirement belongs to as well as the NIST catalog.",
+          "default": null,
+          "help": "Path to a controls.json. Repeatable - pass the framework the requirement belongs to as well as the NIST catalog. Without it, `programme.catalogs` in config names the set.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -52,7 +52,7 @@
           "opts": [
             "--controls"
           ],
-          "required": true,
+          "required": false,
           "secondary_opts": [],
           "type": {
             "dir_okay": true,
@@ -131,8 +131,8 @@
           }
         },
         {
-          "default": "<UNSET>",
-          "help": "Path to a controls.json. Repeatable.",
+          "default": null,
+          "help": "Path to a controls.json. Repeatable. Without it, `programme.catalogs` in config names the set.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -142,7 +142,7 @@
           "opts": [
             "--controls"
           ],
-          "required": true,
+          "required": false,
           "secondary_opts": [],
           "type": {
             "dir_okay": true,
@@ -200,6 +200,27 @@
           }
         },
         {
+          "default": null,
+          "help": "The topic registry the Policy grouping is checked against (default: config/topics.yaml, skipped if it isn't there).",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "topics_path",
+          "nargs": 1,
+          "opts": [
+            "--topics"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "dir_okay": true,
+            "exists": false,
+            "file_okay": true,
+            "name": "path"
+          }
+        },
+        {
           "default": false,
           "help": "Treat warnings as failures too. For a repo that has finished migrating.",
           "hidden": false,
@@ -238,7 +259,7 @@
       ]
     },
     "coverage": {
-      "help": "Report which in-scope controls no topic owns, and which two topics claim.\n\nOrphaned controls mean nobody is doing the work. Contested controls are\nworse: it looks covered while each owner assumes the other has it. Both\nare pure set arithmetic over the topic registry - no LLM involved. See\nREADME's \"One topic, one team\".",
+      "help": "Report which in-scope controls no topic owns, and which two topics claim.\n\nOrphaned controls mean nobody is doing the work. Contested controls are\nworse: it looks covered while each owner assumes the other has it. Both\nare pure set arithmetic over the topic registry - no LLM involved.",
       "name": "coverage",
       "params": [
         {
@@ -263,8 +284,8 @@
           }
         },
         {
-          "default": "<UNSET>",
-          "help": "Path to a controls.json. Repeatable - pass the NIST 800-53 file plus any other framework you want reachability reported for.",
+          "default": null,
+          "help": "Path to a controls.json. Repeatable - pass the NIST 800-53 file plus any other framework you want reachability reported for. Without it, `programme.catalogs` in config names the set.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -274,7 +295,7 @@
           "opts": [
             "--controls"
           ],
-          "required": true,
+          "required": false,
           "secondary_opts": [],
           "type": {
             "dir_okay": true,
@@ -370,11 +391,8 @@
           "name": "check",
           "params": [
             {
-              "default": [
-                "data/frameworks/nist-800-53-r5/controls.json",
-                "data/frameworks/hipaa-security-rule/controls.json"
-              ],
-              "help": "A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's.",
+              "default": null,
+              "help": "A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's. Without it, `programme.catalogs` in config names the set; with none, the 800-53 and HIPAA Security Rule catalogs.",
               "hidden": false,
               "is_flag": false,
               "kind": "Option",
@@ -457,11 +475,8 @@
               }
             },
             {
-              "default": [
-                "data/frameworks/nist-800-53-r5/controls.json",
-                "data/frameworks/hipaa-security-rule/controls.json"
-              ],
-              "help": "A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's.",
+              "default": null,
+              "help": "A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's. Without it, `programme.catalogs` in config names the set; with none, the 800-53 and HIPAA Security Rule catalogs.",
               "hidden": false,
               "is_flag": false,
               "kind": "Option",
@@ -518,6 +533,24 @@
               "type": {
                 "name": "text"
               }
+            },
+            {
+              "default": null,
+              "help": "Refuse a run estimated to cost more than this many dollars, and stop one whose cost passes it. Overrides `budget.max_usd` in config for this run.",
+              "hidden": false,
+              "is_flag": false,
+              "kind": "Option",
+              "multiple": false,
+              "name": "max_cost",
+              "nargs": 1,
+              "opts": [
+                "--max-cost"
+              ],
+              "required": false,
+              "secondary_opts": [],
+              "type": {
+                "name": "float"
+              }
             }
           ]
         },
@@ -544,11 +577,8 @@
               }
             },
             {
-              "default": [
-                "data/frameworks/nist-800-53-r5/controls.json",
-                "data/frameworks/hipaa-security-rule/controls.json"
-              ],
-              "help": "A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's.",
+              "default": null,
+              "help": "A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's. Without it, `programme.catalogs` in config names the set; with none, the 800-53 and HIPAA Security Rule catalogs.",
               "hidden": false,
               "is_flag": false,
               "kind": "Option",
@@ -631,11 +661,8 @@
               }
             },
             {
-              "default": [
-                "data/frameworks/nist-800-53-r5/controls.json",
-                "data/frameworks/hipaa-security-rule/controls.json"
-              ],
-              "help": "A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's.",
+              "default": null,
+              "help": "A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's. Without it, `programme.catalogs` in config names the set; with none, the 800-53 and HIPAA Security Rule catalogs.",
               "hidden": false,
               "is_flag": false,
               "kind": "Option",
@@ -1665,7 +1692,7 @@
       ]
     },
     "etl-govramp": {
-      "help": "Parse your own GovRAMP controls matrix into this project's schema.\n\nGovRAMP's Terms & Conditions claim ownership of the documents published\non their site, and no redistribution grant was found - so, like HITRUST,\nthis project never bundles the matrix and never fetches it. You supply\nthe workbook and it is parsed locally, in memory. Nothing is written\nunless you pass --out.\n\nPass the workbook as GovRAMP publishes it rather than an extract of it:\nthe controls sheet is found among the template's other thirteen by its\nheader captions, so the Low, Moderate and High workbooks all read\nwithout being told which they are.\n\nWhat this gives you that the 800-53 catalog does not is the profile's\nown two additions - the parameter values GovRAMP has already decided\n(\"at least every 3 years\"), which `policyforge parameters` would\notherwise leave open for you to answer, and the requirements it layers\non top of a control - across the Core/Ready/Authorized tiers. Those\ntiers are *not* impact levels: one Moderate matrix holds all three.\n\nThe parser is part of the licensed-framework plugin, which is\ndistributed separately; without it, this command says so. If the\nplugin can't read your workbook, or you don't have it, `policyforge\ngenerate-parser --framework govramp` drafts a loader from a sample.",
+      "help": "Parse your own GovRAMP controls matrix into this project's schema.\n\nGovRAMP's Terms & Conditions claim ownership of the documents published\non their site, and no redistribution grant was found - so, like HITRUST,\nthis project never bundles the matrix and never fetches it. You supply\nthe workbook and it is parsed locally, in memory. Nothing is written\nunless you pass --out.\n\nPass the workbook as GovRAMP publishes it rather than an extract of it:\nthe controls sheet is found among the template's other thirteen by its\nheader captions, so the Low, Moderate and High workbooks all read\nwithout being told which they are.\n\nWhat this gives you that the 800-53 catalog does not is the profile's\nown two additions - the parameter values GovRAMP has already decided\n(\"at least every 3 years\"), which `policyforge parameters` would\notherwise leave open for you to answer, and the requirements it layers\non top of a control - across the Core/Ready/Authorized tiers. Those\ntiers are *not* impact levels: one Moderate matrix holds all three.\n\nThe parser is part of the licensed-framework plugin, which is\ndistributed separately: to ask for it, contact info@zardoz.io with the\nsubject \"PolicyForge licensed-framework plugin\". Without it, this\ncommand says so. If the plugin can't read your workbook, or you don't\nhave it, `policyforge generate-parser --framework govramp` drafts a\nloader from a sample.",
       "name": "etl-govramp",
       "params": [
         {
@@ -1759,7 +1786,25 @@
           "is_flag": true,
           "kind": "Option",
           "multiple": false,
-          "name": "force",
+          "name": "allow_undeclared_licensed",
+          "nargs": 1,
+          "opts": [
+            "--allow-undeclared-licensed"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "boolean"
+          }
+        },
+        {
+          "default": false,
+          "help": "",
+          "hidden": true,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "retired_force",
           "nargs": 1,
           "opts": [
             "--force"
@@ -1953,7 +1998,7 @@
       ]
     },
     "etl-hitrust": {
-      "help": "Parse your own licensed HITRUST CSF export into this project's schema.\n\nHITRUST CSF is licensed content. This project never bundles it and never\nfetches it: you supply an export from your own MyCSF licence and it is\nparsed locally, in memory. Nothing is written unless you pass --out.\n\nPrefer a CSV export where you have the choice. The rendered HTML/MHTML of\nthe same report is more clearly labelled but carries markedly fewer\nauthoritative-source mappings, which is most of what makes a CSF export\nworth ingesting.\n\nThe parser is part of the licensed-framework plugin, which is\ndistributed separately; without it, this command says so. If the\nplugin can't read your export, or you don't have it, `policyforge\ngenerate-parser --framework hitrust` drafts a loader from a sample.",
+      "help": "Parse your own licensed HITRUST CSF export into this project's schema.\n\nHITRUST CSF is licensed content. This project never bundles it and never\nfetches it: you supply an export from your own MyCSF licence and it is\nparsed locally, in memory. Nothing is written unless you pass --out.\n\nPrefer a CSV export where you have the choice. The rendered HTML/MHTML of\nthe same report is more clearly labelled but carries markedly fewer\nauthoritative-source mappings, which is most of what makes a CSF export\nworth ingesting.\n\nThe parser is part of the licensed-framework plugin, which is\ndistributed separately: to ask for it, contact info@zardoz.io with the\nsubject \"PolicyForge licensed-framework plugin\". Without it, this\ncommand says so. If the plugin can't read your export, or you don't\nhave it, `policyforge generate-parser --framework hitrust` drafts a\nloader from a sample.",
       "name": "etl-hitrust",
       "params": [
         {
@@ -2023,7 +2068,25 @@
           "is_flag": true,
           "kind": "Option",
           "multiple": false,
-          "name": "force",
+          "name": "allow_undeclared_licensed",
+          "nargs": 1,
+          "opts": [
+            "--allow-undeclared-licensed"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "boolean"
+          }
+        },
+        {
+          "default": false,
+          "help": "",
+          "hidden": true,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "retired_force",
           "nargs": 1,
           "opts": [
             "--force"
@@ -2217,7 +2280,7 @@
       ]
     },
     "etl-soc2-tsc": {
-      "help": "Parse YOUR OWN copy of the AICPA Trust Services Criteria (SOC 2), and\noptionally your own copy of the AICPA's mapping to NIST SP 800-53, into a\nlocal, licensed catalog.\n\nNOTHING IS FETCHED FROM THE AICPA, and nothing licensed ships with this\nproject. The AICPA's terms govern your copy; the catalog README quotes\nthem, and whether they permit this use is your decision.\n\nBuilt and tested only against synthetic input, since no copy of the\ncriteria is in this project: your run is the first real one. It refuses\nwhole, writing nothing, if your file is shaped differently.\n\nMapping links are read as partial (`source-untyped`), because the AICPA's\nmapping states no relationship and predates Rev 5. Each 800-53 id NIST\nmarks as changed substantively since Rev 4 is flagged; one withdrawn in\nRev 5, or not a Rev 5 id at all, is refused by name.",
+      "help": "Parse YOUR OWN copy of the AICPA Trust Services Criteria (SOC 2), and\noptionally your own copy of the AICPA's mapping to NIST SP 800-53, into a\nlocal, licensed catalog.\n\nNOTHING IS FETCHED FROM THE AICPA, and nothing licensed ships with this\nproject. The AICPA's terms govern your copy; the catalog README quotes\nthem, and whether they permit this use is your decision.\n\nBuilt and tested only against synthetic input, since no copy of the\ncriteria is in this project: your run is the first real one. It refuses\nwhole, writing nothing, if your file is shaped differently.\n\nMapping links are read as partial (`source-untyped`), because the AICPA's\nmapping states no relationship and predates Rev 5. Each 800-53 id NIST\nmarks as changed substantively since Rev 4 is flagged; one withdrawn in\nRev 5, or not a Rev 5 id at all, is refused by name.\n\nThe parser is part of the licensed-framework plugin, which is\ndistributed separately: to ask for it, contact info@zardoz.io with the\nsubject \"PolicyForge licensed-framework plugin\". Without it, this\ncommand says so.",
       "name": "etl-soc2-tsc",
       "params": [
         {
@@ -2329,7 +2392,25 @@
           "is_flag": true,
           "kind": "Option",
           "multiple": false,
-          "name": "force",
+          "name": "allow_undeclared_licensed",
+          "nargs": 1,
+          "opts": [
+            "--allow-undeclared-licensed"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "boolean"
+          }
+        },
+        {
+          "default": false,
+          "help": "",
+          "hidden": true,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "retired_force",
           "nargs": 1,
           "opts": [
             "--force"
@@ -2504,6 +2585,24 @@
           "type": {
             "name": "boolean"
           }
+        },
+        {
+          "default": false,
+          "help": "Allow publishing documents that contain secret findings.",
+          "hidden": false,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "allow_secret_findings",
+          "nargs": 1,
+          "opts": [
+            "--allow-secret-findings"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "boolean"
+          }
         }
       ]
     },
@@ -2517,8 +2616,30 @@
       "name": "generate",
       "params": [
         {
+          "default": null,
+          "help": "Draft a document of its own kind rather than a topic's: 'acceptable-use' writes the Acceptable Use Policy and its Privileged User Rules addendum from a fixed set of 800-53 controls. Takes no --synthesis, --standard or --policy.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "document_kind",
+          "nargs": 1,
+          "opts": [
+            "--document"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "case_sensitive": true,
+            "choices": [
+              "acceptable-use"
+            ],
+            "name": "choice"
+          }
+        },
+        {
           "default": "standard",
-          "help": "Document tier to draft. 'policy' and 'procedure' require --standard, so they can reference the Standard document by name.",
+          "help": "Document tier to draft. 'policy' and 'procedure' require --standard, so they can reference the Standard document by name; 'policy' with --policy drafts one Policy over every Standard that names it instead.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -2541,8 +2662,8 @@
           }
         },
         {
-          "default": "<UNSET>",
-          "help": "Path to a synthesized topic markdown file produced by `policyforge synthesize`.",
+          "default": null,
+          "help": "Path to a synthesized topic markdown file produced by `policyforge synthesize`. Required unless --policy is given.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -2552,7 +2673,7 @@
           "opts": [
             "--synthesis"
           ],
-          "required": true,
+          "required": false,
           "secondary_opts": [],
           "type": {
             "dir_okay": true,
@@ -2563,7 +2684,7 @@
         },
         {
           "default": null,
-          "help": "Path to the already-generated Standard document this Policy or Procedure implements. Required when --tier policy or --tier procedure.",
+          "help": "Path to the already-generated Standard document this Policy or Procedure implements. Required when --tier policy or --tier procedure, except with --policy.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -2584,7 +2705,46 @@
         },
         {
           "default": null,
-          "help": "Where to write the drafted document (default: output/<tier>s/<synthesis-filename>).",
+          "help": "Draft one Policy over every Standard whose topic names it (--tier policy). Reads the Policy and its topics from the registry (--topics), and the Standards from the content tree.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "policy_name",
+          "nargs": 1,
+          "opts": [
+            "--policy"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "text"
+          }
+        },
+        {
+          "default": null,
+          "help": "The topic registry --policy reads (default: config/topics.yaml).",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "topics_path",
+          "nargs": 1,
+          "opts": [
+            "--topics"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "dir_okay": true,
+            "exists": false,
+            "file_okay": true,
+            "name": "path"
+          }
+        },
+        {
+          "default": null,
+          "help": "Where to write the drafted document (default: docs/<tier>s/<synthesis-filename>).",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -2622,6 +2782,42 @@
             "exists": false,
             "file_okay": true,
             "name": "path"
+          }
+        },
+        {
+          "default": false,
+          "help": "Replace the target even though it was edited since `generate` wrote it, or was never written by `generate`. The replaced file is recorded in history first.",
+          "hidden": false,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "overwrite_edits",
+          "nargs": 1,
+          "opts": [
+            "--overwrite-edits"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "boolean"
+          }
+        },
+        {
+          "default": null,
+          "help": "Refuse a run estimated to cost more than this many dollars, and stop one whose cost passes it. Overrides `budget.max_usd` in config for this run.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "max_cost",
+          "nargs": 1,
+          "opts": [
+            "--max-cost"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "float"
           }
         }
       ]
@@ -2733,7 +2929,7 @@
         },
         {
           "default": false,
-          "help": "Copy the candidate into src/policyforge/ingest/ once it passes the static check and its trial run returns records. Without this it stays in output/ for review.",
+          "help": "Copy the candidate into src/policyforge/ingest/ once it passes the static check and its trial run returns records. Without this it stays in output/ for review. Either way, read it before you commit it: the checks catch known-dangerous shapes, not every one.",
           "hidden": false,
           "is_flag": true,
           "kind": "Option",
@@ -2984,7 +3180,7 @@
       ]
     },
     "init": {
-      "help": "Lay out a PolicyForge project: bundled catalogs, example configs, .gitignore.\n\nEvery command reads `config/` and `data/frameworks/` relative to where it\nruns. A clone of the repository already has them; an installed package\n(Homebrew, pipx, pip) does not, and this writes them. The public-domain\ncatalogs are copied in - NIST 800-53, FedRAMP, ARC-AMPE, the HIPAA\nSecurity Rule - with a README for each bring-your-own one.\n\nNever overwrites: a file that already exists is kept, so running it again,\nor inside a clone, changes nothing you have edited.",
+      "help": "Lay out a PolicyForge project: catalogs, config.yaml, topics.yaml, .gitignore.\n\nEvery command reads `config/` and `data/frameworks/` relative to where it\nruns. A clone of the repository already has them; an installed package\n(Homebrew, pipx, pip) does not, and this writes them. The public-domain\ncatalogs are copied in - NIST 800-53, the AI RMF and its Playbook, NIST\n800-171, CSF 2.0, FedRAMP, ARC-AMPE, the HIPAA Security Rule, Privacy Rule\nand Breach Notification Rule, 42 CFR Part 2, Information Blocking and ONC\n170.315 - with a README for each bring-your-own one. It also writes a\nstarter `config/config.yaml` (your provider and model, or a local model\nthat needs no key, loading 800-53, the AI RMF and the three HIPAA rules)\nand `config/topics.yaml`: the topics the organisation's scope facts call\nfor, at most 25, with what was folded away and what was not declared named\nat the top. Declare the facts with --builds-software, --own-facilities,\n--personal-data, --baseline and --ai, or under `programme:` in config.yaml.\n\nNever overwrites: a file that already exists is kept, so running it again,\nor inside a clone, changes nothing you have edited. After an upgrade,\n`--refresh` replaces the bundled catalogs and examples that changed and\nlists them.",
       "name": "init",
       "params": [
         {
@@ -3004,8 +3200,288 @@
             "file_okay": false,
             "name": "directory"
           }
+        },
+        {
+          "default": null,
+          "help": "The model provider for the starter config.yaml (local, anthropic, gemini, litellm, or another provider's name with --model). Default: local, a model on this machine that needs no key.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "provider",
+          "nargs": 1,
+          "opts": [
+            "--provider"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "text"
+          }
+        },
+        {
+          "default": null,
+          "help": "The model for the starter config.yaml.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "model",
+          "nargs": 1,
+          "opts": [
+            "--model"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "text"
+          }
+        },
+        {
+          "default": null,
+          "help": "The NAME of the environment variable holding the provider's key. The key itself is never asked for or written.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "api_key_env",
+          "nargs": 1,
+          "opts": [
+            "--api-key-env"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "text"
+          }
+        },
+        {
+          "default": null,
+          "help": "Scope fact: the organisation builds software (turns Secure Development on). Left out, it is undeclared and its topic is left out.",
+          "hidden": false,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "builds_software",
+          "nargs": 1,
+          "opts": [
+            "--builds-software"
+          ],
+          "required": false,
+          "secondary_opts": [
+            "--no-builds-software"
+          ],
+          "type": {
+            "name": "boolean"
+          }
+        },
+        {
+          "default": null,
+          "help": "Scope fact: the organisation runs its own facilities (turns Physical & Environmental Security on).",
+          "hidden": false,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "own_facilities",
+          "nargs": 1,
+          "opts": [
+            "--own-facilities"
+          ],
+          "required": false,
+          "secondary_opts": [
+            "--no-own-facilities"
+          ],
+          "type": {
+            "name": "boolean"
+          }
+        },
+        {
+          "default": null,
+          "help": "Scope fact: the personal data handled. pii adds Privacy; phi adds the HIPAA topics as well.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "personal_data",
+          "nargs": 1,
+          "opts": [
+            "--personal-data"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "case_sensitive": true,
+            "choices": [
+              "none",
+              "pii",
+              "phi"
+            ],
+            "name": "choice"
+          }
+        },
+        {
+          "default": null,
+          "help": "Scope fact: an assessed control baseline, which keeps Personnel Security and System Maintenance as topics.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "baseline",
+          "nargs": 1,
+          "opts": [
+            "--baseline"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "case_sensitive": true,
+            "choices": [
+              "none",
+              "800-53",
+              "fedramp",
+              "govramp"
+            ],
+            "name": "choice"
+          }
+        },
+        {
+          "default": null,
+          "help": "Scope fact: the organisation's role with AI. user gets three AI topics; builder gets the AI RMF's five, and up to two more.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "ai_role",
+          "nargs": 1,
+          "opts": [
+            "--ai"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "case_sensitive": true,
+            "choices": [
+              "none",
+              "user",
+              "builder"
+            ],
+            "name": "choice"
+          }
+        },
+        {
+          "default": false,
+          "help": "Bring an existing project's bundled catalogs and example configs up to this version and say what changed. Your config.yaml and topics.yaml are not touched, and a replaced file's previous copy is kept under output/.init-backup/.",
+          "hidden": false,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "refresh",
+          "nargs": 1,
+          "opts": [
+            "--refresh"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "boolean"
+          }
         }
       ]
+    },
+    "library": {
+      "commands": {
+        "add": {
+          "help": "Add a version: copy the export, parse it with the framework's licensed\nparser, record where both came from, write the change log against the\ncurrent version, then commit and tag `v<version>` in the library.\n\nRefused before anything is written: a library that isn't a repository of\nits own, sits inside a PolicyForge checkout, or hasn't declared it may hold\nlicensed content; a version that exists; an export that is already a\nversion under another name; a library with uncommitted changes or no git\nidentity.",
+          "name": "add",
+          "params": [
+            {
+              "default": "<UNSET>",
+              "help": "The library: a git repository of its own whose framework.yaml names the parser and declares `allow_licensed_in_repo: true`.",
+              "hidden": false,
+              "is_flag": false,
+              "kind": "Option",
+              "multiple": false,
+              "name": "library_dir",
+              "nargs": 1,
+              "opts": [
+                "--library"
+              ],
+              "required": true,
+              "secondary_opts": [],
+              "type": {
+                "dir_okay": true,
+                "exists": true,
+                "file_okay": false,
+                "name": "directory"
+              }
+            },
+            {
+              "default": "<UNSET>",
+              "help": "The export as you received it (e.g. your MyCSF export). Copied byte for byte.",
+              "hidden": false,
+              "is_flag": false,
+              "kind": "Option",
+              "multiple": false,
+              "name": "export_path",
+              "nargs": 1,
+              "opts": [
+                "--export"
+              ],
+              "required": true,
+              "secondary_opts": [],
+              "type": {
+                "dir_okay": false,
+                "exists": true,
+                "file_okay": true,
+                "name": "file"
+              }
+            },
+            {
+              "default": "<UNSET>",
+              "help": "The version it is, e.g. 11.7.",
+              "hidden": false,
+              "is_flag": false,
+              "kind": "Option",
+              "multiple": false,
+              "name": "version",
+              "nargs": 1,
+              "opts": [
+                "--version"
+              ],
+              "required": true,
+              "secondary_opts": [],
+              "type": {
+                "name": "text"
+              }
+            },
+            {
+              "default": null,
+              "help": "Your documents, so the change log names which cite each changed item. Default: the project's content tree, if there is one.",
+              "hidden": false,
+              "is_flag": false,
+              "kind": "Option",
+              "multiple": false,
+              "name": "content_dir",
+              "nargs": 1,
+              "opts": [
+                "--content-dir"
+              ],
+              "required": false,
+              "secondary_opts": [],
+              "type": {
+                "dir_okay": true,
+                "exists": false,
+                "file_okay": false,
+                "name": "directory"
+              }
+            }
+          ]
+        }
+      },
+      "help": "Keep your own licensed catalog's versions, each traceable to its export,\nwith a change log between them (a private git repository of their own).",
+      "invoke_without_command": false,
+      "name": "library",
+      "params": []
     },
     "llm-check": {
       "help": "Confirm your configured API key + model actually work.",
@@ -3017,10 +3493,8 @@
       "name": "map",
       "params": [
         {
-          "default": [
-            "data/frameworks/nist-800-53-r5/controls.json"
-          ],
-          "help": "Path to a controls.json. Repeatable, and normally repeated: a cross-framework crosswalk needs every framework loaded together, so passing only the NIST file produces a crosswalk with nothing to cross-reference.",
+          "default": null,
+          "help": "Path to a controls.json. Repeatable, and normally repeated: a cross-framework crosswalk needs every framework loaded together, so passing only the NIST file produces a crosswalk with nothing to cross-reference. Without it, `programme.catalogs` in config names the set; with none, the 800-53 catalog alone.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -3222,8 +3696,8 @@
       "name": "parameters",
       "params": [
         {
-          "default": "<UNSET>",
-          "help": "Framework controls.json to read parameters from. Repeatable.",
+          "default": null,
+          "help": "Framework controls.json to read parameters from. Repeatable. Without it, `programme.catalogs` in config names the set.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -3233,7 +3707,7 @@
           "opts": [
             "--controls"
           ],
-          "required": true,
+          "required": false,
           "secondary_opts": [],
           "type": {
             "dir_okay": true,
@@ -3527,7 +4001,43 @@
           "is_flag": true,
           "kind": "Option",
           "multiple": false,
-          "name": "force",
+          "name": "overwrite_wiki_changes",
+          "nargs": 1,
+          "opts": [
+            "--overwrite-wiki-changes"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "boolean"
+          }
+        },
+        {
+          "default": false,
+          "help": "Allow publishing documents that contain secret findings.",
+          "hidden": false,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "allow_secret_findings",
+          "nargs": 1,
+          "opts": [
+            "--allow-secret-findings"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "boolean"
+          }
+        },
+        {
+          "default": false,
+          "help": "",
+          "hidden": true,
+          "is_flag": true,
+          "kind": "Option",
+          "multiple": false,
+          "name": "retired_force",
           "nargs": 1,
           "opts": [
             "--force"
@@ -3895,8 +4405,8 @@
           }
         },
         {
-          "default": "<UNSET>",
-          "help": "Path to a controls.json. Repeatable - pass the NIST catalog plus every framework you want the documents resolved against.",
+          "default": null,
+          "help": "Path to a controls.json. Repeatable - pass the NIST catalog plus every framework you want the documents resolved against. Without it, `programme.catalogs` in config names the set.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -3906,7 +4416,7 @@
           "opts": [
             "--controls"
           ],
-          "required": true,
+          "required": false,
           "secondary_opts": [],
           "type": {
             "dir_okay": true,
@@ -3976,8 +4486,8 @@
       "name": "ssp",
       "params": [
         {
-          "default": "<UNSET>",
-          "help": "Path to a controls.json. Repeatable - pass the NIST 800-53 file plus any other framework whose mappings you want shown as crosswalk columns.",
+          "default": null,
+          "help": "Path to a controls.json. Repeatable - pass the NIST 800-53 file plus any other framework whose mappings you want shown as crosswalk columns. Without it, `programme.catalogs` in config names the set.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -3987,7 +4497,7 @@
           "opts": [
             "--controls"
           ],
-          "required": true,
+          "required": false,
           "secondary_opts": [],
           "type": {
             "dir_okay": true,
@@ -4114,6 +4624,24 @@
             "file_okay": true,
             "name": "path"
           }
+        },
+        {
+          "default": null,
+          "help": "Refuse a run estimated to cost more than this many dollars, and stop one whose cost passes it. Overrides `budget.max_usd` in config for this run.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "max_cost",
+          "nargs": 1,
+          "opts": [
+            "--max-cost"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "float"
+          }
         }
       ]
     },
@@ -4197,8 +4725,8 @@
           }
         },
         {
-          "default": "<UNSET>",
-          "help": "Path to a controls.json (one per loaded framework). Repeatable.",
+          "default": null,
+          "help": "Path to a controls.json (one per loaded framework). Repeatable. Without it, `programme.catalogs` in config names the set.",
           "hidden": false,
           "is_flag": false,
           "kind": "Option",
@@ -4208,7 +4736,7 @@
           "opts": [
             "--controls"
           ],
-          "required": true,
+          "required": false,
           "secondary_opts": [],
           "type": {
             "dir_okay": true,
@@ -4278,6 +4806,24 @@
             "exists": false,
             "file_okay": true,
             "name": "path"
+          }
+        },
+        {
+          "default": null,
+          "help": "Refuse a run estimated to cost more than this many dollars, and stop one whose cost passes it. Overrides `budget.max_usd` in config for this run.",
+          "hidden": false,
+          "is_flag": false,
+          "kind": "Option",
+          "multiple": false,
+          "name": "max_cost",
+          "nargs": 1,
+          "opts": [
+            "--max-cost"
+          ],
+          "required": false,
+          "secondary_opts": [],
+          "type": {
+            "name": "float"
           }
         }
       ]
@@ -4623,7 +5169,7 @@
           ]
         }
       },
-      "help": "Ask questions about your published policy set, conversationally.\n\nRun with no subcommand to open the shell. Zardoz reads; it does not\nwrite. It can draft a `policyforge edit-topic` command for you to run,\nbut every change to a live page still goes through that command's gates.",
+      "help": "Ask questions about your published policy set, conversationally.\n\nRun with no subcommand to open the shell. Zardoz reads; it does not\nwrite. To change a page, run `policyforge edit-topic` yourself: every\nchange to a live page goes through that command's gates.",
       "invoke_without_command": true,
       "name": "zardoz",
       "params": [
@@ -4711,5 +5257,24 @@
   "help": "PolicyForge - cross-mapped compliance policy/procedure generation.",
   "invoke_without_command": false,
   "name": "policyforge",
-  "params": []
+  "params": [
+    {
+      "default": false,
+      "help": "Print the installed PolicyForge version and exit.",
+      "hidden": false,
+      "is_flag": true,
+      "kind": "Option",
+      "multiple": false,
+      "name": "version",
+      "nargs": 1,
+      "opts": [
+        "--version"
+      ],
+      "required": false,
+      "secondary_opts": [],
+      "type": {
+        "name": "boolean"
+      }
+    }
+  ]
 }

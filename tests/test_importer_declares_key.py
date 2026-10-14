@@ -54,7 +54,8 @@ def _govramp(tmp_path, out):
 
     matrix = build_workbook(tmp_path / "GovRAMP-Controls-Matrix_Mod_Rev5_V1.06.xlsx")
     return CliRunner().invoke(
-        cli_mod.cli, ["etl-govramp", "--export", str(matrix), "--out", str(out), "--force"]
+        cli_mod.cli,
+        ["etl-govramp", "--export", str(matrix), "--out", str(out), "--allow-undeclared-licensed"],
     )
 
 
@@ -83,7 +84,7 @@ def test_etl_hitrust_declares_the_key_the_name_already_had(tmp_path, monkeypatch
     from policyforge.ingest.levelled import FRAMEWORK
 
     out = tmp_path / "local_content" / "hitrust" / "controls.json"
-    result = _hitrust(monkeypatch, tmp_path, "--out", str(out), "--force")
+    result = _hitrust(monkeypatch, tmp_path, "--out", str(out), "--allow-undeclared-licensed")
 
     assert result.exit_code == 0, result.output
     manifest = yaml.safe_load((out.parent / "framework.yaml").read_text(encoding="utf-8"))

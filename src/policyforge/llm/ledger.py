@@ -125,6 +125,15 @@ class CallRecord:
     #: The provider's own id for the request. Free on the response, the
     #: first thing a vendor asks for, and unrecoverable afterwards.
     request_id: str | None = None
+    #: Where the call was sent (#328): the base URL the provider resolved,
+    #: base-URL overrides such as ANTHROPIC_BASE_URL included, as scheme,
+    #: host, port and path. Userinfo, the query, the fragment and path
+    #: parameters are dropped; the rest of the path is kept as given, so a
+    #: key carried as a path segment would be recorded (`recordable_endpoint`).
+    #: None where the provider can't say (LiteLLM with no `api_base`, a
+    #: fake client), on a call that raised before a reply, on an embedding
+    #: or rerank batch, and on every row written before #328.
+    endpoint: str | None = None
     #: Every bigger-budget re-send inside this call, with the billed attempt
     #: before it: its request id, cost and output tokens (#361). The row's
     #: tokens and request id are the LAST attempt's; this is where the
@@ -171,6 +180,10 @@ class Scope:
     site: str | None = None
     content_class: str | None = None
     records: list[CallRecord] = field(default_factory=list)
+    #: What set `content_class`, in words a refusal can show: the passage, the
+    #: target file, the synthesis (#327). "" when the scope was opened with a
+    #: class and no reason.
+    content_reason: str = ""
 
     @property
     def models(self) -> list[str]:
@@ -277,6 +290,64 @@ def about(subject: str, *, site: str | None = None, content_class: str | None = 
 
 def current_scope() -> Scope | None:
     return _scope.get(None)
+
+
+@contextmanager
+def carrying(content_class: str | None, reason: str = ""):
+    """For the calls inside, raise the current scope's class to the most
+    guarded of its own and `content_class`; put it back afterwards (#327).
+
+    One scope can make calls that send different things. A Zardoz turn
+    rewrites a follow-up from the earlier exchange, routes the question, and
+    answers from passages, all under one scope. A call's class is the most
+    guarded of everything THAT call sends (80's ruling on 327), so the class
+    is raised around the call, not for the whole turn. `reason` says what
+    raised it, and a refusal shows it. Unknown or empty classes raise
+    nothing. With no scope open, one is opened for the block.
+    """
+    from .boundary import CONTENT_CLASSES
+
+    klass = str(content_class or "").strip().lower()
+    scope = current_scope()
+    if scope is None:
+        with about("unscoped", content_class=klass or None) as opened:
+            opened.content_reason = reason if klass else ""
+            yield opened
+        return
+    before = (scope.content_class, scope.content_reason)
+    rank = CONTENT_CLASSES.index
+    current = scope.content_class if scope.content_class in CONTENT_CLASSES else None
+    if klass in CONTENT_CLASSES and (current is None or rank(klass) > rank(current)):
+        scope.content_class, scope.content_reason = klass, reason
+    try:
+        yield scope
+    finally:
+        scope.content_class, scope.content_reason = before
+
+
+def scope_content():
+    """The class of what the current call sends, and what said so (#327).
+
+    The scope's class when a caller named one, otherwise the organization's
+    own material: what a policy corpus is, and what `classify_path` calls
+    anything that isn't a declared catalog. The one reading for every
+    channel: the model wrapper below and the embed/rerank `Channel`. An
+    unknown class is an error naming it, never a guess.
+    """
+    from .boundary import CONTENT_CLASSES, ORG_INTERNAL, ContentClassification
+
+    scope = current_scope()
+    if scope is not None and scope.content_class:
+        if scope.content_class not in CONTENT_CLASSES:
+            raise ValueError(
+                f"The ledger scope for {scope.subject!r} names content class "
+                f"{scope.content_class!r}; known: {', '.join(CONTENT_CLASSES)}."
+            )
+        return ContentClassification(
+            scope.content_class,
+            scope.content_reason or f"the scope for {scope.subject!r} says so",
+        )
+    return ContentClassification(ORG_INTERNAL, "the organization's own documents")
 
 
 # ---- what a set of calls cost (#379) ----------------------------------------
@@ -393,19 +464,63 @@ _run: contextvars.ContextVar[list[CallRecord] | None] = contextvars.ContextVar(
 )
 
 
+#: The spend meter of the `run()` block in force, once a call under a ceiling
+#: has made one (#125). A holder rather than the meter itself: the ceiling is
+#: read from the provider's config at its first call, and the planned count
+#: is the command's, set when the block is opened.
+_run_spend: contextvars.ContextVar[dict | None] = contextvars.ContextVar(
+    "policyforge_run_spend", default=None
+)
+
+#: What a ceiling's stop is recorded as in the ledger file. Those rows aren't
+#: calls: `load` keeps them out of every total and `load_stops` returns them.
+SPEND_STOP = "spend_ceiling"
+
+
 @contextmanager
-def run(report=None):
+def run(report=None, *, planned: int | None = None):
     """Collect every row a command records, and pass `run_summary` of them
     to `report` at the end, **whether the run succeeded or not**: a run that
-    failed after re-sending is the one whose bill most needs saying."""
+    failed after re-sending is the one whose bill most needs saying.
+
+    `planned` is how many requests the command meant to make, where it knows
+    that up front: a spend ceiling's stop says REQUESTED beside COMPLETED
+    from it (#125)."""
     records: list[CallRecord] = []
     token = _run.set(records)
+    spend_token = _run_spend.set({"planned": planned, "meter": None})
     try:
         yield records
     finally:
         _run.reset(token)
+        _run_spend.reset(spend_token)
         if report is not None:
             report(run_summary(records))
+
+
+def new_spend() -> dict:
+    """A spend total for `session_spend`: no meter until a call under a
+    ceiling makes one, as a `run()` block's."""
+    return {"planned": None, "meter": None}
+
+
+@contextmanager
+def session_spend(holder: dict):
+    """Draw every call in the block on `holder`'s total, across blocks.
+
+    `run()` holds one total for one command. A session (the Zardoz shell, the
+    MCP server) makes calls over many turns, and from more than one provider:
+    the answerer and, under `entail.answering`, the judge. Each provider kept
+    its own total, so a session could spend the ceiling once per provider
+    (1d, PR 408, measured at twice it). The session keeps `new_spend()` and
+    opens this around each turn, so every provider draws on one total that
+    lasts the session.
+    """
+    token = _run_spend.set(holder)
+    try:
+        yield holder
+    finally:
+        _run_spend.reset(token)
 
 
 def run_summary(records: list[CallRecord]) -> str:
@@ -497,8 +612,29 @@ def load(path: Path | None = None) -> list[CallRecord]:
             # because inventing a record is worse than missing one.
             continue
         known = {f.name for f in dataclasses.fields(CallRecord)}
-        records.append(CallRecord(**{k: v for k, v in data.items() if k in known}))
+        record = CallRecord(**{k: v for k, v in data.items() if k in known})
+        if record.stop_reason == SPEND_STOP:
+            continue  # a stop is not a request: see `load_stops`
+        records.append(record)
     return records
+
+
+def load_stops(path: Path | None = None) -> list[CallRecord]:
+    """The runs a spend ceiling stopped (#125), oldest first. Each row holds
+    the cost reached in `cost_usd` and the stop's account in `error`."""
+    source = path or DEFAULT_LEDGER_PATH
+    if not source.exists():
+        return []
+    known = {f.name for f in dataclasses.fields(CallRecord)}
+    stops = []
+    for line in source.read_text(encoding="utf-8").splitlines():
+        try:
+            data = json.loads(line) if line.strip() else None
+        except json.JSONDecodeError:
+            continue
+        if isinstance(data, dict) and data.get("stop_reason") == SPEND_STOP:
+            stops.append(CallRecord(**{k: v for k, v in data.items() if k in known}))
+    return stops
 
 
 # ---- the recording provider ----------------------------------------------
@@ -521,6 +657,9 @@ class RecordingProvider(LLMProvider):
         provider_class: str,
         path: Path | None = None,
         agreement: dict | None = None,
+        classification=None,
+        config: dict | None = None,
+        recording: bool = True,
     ):
         self._inner = inner
         self._provider_name = provider_name
@@ -529,6 +668,184 @@ class RecordingProvider(LLMProvider):
         #: The declared agreement this provider sends licensed content under,
         #: or None: decided once, from config, in `wrap` (#11).
         self._agreement = agreement
+        #: The provider's boundary classification and the config whose
+        #: ceilings and agreement decide each call (#327). None for a wrapper
+        #: built by hand without them: nothing to decide against.
+        self._classification = classification
+        self._config = config or {}
+        #: False when `llm.ledger.enabled` is false: calls are still DECIDED,
+        #: only not written down (#327: a check that lived in the recording
+        #: half switched off with the ledger).
+        self._recording = recording
+        #: The running total when no `run()` block is open (#125).
+        self._own_meter = None
+
+    def _tag_http(self, exc: BaseException) -> None:
+        """Say which service an HTTP failure came from (#413): this provider,
+        and the variable `llm.api_key_env` names. The wrapper made the
+        request, so the status code is never what decides whose credential
+        to point at."""
+        import requests
+
+        from .base import ProviderHttpError
+
+        if not isinstance(exc, (requests.exceptions.RequestException, ProviderHttpError)):
+            return
+        from policyforge.http_service import LLM, Service, tag
+
+        llm = self._config.get("llm") if isinstance(self._config.get("llm"), dict) else {}
+        tag(
+            exc,
+            Service(
+                LLM,
+                f"the {self._provider_name} model provider",
+                str((llm or {}).get("api_key_env") or ""),
+            ),
+        )
+
+    def _spend_meter(self):
+        """The running total of this run, or None when no ceiling is set.
+
+        The ceiling is `budget.max_usd` in the config this provider was
+        built with (`--max-cost` is applied over it by the command), so every
+        command that goes through `get_provider` is covered the day it is
+        written. The total belongs to the `run()` block in force, and to
+        this provider instance when there is none.
+        """
+        from . import spend
+
+        ceiling = spend.ceiling_of(self._config)
+        if ceiling is None:
+            return None
+        holder = _run_spend.get()
+        if holder is not None:
+            if holder["meter"] is None:
+                holder["meter"] = spend.Meter(ceiling, holder["planned"])
+            return holder["meter"]
+        if self._own_meter is None:
+            self._own_meter = spend.Meter(ceiling)
+        return self._own_meter
+
+    def _meter_cost(
+        self, meter, system, prompt, response, billed, cost, last_cost, max_tokens, extra_chars
+    ) -> None:
+        """Put one request's cost on the running total.
+
+        A cost the provider reported goes on as it is. One it did not (only
+        LiteLLM reports a cost; the rest return tokens, or nothing) is priced
+        here from the tokens at the model map's rates, never added as $0: a
+        ceiling that held for one provider and not another is a setting that
+        does nothing where it matters (#125, 1d on PR 406).
+        """
+        from . import spend
+
+        if cost is not None:
+            meter.add(cost)
+            return
+        rates = spend.rates_for(
+            response.model if response is not None and response.model else self.model,
+            self._provider_class,
+        )
+        # A request that raised after billing carries what it used on the
+        # exception (`ReasoningBudgetExhausted`: two attempts' tokens, #343),
+        # and the limit it was given where the output was spent against it.
+        if response is not None:
+            input_tokens, output_tokens = response.input_tokens, response.output_tokens
+            replied, limit = True, max_tokens
+        else:
+            input_tokens = getattr(billed, "input_tokens", None)
+            output_tokens = getattr(billed, "output_tokens", None)
+            spent_against = getattr(billed, "max_tokens", None)
+            replied = output_tokens is not None or spent_against is not None
+            limit = spent_against if spent_against is not None else max_tokens
+        priced = spend.cost_of_response(
+            rates=rates,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            prompt_tokens=spend.input_tokens_of(system, prompt)
+            + -(-extra_chars // spend.CHARS_PER_TOKEN),
+            max_tokens=limit,
+            replied=replied,
+        )
+        if priced is None:
+            # No price at all: what is known is the last attempt's part.
+            meter.add(last_cost, whole=False)
+            return
+        if last_cost is not None and last_cost > priced:
+            priced = last_cost  # the known part is never counted as less
+        meter.add(priced, estimated=not rates.free)
+
+    def spend_meter(self):
+        """The running total of the run in force, or None when no ceiling is
+        set. For a harness that swallows provider failures on purpose and so
+        cannot learn of a stop from the exception (`evals`, #125)."""
+        return self._spend_meter()
+
+    def _admit(self) -> None:
+        """Refuse a call that would break a spend ceiling, then one that may
+        not go to this provider."""
+        self._admit_spend()
+        self._admit_boundary()
+
+    def _admit_spend(self) -> None:
+        """Under a ceiling (#125): refuse a hosted model that can't be priced,
+        and make no further call once the run's total has passed it."""
+        from . import spend
+
+        meter = self._spend_meter()
+        if meter is None:
+            return
+        spend.refuse_unpriced(spend.rates_for(self.model, self._provider_class), meter.ceiling)
+        try:
+            meter.check()
+        except spend.SpendStopped as stopped:
+            self._record_stop(stopped)
+            raise
+
+    def _record_stop(self, stopped) -> None:
+        """Write the stop into the ledger file (not into the run's rows: it
+        is not a request)."""
+        if not self._recording:
+            return
+        scope = current_scope()
+        append(
+            CallRecord(
+                timestamp=datetime.now(timezone.utc).isoformat(),
+                provider=self._provider_name,
+                provider_class=self._provider_class,
+                model=self.model,
+                subject=scope.subject if scope else None,
+                site=scope.site if scope else None,
+                content_class=scope.content_class if scope else None,
+                cost_usd=round(stopped.spent, 6),
+                stop_reason=SPEND_STOP,
+                error=str(stopped),
+            ),
+            self._path,
+        )
+
+    def _admit_boundary(self) -> None:
+        """Refuse before any byte leaves, if what this call sends may not go
+        to this provider (#327, CR-01/02/03/10).
+
+        THE decision for every language-model call: a call site can't forget
+        it, because every provider `get_provider` builds comes through here.
+        Read from the scope (`scope_content`): the class a caller named, or
+        the organization's own material. A command's own earlier check
+        (`boundary.enforce`) may still refuse first, with its own message;
+        the two agree, because both ask `boundary.check`.
+        """
+        if self._classification is None:
+            return
+        from .boundary import ENFORCE_ADVICE, BoundaryViolation, check, refusal_advice
+
+        decision = check(scope_content(), self._classification, self._config)
+        if not decision.allowed:
+            raise BoundaryViolation(
+                "Refusing to send this to the configured model.\n"
+                f"{decision.explain()}\n"
+                + refusal_advice(decision, self._config, otherwise=ENFORCE_ADVICE)
+            )
 
     @property
     def inner(self) -> LLMProvider:
@@ -575,6 +892,8 @@ class RecordingProvider(LLMProvider):
         response: LLMResponse | None,
         error: str | None = None,
         billed: BaseException | None = None,
+        max_tokens: int | None = None,
+        extra_chars: int = 0,
     ) -> None:
         # A call that raised after billing (a re-send that came back empty
         # again, `ReasoningBudgetExhausted`) carries what was billed on the
@@ -583,9 +902,19 @@ class RecordingProvider(LLMProvider):
         def _billed(name: str):
             return getattr(billed, name, None) if billed is not None else None
 
-        scope = current_scope()
         cost = response.cost_usd if response else _billed("cost_usd")
         last_cost = response.last_cost_usd if response else _billed("last_cost_usd")
+        # The running total reads the cost whether or not the ledger is on:
+        # a ceiling that stopped holding when recording was switched off
+        # would be a setting that quietly stops applying (#125).
+        meter = self._spend_meter()
+        if meter is not None:
+            self._meter_cost(
+                meter, system, prompt, response, billed, cost, last_cost, max_tokens, extra_chars
+            )
+        if not self._recording:
+            return
+        scope = current_scope()
         record = CallRecord(
             timestamp=datetime.now(timezone.utc).isoformat(),
             provider=self._provider_name,
@@ -607,6 +936,7 @@ class RecordingProvider(LLMProvider):
             hidden_output_tokens=response.hidden_output_tokens if response else None,
             stripped_reasoning_chars=(response.stripped_reasoning_chars if response else None),
             request_id=response.request_id if response else _billed("request_id"),
+            endpoint=response.endpoint if response else None,
             prompt_sha=prompt_digest(system, prompt),
             error=error,
             escalations=escalation.take(),
@@ -635,6 +965,7 @@ class RecordingProvider(LLMProvider):
         # `llm/effort.py` passes only after asking the flags above. With the
         # flags forwarded, a fixed signature here would turn every such call
         # into a TypeError — the flags and the arguments travel together.
+        self._admit()
         try:
             response = self._inner.generate(
                 system=system,
@@ -644,14 +975,20 @@ class RecordingProvider(LLMProvider):
                 **kwargs,
             )
         except Exception as exc:
+            self._tag_http(exc)
             # Recorded before re-raising. The request reached the vendor and
             # was billed, and the content in it was exposed whether or not a
             # reply came back — which is the half a spend-only meter misses.
             self._record(
-                system=system, prompt=prompt, response=None, error=type(exc).__name__, billed=exc
+                system=system,
+                prompt=prompt,
+                response=None,
+                error=type(exc).__name__,
+                billed=exc,
+                max_tokens=max_tokens,
             )
             raise
-        self._record(system=system, prompt=prompt, response=response)
+        self._record(system=system, prompt=prompt, response=response, max_tokens=max_tokens)
         return response
 
     def generate_batch(self, requests, **kwargs) -> dict:
@@ -662,9 +999,11 @@ class RecordingProvider(LLMProvider):
         with nothing in the ledger to say so — which is the one thing the
         wrapper exists to make impossible.
         """
+        self._admit()
         try:
             answers = self._inner.generate_batch(requests, **kwargs)
         except Exception as exc:
+            self._tag_http(exc)
             # Submitted and billed or not, the content left this machine.
             for request in requests:
                 self._record(
@@ -672,6 +1011,7 @@ class RecordingProvider(LLMProvider):
                     prompt=request.prompt,
                     response=None,
                     error=type(exc).__name__,
+                    max_tokens=getattr(request, "max_tokens", None),
                 )
             raise
         scope = current_scope()
@@ -689,6 +1029,7 @@ class RecordingProvider(LLMProvider):
                     system=request.system,
                     prompt=request.prompt,
                     response=answers.get(request.custom_id),
+                    max_tokens=getattr(request, "max_tokens", None),
                 )
         return answers
 
@@ -720,16 +1061,30 @@ class RecordingProvider(LLMProvider):
         return self._inner_supports("supports_grounding")
 
     def generate_json(self, *, system: str, prompt: str, schema: dict, **kwargs) -> LLMResponse:
+        self._admit()
         try:
             response = self._inner.generate_json(
                 system=system, prompt=prompt, schema=schema, **kwargs
             )
         except Exception as exc:
+            self._tag_http(exc)
             self._record(
-                system=system, prompt=prompt, response=None, error=type(exc).__name__, billed=exc
+                system=system,
+                prompt=prompt,
+                response=None,
+                error=type(exc).__name__,
+                billed=exc,
+                max_tokens=kwargs.get("max_tokens"),
+                extra_chars=len(str(schema)),
             )
             raise
-        self._record(system=system, prompt=prompt, response=response)
+        self._record(
+            system=system,
+            prompt=prompt,
+            response=response,
+            max_tokens=kwargs.get("max_tokens"),
+            extra_chars=len(str(schema)),
+        )
         return response
 
     def generate_grounded(
@@ -743,16 +1098,30 @@ class RecordingProvider(LLMProvider):
         documents would make the record depend on the retrieved text
         without saying anything more about which call this was.
         """
+        self._admit()
         try:
             response = self._inner.generate_grounded(
                 system=system, prompt=prompt, documents=documents, **kwargs
             )
         except Exception as exc:
+            self._tag_http(exc)
             self._record(
-                system=system, prompt=prompt, response=None, error=type(exc).__name__, billed=exc
+                system=system,
+                prompt=prompt,
+                response=None,
+                error=type(exc).__name__,
+                billed=exc,
+                max_tokens=kwargs.get("max_tokens"),
+                extra_chars=len(str(documents)),
             )
             raise
-        self._record(system=system, prompt=prompt, response=response)
+        self._record(
+            system=system,
+            prompt=prompt,
+            response=response,
+            max_tokens=kwargs.get("max_tokens"),
+            extra_chars=len(str(documents)),
+        )
         return response
 
     def check(self) -> bool:
@@ -766,9 +1135,13 @@ class RecordingProvider(LLMProvider):
 
 
 def wrap(provider: LLMProvider, config: dict) -> LLMProvider:
-    """Wrap `provider` in a ledger, unless config turned it off."""
-    if not ledger_enabled(config):
-        return provider
+    """Wrap `provider` so every call is decided against the boundary, and
+    recorded in the ledger unless config turned that off.
+
+    Always wrapped (#327). This returned the bare provider when the ledger
+    was off, and the boundary decision now lives in the wrapper, so turning
+    off the record would have turned off the check with it.
+    """
     llm = config.get("llm") or {}
     classified = classify_provider(llm)
     return RecordingProvider(
@@ -777,6 +1150,9 @@ def wrap(provider: LLMProvider, config: dict) -> LLMProvider:
         provider_class=classified.klass,
         path=ledger_path(config),
         agreement=_agreement_relied_on(classified, config),
+        classification=classified,
+        config=config,
+        recording=ledger_enabled(config),
     )
 
 

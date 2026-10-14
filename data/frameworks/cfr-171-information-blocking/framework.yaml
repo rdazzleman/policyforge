@@ -16,3 +16,7 @@ fetched_at: '2026-09-20'
 # ruling on #423): the section. Each of 171.201-171.403 is one named
 # exception and its paragraphs are that exception's conditions.
 family: section
+# leaf_parts is not set (441): a part below a leaf stands whether or not it
+# exists. Measured 2026-10-12 at 937b6df5: 29 of the 59 leaf texts list parts,
+# and the excerpt in tests/fixtures/ecfr_45cfr171_excerpt.xml keeps all 61 of its
+# markers, but the whole source isn't on disk, so the catalog isn't measured whole.

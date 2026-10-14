@@ -1,6 +1,6 @@
 """Writes generated documents to output/ as plain markdown.
 
-This is the primary export path (see README's "Output format priority") —
+This is the primary export path (see `generate/policy_writer.py`'s output contract) —
 Confluence export (confluence_exporter.py) converts this same output rather
 than generating separately. `check_markdown_quality` is the enforcement
 mechanism: call it before treating generated output as final.

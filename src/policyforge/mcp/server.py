@@ -248,6 +248,8 @@ def call_tool(state, name: str, arguments: dict) -> str:
         question = str(arguments.get("question", "")).strip()
         if not question:
             return "Ask a question — this tool answers from the synced documents."
+        if question.lstrip().startswith("/"):
+            return "This tool answers questions. Commands are not available through it."
         # Through `dispatch`, not straight to `answer_question`: dispatch is
         # what applies the refusal rendering, the citation checks and the
         # conversation context, and a tool that skipped them would be a

@@ -17,17 +17,25 @@ AnthropicProvider, where a missing key is always an error.
 Running locally is not only about token cost. This project keeps licensed
 BYOC exports (HITRUST, GovRAMP) out of git precisely because redistributing
 them is a licence question, and sending one to a third-party API processor
-is the same question wearing a different hat — see the README's licensing
-section and `generate-parser`'s warning. A model on localhost removes that
-question rather than answering it.
+is the same question wearing a different hat — see the README's "What you
+may redistribute" table and `generate-parser`'s warning. A model on
+localhost removes that question rather than answering it.
 """
 
 from __future__ import annotations
 
 import os
 
+from ..config import ProviderSetupError
 from ._inline_thinking import answer_and_stripped, exhausted, needs_more_room, retry_budget
-from .base import LLMProvider, LLMResponse, ProviderRejected, SchemaReplyError
+from .base import (
+    LLMProvider,
+    LLMResponse,
+    ProviderHttpError,
+    ProviderRejected,
+    SchemaReplyError,
+    recordable_endpoint,
+)
 
 #: The statuses that mean "the request, as written, was refused": bad
 #: request, unknown model or route, payload too large, unprocessable.
@@ -86,7 +94,7 @@ class OpenAICompatProvider(LLMProvider):
         if api_key_env:
             api_key = os.environ.get(api_key_env)
             if not api_key:
-                raise RuntimeError(
+                raise ProviderSetupError(
                     f"Environment variable {api_key_env} is not set. "
                     f"Either export it, or drop llm.api_key_env from your config "
                     f"if this endpoint needs no key (a local server usually does not)."
@@ -144,7 +152,12 @@ class OpenAICompatProvider(LLMProvider):
             # 408 clears by waiting, a 401 or 403 is the key, a 5xx is the
             # server. Budget advice on any of those would send the user to
             # change the wrong thing, so they stay the plain error they were.
-            raise RuntimeError(f"{url} returned HTTP {response.status_code}: {response.text[:400]}")
+            raise ProviderHttpError(
+                f"{url} returned HTTP {response.status_code}: {response.text[:400]}",
+                status=response.status_code,
+                url=url,
+                reason=str(getattr(response, "reason", "") or ""),
+            )
         return response.json()
 
     def generate(
@@ -244,6 +257,8 @@ class OpenAICompatProvider(LLMProvider):
             # path since #343, and dropped here until #426, so every local
             # row we measured had none.
             request_id=data.get("id"),
+            # The server root this provider posts to, from config (#328).
+            endpoint=recordable_endpoint(self.base_url),
         )
 
     def supports_schema(self) -> bool:

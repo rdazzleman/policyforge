@@ -37,11 +37,16 @@ from policyforge.llm.prompts import Prompt, register
 #: The shape is decided in `content/tags.py`, once, for every reader.
 _SOURCE_TAG_RE = SOURCE_TAG_RE
 
-#: Confluence macros this project's own exporter emits. Anything else in a
-#: fetched page came from elsewhere and will not survive the
-#: storage -> markdown -> storage round trip.
+#: Confluence macros this project's own exporter emits that survive the
+#: storage -> markdown -> storage round trip by name. The other one it emits,
+#: a source block's `expand`, is judged by its title, not its name: see
+#: `detect_unsupported_macros`. Anything else in a fetched page came from
+#: elsewhere and will not survive the round trip.
 _SUPPORTED_MACROS = {"code"}
-_MACRO_RE = re.compile(r'<ac:structured-macro\s+ac:name="([^"]+)"')
+#: `ac:name` wherever it stands among the attributes: a server's
+#: `ac:schema-version` or `ac:macro-id` may come first, and the pattern that
+#: wanted it first saw no macro at all on such a page (449).
+_MACRO_RE = re.compile(r'<ac:structured-macro\b[^>]*?\bac:name="([^"]+)"')
 
 #: Plan steps that can legitimately introduce a heading the original lacked.
 #: A plan made only of `modify` and `remove` steps has no business producing
@@ -61,9 +66,13 @@ class EditCheck:
     changed_sections: list[str] = field(default_factory=list)
     #: Headings the revision has and the original did not.
     added_headings: list[str] = field(default_factory=list)
+    #: Added headings the plan doesn't account for, in the revision's order
+    #: (`_unplanned_headings`). This, not `additions_were_planned`, is what
+    #: `is_clean` and the CLI read: one planned addition used to approve every
+    #: new heading in the page (issue 258).
+    unplanned_headings: list[str] = field(default_factory=list)
     #: Whether the plan held a step that could legitimately add a heading.
-    #: Recorded on the check so `is_clean` can be read off it alone, without
-    #: the caller needing to consult the plan again.
+    #: Kept as a record of the plan's shape; it no longer decides `is_clean`.
     additions_were_planned: bool = False
     unchanged: bool = False
     lines_added: int = 0
@@ -75,7 +84,7 @@ class EditCheck:
             self.dropped_source_tags
             or self.removed_headings
             or self.changed_sections
-            or (self.added_headings and not self.additions_were_planned)
+            or self.unplanned_headings
         )
 
 
@@ -84,13 +93,21 @@ def detect_unsupported_macros(storage_html: str) -> list[str]:
 
     The edit path is storage format -> markdown -> edit -> storage format.
     That is lossless only for what `confluence_exporter.py` itself emits; a
-    panel, expand block, status lozenge or page-properties macro would be
-    flattened to approximate HTML or lost outright on the way back. Editing
-    such a page would quietly damage parts of it nobody asked to change, so
-    callers are expected to check this first and refuse rather than warn
-    after the fact.
+    panel, a person's own expand block, status lozenge or page-properties
+    macro would be flattened to approximate HTML or lost outright on the way
+    back. Editing such a page would quietly damage parts of it nobody asked
+    to change, so callers are expected to check this first and refuse rather
+    than warn after the fact.
+
+    **A source block's `expand` is the exporter's own** (449): the importer
+    reads it back into the block, so it isn't reported. Which `expand` is one
+    is decided by the importer's own rule (`unwrap_source_blocks`), never by a
+    second list here. Its body is still checked like the rest of the page.
     """
-    return sorted(set(_MACRO_RE.findall(storage_html)) - _SUPPORTED_MACROS)
+    from policyforge.export.confluence_importer import unwrap_source_blocks
+
+    found = _MACRO_RE.findall(unwrap_source_blocks(storage_html))
+    return sorted(set(found) - _SUPPORTED_MACROS)
 
 
 def _headings(document: str) -> list[str]:
@@ -116,6 +133,56 @@ def _sections(document: str) -> dict[str, str]:
         else:
             sections.setdefault(current, []).append(line)
     return {name: "\n".join(body).strip() for name, body in sections.items()}
+
+
+def _unplanned_headings(original: str, revised: str, plan: EditPlan) -> list[str]:
+    """The headings `revised` adds that `plan` doesn't account for, in order.
+
+    80's ruling on issue 258 (C). An adding step's `target` names either the
+    new heading (the validator lets an `add` name one that isn't there yet)
+    or the existing section it's added under, which is what the planner's
+    prompt asks for. So, for each heading the revision adds:
+
+    1. it's planned if an adding step names it (casefolded);
+    2. otherwise it uses one slot, of one per `add` step whose target is a
+       heading the original already has, taken in the revision's order. A
+       `rewrite` earns no slot: it rewrites the section it names and creates
+       none, so a rewrite-only plan can't carry an unnamed section through
+       (80's clarification, b5 on PR 287);
+    3. what's left is unplanned, by name.
+
+    A copy of a heading the original already has, or a second copy of a new
+    one, is reported and never takes a slot: it duplicates a section rather
+    than adding one, and `_sections` reads duplicates as one block, so a
+    change in either would otherwise go unseen.
+    """
+    import collections
+
+    existing = collections.Counter(_headings(original))
+    existing_folded = {heading.casefold() for heading in existing}
+    adding = [step.target.strip().casefold() for step in plan.steps if step.kind in _ADDING_KINDS]
+    named = {target for target in adding if target not in existing_folded}
+    slots = sum(
+        1
+        for step in plan.steps
+        if step.kind == "add" and step.target.strip().casefold() in existing_folded
+    )
+
+    seen: collections.Counter[str] = collections.Counter()
+    unplanned: list[str] = []
+    for heading in _headings(revised):
+        seen[heading] += 1
+        if not heading or seen[heading] <= existing[heading]:
+            continue
+        if existing[heading] or seen[heading] > 1:
+            unplanned.append(heading)
+        elif heading.casefold() in named:
+            continue
+        elif slots:
+            slots -= 1
+        else:
+            unplanned.append(heading)
+    return unplanned
 
 
 def check_edit(original: str, revised: str, *, plan: EditPlan) -> EditCheck:
@@ -157,6 +224,7 @@ def check_edit(original: str, revised: str, *, plan: EditPlan) -> EditCheck:
             if name in before and body != before[name] and name.casefold() not in planned
         )
         check.added_headings = sorted(set(after) - set(before) - {""})
+        check.unplanned_headings = _unplanned_headings(original, revised, plan)
 
     original_lines = original.splitlines()
     revised_lines = revised.splitlines()

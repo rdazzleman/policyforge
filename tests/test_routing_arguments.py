@@ -32,7 +32,7 @@ class Router:
 
     First the routing decision, then — only for a skill that declares
     arguments — how to narrow it. Two calls rather than one is the whole
-    design: see MEASUREMENTS.md epoch 14 for why combining them made routing
+    design: see docs/measurements/epochs.md epoch 14 for why combining them made routing
     measurably worse.
     """
 

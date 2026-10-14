@@ -3,8 +3,10 @@
 `tests/_pyproject.py` uses `tomllib` where it exists and a minimal reader
 where it does not. The minimal reader only matters on Python 3.10 without
 `tomli`, which is the environment least likely to be checked by hand — so
-it is checked here, on every interpreter that has `tomllib`, against the
-sections the suite actually reads.
+it is checked here, against the sections the suite actually reads, on every
+interpreter that has a real TOML parser: `tomllib` from 3.11, `tomli` (the
+same parser, which the 3.10 lock pins) on 3.10. With `tomllib` alone, this
+test skipped on 3.10, which CI's skip gate didn't expect (#380's 3.10 leg).
 """
 
 from __future__ import annotations
@@ -31,8 +33,18 @@ def _dig(data: dict, path: tuple[str, ...]):
     return data
 
 
+def _real_toml_parser():
+    """`tomllib`, or on 3.10 `tomli`, its origin; a skip only when neither is
+    installed, which no CI leg is."""
+    try:
+        import tomllib
+    except ModuleNotFoundError:
+        tomllib = pytest.importorskip("tomli")
+    return tomllib
+
+
 def test_the_fallback_reads_what_the_suite_reads_exactly_as_tomllib_does():
-    tomllib = pytest.importorskip("tomllib")
+    tomllib = _real_toml_parser()
     text = _pyproject.PYPROJECT.read_text(encoding="utf-8")
 
     reference = tomllib.loads(text)

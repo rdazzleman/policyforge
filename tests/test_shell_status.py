@@ -210,6 +210,7 @@ def test_the_shape_inside_a_quoted_string_is_still_reported():
 # --- the population, and the assertion that keeps the rest meaningful ----
 
 
+@pytest.mark.github_config
 def test_the_population_is_not_empty_and_covers_every_kind():
     """**The defect this check exists to find, applied to itself.**
 
@@ -225,6 +226,7 @@ def test_the_population_is_not_empty_and_covers_every_kind():
     assert sum(1 for s in sources if s.kind == "workflow") >= 5
 
 
+@pytest.mark.github_config
 def test_one_kind_going_quiet_fails_even_when_the_others_are_healthy(monkeypatch):
     """**policyforge-9b's finding, and it is the whole reason this rule is
     per-kind rather than over the union.**
@@ -262,6 +264,7 @@ def test_a_kind_with_nothing_to_find_stays_silent():
     assert shell_status.main([]) == 0
 
 
+@pytest.mark.github_config
 def test_the_census_is_a_second_derivation_not_the_parser_again():
     """A census computed by the block parser would agree with it by
     construction — the `arc_ampe` defect, and the thing that makes a check
@@ -324,6 +327,7 @@ def test_the_census_is_a_second_derivation_not_the_parser_again():
     )
 
 
+@pytest.mark.github_config
 def test_the_census_does_not_follow_the_parser(monkeypatch):
     """**The independence property, tested by breaking one side.**
 
@@ -571,6 +575,7 @@ def test_a_workflow_the_census_cannot_parse_fails(tmp_path, monkeypatch, capsys)
     assert "could not count" in capsys.readouterr().err
 
 
+@pytest.mark.github_config
 def test_a_shrunk_population_fails_rather_than_passes(monkeypatch):
     """**Non-empty accepts a shrink, and that is the whole of #228.**
 
@@ -624,6 +629,7 @@ def test_the_repository_itself_is_clean():
     assert result.returncode == 0, f"{result.stdout}\n{result.stderr}"
 
 
+@pytest.mark.github_config
 def test_ci_still_gates_markdown_on_a_non_empty_list():
     """The fix, asserted on the artefact rather than on the intention.
 

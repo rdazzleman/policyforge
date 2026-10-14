@@ -26,8 +26,9 @@ Three properties follow, and they are the whole point:
 
 * **One decision, many documents.** The value is substituted into control
   text before synthesis, so every document drawn from that control says the
-  same thing, and so does the SSP. Consistency stops being something to
-  check for and becomes something that cannot fail.
+  same thing. **Not the SSP yet:** `ssp` writes from the catalogs as they
+  are and doesn't read this ledger, so a decided value doesn't reach it
+  (#388; reading it there is its own issue).
 * **The reasoning survives.** "Why quarterly" is the question asked a year
   later, by an assessor or by whoever inherits the programme, and the answer
   belongs next to the value rather than in someone's memory.
@@ -52,6 +53,8 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from policyforge.textfile import normalise_newlines
 
 DEFAULT_LEDGER_PATH = Path("config/parameters.yaml")
 
@@ -186,29 +189,87 @@ def extract_parameters(controls) -> list[Parameter]:
     return list(found.values())
 
 
-def _scalar(text: str) -> str:
-    """Quote a value as a YAML scalar.
+def _scalar(text: str, indent: int = 4) -> str:
+    """Quote a value as a YAML scalar, for a key indented `indent` spaces.
 
-        Not `yaml.safe_dump`: on a bare string that emits a document-end marker
-        (`x
-    ...
-    `), and stripping it leaves `...` sitting inside the mapping,
-        which corrupts the file it was meant to write. Newlines are folded to
-        spaces so a multi-sentence rationale stays one valid scalar.
+    Not `yaml.safe_dump`: on a bare string that emits a document-end marker
+    (`...`), and stripping it leaves `...` sitting inside the mapping, which
+    corrupts the file it was meant to write.
+
+    A one-line value is single-quoted. A value with a line break inside it is
+    a literal block (`|`), so each line, blank line, whitespace-only line and
+    trailing space reads back as written (the old fold to one line rewrote
+    them, issue 190). Not `>`, which is YAML's folded style and joins the
+    lines again. The indentation indicator is explicit, because YAML
+    otherwise takes the indentation from the first line, and a first line
+    that starts with spaces would read back shorter.
+
+    **Trailing line breaks are not kept**: they're dropped before the value
+    is written, and the block strips (`-`). `load_ledger` strips outer
+    whitespace anyway, so no reader of the ledger sees the difference. Keep
+    chomping (`+`) can't be used here: it takes in the blank line
+    `render_ledger` writes before the next parameter, so a value ending in a
+    break read back with an extra one (9b on PR 278).
     """
-    folded = " ".join(str(text).split())
-    if not folded:
+    text = normalise_newlines(str(text)).rstrip("\n")
+    if not text:
         return '""'
-    return "'" + folded.replace("'", "''") + "'"
+    if "\n" not in text:
+        return "'" + text.replace("'", "''") + "'"
+    pad = " " * (indent + 2)
+    return "|2-\n" + "\n".join(pad + line if line else "" for line in text.split("\n"))
+
+
+class LedgerError(ValueError):
+    """The ledger can't be read as one decision per key: a key appears twice
+    in one mapping. A `ValueError`, so a caller that catches those still
+    does; the CLI prints it as one line (`cli._Group.invoke`), and the zardoz
+    shell as a refusal."""
+
+
+def _unique_key_loader(path: Path):
+    """A SafeLoader that refuses a key repeated within one mapping, naming
+    the key and both lines. `yaml.safe_load` keeps the last of the two
+    silently, so a second decision for a parameter replaced the first and
+    nobody was told (issue 190).
+
+    Only a mapping's own keys are compared. Keys brought in by a YAML merge
+    (`<<: *anchor`) may be overridden, as YAML intends, so construction is
+    left to SafeLoader once the check passes.
+    """
+    import yaml
+
+    class UniqueKeyLoader(yaml.SafeLoader):
+        def construct_mapping(self, node, deep=False):
+            first: dict = {}
+            for key_node, _ in node.value:
+                if not isinstance(key_node, yaml.ScalarNode):
+                    continue
+                if key_node.tag == "tag:yaml.org,2002:merge":
+                    continue
+                key = self.construct_object(key_node, deep=True)
+                line = key_node.start_mark.line + 1
+                if key in first:
+                    raise LedgerError(
+                        f"{path}: the key {key!r} appears twice in one mapping, at lines "
+                        f"{first[key]} and {line}. Keep one, or the second replaces the first."
+                    )
+                first[key] = line
+            return super().construct_mapping(node, deep=deep)
+
+    return UniqueKeyLoader
 
 
 def load_ledger(path: Path = DEFAULT_LEDGER_PATH) -> dict[str, Decision]:
-    """Read decisions from disk. A missing ledger is an empty one."""
-    import yaml
-
+    """Read decisions from disk. A missing ledger is an empty one. A key
+    repeated within one mapping raises `LedgerError` (`_unique_key_loader`)."""
     if not Path(path).exists():
         return {}
-    data = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
+    loader = _unique_key_loader(path)(Path(path).read_text(encoding="utf-8"))
+    try:
+        data = loader.get_single_data() or {}
+    finally:
+        loader.dispose()
     raw = data.get("parameters") if isinstance(data, dict) else None
     if not isinstance(raw, dict):
         return {}

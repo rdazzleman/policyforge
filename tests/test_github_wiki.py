@@ -297,13 +297,29 @@ def test_a_licensed_class_is_read_however_it_was_typed(remote, tmp_path, stamped
     assert "licensed content is never published to a public wiki" in report.results[0].reason
 
 
-def test_an_unrecognised_class_is_not_treated_as_licensed(remote, tmp_path):
-    """The stated asymmetry, pinned so it stays a decision rather than
-    becoming an accident. Unknown *visibility* counts as public; an unknown
-    *content class* counts as not licensed, because most documents carry no
-    class and refusing them all would get the check turned off. What stands
-    between such a document and the world is the visibility rule."""
-    _, documents, problems = _licensed_tree(tmp_path, stamped=False, value="licensed-content")
+@pytest.mark.parametrize("stamped", [False, True])
+@pytest.mark.parametrize("value", ["licensed-content", "licenced", "bogus"])
+def test_an_unrecognised_class_is_treated_as_licensed(remote, tmp_path, stamped, value):
+    """#336, 80's ruling: a class that is SAID and can't be read counts as
+    licensed. This test used to pin the opposite (an unknown class counts
+    as not licensed), so a misspelt licensed stamp reached a public wiki."""
+    _, documents, problems = _licensed_tree(tmp_path, stamped=stamped, value=value)
+    wiki = publisher(remote, tmp_path)
+    wiki.public = True
+    wiki.allow_public = True
+
+    report = publish_documents(wiki, documents, problems, dry_run=False)
+
+    assert [r.action for r in report.results] == [SKIPPED]
+
+
+def test_a_document_with_no_class_still_publishes_to_a_public_wiki(remote, tmp_path):
+    """What the ruling must ALLOW: most documents carry no class at all, and
+    refusing those would get the check turned off. Absence is unchanged; the
+    wiki's visibility rule is what stands between such a document and the
+    world."""
+    front = f"---\ntitle: {TITLE}\ntargets:\n  github_wiki:\n    title: {TITLE}\n---\n\n"
+    _, documents, problems = tree(tmp_path, frontmatter=front)
     wiki = publisher(remote, tmp_path)
     wiki.public = True
     wiki.allow_public = True

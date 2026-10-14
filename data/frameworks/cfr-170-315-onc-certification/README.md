@@ -5,8 +5,8 @@ criteria for health IT). Same basis as NIST 800-53/FedRAMP/ARC-AMPE/HIPAA, so
 unlike HITRUST/GovRAMP this is safe to bundle directly rather than treat as
 BYOC.
 
-**This catalog shipped once with fabricated criteria and was withdrawn** (#152,
-reverted by #163). Categories (b) and (e) held entries that do not exist, and
+**This catalog shipped once with fabricated criteria and was withdrawn.**
+Categories (b) and (e) held entries that do not exist, and
 nothing in the catalog looked wrong. This version is refused by its own loader
 unless its criteria **equal** a set that two independent sources agree on. See
 "How it is kept honest" below.
@@ -67,7 +67,7 @@ here, because none has been independently measured.** No final rule amending
 § 170.315 has been published since HTI-4 (last amended 2025-10-01, per eCFR)
 as of 2026-09-24, so every criterion in this catalog is still live. **If that rule
 is finalised, the framework-drift job goes red, and that is the job working.**
-A person then re-derives the agreed set (#179) and re-pins the catalog; the
+A person then re-derives the agreed set and re-pins the catalog; the
 loader refuses a changed set rather than absorbing it.
 
 ## How it is kept honest
@@ -85,7 +85,7 @@ above, or a repeat of the current value. (eCFR carries two dated versions of
 `(b)(2)(iv)`.) **A marker that fits no level is an error, never a guess.**
 
 **Then the result is refused unless it equals an independent set.**
-This project's research found the live criteria from two sources on #179. Neither
+This project's research found the live criteria from two sources. Neither
 reads this section's paragraph text:
 
 - ONC's test-method index;
@@ -105,7 +105,7 @@ catalog declaring `45 CFR 170` could not be cited by any document. The declared
 name comes from the section's own heading, "ONC certification criteria for
 Health IT", and is pinned to this catalog's key in `mapping/crosswalk`. Other
 ONC programme names are not pinned, because nobody has read them in a catalog
-yet (#176).
+yet.
 
 ## Regenerating it
 

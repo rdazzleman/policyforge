@@ -1,5 +1,752 @@
 # Changelog
 
+## 1.8.0
+
+**A line break in an SSP workbook cell reads back as written.** A carriage
+return in cell text came back as a line feed, and a Windows line ending
+(CRLF) as two line breaks. Every CR and CRLF is now written as a line feed.
+
+**`pull` refuses a page nested too deeply to convert, and carries on.** A
+Confluence page nested hundreds of levels deep used to stop the whole `pull`
+with a Python `RecursionError`, after earlier pages had been written. It is
+now listed under "Refused" with the reason, and the other pages are pulled.
+
+**A Procedure's Related Standard isn't reported as an unfilled placeholder.**
+When a drafted Procedure names its Standard in brackets, `generate` now writes
+the title without them and no longer lists it among the placeholders left
+unfilled.
+
+**`pull` no longer tells you to rewrite macros on a page it couldn't find.**
+A refused page now gets advice for its own reason: macro advice for a page
+with unsupported macros, "Check the page title and space." for a page that
+wasn't found, and the nesting advice for a page too deep to convert.
+
+**A catalog's licence marker now fails closed.** A catalog file whose
+envelope said `"Licensed"`, `"LICENSED"` or `"licenced"`, used the key
+`license`, or named no licence at all was read as not licensed, so the
+licensed-content boundary could let it reach a hosted model. Any envelope
+value other than an explicit `public-domain` now counts as licensed, the rule
+framework manifests already follow. Catalogs PolicyForge writes are
+unchanged.
+
+**Zardoz now checks a page's frontmatter for text aimed at the model.** A
+page's owner, topic, tier and other frontmatter fields are shown inside an
+answer, but only the title and body were checked for instructions addressed
+to whoever reads the prompt. They are now checked with the same rules, the
+sync report names the field a finding came from, and a page flagged that way
+is left out of answers like any other flagged page.
+
+**The public repository runs nothing, and the build backend is hashed.** A public release commit leaves out GitHub's Dependabot configuration and workflows, so GitHub no longer opens dependency pull requests or starts workflow runs there. The publish run checks that nothing else differs from the release, and its public-shape test leaves out the tests that read those files. The private CI repository still runs them. Every job that installs the project takes `setuptools` from a hashed lock, `requirements/build.txt`, and builds without isolation, instead of fetching an unhashed `setuptools` each time.
+
+**The test suite runs on every core.** The `dev` extra now installs
+`pytest-xdist`, and `scripts/check.py` and CI run `pytest -n auto`, so a
+full run uses every processor instead of one.
+
+**The static analyser now runs from one pinned container image, so its own
+dependencies are no longer audited in advisory mode.** semgrep runs in CI
+and in the local gate from a single image, pinned by digest. Its lock is gone,
+and so is the advisory audit of that lock, which listed pyjwt advisories that
+didn't block in 1.7. The installed product was never affected: semgrep never
+ships to users. For contributors, the local gate needs Docker to run semgrep.
+Without Docker, it skips semgrep with a note, and CI still runs it.
+
+**`generate` now writes drafted documents into the shared markdown content tree (`docs/<tier>s/` or `zardoz.content_dir`), matching what `publish`, `pull`, `check`, and `zardoz sync` read.** Previously, `generate` defaulted to `output/<tier>s/`, requiring documents to be moved by hand into the content tree before downstream commands could see them. Passing `--out` continues to override the output path. **This is a breaking change for anything that read `output/<tier>s/`:** pass `--out output/<tier>s/<name>.md` to keep the old location. `generate` prints the path it wrote.
+
+**`generate` will not overwrite a document that was edited after it was written.** Each generated document now records a hash of its body in its `generated_by` stamp. If the target exists and its body no longer matches that hash, or it was generated before the hash was recorded, or it has no stamp at all, `generate` leaves it alone, names the file, and exits 2 before it calls the model. Pass `--overwrite-edits` to replace it anyway: the replaced file is recorded in the local history first, and the run prints that entry. Only the body is compared, so a change to the frontmatter alone is not an edit.
+
+**`zardoz sync` follows the same tree, and never widens its corpus silently.** With no Confluence host configured, it reads `docs/` (or `zardoz.content_dir`) when that directory exists. With a host configured, it reads a markdown tree only when `--content-dir` or `zardoz.content_dir` names one, so unrelated markdown in `docs/` does not become a source. A `zardoz.content_dir` that names a directory that does not exist is reported, not replaced by `docs/`.
+
+**A catalog with `controls.json` on disk now takes precedence over a README-only stub with the same framework id.** Previously, `init`'s README-only stub under `data/frameworks/<id>/` shadowed a BYOC catalog written under `local_content/<id>/` when resolving catalogs by id, causing commands reading `programme.catalogs` or synthesis `derived_from` to report that no `controls.json` existed under the stub directory.
+
+**`generate --document acceptable-use` drafts an Acceptable Use Policy and a
+Privileged User Rules addendum.** An acceptable use policy is the rules of
+behaviour every member of the workforce signs before access, and no single
+topic produces one. The new kind draws on a fixed set of NIST SP 800-53
+controls (PL-4 and PL-4(1), PS-6, PS-8, AC-6, AC-8, AC-17, AC-19, AC-20, MP-7,
+CM-10, CM-11, IR-6, AT-2 and PT-2), whichever topics anchor them. The model
+drafts each section's rules in plain language from those controls' text,
+with any parameter values decided in `config/parameters.yaml` filled in. The
+Policy has fourteen sections in a fixed order, from Scope to the link to
+training, including AI use. The addendum covers privileged access. Code
+writes each heading, an acknowledgment block to sign, and a traceability
+appendix that lists each section's controls and whatever the run's crosswalk
+maps them to. The body carries no citation tags. Values the organisation
+decides, such as approved AI tools or a reporting deadline, stay as
+placeholders. A section the draft left out gets a placeholder of its own, and
+the run names it. The owner is the owner of the topic that anchors PL-4. Both
+files are written to `policies/`.
+
+**`generate` now writes a document's own topic owner without brackets, instead of reporting it as an unfilled placeholder.** When a drafted document names the owner declared in its synthesis frontmatter as `[IT Asset Management]`, the brackets are dropped and the name is reported as filled. The match is exact, trimmed and case-sensitive, and only the document's own owner is changed: other teams' names stay bracketed, and a team you declared under `org.teams` keeps the name you gave it, even when it is also the owner.
+
+**A file saved as UTF-8 with a byte-order mark keeps its frontmatter.**
+Windows PowerShell 5.1's `Out-File` and `Set-Content -Encoding utf8` put a
+U+FEFF at the start of the file, which hid the `---` that opens the
+frontmatter. `export-confluence` then published the frontmatter as page
+text, and `generate` read no metadata from such a synthesis, so a licensed
+synthesis's `content_class` was lost and the class was taken from where the
+file sat. Every command now reads frontmatter through one reader that looks
+past one leading byte-order mark; the file on disk is left as it is, and the
+edit path writes it back with its mark.
+
+**The one-line HTTP error report now retains the port when a URL specifies one.** Non-default ports (such as Ollama on `:11434` or self-hosted Confluence on `:8090`) are kept in the error output while credentials and query parameters remain stripped, malformed ports fall back to host-only without raising an exception, and an IPv6 address keeps its brackets (`http://[::1]:11434/v1`).
+
+**Add `policyforge.__main__` so `python -m policyforge` executes the CLI.** When environment `Scripts` or `bin` directories are not on PATH, invoking the package directly via `python -m policyforge` now runs the CLI with `policyforge` as the program name in usage and error output.
+
+**`drift` reports changes to a catalog's level requirements and to the mappings
+and additional requirements above them.** A reworded, added or removed level
+requirement, or one moved to another level, reported a clean result, though a
+levelled catalog such as HITRUST carries most of its substance there. So did a
+change to a control's or enhancement's authoritative-source mappings, its
+additional requirements or a decided parameter value. Each is now reported
+under the id it changed, the level named for a level requirement, and counts
+as a change to review. The levels are read from the catalog's structure, with
+no framework special case. A document citing a changed level requirement, or
+its control, is in the blast radius as one citing a control is. Whitespace and
+line-ending changes stay editorial, and a catalog compared with itself reports
+nothing.
+
+**A container image now holds every public framework catalog.** An image built from the
+repository's `Dockerfile` held only four: NIST SP 800-53, FedRAMP, ARC-AMPE and the HIPAA
+Security Rule. The build context left out the other nine, so `synthesize` and `generate` in
+the container had no catalog to read for the HIPAA
+Privacy and Breach Notification Rules, NIST CSF 2.0, SP 800-171, the AI RMF and its
+Playbook, the ONC Certification Criteria, Information Blocking, or the Substance Use
+Disorder Patient Records rule (42 CFR Part 2). All thirteen public
+catalogs are now included. The licensed bring-your-own catalogs (HITRUST, GovRAMP, SOC 2)
+still contribute only their README, so a copied-in licensed catalog stays out of the image.
+
+**A Confluence page nested too deeply to convert is refused by name everywhere, not only in `pull`.**
+`import-confluence` and `edit-topic` now stop with one line naming the page
+(exit 2), before anything is written, where they ended in a traceback. A
+Zardoz corpus sync skips that page by name and syncs the rest, where one
+deep page stopped the whole sync.
+
+**The model-call ledger records where each call was sent.** Each row now has
+an `endpoint` field: the base URL the provider resolved for the call, with a
+base-URL override such as `ANTHROPIC_BASE_URL` taken into account. It keeps
+the scheme, host, port and path, and drops any user name and password before
+the host, the query string, the fragment and path parameters (`;name=value`).
+The rest of the path is kept as given, so a key carried as a path segment would
+be recorded. It is empty where the provider can't say: a LiteLLM model with no
+`api_base` configured (LiteLLM reports its default there even when an
+environment override sent the call elsewhere), a call that failed before a
+reply, an embedding or rerank batch, and rows written before this change.
+
+**A generated document now says what it is.** `generate` writes the document's
+`topic`, `owner` and `tier` into its frontmatter, from the synthesis it was
+given and the `--tier` you passed, beside the provenance stamp. When
+`config/topics.yaml` declares the topic's Confluence page for that tier, it
+writes the `confluence:` binding too. Before, `publish`, `check` and Zardoz
+could not use a generated document until someone typed that frontmatter in by
+hand, and `check` reported every one as "has no owner". A value the synthesis
+doesn't have is left out, never guessed, and `generate` says which. If the
+topic registry can't be read, the document is still written, without the
+`confluence:` block, and the run says so.
+
+**`generate --tier policy --policy "<name>"` drafts one Policy from every Standard whose topic names it, and `edit-topic` and `pull` now reach the Policy's page.** The Policy is written from the Standards in the content tree (not from syntheses): a short Purpose and Scope, then one plain-language section for each Standard, headed by that Standard's title, and a closing "Standards under this Policy" section listing each Standard's title, owner and a link to its file. The model drafts the prose; code writes the closing list, so there is one list and it is built from the files. A Standard the draft gave no section (however it numbered or nested its headings) is given one, and the run names it; a section the draft wrote that is only a list of Standards, or is headed as a Standard the Policy doesn't govern, is dropped and named; a Standard outside the group that the prose names is reported, since a sentence is the author's to fix. A Policy carries no inline tags: every tag-shaped span is removed, and the ones no catalog on disk holds are named in the run. The Policy is written to `policies/<policy-name>.md`, bound to the page its registry entry declares, and owned by the Policy's own owner. A topic's Standard is found as `edit-topic` finds it (its `topic:`, or the page it is bound to, which is what `pull` writes). A topic that names the Policy but has no Standard yet, or has two, stops the run before any model is built and is named. The licensing boundary is checked on the most guarded Standard: one licensed Standard makes the Policy licensed. `edit-topic` includes the Policy a topic's Standard sits under as a candidate beside the topic's own pages (a plan that finds nothing to change leaves it alone), and `pull` brings down each Policy's declared page with the topics'. `generate --tier policy --standard` for a single topic works as before.
+
+**A topic can name the Policy its Standard belongs to, and `check` and `coverage` hold the grouping together.** `config/topics.yaml` takes a `policy:` on each topic and a `policies:` block describing each Policy (its name, the accountable executive, cadence and description, and the page it publishes to). The starter registry groups its topics under twelve Policies, all eight AI topics under one. A generated Standard now carries `policy:` in its frontmatter and says in one sentence which Policy it implements, or that it has none; a regenerated one takes the registry's current Policy. `check` reads the registry (`--topics`, default `config/topics.yaml`, skipped if absent): a Standard naming a Policy the block doesn't declare, or two Policies claiming one page, is an error; a declared Policy nothing names, a topic with no `policy:` (it stays its own Policy), and a topic that declares a Policy page of its own instead of leaving it to the Policy, are warnings. `coverage` names any Policy a topic uses that the block doesn't declare.
+
+**A generated Procedure's steps carry no citations, and a final `Traceability` section lists each step with the Standard section it implements and the citations it carried.** The framework tags that used to follow every step heading now sit in that one section, so a reader follows a step to its Standard section and to its control without a tag in every step. Nothing is dropped: the tags are written there as drafted, so `check`, `satisfies` and the drift report find a Procedure by its citations as before. The mapping to the Standard is computed from the citations the drafting model wrote, not asked of it, so it can't name a Standard section that isn't there. A step that reaches no Standard section is listed as having none, in the document and on the console. A bracket that doesn't resolve as a citation, such as a role like `[Tier 2 Support]` or a range like `[HIPAA 164.310(a)(1)-(2)]`, stays where it was. A NIST AI RMF Playbook citation is written inside a sentence that says NIST suggests the action, as that rule already requires. Documents generated before this change are not rewritten.
+
+**`init` writes the topics your organisation's scope facts call for, not the whole example registry.** Five facts under `programme:` in `config/config.yaml` (`builds_software`, `own_facilities`, `personal_data`, `baseline`, `ai`), or the matching `init` options, decide which topics `config/topics.yaml` holds, at most 25. An area is a topic when at least three of five reference structures name it (a partial match counts half): a healthcare SaaS that builds software, has no facilities, handles PHI, has an 800-53 baseline and no AI gets 22; with AI it is 25, never more. A condition turns the rest on: Secure Development, Physical & Environmental Security, Privacy (and for `phi` the two HIPAA topics), Personnel Security and System Maintenance. A topic that is off folds into its nearest core topic, which keeps its owner and its accountability and names the folded topic's owner as a contributor; `init` prints every fold, any AI topic it left out to stay at 25, and every fact nobody declared. An undeclared fact is off, not `none`, and says so. A user of AI gets three AI topics, a builder five and up to two more (Data for AI Systems, Transparency to Affected People), anchored at the AI RMF category level. The registry's header names what it was built from, and the table's two columns that could not be verified are named where a decision rests on them. `coverage` now also names an area the declared scope expects that no topic anchors, warns past 25 topics, and lists undeclared facts, and its JSON carries them under `scope_facts`; none of it changes `--strict`. `generate --document acceptable-use` leaves the AI Use section out for `ai: none` and says so, and keeps it when the fact is unset. The starter registry file is now a pool of 33 topics that `init` draws from: Asset Management, Personnel Security and Privacy are separate topics there, with their controls moved out of Change & Configuration Management, Security Program Governance, Workforce Security Training and Data Protection (which Data Protection & Privacy is renamed to), and three AI topics added that take their categories from the role. An existing `config/topics.yaml` is never rewritten.
+
+**A registry can now own the HIPAA Privacy Rule and Breach Notification Rule, and `coverage` counts them.** NIST publishes no 800-53 mapping for either rule, so until now a topic anchoring `164.502` was reported as an unknown anchor and `coverage` reached none of their requirements. A topic anchors a rule's section (`164.502`), and owns every paragraph under it, as AC-2 owns AC-2(1). A registry that anchors neither rule never sees them in its numbers, and they are named under the report. The starter registry carries two topics for them, **HIPAA Privacy Practices** and **Breach Notification**, owned by Privacy and marked as the ones to keep only if you handle PHI. `init` now loads the three HIPAA rules with 800-53 and the AI RMF, so the starter's first `coverage` has no unknown anchors; delete the two topics and the three catalog lines and HIPAA leaves the numbers. A citation `[HIPAA 164.502(b)]` now resolves by id across the Security, Privacy and Breach Notification Rules, which are one regulation. Paragraphs Purl v. HHS vacated are left out of the count and named (`N vacated paragraph(s) of HIPAA Privacy Rule not counted (Purl v. HHS)`), from the same list generation reads, and a topic anchoring vacated text is told so rather than that it is out of scope. A section written unquoted in `topics.yaml` (`164.510`) is refused by name, because YAML reads it as 164.51.
+
+**A spend ceiling: `budget.max_usd` in config, or `--max-cost USD` for one run.** `ssp`, `synthesize`, `generate`, `crosswalk propose` and the eval runner (`scripts/eval_zardoz.py`) accept it. With neither set, nothing changes.
+
+Where the number of requests is known up front (`ssp`, `synthesize`, `crosswalk propose`), a run whose estimate is above the ceiling is refused before any request, with the estimate, the ceiling, the request count and the rates it used, and exit status 2. The estimate is an upper bound: every output is priced at its token limit. The run also keeps a running total from each response's cost, and once the total has passed the ceiling it makes no further request, stops with exit status 1, and says how many requests it planned and how many completed, so a short run never reads as a cheap one. The model log records the stop.
+
+Only some providers report what a request cost; for the others the running total prices each response from its tokens at the model map's rates, and a response that reports no tokens is counted at its prompt and its `max_tokens`, an upper bound. A hosted model whose price the model map does not hold is refused under a ceiling, naming the model; it is never counted as free. A local or self-hosted model has no per-token charge and passes at $0.
+
+The eval runner makes no estimate first, because how many requests a case makes is not known until it runs. It stops after the case in which the ceiling was reached, and does not count that case, since the requests it was refused were answered by the fallbacks the harness grades.
+
+`config/config.example.yaml` documents the key, commented out.
+
+**A licensed-framework command without the plugin now tells you how to ask
+for it.** Running `etl-hitrust`, `etl-govramp` or `etl-soc2-tsc` without the
+licensed-framework plugin still refuses, and the refusal now says: contact
+info@zardoz.io with the subject "PolicyForge licensed-framework plugin". The
+`--help` for all three says the same. Before, they said the plugin was
+distributed separately and gave no way to get it. The HITRUST
+and GovRAMP catalog READMEs no longer show a stray `\n` in the sentence about
+the plugin.
+
+**`policyforge init` now writes a working project, `init --refresh` updates one, and the first-run failures say what to do.**
+
+`init` writes `config/config.yaml` and `config/topics.yaml` as well as the catalogs, each only where there is none. The starter config names a local model that needs no key (`--provider`, `--model` and `--api-key-env` choose another; the key itself is never written, only the variable that holds it) and the catalogs the starter registry needs, in `programme.catalogs`, so `policyforge coverage` works with no flags.
+
+`init --refresh` brings the bundled catalogs and example configs up to the installed version after an upgrade and lists what changed, with the old and new hash of each. Your `config.yaml`, `topics.yaml`, `local_content/` and `.gitignore` are not touched, and a replaced file's previous copy is kept under `output/.init-backup/`.
+
+Four failures that were tracebacks or bare messages are now one line with the next step: a config with no `llm:` block, a missing topic registry, an unset Confluence or GitHub token variable, and an HTTP failure from Confluence (the line names the host, without credentials or query, and what to check for a 401, 403, 404 or 5xx).
+
+**A programme profile: name your catalog set once.** `programme.catalogs` in `config/config.yaml` lists the catalogs your organisation maps against, each a framework's name (`policyforge frameworks` lists them, bundled and under `local_content/`) or a path to a `controls.json`. `synthesize`, `ssp`, `map`, `bundle`, `addresses`, `coverage`, `parameters`, `satisfies` and the `crosswalk` commands use it when `--controls` isn't given, and say so in one line: `catalogs: programme (2): nist-800-53-r5, hipaa-security-rule`.
+
+`--controls` on the command line replaces the profile entirely; nothing is merged. With neither, a command that had no default fails in one line naming `programme.catalogs` and `--controls`, and one that defaulted to 800-53 (or 800-53 and HIPAA) keeps that default only when no profile exists, and says so. An unknown name or a missing path is refused, naming it, before anything runs. A licensed catalog keeps every check it had: the profile only names files. `drift` and `etl-hipaa-crosswalk`, where `--controls` is one specific file, are unchanged.
+
+`config/config.example.yaml` shows the block, commented out.
+
+**`synthesize` now keeps every requirement that shares an id with another, and
+says so.** A catalog can file two different requirements under one id (a
+HITRUST export has several). Synthesis used to keep only the last of them, so
+the other never reached the generated documents while `coverage` still counted
+it. Both now reach the synthesis, and the run prints a line naming each shared
+id and how many requirements carry it. A requirement written twice word for
+word is still sent once. A control whose own id matches another control's
+enhancement id still takes that id, as before.
+
+**A topic file's control ids now work in any case.** `ac-3`, `Ac-3(1)` and
+`govern 1.1` in `nist_controls` (or in `synthesize --nist-controls`) now mean
+the catalog's `AC-3`, `AC-3(1)` and `Govern 1.1` everywhere. Before, a
+lower-case anchor was owned in `drift` and `parameters` but unknown to
+`coverage`, `bundle` and `addresses`, reported as cited nowhere by
+`satisfies`, and silently left out of a synthesized topic while the topic's
+other anchors still resolved. Only ids shaped like NIST 800-53 or AI RMF ids
+are respelled. Every other id keeps its case, so `164.308(a)(1)` stays as
+written, and a zero-padded `AC-03` is still reported as unknown, because
+800-53 has no such id. The same rule applies to 800-53 ids that another
+catalog's crosswalk names, so a catalog of your own that maps a requirement to
+`ac-3` now reaches the topics that own `AC-3`.
+
+**`generate` now reads a document's brackets against the catalogs its synthesis
+was drawn from, as `satisfies --controls` does.** A short citation such as
+`[NIST SC-8]` was listed among the roles left to fill whenever more than one NIST
+catalog was installed, although `satisfies` given 800-53 alone counted it cited.
+The two now resolve a bracket the same way, and `generate` prints which
+catalogs it read citations against. A synthesis that records no catalog set, or
+names one that is no longer on disk, is read against every installed catalog,
+as before, and the line says so. A HIPAA standard cited above the paragraphs the
+catalog carries, such as `[HIPAA 164.316(b)]`, is no longer reported as a
+placeholder; `satisfies` already counted it cited.
+
+**`ssp` no longer writes text as a live spreadsheet formula.** A control
+statement, system profile field, narrative or crosswalk value beginning with
+`=` was stored in the workbook as a formula, so a value such as
+`=HYPERLINK(...)` would run when the file was opened. Every cell filled from
+your catalogs, configuration or drafted narratives is now written as text; a
+value beginning with `=`, `+`, `-`, `@`, a tab or a carriage
+return is also marked so that editing the cell later doesn't turn it into a
+formula. The CIS Summary sheet's own status and origination formulas are
+unchanged, and a workbook built from the bundled catalog is otherwise
+identical, cell for cell.
+
+**`generate` now checks its arguments before it builds a model provider.** A
+Policy or Procedure run with no `--standard`, or with a `--standard` that is a
+directory, isn't UTF-8 text, or has no `# ` title, used to fail only after the
+provider was built: on a machine with no provider configured it failed on the
+provider instead, and the last three ended in a Python traceback. Each now stops
+first with a usage error (exit 2) that names the problem. Runs with valid
+arguments are unchanged.
+
+**Cost estimates no longer undercut a newer LiteLLM's own price table.**
+PolicyForge corrects LiteLLM's bundled prices where a provider lists a model
+higher, and those corrections were fixed against LiteLLM 1.103.0. With LiteLLM
+1.104.0, which a fresh install gets, two of them (GLM 5.3 Flash's and Kimi K3's
+output price) became lower than LiteLLM's own figure, so a re-send notice's
+worst-case cost could understate it. Each correction is now applied only where
+the provider's list price is higher than the table LiteLLM loaded, whichever
+version that is. With the pinned LiteLLM 1.103.0, every estimate is unchanged.
+
+**A re-send notice now names where each part of its price estimate comes from.**
+The estimate takes each component (input price, output price and output ceiling)
+from whichever is higher, LiteLLM's table or PolicyForge's override, so one
+model's figures can come from both. The notice, and the cost ledger's
+`price_basis`, used to credit all of them to one source. A mixed model is now
+named per component, for example "input: PolicyForge's override table (…);
+output and output ceiling: LiteLLM 1.104.0's bundled table", so each figure can
+be found in the source named for it. A model whose figures all come from one
+place is named once, as before.
+
+**A bracketed sentence is no longer reported as a placeholder to fill.** A model that writes a Procedure's prerequisites as `[Access to policy management system]` or `[Quarterly review schedule established by AI Risk / Product]` had each reported as an unfilled placeholder, with advice to fill a role or record a parameter value; neither is one. A placeholder is a label: every word is capitalised, apart from short connectives and anything after a colon, so a span with a lower-case content word is read as prose. `generate` now lists those spans under their own heading, "Bracketed prose, left as written", and leaves them in the document as written. Nothing is dropped from the report: a span the reader stops counting as a placeholder is listed there, a role the vocabulary declares is never read as prose, and a role your config fills is filled first. The corpus comparison reports the same fourth class.
+
+**The Anthropic and Vertex providers work again with the current Anthropic SDK.**
+Version 1.7.0 of the `anthropic` package removed the `temperature` argument,
+so every call through the `anthropic` or `vertex` provider failed with a
+`TypeError` before anything was sent. These providers no longer send a
+temperature, on live calls or in batches. Newer Claude models already refused
+an explicit one. The other providers still send the temperature they are given.
+
+**A missing API key or provider extra is a one-line error, exit 2.** When the
+configured provider can't be built because its key variable isn't set or its
+optional extra (`litellm`, `bedrock`, `vertex`) isn't installed, PolicyForge now prints
+the same message as before in one line, with exit code 2, instead of a long
+Python traceback and exit code 1. **If you script a command and check for exit
+code 1 on a missing key, check for 2.**
+`zardoz discover` without `--no-llm` is the exception: with no key it no longer
+stops. It prints why the model is unusable, naming the missing variable, and
+groups the space by naming convention only, as `--no-llm` does.
+
+**`--force` now only means "overwrite my own local file".** It used to mean
+three things. `crosswalk seed` and `generate-parser` keep it. Two other uses
+are renamed, with the same behaviour and help:
+
+- `publish --force` is now `publish --overwrite-wiki-changes`. It overwrites
+  pages someone changed on the wiki since this tool last wrote them.
+- `etl-hitrust`, `etl-govramp` and `etl-soc2-tsc --force` is now
+  `--allow-undeclared-licensed`. It writes a licensed catalog where the
+  repository has not declared `frameworks.allow_licensed_in_repo`.
+
+**On those four commands `--force` now refuses**, with one line and exit code
+2 naming the new flag, and does nothing else. A script that passed it stops
+instead of overwriting a wiki edit or writing a licensed catalog. Change it to
+the new flag.
+
+**`generate` no longer replaces a document's frontmatter when it regenerates one.** It used to build the frontmatter from scratch, so a hand-set `owner:`, a key somebody added, and the page version `pull` records inside `confluence:` were lost on the next run, and the body check did not notice because it covers the body only. It now merges, as `pull` does: it updates the keys it owns (`generated_by`, `topic` and `tier`) and keeps every other key, the `confluence:` binding and its version included. A registry binding only fills what the document's own block lacks.
+
+An `owner` already in the document that differs from the synthesis's is kept, and `generate` prints one line naming both values. Remove the `owner:` line to take the synthesis's.
+
+If the document already there is about another topic, the `confluence:` binding (or `targets:`) and `owner` that belong to that topic's page are not carried onto the new one, and `generate` says so, so a later `publish` cannot write one topic's text over another's page. A binding written under `targets:` is filled there, as `pull` does, and not given a second block.
+
+**A refused request names the service that refused it.** A wrong or expired model key (a 401 or 403 from the OpenAI-compatible or Gemini provider), and a 429 or a server failure from them, used to end in a traceback; they are now one line naming the model provider and the variable `llm.api_key_env` names, with what to check. The same one-line message for a failed Confluence request used to give a 401 the Confluence advice whichever service had answered, so a wrong model key could send you to fix your Confluence token. The line now names the service as the code that made the request knows it: the model provider and its key variable, or Confluence and the token variable the command was given. A failure from a service nobody named says the credential was refused and doesn't guess whose. The vendor's own reply is never printed in the line, since a refused-key reply can echo part of the key.
+
+**A container image's crosswalk now covers every public catalog the image holds.** The build stage made `data/frameworks/crosswalk.json` from four catalogs (NIST SP 800-53, FedRAMP, ARC-AMPE and the HIPAA Security Rule) although the image holds all thirteen public ones. `addresses`, `coverage` and `synthesize` run in the container read that file, so they reached no mapping for NIST CSF 2.0 or SP 800-171, and found fewer NIST controls mapped than a crosswalk over every public catalog has. The build now maps all thirteen, and `tests/test_container.py` holds the Dockerfile's list to the catalogs whose manifests say `licence: public-domain`, so a catalog added to the bundle can't be left out of the image's crosswalk again. The licensed bring-your-own catalogs are not in the list, and still contribute only their README.
+
+**Re-send price estimates follow one rule, and say when a price is soft.**
+For each model PolicyForge corrects, each price is now the higher of the
+table that comes with LiteLLM and the provider's list price as read at the
+release. A correction exists only where LiteLLM's table is lower.
+
+So the DeepSeek V4 Flash and Pro corrections are gone: OpenRouter's list now
+prices them below LiteLLM's table, which they use again. Kimi K3 keeps its
+input price from LiteLLM's table and takes its output price from OpenRouter's
+list. Where a provider's list price has moved between readings, a re-send
+warning now says so: "this provider's price has varied". What a run actually
+cost still comes from the provider's own figure where it reports one.
+
+**Source tags read the shorter citation form: `[HITRUST 11.a, 11.c | NIST IR-1, IR-8 | ARC-AMPE]`.** `check`, `satisfies`, `drift` and the placeholder
+list now read several ids after one framework name as one citation each (a
+qualifier list such as `Moderate, High` stays one citation). A framework
+named alone inside a tag that cites something is a baseline reference: it is
+not reported as an unresolved citation. A bracket that is nothing but a
+framework name, such as `[ARC-AMPE]`, is still reported. **`NIST` alone now
+names NIST SP 800-53** whatever other NIST catalogs are loaded, so `[NIST SC-8]` resolves where it was reported as ambiguous before. Another NIST
+catalog's ids still need that catalog's name: `[NIST 03.01.01]` stays
+unresolved with NIST SP 800-171 loaded.
+
+**`check` now holds every quote in a Standard's source blocks to its
+catalog, and Confluence shows the blocks as expand sections.** A quote that
+differs from the catalog's text by a character, an id the catalog doesn't
+hold, a title or baseline it doesn't carry, a count that disagrees with the
+list, a public entry with its quote removed, or any line added inside a block
+is an error; a block for a catalog that isn't on the machine running `check` is
+a warning, since it can't be checked there. `export-confluence` and
+`publish` send each block as Confluence's expand macro, and `pull` and
+`import-confluence` turn it back into the block, so a round trip keeps every
+quote (tested on the storage format with the attributes a server adds to its
+macros, not against a live server). A code block containing HTML-like text (`<b>`, `&`) also comes back
+from Confluence as written now, where its tags were dropped before.
+
+**A generated Standard now shows each section's sources in their own words,
+and writes its tags in one short form.** `generate` rewrites each tag as
+`[HITRUST 11.a | NIST IR-1, IR-8 | ARC-AMPE]`: NIST SP 800-53 ids once, under
+`NIST`, and a tailoring of 800-53 (ARC-AMPE, FedRAMP, GovRAMP) named as a
+baseline unless it adds an id 800-53 isn't cited for. Under each section it
+adds a collapsible block per framework, quoting every requirement that
+section cites from the catalog itself, never from the model. A licensed
+catalog is listed by id and title only unless you set
+`standards.quote_licensed: true`. `check` doesn't read the quoted text as
+your own obligations, and it now compares a Standard with its synthesis by
+the citations they make, not by the text of their tags. **Regenerate a
+Standard to get the new form**; one written before still reads.
+
+**HITRUST requirements now reach `synthesize`, within your declared level
+scope.** `map` records HITRUST mappings per level statement (`11.c Level 2`),
+and `synthesize` looked those ids up only as controls or enhancements, so no
+HITRUST text reached a synthesis, while `coverage` counted it reached and
+every synthesis still listed HITRUST as a source. Each named level statement
+is now sent under its control's heading. Levels follow `frameworks.scoping`
+exactly as `coverage` counts them: `synthesize` names each crosswalk-named
+level the scope leaves out, with the reason, summarises the levels it drops
+from a control reached as a whole, and says when no scope is declared. It
+also names any crosswalk id that no loaded catalog carries. **Re-run
+`synthesize` and `generate` for any topic built from a HITRUST catalog.**
+
+**`publish` and `export-confluence` refuse a document carrying a credential.**
+They scan what they would send for high-confidence formats: private key blocks
+(PEM and PGP), AWS access key ids (long-term and temporary), GitHub, Slack,
+OpenAI and Anthropic keys, Google API keys, and JSON Web Tokens. A finding stops
+the run with exit 2 before anything is sent, naming the file, the line and the
+kind of credential, and never printing more than its first four characters.
+`policyforge check` reports the same findings as warnings, drafts included. No
+rule looks for the word "password" or for random-looking strings, so policy
+prose about passwords and keys is left alone, and AWS's documented example key
+is allowed. A person who has looked can publish anyway with
+`--allow-secret-findings`, which prints how many findings it allowed. A draft
+with no destination doesn't block `publish`, since it is never sent.
+
+**Two more section-number shapes are no longer read as sentences.** The
+statement checks read `- 6.2. Staff must …` and `1. 6.2. Staff must …` as a
+list item holding `6.2.`, and a `6.2.` opening a paragraph's second line was
+glued onto the sentence above it. These numbers are now set aside like the
+others, and a number is kept where setting it aside would join two sentences
+into one.
+
+**A line-ending-only change no longer records a new document version.** The
+version history hashed a document's text as it arrived, but stored it with LF
+line endings, so the same document saved with Windows (CRLF) or old Mac (CR)
+line endings recorded a version whose stored text was identical to the last.
+Line endings are now folded before hashing. A history recorded before this
+change records no extra version for unchanged text either.
+
+**The parameters ledger keeps a multi-line value as written, and refuses a key
+given twice.** A rationale written over several lines used to be folded onto
+one line the next time the ledger was rewritten (`parameters --init`). It is
+now kept line for line, blank lines and trailing spaces included. A parameter,
+or one of its fields, given twice in the ledger used to keep the second
+silently. Every command that reads the ledger now stops with one line naming
+the key and both line numbers.
+
+**An edit adding one planned section no longer approves every new section.**
+When a plan asked to add a section, the edit check accepted any heading the
+revision added, including ones the plan never mentioned, and a section
+duplicated in the revision passed too. Each new heading now has to be named by
+a step, or covered one for one by a step that adds under an existing section.
+Anything left over is named in the review's "sections added that the plan did
+not ask for" warning, which it used to suppress whenever the plan added
+anything.
+
+**A placeholder with an acronym in parentheses is reported.** A label such as
+`[Security Information and Event Management (SIEM) System]` was never read as
+a placeholder, so `generate` didn't list it among the unfilled ones and a
+published document could carry it unnoticed. It's now read whole and listed,
+or filled when a role with that exact label is declared. Citations such as
+`[NIST 800-53 AC-7(3)]` are still citations. A parenthesised citation of a
+framework outside the run's catalogs, such as a HIPAA paragraph, is now listed
+with the other unresolved citations, as the same citation without parentheses
+already was.
+
+**An answer never draws on a page the injection scanner flagged.** A synced
+document whose text reads as instructions to whoever is answering (the pages
+the sync report already lists) used to stay searchable, so an answer could be
+built from it. It is now left out of what answers search, so its text is never
+sent to the model, and each answer says in one line how many documents were
+left out and that `policyforge zardoz sync` names them. The documents are
+still synced and still reported.
+
+**Zardoz's injection check catches two more ways a page can instruct the
+model reading it.** An instruction split by invisible characters (a
+zero-width space inside "Ignore", for example) or written in full-width
+letters is now read the way a model reads it, and is flagged. So is text
+addressed to the model by name, such as "Editor's note to the AI assistant:
+disregard the policy", where the old patterns only knew the plain imperative.
+Findings still quote the page as written. A sentence that only mentions an
+AI tool ("paste nothing into an AI assistant") isn't flagged. One that names
+the model and tells it what to say or do is, even in a policy ("The AI must
+not answer questions about salaries"), because that's how the model reads it.
+Findings are reported for review; they don't stop anything.
+
+**`entail.answering` now checks Zardoz's answers, as its startup note said.**
+The judge was built when the setting was on, and the shell and MCP server said
+"entailment checking on", but the judge never reached them, so no answer was
+checked. It does now: one extra model call per cited sentence, recorded in the
+ledger, decided by the same boundary as the answer (so a hosted judge is
+refused a licensed passage, and the answer says the check did not run), and
+counted against the same `budget.max_usd`: a Zardoz or MCP session keeps one
+spend total for every model it calls, where each provider used to keep its own. **If you
+set `entail.answering`, expect those calls from now on.** Also corrected:
+`policyforge zardoz --help` no longer says Zardoz drafts an `edit-topic`
+command for you (it never did); the `/shadow` command, which could only ever
+say there was nothing to show, is gone.
+
+**The security, trust and measurements documents moved to
+[zardoz.io/trust](https://zardoz.io/trust/).** The system card, the product
+commitments, the security architecture, the OWASP LLM Top 10 and NIST AI RMF
+mappings, subprocessors, responsible use, and the readable half of the
+measurements are pages there now, and the comparison with other tools is at
+[zardoz.io/compare](https://zardoz.io/compare/). The repository keeps
+`SECURITY.md` (how to report a vulnerability, response times, and supported
+versions: only the latest minor release), the measurement ledgers, and the
+epoch log, now at `docs/measurements/epochs.md`. Links in the README, the
+example configuration and the pull request template point to the new pages.
+
+**`export-confluence` publishes the document, not its frontmatter.** It
+converted the whole file, so a generated document arrived on the page with a
+rule and its frontmatter (`generated_by`, `topic`, `owner`) as a heading above
+the title. It now sends the body only, read the same way `publish` reads it,
+so both commands send the same page for the same file. A file whose
+frontmatter isn't valid YAML is refused by name instead of being sent as
+text. **A file that opens with a horizontal rule (`---`) and has another one
+later is now refused by `publish`, `check` and `export-confluence`**: the text
+between the two rules reads as frontmatter, and `publish` used to drop it
+without a word. Start such a file with its heading, or write the rule as
+`***`.
+
+**Every generated document records the catalogs it was drawn from**, under
+`generated_by.catalogs`: each catalog's name and the sha256 of its
+`controls.json`. A catalog that is a version in a `policyforge library`
+records that version and its export's sha256, so the trace runs from the
+document to the version to the export as received. Any other catalog
+records `library: none`. `synthesize` writes the record into the synthesis
+and `generate` carries it into the Standard, Policy, Procedure and
+acceptable-use documents. A Policy drafted from its Standards lists their
+catalogs once each. A document drafted from a synthesis written before this
+release names that synthesis under `catalogs_not_recorded`.
+
+**`policyforge library add` keeps your own licensed catalog's versions, each
+traceable to the export it came from, with a change log between them.** A
+library is a private git repository of its own, whose `framework.yaml` names
+the licensed parser (for HITRUST CSF, `etl-hitrust`) and declares
+`allow_licensed_in_repo: true`. Each version keeps the export byte for byte,
+the catalog the parser made of it, and a `provenance.json` recording both
+files' sha256, the parser and plugin, the PolicyForge version, the date, and
+who added it. Adding a version after the first writes
+`changes/<old>-to-<new>.md`. It lists added, removed and changed
+requirements and mapping changes, each with its id and level, and names
+which of your documents cite each one. Each version is one commit and a
+tag. A version that exists, an export already added under another name, a
+library with uncommitted changes, one that hasn't declared it may hold
+licensed content, and one inside a PolicyForge checkout are refused before
+anything is written. A failed add leaves the library as it was.
+
+**Zardoz's follow-up rewrite treats earlier answers as quoted text.** When
+you ask a follow-up such as "and for contractors?", Zardoz rewrites it into a
+standalone question using the recent exchange. The earlier answers quote your
+documents, and they reached the rewriting model unmarked, so a page that said
+"ignore the question" could steer the rewrite. They are now fenced the same
+way passages are when answering: a per-request marker no document can contain,
+and an instruction that the text inside is context, never instructions.
+
+**Citation tags are no longer reported as unfilled roles.** A generated
+document's `[NIST 800-53 AC-2]` or `[NIST AI RMF Govern 1.1]` used to appear
+in the list of roles left for you to fill, and a Zardoz answer that quoted one
+was warned about as a reproduced placeholder. Both now leave a citation alone.
+A bracket counts as a citation only when it names a framework catalog you have
+and a requirement that exists in it, across every catalog you have installed.
+Everything else is still reported: real roles such as `[CISO]`, `[IT]` and
+`[Security Lead]` (and `[CISO - interim]` still reads as `CISO`), a
+role that names a framework, such as `[FedRAMP 3PAO]`, a tag whose requirement
+doesn't exist, and a bare `[NIST]`, which is an incomplete citation. So is a
+citation of a framework you have no catalog for, such as `[ISO 27001 A.5.1]`;
+add that framework's catalog and it drops out. Because several NIST catalogs
+come installed, a short `[NIST SC-8]` is ambiguous and also stays listed;
+`[NIST 800-53 SC-8]` doesn't.
+
+**`addresses` finds a requirement id typed in any case.**
+`policyforge addresses ac-2` now finds `AC-2`, as `AC-2` always did, and so
+does `164.308(A)(1)(II)(a)` for the HIPAA Security Rule's
+`164.308(a)(1)(ii)(A)`. The answer always shows the id as its catalog spells
+it. If what you typed matches more than one id that differ only by letter case
+(which only a catalog of your own can contain), every match is listed and none
+is picked; name the one you mean exactly as its catalog spells it.
+
+**`policyforge --version` prints the installed version.** It reads the version
+from the installed package, so it says what pip or Homebrew put on your
+machine. If the code running declares a different version (an editable
+install made before an upgrade), a note on stderr names both and suggests
+reinstalling; the version on stdout is unchanged. Run from source with no
+package installed, it says so on stderr and exits 1 rather than print a
+version.
+
+**`generate` lists citations that don't resolve apart from roles left to
+fill.** A bracket written as a framework citation that the run's catalogs
+don't resolve, such as `[ISO 27001 A.5.1]`, an id the catalog doesn't carry,
+or a framework named alone like `[NIST]`, used to be listed among the roles
+to add under `org.vendors` or `org.teams`. It now has its own list, with
+advice to check the tag's spelling or add that framework's catalog to the
+run. Roles keep their list and advice, and the two lists together hold every
+bracket the run left.
+
+**`generate` checks that `--out` can be written before it calls the model.**
+A path that couldn't be written, such as one under an existing file or an
+existing directory given as the file, used to fail only after the draft had
+been paid for, ending in a Python traceback with the draft lost. It now stops
+first with a usage error (exit 2) naming the path. As before, missing
+directories are created and an existing file is overwritten, with earlier
+versions kept in the history.
+
+**`generate` lists roles apart from other placeholders it couldn't fill.**
+Placeholders left in a draft used to be listed as roles to add under
+`org.vendors` or `org.teams`, though most were values the organisation
+decides, such as a review frequency or a system's name. Now only a label the
+role vocabulary declares is listed as a role, with that advice and a pointer
+to `policyforge roles`. Everything else is listed as unfilled, with advice
+to fill a role under `org.vendors` or `org.teams`, or record a value in the
+parameters ledger (`config/parameters.yaml`). The lists together still hold
+every placeholder the run left.
+
+**The Governance, Risk and Compliance role is filled like any other.** A
+placeholder naming it, `[Governance, Risk and Compliance]`, was never filled
+from `org.teams.grc` and never listed among the roles left, because of the
+comma in its name. Every declared role label is now recognised, starting with
+a capital and in any case after that, as other roles already are. Bracketed
+lists in ordinary prose, such as `[Access Control, Audit]`, are still left
+alone.
+
+**A configuration that can't be found or read is one line, not a
+traceback.** With no `config.yaml`, or one that is empty, isn't valid YAML,
+isn't a mapping of settings, isn't saved as UTF-8 or can't be opened (a
+directory, or no permission), a command now prints `Error:` and what to do on
+a single line and exits with status 2. It used to print a Python traceback of
+thirty-odd lines, with the same message at the bottom where it had one.
+
+**A link's text is no longer treated as a placeholder.** In a Markdown link
+such as `[Ticketing System](https://…)`, the text in brackets was read as an
+unfilled placeholder, and when that role was filled the link was rewritten as
+`Jira(https://…)`, which breaks it. Inline links, reference links and images
+are now left exactly as written. A bracket followed by a colon or a space is
+still a placeholder.
+
+**A licensed catalog can no longer be written into a bundled framework file
+through a link.** The licensed-catalog importers refused an `--out` inside
+`data/frameworks/`, but an `--out` elsewhere that was a hard link to a bundled
+`controls.json` passed, and the import wrote the licensed catalog into the
+bundled file and exited 0. They now refuse an `--out`, or the `framework.yaml`
+beside it, that is the same file as anything under `data/frameworks/`, naming
+it. The catalog and its manifest are also written as a new file moved into
+place, so a link the check misses can't carry the catalog into another file.
+
+**Every model call is now checked against your content boundary, not only
+the commands that remembered to ask.** Zardoz and the MCP `ask_documents`
+tool, `edit-topic` and `edit-confluence`, and the entailment judge behind
+`check --entail` sent their text to whatever model was configured, so a
+Standard stamped `licensed` could be answered from, edited or judged by a
+hosted model, and a tightened `llm.boundary` ceiling was ignored there.
+Each call is now decided by what it sends:
+
+- a Zardoz answer by the passages it draws on, and by an earlier answer it
+  carries forward;
+- an edit by the class its files state;
+- a judgement by the document's and its synthesis's class.
+
+A refusal names the passage or file that set the class and the opt-in
+(`llm.licensed_agreement`) that would allow it. **You may see new
+refusals**: that is the boundary now holding where it didn't.
+
+The Zardoz corpus now keeps each document's content class. **Re-sync it**
+(`policyforge zardoz sync`): a snapshot synced earlier reads every document
+as your organization's own until you do, and the shell says so when it
+starts. Turning off the ledger no longer turns off the check.
+
+**A misspelt `content_class` now reads as licensed, not as no class.** A
+document whose frontmatter stamped a class PolicyForge doesn't recognise
+(`licenced`, say) used to be treated as your organization's own content, so
+a typo in a licensed stamp let the text reach a hosted model or a public
+wiki. Any stamped value that isn't a known class now counts as `licensed`,
+and the command says so once per document, naming the value, so the typo is
+easy to find and fix. A document with no `content_class` at all is
+unchanged.
+
+**A document that states its content class twice takes the more guarded
+one.** A hand-added top-level `content_class` used to override the class
+`generate` stamped under `generated_by`, so `content_class: public-domain`
+on a document stamped `licensed` let Zardoz answer from it through a hosted
+model, while the wiki export still refused it. Both now read the most
+guarded of the two: a public label never lowers a licensed stamp.
+
+**A page can't stall `zardoz sync`'s injection check any more.** A long
+unbroken run of characters that Unicode normalisation expands (a megabyte of
+one ligature, for example) used to take minutes to check, and the time grew
+with the square of the run. Long runs are now checked a piece at a time,
+cut only where nothing can combine across the cut, so Chinese, Japanese and
+Korean pages are read exactly as before. A run with no such place to cut is
+reported as a finding of its own rather than skipped quietly.
+
+**A Standard published from 1.8 can be published, pulled and edited again.**
+A Standard's source blocks reach Confluence as collapsible `expand` macros,
+and the check for macros this tool can't round-trip reported them as
+unsupported on the tool's own output. So `publish` skipped the page, `pull`
+refused it, and `edit-topic --host` and `edit-confluence` refused to edit it,
+unless `--allow-macros` was given. A source block's `expand` is now
+recognised by the same rule `pull` uses to read it back into the block. An
+`expand` a person added with any other title, and any macro placed inside a
+source block, are still reported. A page whose only difference is the
+`ac:macro-id` and `ac:schema-version` a server adds to each macro also
+counts as unchanged now, so `publish` no longer writes a new version of
+every Standard on every run. The check also finds a macro whose name isn't its first attribute; it used to miss one, and a page holding it could be flattened by a publish.
+
+**A `policyforge library` now holds every file exactly as received, on every
+checkout.** Under Git for Windows' default `core.autocrlf=true`, a library
+used to store a text export with Windows line endings converted, so its
+`provenance.json` sha256 didn't match what git kept. A clone also checked
+`controls.json` out converted, so documents drawn from it traced
+`library: none`. `library add` now makes `* -text` the last rule of the
+library's `.gitattributes`, committed with the version, and checks with git
+that no file being added would be converted. A library made before this gets
+the rule on its next `add`. The command then says that earlier versions and
+checkouts may hold converted bytes and should be re-cloned and checked
+against their provenance.
+
+**An invented HIPAA paragraph no longer counts as evidence.** A citation such
+as `[HIPAA 164.502(a)(1)(40)]` stood for section 164.502 in `satisfies` and
+passed the placeholder check, although the Privacy Rule has no such
+paragraph. A part the catalog doesn't list, below a paragraph it subdivides,
+is now reported as unresolved, in the HIPAA Privacy and Breach Notification
+Rules and in every catalog read the same way. Real paragraphs keep
+resolving, including those below a paragraph the catalog doesn't subdivide,
+such as `[HIPAA 164.316(b)(1)(i)]`. An invented part below such a paragraph
+still resolves, because nothing in the catalog tells it from a real one.
+
+**An invented sub-paragraph of a HIPAA or ONC requirement no longer counts as
+evidence.** A citation such as `[HIPAA 164.530(i)(1)(iv)]` or
+`[ONC Certification Criteria 170.315(a)(1)(99)]` names a part below a
+paragraph the catalog doesn't subdivide, and `satisfies` and the placeholder
+check counted it, though no such paragraph exists. In the HIPAA Security,
+Privacy and Breach Notification Rules and the ONC certification criteria, a
+part below such a paragraph now resolves only when that paragraph's own text
+lists it as an item, so `[HIPAA 164.316(b)(1)(ii)]` resolves and
+`[HIPAA 164.316(b)(1)(iii)]` is reported. Each catalog's manifest records
+the setting and the measurement behind it. The 42 CFR Part 2 and Information
+Blocking catalogs aren't measured whole yet, so they keep the old behaviour,
+and `satisfies` names them in every run. The HIPAA Security Rule catalog's
+text also regains the list markers its import dropped: a paragraph that
+continues an item, such as 164.316(b)(1)'s "(ii) If an action ...", now
+keeps its "(ii)". A Standard generated before this that quotes one of the
+eight changed paragraphs in a source block will be reported by `check`
+until it's regenerated.
+
+**`publish` no longer reverts a live edit made from now on.** `edit-confluence`
+and `edit-topic --host` write the approved edit to the Confluence page and not
+to the repository, but they stamped the page as if `publish` had written it,
+so the next `publish --apply` from an unchanged tree put the old text back with
+no warning. A live edit now carries its own stamp: `publish` refuses the page,
+as it does a hand edit, and `wiki-drift` reports it as a live edit, until
+`pull` brings the edit into the repository. Both edit commands print that
+`pull` command after each page they publish. **A page you edited live with an
+earlier version still carries the publish stamp, so `publish` takes it for
+its own last write: run `pull` for those pages before your next `publish --apply`.**
+
+**`generate-parser` refuses two more ways out, and says what its checks
+can't catch.** A drafted parser that reaches the interpreter's own machinery
+through an allowed module (such as `pathlib.sys.modules["builtins"].eval`)
+is now refused before it runs, and its trial run refuses a read of any file
+other than the sample. The command now also says, whether or not you pass
+`--promote`, that the checks catch known-dangerous shapes and not every one:
+code that misbehaves only on inputs your sample doesn't have passes both. Read
+the generated parser before you commit it.
+
+**`publish` leaves a page alone when it already says what the file says.** It
+wrote every page on every run, so each unchanged page got a new Confluence
+version, and the next `pull` then rewrote every file's version number. An
+unchanged page is now skipped, and the plan says how many were left alone. A
+page published before this tool stamped its writes is still written once, so
+it is stamped from then on.
+
+**`pull` updates the file a page is bound to, and keeps its frontmatter.** It
+used to place every pulled page by its title, so a page bound to a file with
+another name arrived as a second copy beside it, which `check` then rejected.
+And it replaced the frontmatter, so `topic`, `owner`, `generated_by` and any
+other key were gone after the first pull. Now the page goes into the file
+whose `confluence:` block names it, only the binding (page id and version) is
+updated, and the file keeps its own title and tier. A page no file is bound to
+is still placed by its title, and the report says so. Two cases are refused
+rather than guessed: two files bound to one page, and a title whose file
+already belongs to another page (the same title in another space).
+
+**A citation to a range or a list of enhancements cites each member.**
+`[HIPAA 164.310(d)(2)(i)-(iv)]`, `[NIST CP-9(1) to (3)]` and
+`[NIST CP-9(1), (2) and (3)]` now count as citing every id they span, in
+`satisfies`, in drift, in the source blocks and in `check`, instead of being
+reported as unknown. `check` warns on each vacated paragraph in a range. A
+range resolves only when its endpoints differ in their last part and the
+catalog carries every member. Otherwise it is still reported, as written. A
+citation such as `[NIST CP-9(1) or (3)]` is reported too: it no longer counts
+as a citation of `CP-9(1)` alone.
+
+**Leaving `policyforge zardoz` with Ctrl-D, or piping questions into it, ends
+with exit 0.** The end of input used to print "Aborted!" and exit 1, so a
+person leaving the shell, or a script whose questions had all been answered,
+looked like a failure. Ctrl-C still only abandons the line being typed.
+
 ## 1.7.0
 
 ### Breaking changes
@@ -153,13 +900,13 @@ every release up to 1.178.0, and advisories against pyjwt 2.13.0 kept
 arriving, eight of them in one afternoon, while semgrep's pin keeps its lock
 on 2.13.0. So `pip-audit` over
 `requirements/semgrep/semgrep.txt` now reports each advisory by id and
-prints `semgrep lock: N advisories (advisory, not blocking; #82)`, which the
+prints a one-line count of them, marked advisory and not blocking, which the
 gate repeats in its summary. **The installed product is not affected:** its
 own locks pin pyjwt 2.15.1, semgrep never ships to users, and the audits of
 the product's environment and runtime lock still block. An advisory that
 the product shares (the same package and version in `requirements/runtime.txt`)
 still blocks, and so does an audit that can't run. A pinned semgrep container
-image replaces this in 1.8 (#83).
+image replaces this in 1.8.
 
 ### New frameworks
 
@@ -263,8 +1010,7 @@ does not rule out.
 Through OpenRouter, the cost PolicyForge records is the figure OpenRouter
 reports it charged. Through any other LiteLLM route, no provider reports a
 cost, so the figure is LiteLLM's estimate from its price table. Until now the
-two were recorded and shown the same way, so an estimate could read as a bill
-(#87).
+two were recorded and shown the same way, so an estimate could read as a bill.
 
 Each call in the model log now records `cost_source`: `provider` or
 `estimate`. The line printed at the end of a run, `policyforge model-log`, a
@@ -273,7 +1019,7 @@ only when all of it was billed. Otherwise they name the parts, for example
 `$0.2500 billed + $0.1000 estimated`. A re-send warning still says the first
 attempt was paid for, gives an estimated figure as a cost
 (`paid for; cost $0.0123 estimated`), and says "billed" only beside a figure
-the provider reported (#97). Log rows written by
+the provider reported. Log rows written by
 an earlier version have no source, and their cost is shown as "of unrecorded
 source", never as billed.
 
@@ -283,7 +1029,7 @@ GitHub on every run, including runs set to keep licensed content local. It
 carried no content, but it was an outbound request nothing documented, and it
 meant the prices you were shown could change between runs without any change
 to PolicyForge, and matched nothing the project tests. PolicyForge now always uses the table that comes with the
-installed LiteLLM, so figures change only when LiteLLM is upgraded (#79).
+installed LiteLLM, so figures change only when LiteLLM is upgraded.
 
 **Where that table is wrong for a model PolicyForge names, a small override
 table corrects it,** with its source and the date it was read. Claude Opus 5.5
@@ -300,7 +1046,7 @@ from:** LiteLLM's bundled table and its version, or the override table and
 its date.
 
 **Standards and Procedures now start with room for 32,768 output tokens, up
-from 16,384.** Measured with nothing cut off (#3): at the old budget, 3 of 5
+from 16,384.** Measured with nothing cut off: at the old budget, 3 of 5
 Standards on Claude Sonnet 5 and 2 of 5 on Claude Opus 5.5 ran out of room.
 Each was cut off, then paid for again on a retry, and in the run behind
 MEASUREMENTS.md every Opus Procedure was. The budget is a limit, not a
@@ -1380,7 +2126,7 @@ PR whose head the commit was, take its merge commit, diff over the commit's
 own files, read the deletions, and **classify each one** — a line absent
 from the merge is lost work *or* a removal a reviewer asked for, and those
 are indistinguishable in a diff and opposite in consequence. Measured on
-#204, the PR that shipped this document: 17 deletions, every one requested
+the PR that shipped this document: 17 deletions, every one requested
 during review. Not by subject — squash rewrites it — and
 not against `origin/main`, which has moved. **Both wrong methods were tried
 first and both gave confident false answers**, including 165 "unlanded"
@@ -1402,8 +2148,8 @@ merged feature branches is **zero**.
 which is measured here rather than assumed: diffing a merged branch's own
 files against main reports 459 insertions, because later work touched the
 same files. What works is asking GitHub for the merge commit and testing
-*that* for ancestry — which correctly reports #168 as merged and **not** in
-main, the stranding that had to be recovered as #169.
+*that* for ancestry — which correctly reports such a PR as merged and **not** in
+main, a stranding that then had to be recovered.
 
 **And content-checking works too — from the reviewed SHA rather than the
 branch head.** `git diff <reviewed-sha> <merge-commit>` over the reviewed
@@ -1418,7 +2164,7 @@ and did not carry it). During a release train, recently merged PRs are
 not yet ancestors of main at all, and every one of them is healthy.
 
 **CI's lock moves `filelock` to 3.32.7 and `virtualenv` to 21.7.10**, the
-versions Dependabot proposed in #239–#242, regenerated with the lock's own
+versions Dependabot proposed, regenerated with the lock's own
 header command rather than merged as Dependabot wrote them. Both are
 dev-only tools; nothing a user installs changes.
 
@@ -1440,7 +2186,7 @@ fix: an empty population and a clean tree returned the identical value,
 and the exit code the charge tells everyone to condition their push on
 was 0.
 
-**Three populations had that property, not one.** #224 reported the
+**Three populations had that property, not one.** The first report was the
 markdown targets; the tracked-file list behind the CRLF check and the
 corpus behind the conflict-marker scan were the same shape, found by
 asking what else in the file derives a set and then believes a clean
@@ -1469,8 +2215,6 @@ different because the check table is a dict literal whose keys cannot
 shrink without a visible diff — true of the code as it stands, and an
 argument from the current shape rather than from a guard, which stops
 holding the moment anyone builds that table conditionally.
-
-Closes #224.
 
 **`scripts/check.py` now runs the changelog-fragment check that CI
 requires.** It did not, so a fragment CI rejects passed the pre-push gate
@@ -1619,8 +2363,6 @@ One known false positive is written down rather than papered over: the bad
 shape inside a quoted string is reported, because `bash -c 'x | tail && y'`
 cannot be told from `echo 'x | tail && y'` without a shell parser, and the
 first one really does execute it.
-
-Closes #215 and #216.
 
 **A changelog fragment that could never be published is now refused instead
 of ignored.** `changelog.d/` entries are `.md` files; a file saved there

@@ -426,6 +426,28 @@ def test_an_archive_that_is_not_the_commit_is_refused(repo, tmp_path, change):
     assert not ok, lines
 
 
+def test_the_proof_line_counts_every_differing_file_not_just_its_sample(repo, tmp_path):
+    """#158: the proof sampled three differing paths and printed no count, so
+    "3 differing" was read as three files when it was 489 of 680. With five
+    files changed, the line must say five, though it samples three (b5 on #167)."""
+    root, _ = repo
+    for n in range(5):
+        (root / "src" / f"m{n}.py").write_bytes(b"x = 1\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "five")
+    commit = _git(root, "rev-parse", "HEAD")
+    good = _archive(root, commit, tmp_path / "a.tgz")
+
+    def five_changed(member_data):
+        return [(m, b"x = 2\n" if "/src/m" in m.name else d) for m, d in member_data]
+
+    bad = _rewrite(good, tmp_path / "b.tgz", five_changed)
+    ok, lines = release._archive_is_tree(_real_ctx(root), bad, commit)
+    assert not ok
+    said = " ".join(lines)
+    assert "differing 5 [" in said, said
+
+
 def test_a_path_git_would_quote_proves(repo, tmp_path):
     """`ls-tree` without `-z` quotes a non-ASCII or oddly spelled path, which
     would read as a file the archive lacks. With `-z` it is itself (1d)."""
@@ -570,6 +592,11 @@ def test_the_token_is_not_in_a_real_containers_environment(tmp_path, monkeypatch
 # --- the tag, the record, and the later public run --------------------------------
 
 
+#: The private tag asked of the repo's URL (#124), as `_fake_run` keys argv.
+TAG_AT_URL_990 = f"ls-remote --tags {release.FORGEJO_REPO_URL} v9.9.0^{{}}"
+TAG_AT_URL_170 = f"ls-remote --tags {release.FORGEJO_REPO_URL} v1.7.0^{{}}"
+
+
 def _fake_run(answers: dict):
     def run(argv):
         key = " ".join(argv[3:]) if argv[:2] == ["git", "-C"] else " ".join(argv)
@@ -583,7 +610,7 @@ def _fake_run(answers: dict):
 
 def test_the_local_tag_is_on_forgejo_and_names_main(tmp_path):
     calls: list = []
-    run = _fake_run({"ls-remote --tags forgejo v9.9.0^{}": f"{MAIN}\trefs/tags/v9.9.0^{{}}\n"})
+    run = _fake_run({TAG_AT_URL_990: f"{MAIN}\trefs/tags/v9.9.0^{{}}\n"})
     ctx = Context(
         version="9.9.0",
         root=tmp_path,
@@ -595,7 +622,8 @@ def test_the_local_tag_is_on_forgejo_and_names_main(tmp_path):
     assert release._tagged(ctx).ok
     (tmp_path / "CHANGELOG.md").write_text("## 9.9.0\n\nx\n", encoding="utf-8")
     release._tag(ctx)
-    assert ["git", "-C", str(tmp_path), "push", "forgejo", "refs/tags/v9.9.0"] in calls
+    pushed = ["git", "-C", str(tmp_path), "push", release.FORGEJO_REPO_URL, "refs/tags/v9.9.0"]
+    assert pushed in calls
     assert not any(c[:1] == ["gh"] for c in calls), "no GitHub Release"
 
 
@@ -613,7 +641,7 @@ def _records(line, login="policyforge-9b"):
 def _matching_ctx(tmp_path, tag_tree, cut_tree, record_tree):
     run = _fake_run(
         {
-            "ls-remote --tags forgejo v1.7.0^{}": f"{MAIN}\trefs/tags/v1.7.0^{{}}\n",
+            TAG_AT_URL_170: f"{MAIN}\trefs/tags/v1.7.0^{{}}\n",
             f"rev-parse {MAIN}^{{tree}}": tag_tree,
             "rev-parse HEAD^{tree}": cut_tree,
         }
@@ -651,7 +679,7 @@ def test_the_public_build_gate_carries_the_local_check():
         forge="forgejo",
         run=_fake_run(
             {
-                "ls-remote --tags forgejo v1.7.0^{}": f"{MAIN}\trefs/tags/v1.7.0^{{}}\n",
+                TAG_AT_URL_170: f"{MAIN}\trefs/tags/v1.7.0^{{}}\n",
                 f"rev-parse {MAIN}^{{tree}}": "1" * 40,
                 "rev-parse HEAD^{tree}": "2" * 40,
             }
@@ -753,7 +781,6 @@ def _wire(plan, repo, tmp_path, monkeypatch, *, publish: str, formula: bool) -> 
     forgejo = _serve(_Forgejo)
     bare = tmp_path / "forgejo.git"
     _git(tmp_path, "init", "-q", "--bare", str(bare))
-    _git(root, "remote", "add", "forgejo", str(bare))
     url = f"http://127.0.0.1:{proxy.server_port}"
     for name in ("HTTPS_PROXY", "https_proxy", "HTTP_PROXY", "http_proxy", "ALL_PROXY"):
         monkeypatch.setenv(name, url)
@@ -776,6 +803,7 @@ def _wire(plan, repo, tmp_path, monkeypatch, *, publish: str, formula: bool) -> 
         formula_path=base if formula else None,
         forge="forgejo",
         forgejo=release._real_forgejo,
+        forgejo_url=str(bare),
         publish=publish,
         fetch_archive=release._real_fetch_archive,
     )

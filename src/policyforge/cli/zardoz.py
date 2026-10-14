@@ -83,8 +83,8 @@ def zardoz_cmd(ctx, topics_path: Path, corpus_dir: Path, no_art: bool, plain: bo
     """Ask questions about your published policy set, conversationally.
 
     Run with no subcommand to open the shell. Zardoz reads; it does not
-    write. It can draft a `policyforge edit-topic` command for you to run,
-    but every change to a live page still goes through that command's gates.
+    write. To change a page, run `policyforge edit-topic` yourself: every
+    change to a live page goes through that command's gates.
     """
     from policyforge.zardoz.startup import load_registry, open_session
 
@@ -119,11 +119,23 @@ def zardoz_cmd(ctx, topics_path: Path, corpus_dir: Path, no_art: bool, plain: bo
         click.echo(note)
     click.echo("")
 
-    run_shell(
-        session.state,
-        read=lambda prompt: click.prompt(prompt, prompt_suffix="", show_default=False),
-        write=click.echo,
-    )
+    run_shell(session.state, read=_read_line, write=click.echo)
+
+
+def _read_line(prompt: str) -> str:
+    """One line of input, for `run_shell`.
+
+    End of input raises `EOFError` and Ctrl-C raises `KeyboardInterrupt`,
+    which `run_shell` tells apart: the first leaves (exit 0), the second
+    abandons the line being typed. `click.prompt` turned both into
+    `click.Abort`, so Ctrl-D, and a piped script running out of questions,
+    ended with "Aborted!" and exit 1, a clean exit reading as a failure
+    (#389). Looked up at call time, so `CliRunner`'s input stands in for the
+    terminal's in tests.
+    """
+    from click import termui
+
+    return termui.visible_prompt_func(prompt)
 
 
 @zardoz_cmd.command("discover")
@@ -245,7 +257,7 @@ def zardoz_sync(
     own frontmatter - are trusted; everything else is supporting context that
     answers may use and will say they used.
     """
-    from policyforge.zardoz.corpus import sync_corpus
+    from policyforge.zardoz.corpus import content_tree, sync_corpus
 
     topics = ctx.obj["topics"]
     corpus_dir = ctx.obj["corpus_dir"]
@@ -254,14 +266,25 @@ def zardoz_sync(
 
     host = _zardoz_setting(config, "host", host)
     supporting_space = _zardoz_setting(config, "supporting_space", supporting_space)
-    if content_dir is None:
-        configured = _zardoz_setting(config, "content_dir", "")
-        content_dir = Path(configured) if configured else None
+    resolved_content = content_tree(config, content_dir)
+    named = content_dir is not None or bool(_zardoz_setting(config, "content_dir", ""))
+    if named:
+        # The flag, or `zardoz.content_dir`: used as named, and a missing one
+        # is an error below, as it always was.
+        content_dir = resolved_content
+    elif host:
+        # A host alone: the corpus does not widen to whatever markdown a
+        # default `docs/` happens to hold (80's ruling on #385). The tree is
+        # read only when something names it.
+        content_dir = None
+    else:
+        # No host and nothing named: the one default tree, when it is there.
+        content_dir = resolved_content if resolved_content.exists() else None
 
     if content_dir is None and not host:
         raise click.UsageError(
-            "Nothing to sync from. Point at a markdown tree, a Confluence host, or "
-            "both:\n"
+            f"No content directory at {resolved_content}. Point at a markdown tree, a "
+            "Confluence host, or both:\n"
             "    policyforge zardoz sync --content-dir docs\n"
             "or in config/config.yaml:\n"
             "    zardoz:\n"

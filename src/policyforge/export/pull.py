@@ -13,7 +13,8 @@ different strings, and a pull that did not record the correspondence would
 publish to the wrong place, or nowhere.
 
 **Pages this tool cannot round-trip are refused, not degraded.** A page
-using `info`, `expand`, `status` or page-properties macros converts to
+using `info`, `expand` (other than a Standard's own source blocks), `status`
+or page-properties macros converts to
 readable markdown and would be flattened on the way back — so pulling it
 would produce a file that looks correct and destroys those macros the first
 time it is published. Refusing names the page and the macros and leaves it
@@ -99,4 +100,36 @@ def pages_from_topics(topics, *, kind: str = "confluence") -> list[tuple[str, st
         if kind == "confluence" and not container:
             continue
         targets.extend((container, title, tier) for tier, title in pages)
+    return targets
+
+
+def pages_from_policies(policies, *, kind: str = "confluence") -> list[tuple[str, str, str]]:
+    """The page each Policy declares for one store (22, part 2b), as pull
+    targets of tier `policy`.
+
+    A Policy is published to the page its own registry entry names, not to a
+    topic's, so a pull that read only the topics would leave the Policy page
+    out of the round trip. A Policy declaring none contributes nothing.
+    """
+    targets: list[tuple[str, str, str]] = []
+    for policy in policies:
+        page = policy.page(kind)
+        if page is None:
+            continue
+        container, title = page
+        if kind == "confluence" and not container:
+            continue
+        targets.append((container, title, "policy"))
+    return targets
+
+
+def pages_from_registry(registry, *, kind: str = "confluence") -> list[tuple[str, str, str]]:
+    """Every page the registry declares for one store: its topics' pages, then
+    its Policies', each page once."""
+    targets = pages_from_topics(registry.topics, kind=kind)
+    seen = {(container, title) for container, title, _tier in targets}
+    for container, title, tier in pages_from_policies(registry.policies, kind=kind):
+        if (container, title) not in seen:
+            seen.add((container, title))
+            targets.append((container, title, tier))
     return targets

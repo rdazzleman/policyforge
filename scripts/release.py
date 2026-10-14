@@ -80,9 +80,11 @@ import hashlib
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 import tempfile
+import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -105,7 +107,18 @@ CONTAINER_IMAGE = release_check.CONTAINER_IMAGE
 #: and read GitHub whatever `forge` says (80's rulings on #7, comment 319).
 FORGEJO_URL = os.environ.get("FORGEJO_URL", "http://127.0.0.1:3000").rstrip("/")
 FORGEJO_REPO = "policyforge/policyforge"
-FORGEJO_REMOTE = "forgejo"
+#: The private repository BY URL, never through a remote name (80's ruling
+#: (b) on #124). A clone whose remote is `origin` read the tag as absent; and
+#: the shared clone's `forgejo` remote carried another account's token in its
+#: URL (b5 measured it), so every read and push through it went to a URL
+#: holding a credential that wasn't the operator's. The operator's own token
+#: goes as a header (`_git_env`), and a URL with userinfo is refused
+#: (`userinfo_refusal`).
+FORGEJO_REPO_URL = f"{FORGEJO_URL}/{FORGEJO_REPO}.git"
+#: Where `_main_merged` puts Forgejo's main, fetched by URL: a ref of the
+#: tooling's own, so no remote-tracking ref (and no FETCH_HEAD, which the
+#: shared clone's main checkout shares) stands in for it.
+FORGEJO_MAIN_REF = "refs/release-tooling/forgejo/main"
 
 #: The public repository, BY URL (#33): what users fetch. Never a remote
 #: name, which could resolve to Forgejo, and never a mirror. Every push to it
@@ -191,8 +204,20 @@ class Context:
     #: Installs a formula text in a clean container and checks the installed
     #: package's version is this one: (formula, version) -> (ran, ok, lines).
     install: Callable[[str, str], tuple[bool, bool, list[str]]] = None  # type: ignore[assignment]
+    #: Runs the full suite on one Python version over a tree archive (#242):
+    #: (version, tar) -> (result, lines), result one of PYTHON_RESULTS.
+    run_python: Callable[[str, Path], tuple[str, list[str]]] = None  # type: ignore[assignment]
+    #: GitHub's pytest legs on the candidate that holds the approval commit's
+    #: tree (#398): (ctx, sha) -> ({job name: mark}, lines, candidate commit).
+    #: Empty jobs when no completed run on such a candidate could be read;
+    #: `lines` say why.
+    #: None (a test's default) reads nothing, so every version runs locally.
+    ci_legs: Callable[[Context, str], tuple[dict[str, str], list[str], str]] = None  # type: ignore[assignment]
     #: Reads the typed confirmation for an outward step.
     confirm: Callable[[str], str] = input
+    #: The private repository's URL (#124): every Forgejo read and push names
+    #: it, never a remote. A test points it at a scratch repository.
+    forgejo_url: str = FORGEJO_REPO_URL
     #: The release's tracking issue, where the two artefact gates read their records.
     tracking: int | None = None
     #: The operator's regenerated and reconciled formula (`--formula`), the
@@ -215,6 +240,10 @@ class Context:
     #: Fetches a Forgejo API path (an archive) to a file as the caller's own
     #: bot: (path, destination) -> HTTP status. Local releases only.
     fetch_archive: Callable[[str, Path], int] = None  # type: ignore[assignment]
+    #: Rehearses the cut on HEAD and runs the tests on the result (#120):
+    #: (version, root) -> Check. `main` passes `_real_rehearse`; a context
+    #: without one fails the changelog step's gate rather than skipping it.
+    rehearse: Callable[[str, Path], Check] = None  # type: ignore[assignment]
 
     @property
     def tag(self) -> str:
@@ -467,15 +496,34 @@ def _server_tip(ctx: Context, branch: str) -> str:
     On Forgejo, the branch API asks the server the same question, and needs
     no git credentials to do it.
     """
+    return _server_answer(ctx, branch)[1]
+
+
+def _server_answer(ctx: Context, branch: str) -> tuple[bool, str]:
+    """(answered, tip) for `branch` ON THE SERVER. `answered` is False when the
+    server couldn't be asked (a failed `ls-remote`, a Forgejo error), which is
+    NOT the same as the branch being absent (`(True, "")`). ba measured on #168
+    that folding the two together let a failed lookup of one train name hide a
+    real ambiguity between the two names (#109)."""
     if ctx.forge == "forgejo":
         import urllib.parse
 
         status, body, _ = ctx.forgejo(
             "GET", f"/repos/{FORGEJO_REPO}/branches/{urllib.parse.quote(branch, safe='')}", None
         )
+        if status == 404:
+            return True, ""
         sha = ((body or {}).get("commit") or {}).get("id", "") if status == 200 else ""
-        return sha if re.fullmatch(r"[0-9a-f]{40}", sha or "") else ""
-    return _remote_tip(ctx, "origin", branch)
+        ok = status == 200 and bool(re.fullmatch(r"[0-9a-f]{40}", sha or ""))
+        return ok, sha if ok else ""
+    out = ctx.run(["git", "-C", str(ctx.root), "ls-remote", "origin", f"refs/heads/{branch}"])
+    if out.returncode != 0:
+        return False, ""
+    for line in (out.stdout or "").splitlines():
+        sha, _, ref = line.partition("\t")
+        if ref.strip() == f"refs/heads/{branch}" and re.fullmatch(r"[0-9a-f]{40}", sha):
+            return True, sha
+    return True, ""
 
 
 def _remote_tip(ctx: Context, remote: str, branch: str) -> str:
@@ -500,21 +548,57 @@ def _dirty_paths(ctx: Context) -> list[str]:
     return [line[3:] for line in out.splitlines() if line.strip()]
 
 
+def _train_branches(ctx: Context) -> tuple[str, ...]:
+    """The names this version's train may have, as `train-final` already reads
+    them (#109): `release/X.Y.Z`, and for X.Y.0 also `release/X.Y`, the name the
+    1.7 train had. A patch release has only its own name, so 1.7.1 never cuts
+    from `release/1.7`."""
+    full = f"{TRAIN_PREFIX}{ctx.version}"
+    if ctx.version.endswith(".0"):
+        return (full, f"{TRAIN_PREFIX}{ctx.version[:-2]}")
+    return (full,)
+
+
+def _train_tips(ctx: Context, branches: tuple[str, ...]) -> tuple[dict[str, str], Check | None]:
+    """{name: tip} for each train name the server holds, or a refusal: a name
+    the server didn't ANSWER for (it may exist at another commit, ba on #168),
+    or both names present at different commits."""
+    answers = {b: _server_answer(ctx, b) for b in branches}
+    unanswered = [b for b, (answered, _) in answers.items() if not answered]
+    if unanswered:
+        return {}, Check(
+            False,
+            [f'the server didn\'t answer for {", ".join(unanswered)}: no answer is not "absent"'],
+        )
+    tips = {b: tip for b, (_, tip) in answers.items() if tip}
+    if len(set(tips.values())) > 1:
+        named = " and ".join(f"{b} at {t[:12]}" for b, t in tips.items())
+        return {}, Check(False, [f"ambiguous train on server: {named}"])
+    return tips, None
+
+
 def _train_tree(ctx: Context) -> Check:
     # THIS version's train, not any train (policyforge-b5 on #348): with a
     # prefix test, `release.py 1.7.0` on a release/1.6.1 checkout passed
     # here and cut 1.7.0 from 1.6.1's code, and notes-measured, reading
-    # release/1.7.0's tip, could not see it.
-    train = f"{TRAIN_PREFIX}{ctx.version}"
+    # release/1.7.0's tip, could not see it. The names are exact (#109).
+    branches = _train_branches(ctx)
     branch = ctx.git("rev-parse", "--abbrev-ref", "HEAD")
     head = ctx.git("rev-parse", "HEAD")
-    remote = _server_tip(ctx, branch) if branch == train else ""
+    valid_tips, refused = _train_tips(ctx, branches)
+    if refused:
+        return refused
+
+    train = branch if branch in branches else branches[0]
+    remote = valid_tips.get(train, "")
     cut = _release_pr(ctx).get("headRefOid", "")
     dirty = _dirty_paths(ctx)
-    ok = branch == train and head in {remote, cut} - {""} and not dirty
+
+    ok = branch in branches and head in {remote, cut} - {""} and not dirty
+    expected_branches = " or ".join(repr(b) for b in branches)
     measured = [
-        f"branch {branch!r} (must be {train!r})",
-        f"HEAD {head[:12]}: origin/{branch} ON THE SERVER {remote[:12] or '-'}, "
+        f"branch {branch!r} (must be {expected_branches})",
+        f"HEAD {head[:12]}: origin/{train} ON THE SERVER {remote[:12] or '-'}, "
         f"release PR head {cut[:12] or '-'} (must be one)",
         f"uncommitted changes: {len(dirty)} (must be 0)",
     ]
@@ -549,6 +633,26 @@ def _changelog_cut(ctx: Context) -> Check:
         has and not left,
         [f"`## {ctx.version}` in CHANGELOG.md: {has}", f"fragments left: {len(left)}"],
     )
+
+
+def _rehearsed(ctx: Context) -> Check:
+    """The tree's tests pass once it is cut (#120). #118's test read a fragment
+    by name, passed on every train gate, and failed only on the release PR,
+    the first tree without fragments. So before the cut assembles them, the
+    same cut is rehearsed on HEAD in a throwaway worktree and the suite runs
+    there (`scripts/cut_rehearsal.py`; a pass is remembered per tree)."""
+    if ctx.rehearse is None:
+        return Check(False, ["cut rehearsal: NOT RUN (this context has no rehearse)"])
+    return ctx.rehearse(ctx.version, ctx.root)
+
+
+def _real_rehearse(version: str, root: Path) -> Check:
+    import cut_rehearsal
+
+    lines: list[str] = []
+    ok = cut_rehearsal.rehearse(version, root=root, out=lines.append)
+    said = [line for text in lines for line in text.splitlines() if line.startswith("cut ")]
+    return Check(ok, said[-6:] or ["cut rehearsal: said nothing"])
 
 
 def _assemble(ctx: Context) -> None:
@@ -596,7 +700,7 @@ def _bump(ctx: Context) -> None:
 #
 # **Instructions are declared, not inferred** (policyforge-b5 on #430). A
 # pin elsewhere may be a record, not a command: "epoch 24 installed
-# ...@v1.6.0" in MEASUREMENTS.md must not become the new release, and a
+# ...@v1.6.0" in docs/measurements/epochs.md must not become the new release, and a
 # conserved count cannot see that over-replacement (#252's shape). So a
 # pin outside these files stops the cut until someone says which it is.
 
@@ -882,7 +986,7 @@ def _open_pr(ctx: Context) -> None:
         )
         for argv in (
             ["git", "-C", str(ctx.root), "commit", "-am", f"Release {ctx.version}"],
-            ["git", "-C", str(ctx.root), "push", FORGEJO_REMOTE, f"HEAD:refs/heads/{branch}"],
+            ["git", "-C", str(ctx.root), "push", ctx.forgejo_url, f"HEAD:refs/heads/{branch}"],
         ):
             proc = ctx.run(argv)
             if proc.returncode != 0:
@@ -954,12 +1058,16 @@ def _main_merged(ctx: Context) -> Check:
     merge = (pr.get("mergeCommit") or {}).get("oid", "") if pr else ""
     if not merge:
         return Check(False, [f"release PR merged into main: {'no' if pr else 'no PR'}"])
-    remote = FORGEJO_REMOTE if ctx.forge == "forgejo" else "origin"
-    ctx.run(["git", "-C", str(ctx.root), "fetch", "-q", remote, "main"])
-    on_main = (
+    if ctx.forge == "forgejo":
+        remote, main = "Forgejo", FORGEJO_MAIN_REF
         ctx.run(
-            ["git", "-C", str(ctx.root), "merge-base", "--is-ancestor", merge, f"{remote}/main"]
-        ).returncode
+            ["git", "-C", str(ctx.root), "fetch", "-q", ctx.forgejo_url, f"+refs/heads/main:{main}"]
+        )
+    else:
+        remote, main = "origin", "origin/main"
+        ctx.run(["git", "-C", str(ctx.root), "fetch", "-q", "origin", "main"])
+    on_main = (
+        ctx.run(["git", "-C", str(ctx.root), "merge-base", "--is-ancestor", merge, main]).returncode
         == 0
     )
     # Against the cut commit THIS script made (local HEAD, which survives
@@ -992,7 +1100,7 @@ def _tag_remote(ctx: Context) -> str:
     """Where the tag lives: Forgejo for a local release (#90), GitHub by URL
     on the Forgejo path (#33), `origin` otherwise."""
     if _is_local(ctx):
-        return FORGEJO_REMOTE
+        return ctx.forgejo_url
     return GITHUB_URL if ctx.forge == "forgejo" else "origin"
 
 
@@ -1179,7 +1287,16 @@ def _licensed_file(path: str) -> str:
     (Windows loads `Ingest/<M>.PY` as the same file), each name's trailing
     dots and spaces dropped (Windows opens `<m>.py.` as `<m>.py`), and the
     parser's compiled bytecode counts as the parser (`ingest/<m>.pyc`,
-    `ingest/__pycache__/<m>.<tag>.pyc`).
+    `ingest/__pycache__/<m>.<tag>.pyc`), and so does a compiled EXTENSION
+    module built from it (#59; b5 measured `ExtensionFileLoader` loading one
+    on #57): `<m>.pyd` or `<m>.so`, with any ABI tags (`.cp312-win_amd64`,
+    `.cpython-312-x86_64-linux-gnu`, `.abi3`) and a debug build's `_d`.
+    They're spelled out, not taken from the running interpreter's
+    `EXTENSION_SUFFIXES`, because the reader's suffixes aren't the build
+    machine's (a Windows build reads a Linux `.so`). A test checks that every
+    suffix in the running interpreter's list is read. Any tag is accepted, so
+    a name no interpreter would load (say `<m>.x.so`) is still read as the
+    parser: that errs towards refusing.
 
     Directly under an `ingest/` segment (or its `__pycache__/`) it is that
     module. Anywhere else (`<m>.py`, `lib/<m>.py`) the file it loads depends
@@ -1198,7 +1315,8 @@ def _licensed_file(path: str) -> str:
         parent = parts[-3] if len(parts) >= 3 else ""
     for module in LICENSED_MODULES:
         compiled = re.fullmatch(rf"{re.escape(module)}(?:\.[\w-]+)*\.pyc", name)
-        if name == f"{module}.py" or compiled:
+        extension = re.fullmatch(rf"{re.escape(module)}(?:_d)?(?:\.[\w-]+)*\.(?:pyd|so)", name)
+        if name == f"{module}.py" or compiled or extension:
             return f"policyforge.ingest.{module}" if parent == "ingest" else UNKNOWN_LOAD
     return ""
 
@@ -1324,16 +1442,16 @@ def licensed_set(
     removed = sorted(p for p in LICENSED_PATHS if p in tracked)
     # Module names as Python spells them (imports are case-sensitive, even on
     # Windows), plus a module's FILE NAME in any case (`<m>.`: `.py`, `.pyc`,
-    # `.py.`), because Windows opens `INGEST/<M>.PY` as the same file (b5 on
-    # #57). Not `-i` on the names: that made a class like `<M>BuildError` a
+    # `.py.`, `.pyd`, `.so`), because Windows opens `INGEST/<M>.PY` as the same
+    # file (b5 on #57), and a debug build's extension module `<m>_d.` (#59).
+    # Not `-i` on the names: that made a class like `<M>BuildError` a
     # candidate, and a public test whose census loads by computed name left P
     # with it.
     hits = ctx.git(
         "grep", "-l", "-F", *(f"-e{m}" for m in LICENSED_MODULES), treeish, "--", "*.py"
     ).splitlines()
-    hits += ctx.git(
-        "grep", "-l", "-F", "-i", *(f"-e{m}." for m in LICENSED_MODULES), treeish, "--", "*.py"
-    ).splitlines()
+    file_names = [f"-e{m}{end}" for m in LICENSED_MODULES for end in (".", "_d.")]
+    hits += ctx.git("grep", "-l", "-F", "-i", *file_names, treeish, "--", "*.py").splitlines()
     candidates = sorted({h.split(":", 1)[1] for h in hits if ":" in h} - set(removed))
     classes: dict[str, list[str]] = {
         "import": [],
@@ -1685,6 +1803,381 @@ def _head_installed(ctx: Context) -> Check:
     return Check(bool(sha) and result == "passed" and sha == head == cut, measured)
 
 
+# --- GitHub's results, read through ops' ci-read (#326, #398) ------------------------
+
+#: The private test repo whose release/X.Y.Z carries a candidate to GitHub's
+#: Actions, and ops' ci-read workflow, the only holder of the user's read token.
+CI_REPO = "policyforge/policyforge-ci"
+CI_URL = f"{FORGEJO_URL}/{CI_REPO}.git"
+OPS_REPO = "policyforge/ops"
+CI_READ_WORKFLOW = "ci-read.yml"
+
+_CI_RUN = re.compile(
+    r"^## (?P<name>.+?) #\d+\s+(?P<branch>\S+) (?P<sha>[0-9a-f]{7,40})\s+"
+    r"(?P<status>[^/\s]+)/(?P<conclusion>\S+)"
+)
+_CI_JOB = re.compile(r"^- (?P<mark>[^:]+): (?P<name>.+)$")
+#: Forgejo's job log starts each line with the runner's timestamp.
+_LOG_STAMP = re.compile(r"^\d{4}-\d\d-\d\dT[\d:.]+Z ")
+
+
+def ci_run_for(summary: str, branch: str, candidate: str, workflow: str = "ci") -> dict | None:
+    """The newest run of `workflow` in ci-read's summary on `branch` at
+    `candidate`, as {status, conclusion, jobs: [(mark, name)]}, or None.
+    ci-read prints runs newest first and each run's sha as 8 hex digits, so a
+    run matches on the branch, that prefix of the candidate AND the workflow's
+    name: one push starts several workflows at the same sha (`macos-wheels`,
+    `single-commit export`, `ci`), and only `ci` carries the pytest legs."""
+    run = None
+    for line in summary.splitlines():
+        line = _LOG_STAMP.sub("", line.rstrip())
+        header = _CI_RUN.match(line)
+        if header:
+            if run is not None:
+                return run
+            if (
+                header["name"] == workflow
+                and header["branch"] == branch
+                and candidate.startswith(header["sha"])
+            ):
+                run = {"status": header["status"], "conclusion": header["conclusion"], "jobs": []}
+            continue
+        job = _CI_JOB.match(line)
+        if run is not None and job:
+            run["jobs"].append((job["mark"].strip(), job["name"].strip()))
+    return run
+
+
+def read_ci_summary(forgejo: Callable, sleep: Callable[[float], None] = time.sleep) -> str | None:
+    """Dispatch ops' ci-read, wait for it, and return its job log: the
+    summary it prints. None when any of that fails, which a caller reads as
+    "not yet", never as a result."""
+    status, body, _ = forgejo(
+        "POST",
+        f"/repos/{OPS_REPO}/actions/workflows/{CI_READ_WORKFLOW}/dispatches",
+        {"ref": "main", "inputs": {"runs": "10"}, "return_run_info": True},
+    )
+    run_id = body.get("id") if status == 201 and isinstance(body, dict) else None
+    if not run_id:
+        return None
+    for _ in range(40):
+        status, run, _ = forgejo("GET", f"/repos/{OPS_REPO}/actions/runs/{run_id}", None)
+        if (
+            status == 200
+            and isinstance(run, dict)
+            and run.get("status") not in (None, "", "waiting", "running", "blocked")
+        ):
+            break
+        sleep(15)
+    else:
+        return None
+    status, jobs, _ = forgejo("GET", f"/repos/{OPS_REPO}/actions/runs/{run_id}/jobs", None)
+    jobs = jobs.get("jobs") if isinstance(jobs, dict) else jobs
+    if status != 200 or not jobs:
+        return None
+    status, text, _ = _real_forgejo(
+        "GET", f"/repos/{OPS_REPO}/actions/jobs/{jobs[0]['id']}/logs", None, text=True
+    )
+    return text if status == 200 and isinstance(text, str) else None
+
+
+# --- the full suite on the Pythons nothing else tests, before approval (#242) ---------
+
+#: `requires-python` claims >=3.10, and only 3.12 (CI) and 3.14 (the local
+#: gates) are tested per change. So each release runs the FULL suite on the
+#: rest once, before the user is asked to approve main (80's ruling 3955).
+CUT_PYTHONS = ("3.10", "3.11", "3.13")
+#: The extras CI's lock installs (requirements/ci.txt's header; a test holds
+#: them equal), installed here FRESH and unhashed: what a user `pip install`ing
+#: on that version actually gets (80's ruling 3961, (A)).
+CUT_EXTRAS = "dev,mcp,litellm,bedrock,vertex"
+PYTHON_RESULTS = ("passed", "FAILED", "install-failed", "did-not-run")
+PYTHON_LINE = re.compile(
+    r"^Release-python: ([0-9a-f]{40}) release=(\S+) python=(3\.\d+) "
+    r"result=(passed|FAILED|install-failed|did-not-run)(?: candidate=([0-9a-f]{40}))?\s*$"
+)
+#: A red version is a release blocker unless the USER acknowledges it at the
+#: cut (3955), on the tracking issue, from their own login only.
+ACKNOWLEDGER = "rdazzleman"
+PYTHON_ACK_LINE = re.compile(
+    r"^Release-python-acknowledged: ([0-9a-f]{40}) release=(\S+) python=(3\.\d+)\s*$"
+)
+
+
+def _python_results(ctx: Context, sha: str) -> dict[str, str]:
+    """{version: the latest recorded result} for this release at `sha`."""
+    results: dict[str, str] = {}
+    for _, _, line in sorted(_tracking_records(ctx)):
+        found = PYTHON_LINE.match(line)
+        if found and found[2] == ctx.version and found[1] == sha:
+            results[found[3]] = found[4]
+    return results
+
+
+def _python_candidates(ctx: Context, sha: str) -> dict[str, tuple[str, str]]:
+    """{version: (latest result, the candidate it was read from)} at `sha`; the
+    candidate is "" for a record from a local run."""
+    latest: dict[str, tuple[str, str]] = {}
+    for _, _, line in sorted(_tracking_records(ctx)):
+        found = PYTHON_LINE.match(line)
+        if found and found[2] == ctx.version and found[1] == sha:
+            latest[found[3]] = (found[4], found[5] or "")
+    return latest
+
+
+def _pythons_tested(ctx: Context) -> Check:
+    """Every version in CUT_PYTHONS has a record for the approval commit,
+    and each passed or was acknowledged by the user. A record for another
+    commit is stale: the head moved, so it says nothing about this one."""
+    sha = _installed_commit(ctx)
+    results = _python_results(ctx, sha) if sha else {}
+    acked = {
+        found[3]
+        for _, _, line in _tracking_records(ctx, only=frozenset({ACKNOWLEDGER}))
+        if (found := PYTHON_ACK_LINE.match(line)) and found[2] == ctx.version and found[1] == sha
+    }
+    ok, measured = bool(sha), []
+    # 3.12 and 3.14 have no local run, so a version outside CUT_PYTHONS counts
+    # only when GitHub's leg for it was red and recorded (80's ruling on 398).
+    extra = [v for v in LEG_PYTHONS if v not in CUT_PYTHONS and v in results]
+    for version in (*CUT_PYTHONS, *extra):
+        result = results.get(version, "")
+        acknowledged = bool(result) and result != "passed" and version in acked
+        ok = ok and (result == "passed" or acknowledged)
+        measured.append(
+            f"Python {version} on {sha[:12] or '?'}: {result or 'no record'}"
+            + (" (acknowledged by the user)" if acknowledged else "")
+        )
+    return Check(ok, measured)
+
+
+#: Every Python `requires-python` claims has one pytest leg on GitHub's CI. The
+#: cut reads all five (#398): the three it would otherwise run locally, and the
+#: two (3.12, 3.14) that are only there to show the set is whole and green.
+LEG_PYTHONS = ("3.10", "3.11", "3.12", "3.13", "3.14")
+
+
+def _leg_job(version: str) -> str:
+    return f"pytest (ubuntu-latest, {version})"
+
+
+def _github_leg_results(ctx: Context, sha: str) -> tuple[dict[str, str], list[str], str]:
+    """({version: "passed" or "FAILED"}, lines, candidate) from GitHub's legs.
+
+    EMPTY, never a pass, unless GitHub's run on a candidate holding this
+    commit's tree has settled all five legs, so every version runs locally
+    when a leg is missing, skipped, still running, or the run unreadable. A red
+    leg is different (80's ruling on 398): it was measured on the candidate's
+    own commit and tree, and the local runs never re-test 3.12 or 3.14, so a
+    local green would stand in for a red it did not measure. A red leg among
+    the five, 3.12 and 3.14 included, is a FAILED result for that version and
+    blocks, with no local run."""
+    if ctx.ci_legs is None:
+        return {}, [], ""
+    jobs, lines, candidate = ctx.ci_legs(ctx, sha)
+    if not jobs:
+        return {}, [*lines, "falling back to the local runs on every version"], ""
+    marks = {v: jobs.get(_leg_job(v), "missing") for v in LEG_PYTHONS}
+    shown = [*lines, *(f"  {_leg_job(v)}: {marks[v]}" for v in LEG_PYTHONS)]
+    red = [v for v in LEG_PYTHONS if marks[v] == "FAIL"]
+    if red:
+        results = dict.fromkeys(red, "FAILED")
+        results.update({v: "passed" for v in LEG_PYTHONS if marks[v] == "success"})
+        way_out = (
+            f"BLOCKED: Python {', '.join(red)} red on GitHub's candidate {candidate[:12]}; "
+            "nothing runs locally. The way out: a new candidate run on GitHub where "
+            "every leg passes, or the user's acknowledgement on the tracking issue, "
+            f"`Release-python-acknowledged: {sha} release={ctx.version} python=<version>`."
+        )
+        return results, [*shown, way_out], candidate
+    unsettled = [v for v in LEG_PYTHONS if marks[v] != "success"]
+    if unsettled:
+        why = f"the legs can't stand in for the local runs (not settled green: {unsettled})"
+        return {}, [*shown, f"{why}: running locally"], ""
+    return dict.fromkeys(LEG_PYTHONS, "passed"), shown, candidate
+
+
+def _real_ci_legs(ctx: Context, sha: str) -> tuple[dict[str, str], list[str], str]:
+    """GitHub's jobs for the run on policyforge-ci's release/X.Y.Z, only when
+    that candidate's TREE is `sha`'s and the run is on the candidate's own
+    commit (ci-read prints each run's sha), with that candidate's commit.
+    {} with the reason otherwise."""
+    branch = f"release/{ctx.version}"
+    ref = f"refs/heads/{branch}"
+    tree = ctx.git("rev-parse", f"{sha}^{{tree}}")
+    found = (ctx.run(["git", "-C", str(ctx.root), "ls-remote", CI_URL, ref]).stdout or "").split()
+    tip = found[0] if found else ""
+    if not tree:
+        return {}, [f"no tree for the approval commit {sha[:12]}"], ""
+    if not tip:
+        return {}, [f"{CI_REPO} {branch} is absent: no candidate"], ""
+    ctx.run(["git", "-C", str(ctx.root), "fetch", "-q", CI_URL, ref])
+    held = ctx.git("rev-parse", f"{tip}^{{tree}}")
+    if held != tree:
+        return (
+            {},
+            [
+                f"candidate {tip[:12]} holds tree {held[:12] or '?'}, not the approval "
+                f"commit's {tree[:12]}"
+            ],
+            "",
+        )
+    summary = read_ci_summary(ctx.forgejo)
+    if summary is None:
+        return {}, ["ci-read could not be read this time"], ""
+    run = ci_run_for(summary, branch, tip)
+    if run is None:
+        return {}, [f"no GitHub run on candidate {tip[:12]} yet"], ""
+    if run["status"] != "completed":
+        return {}, [f"GitHub's run on candidate {tip[:12]} is {run['status']}, not completed"], ""
+    said = f"GitHub's run on candidate {tip[:12]} (tree {tree[:12]}): completed/{run['conclusion']}"
+    return {name: mark for mark, name in run["jobs"]}, [said], tip
+
+
+def _run_pythons(ctx: Context) -> None:
+    """Run the full suite on each version without a passed record for the
+    approval commit, and post one record per version on the tracking issue.
+    The tree goes in as the host's own archive of that commit."""
+    sha = _installed_commit(ctx)
+    if not sha:
+        return
+    work = Path(tempfile.mkdtemp())
+    tar = work / "tree.tar"
+    ctx.run(
+        [
+            "git",
+            "-C",
+            str(ctx.root),
+            "-c",
+            "core.autocrlf=false",
+            "-c",
+            "core.eol=lf",
+            "archive",
+            "--format=tar",
+            "-o",
+            str(tar),
+            sha,
+        ]
+    )
+    done = _python_results(ctx, sha)
+    recorded = _python_candidates(ctx, sha)
+    github, source, candidate = _github_leg_results(ctx, sha)
+    for line in source:
+        print(f"      {line}")
+    for version in (
+        *CUT_PYTHONS,
+        *(v for v in LEG_PYTHONS if v in github and v not in CUT_PYTHONS),
+    ):
+        if version in github:
+            result = github[version]
+            # A re-run of the step on the same candidate adds nothing: the
+            # record is already there, and a duplicate FAILED would read as a
+            # second failure (b5 on 398).
+            # 3.12 and 3.14 are recorded only to supersede an earlier red one.
+            only_to_supersede = version not in CUT_PYTHONS and version not in done
+            if recorded.get(version) == (result, candidate) or (
+                result == "passed" and (done.get(version) == "passed" or only_to_supersede)
+            ):
+                continue
+            shown = "\n".join(f"    {line}" for line in source)
+            _post_tracking(
+                ctx,
+                f"The full suite on Python {version}, read from GitHub's "
+                f"`{_leg_job(version)}` leg over a candidate holding the {ctx.version} approval "
+                f"commit `{sha}`'s tree, by `scripts/release.py`: **{result}**.\n\n"
+                f"{shown}\n\n"
+                f"Release-python: {sha} release={ctx.version} python={version} "
+                f"result={result} candidate={candidate}",
+            )
+            continue
+        if done.get(version) == "passed" or "FAILED" in github.values():
+            continue
+        result, lines = ctx.run_python(version, tar)
+        result = result if result in PYTHON_RESULTS else "FAILED"
+        shown = "\n".join(f"    {line}" for line in lines[-12:])
+        _post_tracking(
+            ctx,
+            f"The full suite on Python {version} (`python:{version}-slim`, a fresh unhashed "
+            f"install of `.[{CUT_EXTRAS}]`) over the {ctx.version} approval commit `{sha}`, "
+            f"by `scripts/release.py`: **{result}**.\n\n{shown}\n\n"
+            f"Release-python: {sha} release={ctx.version} python={version} result={result}",
+        )
+
+
+def _post_tracking(ctx: Context, body: str) -> bool:
+    """Post `body` on the tracking issue, on whichever forge the run uses."""
+    if ctx.forge == "forgejo":
+        status, _, _ = ctx.forgejo(
+            "POST", f"/repos/{FORGEJO_REPO}/issues/{ctx.tracking}/comments", {"body": body}
+        )
+        return status == 201
+    return (
+        ctx.run(
+            [
+                "gh",
+                "api",
+                f"repos/{release_check.REPOSITORY}/issues/{ctx.tracking}/comments",
+                "-f",
+                f"body={body}",
+            ]
+        ).returncode
+        == 0
+    )
+
+
+#: The in-container run. Setup failing (exit 4) is not a test result:
+#: did-not-run. The install failing (exit 3) is a finding in itself: a user on
+#: that version can't install the release. Any pytest failure exits 1.
+_PYTHON_SCRIPT = "\n".join(
+    [
+        "set -u",
+        "exec 2>&1",
+        "export DEBIAN_FRONTEND=noninteractive PIP_ROOT_USER_ACTION=ignore",
+        'setup() { echo "cut-python: setup failed: $1"; exit 4; }',
+        "apt-get update -qq > /dev/null && apt-get install -y -qq --no-install-recommends git "
+        "> /dev/null || setup apt",
+        "mkdir /work && tar -xf /in/tree.tar -C /work && cd /work || setup tree",
+        "git init -q && git add -A && git -c user.name=cut -c user.email=cut@example.invalid "
+        "commit -qm 'the tree under test' || setup git",
+        f'python -m pip install -e ".[{CUT_EXTRAS}]" > /tmp/pip.log 2>&1 '
+        '|| { tail -8 /tmp/pip.log; echo "cut-python: the fresh install failed"; exit 3; }',
+        "python --version",
+        "python -m pytest -q -rs -n auto -p no:cacheprovider; t=$?",
+        'echo "cut-python: pytest exit $t"',
+        '[ "$t" = 0 ] || exit 1',
+    ]
+)
+
+
+def _python_docker_argv(work: Path, version: str) -> list[str]:
+    """The tree's directory read-only at /in and the script, nothing else: no
+    `-e`, `--env` or `--env-file`, so no host variable (FORGEJO_TOKEN
+    included) reaches the container, as `_docker_argv`."""
+    return [
+        "docker",
+        "run",
+        "--rm",
+        "-v",
+        f"{work}:/in:ro",
+        f"python:{version}-slim",
+        "bash",
+        "-c",
+        _PYTHON_SCRIPT,
+    ]
+
+
+def _real_run_python(version: str, tar: Path) -> tuple[str, list[str]]:
+    import shutil
+
+    if shutil.which("docker") is None:
+        return "did-not-run", ["docker is not on PATH"]
+    proc = _real_run(_python_docker_argv(tar.parent, version))
+    lines = ((proc.stdout or "") + (proc.stderr or "")).strip().splitlines()[-15:]
+    lines.append(f"docker exit status: {proc.returncode}")
+    result = {0: "passed", 1: "FAILED", 3: "install-failed"}.get(proc.returncode, "did-not-run")
+    return result, lines
+
+
 def _install_head(ctx: Context) -> None:
     """Install the approval commit's archive (P on the Forgejo path), then post
     the record on the tracking issue, where the user reads it before
@@ -1795,6 +2288,12 @@ def _git_blob_id(data: bytes) -> str:
     return hashlib.sha1(b"blob %d\0" % len(data) + data, usedforsecurity=False).hexdigest()
 
 
+def _counted(paths: list[str]) -> str:
+    """A count with a sample: "3 differing" once read as three files when it
+    was 489 of 680, because only the first three were printed (#158)."""
+    return f"{len(paths)} {paths[:3]}" if paths else "none"
+
+
 def _archive_is_tree(ctx: Context, tarball: Path, commit: str) -> tuple[bool, list[str]]:
     """Whether `tarball` holds exactly `commit`'s tree: every tracked file's git
     blob hash and mode, computed from the tar's own bytes, against
@@ -1860,9 +2359,9 @@ def _archive_is_tree(ctx: Context, tarball: Path, commit: str) -> tuple[bool, li
         f"archive against {commit[:12]}'s tree: {len(got)} file(s) against {len(tree)} "
         f"(must be equal and > 0)",
         f"top-level directories {sorted(prefixes)[:3]} (must be exactly one)",
-        f"missing {missing[:3] or 'none'}, extra {extra[:3] or 'none'}, "
-        f"differing {differ[:3] or 'none'}, held twice {twice[:3] or 'none'}, "
-        f"not a file or link under the prefix {odd[:3] or 'none'}",
+        f"missing {_counted(missing)}, extra {_counted(extra)}, "
+        f"differing {_counted(differ)}, held twice {_counted(twice)}, "
+        f"not a file or link under the prefix {_counted(odd)}",
     ]
 
 
@@ -1995,14 +2494,14 @@ def _local_release_matches(ctx: Context) -> Check:
     is no Forgejo tag (no local release to match)."""
     out = (
         ctx.run(
-            ["git", "-C", str(ctx.root), "ls-remote", "--tags", FORGEJO_REMOTE, f"{ctx.tag}^{{}}"]
+            ["git", "-C", str(ctx.root), "ls-remote", "--tags", ctx.forgejo_url, f"{ctx.tag}^{{}}"]
         ).stdout
         or ""
     ).split()
     target = out[0] if out else ""
     if not target:
         return Check(True, [f"no {ctx.tag} on Forgejo: no local release to match"])
-    ctx.run(["git", "-C", str(ctx.root), "fetch", "-q", FORGEJO_REMOTE, f"refs/tags/{ctx.tag}"])
+    ctx.run(["git", "-C", str(ctx.root), "fetch", "-q", ctx.forgejo_url, f"refs/tags/{ctx.tag}"])
     tag_tree = ctx.git("rev-parse", f"{target}^{{tree}}")
     cut_tree = ctx.git("rev-parse", "HEAD^{tree}")
     recorded = [
@@ -2289,9 +2788,13 @@ FORGEJO_RECORD_AUTHORS = frozenset(
 )
 
 
-def _tracking_records(ctx: Context) -> list[tuple[str, int, str]]:
+def _tracking_records(
+    ctx: Context, only: frozenset[str] | None = None
+) -> list[tuple[str, int, str]]:
     """(created_at, position, last non-empty line) for every comment on the
     tracking issue by a `RECORD_AUTHORS` login, in the order GitHub lists them.
+    `only` narrows the logins further (#242: an acknowledgement counts only
+    from the user's own login), and leaves the ignored-records note alone.
 
     `position` breaks a same-second tie by comment order, never by the line's
     text, which put "passed" after "FAILED" (ba on #383). Comments by anyone
@@ -2310,7 +2813,7 @@ def _tracking_records(ctx: Context) -> list[tuple[str, int, str]]:
             json.dumps([c.get("created_at"), c.get("body"), (c.get("user") or {}).get("login")])
             for c in comments
         )
-        authors = FORGEJO_RECORD_AUTHORS
+        authors = FORGEJO_RECORD_AUTHORS if only is None else FORGEJO_RECORD_AUTHORS & only
     else:
         out = ctx.run(
             [
@@ -2322,7 +2825,7 @@ def _tracking_records(ctx: Context) -> list[tuple[str, int, str]]:
                 ".[] | [.created_at, .body, .user.login] | @json",
             ]
         ).stdout
-        authors = RECORD_AUTHORS
+        authors = RECORD_AUTHORS if only is None else RECORD_AUTHORS & only
     records: list[tuple[str, int, str]] = []
     ignored: list[list[str]] = []
     for position, line in enumerate((out or "").splitlines()):
@@ -2337,7 +2840,8 @@ def _tracking_records(ctx: Context) -> list[tuple[str, int, str]]:
             records.append((created, position, lines[-1]))
         else:
             ignored.append([str(login), lines[-1]])
-    ctx.notes["ignored records"] = json.dumps(ignored)
+    if only is None:
+        ctx.notes["ignored records"] = json.dumps(ignored)
     return records
 
 
@@ -2412,7 +2916,15 @@ def _post_zero_reviewed(ctx: Context) -> Check:
 def _notes_measured(ctx: Context) -> Check:
     if not ctx.tracking:
         return Check(False, ["no --tracking-issue given, so there is no record to read"])
-    tip = _server_tip(ctx, f"{TRAIN_PREFIX}{ctx.version}")
+
+    branches = _train_branches(ctx)
+    valid_tips, refused = _train_tips(ctx, branches)
+    if refused:
+        return refused
+
+    train = next(iter(valid_tips.keys())) if valid_tips else branches[0]
+    tip = valid_tips.get(train, "")
+
     measured = [
         (created, position, match.group(1))
         for created, position, line in _tracking_records(ctx)
@@ -2422,7 +2934,7 @@ def _notes_measured(ctx: Context) -> Check:
     return Check(
         bool(tip) and latest == tip,
         [
-            f"train tip origin/{TRAIN_PREFIX}{ctx.version} ON THE SERVER: {tip[:12] or '?'}",
+            f"train tip origin/{train} ON THE SERVER: {tip[:12] or '?'}",
             f"latest `Notes-measured-SHA:` for {ctx.version} on #{ctx.tracking}: "
             f"{latest[:12] or 'none'} "
             "(must be the tip: a measurement before the last merge may be stale)",
@@ -2630,7 +3142,7 @@ def _base_steps() -> list[Step]:
             "changelog",
             "assemble changelog.d/ into `## X.Y.Z`",
             ACT,
-            _fragments_ready,
+            lambda c: _all(_fragments_ready(c), _rehearsed(c)),
             _changelog_cut,
             _assemble,
             would="assemble the fragments into CHANGELOG.md and remove them",
@@ -2680,10 +3192,24 @@ def _base_steps() -> list[Step]:
             ),
         ),
         Step(
+            "head-pythons",
+            "the full suite on Python 3.10, 3.11 and 3.13, before approval",
+            ACT,
+            _head_installed,
+            _pythons_tested,
+            _run_pythons,
+            outward=True,
+            would=(
+                "run the full suite on the approval commit in python:3.10, 3.11 and 3.13-slim "
+                "containers, each a fresh unhashed install (run this invocation through the "
+                "machine's heavy queue), and post one record per version on the tracking issue"
+            ),
+        ),
+        Step(
             "main",
             "the user merges the release PR, with the install result in hand",
             WAIT,
-            lambda c: _all(_pr_still_open(c), _head_installed(c)),
+            lambda c: _all(_pr_still_open(c), _head_installed(c), _pythons_tested(c)),
             _main_merged,
             would="the user's approval and merge of the release PR in GitHub",
         ),
@@ -2747,7 +3273,15 @@ def _git_env() -> dict[str, str] | None:
     for host in sorted({f"{FORGEJO_URL}/", "http://localhost:3000/"}):
         env[f"GIT_CONFIG_KEY_{count}"] = f"http.{host}.extraHeader"
         env[f"GIT_CONFIG_VALUE_{count}"] = f"Authorization: token {token}"
-        count += 1
+        # For Forgejo, the header is the ONLY credential (ba on #124): an empty
+        # helper resets the helper list for this URL prefix. Without it, a
+        # rejected token made git ask the configured helper for a stored Forgejo
+        # credential, then tell it to ERASE that credential (measured: a logging
+        # stand-in helper behind a 401 was asked [get, erase]). Scoped to the
+        # Forgejo prefixes (1d on #124): GitHub keeps the operator's own helper.
+        env[f"GIT_CONFIG_KEY_{count + 1}"] = f"credential.{host}.helper"
+        env[f"GIT_CONFIG_VALUE_{count + 1}"] = ""
+        count += 2
     env["GIT_CONFIG_COUNT"] = str(count)
     # A rejected token must fail, not open Git Credential Manager and wait
     # for a person who isn't there (ba on #28; fj does the same).
@@ -2774,8 +3308,12 @@ def _git_subcommand(argv: list[str]) -> str:
     return ""
 
 
-def _real_forgejo(method: str, path: str, data: object) -> tuple[int, object, dict]:
-    """Forgejo's API as the caller's own bot (FORGEJO_TOKEN): (status, JSON, headers)."""
+def _real_forgejo(
+    method: str, path: str, data: object, *, text: bool = False
+) -> tuple[int, object, dict]:
+    """Forgejo's API as the caller's own bot (FORGEJO_TOKEN): (status, JSON, headers).
+    With `text=True` the body is returned decoded, not parsed: an Actions job
+    log is plain text (publish_public's `ci-read`, #326)."""
     import urllib.error
     import urllib.parse
     import urllib.request
@@ -2795,6 +3333,12 @@ def _real_forgejo(method: str, path: str, data: object) -> tuple[int, object, di
     try:
         with urllib.request.urlopen(request, timeout=60) as response:  # nosec B310  # nosemgrep
             raw = response.read()
+            if text:
+                return (
+                    response.status,
+                    raw.decode("utf-8", errors="replace"),
+                    dict(response.headers),
+                )
             return response.status, json.loads(raw) if raw else None, dict(response.headers)
     except urllib.error.HTTPError as error:
         return error.code, None, {}
@@ -2828,7 +3372,43 @@ def _real_fetch_archive(path: str, dest: Path) -> int:
         return 0
 
 
+def userinfo_refusal(url: str) -> str | None:
+    """Why `url` is refused, naming its host, if it carries credentials
+    (`user:token@host`), or None. The credential itself is never in the
+    message (80's ruling (b) on #124): a release step must not depend on a
+    credential that isn't the operator's, and one in a URL is a credential
+    nobody chose for this run."""
+    from urllib.parse import urlsplit
+
+    try:
+        parsed = urlsplit(url)
+    except ValueError:
+        return None
+    if parsed.scheme and parsed.netloc and (parsed.username or parsed.password):
+        return (
+            f"refused: a git URL with embedded credentials, for host {parsed.hostname}. "
+            "Use the repository's plain URL; your own token goes through FORGEJO_TOKEN (#124)"
+        )
+    return None
+
+
+def _redacted(arg: str) -> str:
+    """`arg` with any userinfo replaced, so a refused argv can be printed."""
+    if userinfo_refusal(arg) is None:
+        return arg
+    from urllib.parse import urlsplit, urlunsplit
+
+    parsed = urlsplit(arg)
+    host = parsed.hostname or ""
+    netloc = f"<credentials removed>@{host}" + (f":{parsed.port}" if parsed.port else "")
+    return urlunsplit(parsed._replace(netloc=netloc))
+
+
 def _real_run(argv: list[str]) -> subprocess.CompletedProcess:
+    if _git_subcommand(argv) in _GIT_NETWORK:
+        for arg in argv:
+            if why := userinfo_refusal(arg):
+                return subprocess.CompletedProcess([_redacted(a) for a in argv], 2, "", why)
     try:
         return subprocess.run(
             argv,
@@ -2868,14 +3448,26 @@ def _install_script(version: str, source_sha: str = "") -> str:
 
     **The version is the one check that reads the artefact itself**
     (policyforge-ba on #348): an install of the wrong commit passes every
-    other line here. `policyforge --version` does not exist, so it asks the
-    formula's virtualenv for `policyforge.__version__`, the string step 6
-    bumps. `test "$(...)" = X` fails on a wrong version and on no output
-    alike. PROBE MEASURED on #348 against the published 1.6.0 formula in this
-    image, on its Homebrew 4.6.20: it read 1.6.0, the arm expecting 9.9.9
-    failed. The chain now updates Homebrew first (#391), so it measures the
-    Homebrew a user installs with, not the one the image happens to ship.
+    other line here. When this was written `policyforge --version` didn't
+    exist (it does since #219, printing the installed metadata), so it asks
+    the formula's virtualenv for `policyforge.__version__`, the string step 6
+    bumps, which is the artefact this check is about. `test "$(...)" = X`
+    fails on a wrong version and on no output alike. PROBE MEASURED on #348
+    against the published 1.6.0 formula in this image, on its Homebrew
+    4.6.20: it read 1.6.0, the arm expecting 9.9.9 failed. The chain now
+    updates Homebrew first (#391), so it measures the Homebrew a user
+    installs with, not the one the image happens to ship.
+
+    **And right after the install, `release_check.version_step`** (#232):
+    `policyforge --version` must print exactly this version with nothing on
+    stderr, so a skew between the installed metadata and that same
+    `__version__` is caught before the user approves the main merge, not
+    after the publish. It is the step `release_check` runs, not a retyped
+    copy. For a release older than 1.8.0 the chain echoes
+    `release_check.VERSION_NOT_RUN` instead, never a silent gap.
     """
+    step = release_check.version_step(version)
+    version_check = step[1] if step else f"echo {shlex.quote(release_check.VERSION_NOT_RUN)}"
     python = '"$(brew --prefix local/candidate/policyforge)/libexec/bin/python"'
     read = "import policyforge, sys; sys.stdout.write(policyforge.__version__)"
     # A local release's tarball (#90), checked by the container itself before
@@ -2895,6 +3487,7 @@ def _install_script(version: str, source_sha: str = "") -> str:
             "cp /candidate/policyforge.rb "
             '"$(brew --repository)/Library/Taps/local/homebrew-candidate/Formula/"',
             "brew install --build-from-source local/candidate/policyforge",
+            version_check,
             "brew test local/candidate/policyforge",
             "brew audit --strict local/candidate/policyforge",
             "mkdir -p /tmp/pf",
@@ -3062,15 +3655,21 @@ def main(argv: list[str] | None = None) -> int:
         status_of=_real_status,
         hash_url=release_check.hash_of,
         install=_real_install,
+        run_python=_real_run_python,
+        ci_legs=_real_ci_legs,
         tracking=args.tracking_issue,
         formula_path=args.formula,
         forge=args.forge,
         forgejo=_real_forgejo,
         publish=args.publish,
         fetch_archive=_real_fetch_archive,
+        rehearse=_real_rehearse,
     )
     if args.forge == "forgejo" and not os.environ.get("FORGEJO_TOKEN", "").strip():
         print("release: --forge forgejo needs FORGEJO_TOKEN (your own bot's token)")
+        return 2
+    if why := userinfo_refusal(ctx.forgejo_url):
+        print(f"release: FORGEJO_URL is {why}")
         return 2
     print(f"release {ctx.tag}: {'EXECUTE' if args.execute else 'DRY RUN (nothing will change)'}")
     plan = steps(args.forge, args.publish)

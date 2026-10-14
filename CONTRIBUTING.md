@@ -11,28 +11,22 @@ python scripts/check.py
 It runs ruff (lint and format), pytest, bandit, semgrep, pip-audit and
 mdformat, plus gitleaks if the binary is on your PATH.
 
-semgrep is not in the `dev` extra. It pins its own dependencies exactly, and
-installed beside the project those pins became the project's, so it has its
-own hashed lock in `requirements/semgrep/` and its own environment:
-
-```bash
-python -m venv .tools/semgrep
-.tools/semgrep/Scripts/pip install --require-hashes -r requirements/semgrep/semgrep.txt
-```
-
-(`bin/` rather than `Scripts/` outside Windows.) The gate finds it there or on
-your PATH, and skips it with a note otherwise; CI always runs it. It exits non-zero, so
+semgrep is not in the `dev` extra and has no lock here. It pins its own
+dependencies exactly, and installed beside the project those pins became the
+project's. So it runs from one container image, pinned by digest
+(`SEMGREP_IMAGE` in `scripts/semgrep_gate.py`, the same reference as CI's
+semgrep job). The gate runs it through Docker and skips it with a note when
+`docker` isn't on your PATH; CI always runs it. The gate exits non-zero, so
 it works as a pre-push hook. `pre-commit install` wires the fast subset to
 run on commit.
 
-Python 3.12 in a project `.venv`. Dependencies come from three hashed locks,
+Python 3.12 in a project `.venv`. Dependencies come from hashed locks,
 each regenerated with the command in its own header, never edited by hand:
 
-| Lock                               | Installed by                            | Header command                                                                                                                           |
-| ---------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `requirements/ci.txt`              | CI, the dev container                   | `uv pip compile pyproject.toml --extra dev --extra mcp --universal --python-version 3.12 --generate-hashes -o requirements/ci.txt`       |
-| `requirements/runtime.txt`         | the container image                     | `uv pip compile pyproject.toml --extra mcp --universal --python-version 3.12 --generate-hashes -o requirements/runtime.txt`              |
-| `requirements/semgrep/semgrep.txt` | CI, the dev container, `.tools/semgrep` | `uv pip compile requirements/semgrep/semgrep.in --universal --python-version 3.12 --generate-hashes -o requirements/semgrep/semgrep.txt` |
+| Lock                       | Installed by          | Header command                                                                                                                     |
+| -------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `requirements/ci.txt`      | CI, the dev container | `uv pip compile pyproject.toml --extra dev --extra mcp --universal --python-version 3.12 --generate-hashes -o requirements/ci.txt` |
+| `requirements/runtime.txt` | the container image   | `uv pip compile pyproject.toml --extra mcp --universal --python-version 3.12 --generate-hashes -o requirements/runtime.txt`        |
 
 **A change to the dependencies in `pyproject.toml` means regenerating
 `ci.txt` and `runtime.txt` together.** The runtime lock must pin exactly the
@@ -40,14 +34,16 @@ versions CI tests (`tests/test_container.py` checks), so regenerate `ci.txt`
 first and seed `runtime.txt` from it: `cp requirements/ci.txt requirements/runtime.txt`, then run
 the runtime command. uv keeps the versions already in its output file.
 Dependabot's own edits to these locks are Linux-only and are regenerated the
-same way rather than merged. To move semgrep, change the version in
-`requirements/semgrep/semgrep.in`, regenerate `semgrep.txt`, and change the
-`rev:` in `.pre-commit-config.yaml` with it.
+same way rather than merged. To move semgrep, read the new tag's index
+digest (`docker buildx imagetools inspect semgrep/semgrep:<version>`), change
+`SEMGREP_IMAGE` in `scripts/semgrep_gate.py` and the image of ci.yml's
+semgrep job together, and change the `rev:` in `.pre-commit-config.yaml` with
+them. A test holds all three to one version.
 
 ## The one rule that is not about style
 
 **Some behaviour in this repository is a stated commitment, not an
-implementation detail.** [docs/commitments.md](docs/commitments.md) lists
+implementation detail.** [The product commitments](https://zardoz.io/trust/commitments/) list
 eight of them, each with the test that fails when it stops being true. If
 your change makes one of those tests fail, the fix is almost never to edit
 the test.
@@ -85,7 +81,7 @@ Adding a host to `ALLOWED_HOSTS` in
 is a deliberate act, which is the point. Say in the PR what the endpoint is,
 what is sent to it, and whether any of it is the operator's content. If it
 receives content rather than serving public catalog data, it also needs a
-row in [docs/subprocessors.md](docs/subprocessors.md).
+row on [the subprocessors page](https://zardoz.io/trust/subprocessors/); say so in the pull request.
 
 ## Reading an environment variable
 
@@ -103,7 +99,7 @@ If it is a new *credential*, it also belongs in `_CREDENTIALS` in
 
 Prompt text is registered in [`llm/prompts.py`](src/policyforge/llm/prompts.py)
 so a measured run can say which text produced it. Changing a prompt changes
-what [MEASUREMENTS.md](MEASUREMENTS.md) is comparable with — bump the
+what [the epoch log](docs/measurements/epochs.md) is comparable with — bump the
 prompt's `version` and open a new epoch rather than editing numbers recorded
 under the old text.
 
@@ -145,10 +141,10 @@ Evals call a real model and cost real money, so they are not part of
   `PYTHONPATH=<tree>/src` invocation that fixes it (`scripts/tree_guard.py`).
 - **A number without an epoch is not comparable and is worse than no
   number.** If you changed a prompt, open a new epoch in
-  [MEASUREMENTS.md](MEASUREMENTS.md) rather than filing results under the
+  [the epoch log](docs/measurements/epochs.md) rather than filing results under the
   old text. Prompt fingerprints will tell you when this has happened.
 
-Record the runs that got worse. Several entries in MEASUREMENTS.md are
+Record the runs that got worse. Several entries in the epoch log are
 changes that were measured, found harmful, and reverted — that is the file
 working, not a blemish on it.
 
@@ -167,13 +163,13 @@ python scripts/capture_eval_requests.py after.json --model openrouter/deepseek/d
 python scripts/capture_eval_requests.py --compare before.json after.json
 ```
 
-Identical means the numbers in MEASUREMENTS.md stay comparable. A
+Identical means the numbers in the epoch log stay comparable. A
 difference is either the point of the change, in which case the pull
 request says so and a new epoch follows, or a finding. Do this for any
 change under `evals/`, `scripts/eval_zardoz.py`, `llm/`, or a prompt's
 call site. The capture stands in for `litellm.completion` and nothing
 else, so it sees only LiteLLM-backed runs — the `--model` path, which is
-what MEASUREMENTS.md was measured with. A change to the Anthropic,
+what the recorded epochs were measured with. A change to the Anthropic,
 Vertex, Bedrock or OpenAI-compatible providers is not covered by it;
 say in the pull request how that request shape was checked instead.
 
@@ -190,8 +186,12 @@ Stage to a scratch path and diff before touching the committed file.
 
 CI runs every check on Linux with Python 3.12. The workflow also runs the
 test suite alone on Windows and macOS (3.12), but **only on github.com**: on
-the team's Forgejo those two jobs are skipped. So nothing currently
-tests macOS, and Windows is covered only by `scripts/check.py` run locally.
+the team's Forgejo those two jobs are skipped. So Forgejo never runs
+macOS, and Windows is covered only by `scripts/check.py` run locally.
+What Forgejo does check, on release and public branches, is that every
+runtime pin has a macOS wheel (`scripts/macos_wheels.py`): an arm64 miss
+fails, and an Intel miss is reported by name without failing. That's pip on
+a Mac only; it doesn't run anything on macOS.
 `scripts/check.py` on a Windows machine
 still passes some things that fail on Linux. CI was red on this branch from
 its first push for two such reasons: provenance stamps were hashed from
@@ -223,9 +223,10 @@ build context or the image, and runs the same MCP client against the server insi
 
 Opening the repository in VS Code with the Dev Containers extension ("Reopen
 in Container") gives the environment CI runs in. Linux and Python 3.12,
-dependencies from the hashed locks, semgrep in its own environment on PATH,
-and `python scripts/check.py` running every check with nothing skipped but
-gitleaks. The environments live in `/opt`, outside the workspace, so your
+dependencies from the hashed locks, and `python scripts/check.py` running
+every check. Two are skipped there: gitleaks, and semgrep, which runs from
+its pinned image and so needs Docker, which the dev container doesn't have.
+CI runs both. The environments live in `/opt`, outside the workspace, so your
 host's `.venv` is not touched. A Windows checkout works as it is: the
 container has been run against one with CRLF line endings.
 
@@ -281,8 +282,8 @@ add the check.
 ## Documentation
 
 Markdown is a real deliverable here, not a nicety. `mdformat` runs in CI over
-every tracked `*.md`. If you change behaviour described in [docs/](docs/),
-change the doc in the same PR — the docs claim to be checkable, and a claim
+every tracked `*.md`. If you change behaviour described on [zardoz.io/trust](https://zardoz.io/trust/),
+say so in the PR so the page changes with it — the docs claim to be checkable, and a claim
 pointing at code that moved is worse than no claim.
 
 ## Adding a package or a catalog
@@ -312,11 +313,14 @@ that the script proves are the commit's tree before the container sees them.
 Every step that reaches GitHub (the public commit, GitHub `main`, the GitHub
 Release, the tap and the published-formula check) is deferred: printed, and
 recorded on the tracking issue for the public release to start from. A later
-public run of the same version refuses if the tag's tree has moved (#90).
+public run of the same version refuses if the tag's tree has moved.
 
-**Publishing a local release** (`python scripts/publish_public.py X.Y.Z --tracking-issue N --local-issue M --identity "Name <email>" --formula PATH`)
+**Publishing a local release** (`python scripts/publish_public.py X.Y.Z --tracking-issue N --local-issue M --identity "Name <email>" --formula PATH --ops OPS`)
 puts it on the release-only public repo, `policyforge/policyforge-public`,
-whose Forgejo push mirror carries it to GitHub (#115). It builds the public
+whose Forgejo push mirror carries it to GitHub. Before any step, it checks
+every repository it writes to against the repository inventory in `OPS`, a
+checkout of the team's private ops repository, and refuses (exit 3) if any
+of them drifts from its rules or can't be measured. It builds the public
 commit P from the local tag: P's tree is the tag's tree exactly, and a
 licensed path in it is a refusal. It installs P from an archive built on
 this machine, then waits: nothing is pushed until the user's own account
@@ -324,6 +328,25 @@ posts `Publish-approved: <P> release=X.Y.Z` on the tracking issue. After
 that it pushes P and a new tag (fast-forward only, never forced), reads
 GitHub signed out until the mirror has carried both (or times out loudly),
 and proves GitHub's tag archive is P's tree before recording its sha256.
+
+**Before the first publish to a new or recreated public GitHub repo**, check
+its settings by hand. No session can read them. The 1.7.0 publication hit the
+first three (a misspelled name, and Actions and Dependabot left on); the last
+two are what stop the mirror and the release from going live out of order:
+
+- **The name:** create the repo by copying the name from `GITHUB_PUBLIC_URL`,
+  not by typing it. A misspelled repo leaves the mirror pushing nowhere.
+- **Actions:** disabled. The public repo holds releases only; its tests run
+  in the private CI repo.
+- **Dependabot:** alerts, security updates and version updates all disabled.
+  Left on, it opens pull requests and branches on the release-only repo.
+- **The push mirror:** set to sync on commit.
+- **Visibility:** public only after the first sync has landed.
+
+The publish run reads GitHub signed out only after its push. A misnamed or
+still-private repo answers that read the same way: the run prints that GitHub
+"didn't answer `ls-remote`", and then `MIRROR TIMEOUT`. Neither tells a private
+repo from a missing one, so the checklist above is what catches the cause.
 
 1. Move the `## Unreleased` changelog entries under the new version. Bump
    `version` in `pyproject.toml` and `__version__` in

@@ -38,7 +38,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
-from ._confluence_auth import API_CONTENT_PATH, confluence_auth
+from ._confluence_auth import API_CONTENT_PATH, confluence_auth, reports_as_confluence
 
 
 @dataclass
@@ -91,6 +91,7 @@ def _parse_page(page: dict, *, base: str) -> ConfluencePage:
     )
 
 
+@reports_as_confluence
 def fetch_confluence_page(
     *,
     space: str,
@@ -122,10 +123,14 @@ def fetch_confluence_page(
     return _parse_page(results[0], base=base)
 
 
+#: Attributes allowed on every element, in any order: a page as the server
+#: returns it carries `ac:schema-version` and `ac:macro-id`, which this
+#: project's exporter doesn't write (b5 on PR 431), and the strict pattern
+#: restored nothing from such a page.
 _CODE_MACRO_RE = re.compile(
-    r'<ac:structured-macro ac:name="code">'
-    r'(?:<ac:parameter ac:name="language">(?P<language>[^<]*)</ac:parameter>)?'
-    r"<ac:plain-text-body><!\[CDATA\[(?P<code>.*?)\]\]></ac:plain-text-body>"
+    r'<ac:structured-macro\b[^>]*\bac:name="code"[^>]*>\s*'
+    r'(?:<ac:parameter\b[^>]*\bac:name="language"[^>]*>(?P<language>[^<]*)</ac:parameter>\s*)?'
+    r"<ac:plain-text-body><!\[CDATA\[(?P<code>.*?)\]\]></ac:plain-text-body>\s*"
     r"</ac:structured-macro>",
     re.DOTALL,
 )
@@ -138,9 +143,14 @@ def _restore_code_fences(storage_html: str) -> str:
     code block, before handing the rest of the document to markdownify —
     markdownify has no Confluence-macro-specific knowledge of its own."""
 
+    from html import escape
+
     def _replace(match: re.Match[str]) -> str:
         language = match.group("language") or ""
-        code = match.group("code").replace("]]]]><![CDATA[>", "]]>")
+        # Escaped: CDATA holds the code raw, and markdownify parses what it is
+        # handed as HTML, so `<b>weekly</b>` in a code block came back as
+        # `weekly` (found by #17's fidelity check on a round-tripped quote).
+        code = escape(match.group("code").replace("]]]]><![CDATA[>", "]]>"), quote=False)
         lang_attr = f' class="language-{language}"' if language else ""
         return f"<pre><code{lang_attr}>{code}</code></pre>"
 
@@ -274,8 +284,9 @@ def confluence_to_markdown(storage_html: str, *, user_names: dict[str, str] | No
     """
     from markdownify import markdownify
 
+    storage_html, blocks = _lift_source_blocks(storage_html, user_names)
     prepared = _restore_links(_restore_code_fences(storage_html), user_names)
-    return (
+    markdown = (
         markdownify(
             prepared,
             heading_style="ATX",
@@ -284,8 +295,105 @@ def confluence_to_markdown(storage_html: str, *, user_names: dict[str, str] | No
         ).strip()
         + "\n"
     )
+    for placeholder, block in blocks.items():
+        markdown = markdown.replace(placeholder, block)
+    return markdown
 
 
+#: The `expand` macro `confluence_exporter` writes for a Standard's source
+#: block (#17, part 2b). Its body holds no `rich-text-body` of its own (a
+#: quote is a `code` macro, whose body is `plain-text-body`), so the lazy
+#: match ends at the macro's own close.
+_EXPAND_RE = re.compile(
+    r'<ac:structured-macro\b[^>]*\bac:name="expand"[^>]*>\s*'
+    r'<ac:parameter\b[^>]*\bac:name="title"[^>]*>(?P<title>[^<]*)</ac:parameter>\s*'
+    r"<ac:rich-text-body>(?P<body>.*?)</ac:rich-text-body>\s*"
+    r"</ac:structured-macro>",
+    re.DOTALL,
+)
+
+
+def _source_block_title(match: re.Match[str]) -> str | None:
+    """The title of an `_EXPAND_RE` match when it is a source block's
+    (`Source: <catalog> (<n>)`), else None. **The one rule** for which
+    `expand` macro is the exporter's own: `_lift_source_blocks` reads these
+    back into the block, and `unwrap_source_blocks` lets the macro check
+    through them (449)."""
+    from html import unescape
+
+    from policyforge.content.sources import SUMMARY_RE
+
+    title = unescape(match.group("title")).strip()
+    return title if SUMMARY_RE.match(f"<summary>{title}</summary>") else None
+
+
+def unwrap_source_blocks(storage_html: str) -> str:
+    """`storage_html` with each source block's `expand` macro replaced by its
+    body (449). The wrapper is what `_lift_source_blocks` turns back into the
+    block, so it survives a round trip; what is inside it is read like the
+    rest of the page, so a macro a person put in there is still seen.
+
+    An `expand` with any other title, or with a parameter the exporter never
+    writes, doesn't match and stays, so it is still reported."""
+    return _EXPAND_RE.sub(
+        lambda m: m.group("body") if _source_block_title(m) is not None else m.group(0),
+        storage_html,
+    )
+
+
+def _lift_source_blocks(storage_html: str, user_names) -> tuple[str, dict[str, str]]:
+    """Each `expand` macro titled as a source block (`Source: <catalog>
+    (<n>)`), taken out of `storage_html` and converted back into the block
+    `generate` wrote, so `pull` keeps the marker `check` and `deontic` read.
+    Any other `expand` macro is left for markdownify, as before."""
+    from policyforge.content.sources import SOURCE_BLOCK_CLOSE, SOURCE_BLOCK_OPEN
+
+    blocks: dict[str, str] = {}
+    marker = "PFSOURCEBLOCK"
+    while marker in storage_html:
+        marker += "X"
+
+    def lift(match: re.Match[str]) -> str:
+        title = _source_block_title(match)
+        if title is None:
+            return match.group(0)
+        placeholder = f"{marker}{len(blocks)}Z"
+        inner = confluence_to_markdown(match.group("body"), user_names=user_names).strip()
+        blocks[placeholder] = (
+            f"{SOURCE_BLOCK_OPEN}\n<summary>{title}</summary>\n\n{inner}\n\n{SOURCE_BLOCK_CLOSE}"
+        )
+        return f"<p>{placeholder}</p>"
+
+    return _EXPAND_RE.sub(lift, storage_html), blocks
+
+
+class PageTooDeepError(ValueError):
+    """A Confluence page nested too deeply to convert (#273).
+
+    The converter recurses once per nested element, so a page nested about
+    500 deep exhausts the stack (#252). Every caller converts through
+    `convert_page`, which turns that `RecursionError` into this, naming the
+    page, so each caller refuses the page as it refuses any page it can't
+    take: one page by name in a loop, or one line for a single page.
+    """
+
+
+def convert_page(storage_html: str, *, title: str, user_names: dict[str, str] | None = None) -> str:
+    """`confluence_to_markdown`, with a page too deep to convert raised as
+    `PageTooDeepError` naming `title` (80's ruling on #273: one place, not one
+    `except RecursionError` per caller). Only `RecursionError` is caught; the
+    recursion limit is left alone, since raising it moves the cliff."""
+    try:
+        # Called as each caller called it before (#273): `user_names` only
+        # where the caller had names to give.
+        if user_names is None:
+            return confluence_to_markdown(storage_html)
+        return confluence_to_markdown(storage_html, user_names=user_names)
+    except RecursionError:
+        raise PageTooDeepError(f"page {title!r} nested too deeply to convert") from None
+
+
+@reports_as_confluence
 def import_from_confluence(
     *,
     space: str,
@@ -295,8 +403,9 @@ def import_from_confluence(
     token_env: str = "CONFLUENCE_API_TOKEN",
 ) -> str:
     """Fetch a page from Confluence and convert it to markdown — the
-    reverse of confluence_exporter.py's `export_to_confluence`."""
+    reverse of confluence_exporter.py's `export_to_confluence`. A page too
+    deep to convert raises `PageTooDeepError` (#273)."""
     page = fetch_confluence_page(
         space=space, title=title, host=host, username_env=username_env, token_env=token_env
     )
-    return confluence_to_markdown(page.storage_body)
+    return convert_page(page.storage_body, title=page.title)

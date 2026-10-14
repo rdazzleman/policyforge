@@ -8,7 +8,7 @@ guides at [zardoz.io](https://zardoz.io).
 
 Bring your own matrix instead. `etl-govramp` is part of the
 licensed-framework plugin, which is distributed separately from the public
-PolicyForge. Without it, the command says so and points you to
+PolicyForge (to ask for it, email [info@zardoz.io](mailto:info@zardoz.io?subject=PolicyForge%20licensed-framework%20plugin)). Without it, the command says so and points you to
 `generate-parser`, which can draft a loader for your own matrix.
 
 ```bash

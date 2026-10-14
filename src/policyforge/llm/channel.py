@@ -27,7 +27,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
 from .boundary import (
-    ORG_INTERNAL,
     BoundaryViolation,
     ContentClassification,
     ProviderClassification,
@@ -35,7 +34,14 @@ from .boundary import (
     classify_endpoint,
     refusal_advice,
 )
-from .ledger import CallRecord, append, current_scope, ledger_enabled, ledger_path
+from .ledger import (
+    CallRecord,
+    append,
+    current_scope,
+    ledger_enabled,
+    ledger_path,
+    scope_content,
+)
 
 
 def texts_digest(texts: list[str]) -> str:
@@ -88,14 +94,10 @@ class Channel:
         the organization's own material, which is what a policy corpus is
         and what `classify_path` calls anything that is not a declared
         catalog. A caller holding licensed-derived text says so with
-        `ledger.about(..., content_class="licensed")`.
+        `ledger.about(..., content_class="licensed")`. The same reading as the
+        model wrapper's (`ledger.scope_content`, #327).
         """
-        scope = current_scope()
-        if scope is not None and scope.content_class:
-            return ContentClassification(
-                scope.content_class, f"the scope for {scope.subject!r} says so"
-            )
-        return ContentClassification(ORG_INTERNAL, "the organization's own documents")
+        return scope_content()
 
     def admit(self) -> None:
         """Refuse before any byte leaves, if the content may not go here."""

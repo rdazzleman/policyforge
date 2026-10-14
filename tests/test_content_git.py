@@ -248,7 +248,12 @@ def test_applying_publishes_the_document_body(tmp_path, monkeypatch):
 
 
 def test_an_existing_page_is_an_update_not_a_create(tmp_path, monkeypatch):
-    _patch_confluence(monkeypatch, pages={"Access Control Standard": PLAIN_PAGE})
+    # The page says something the file doesn't: a page that already matches
+    # is left alone (#391).
+    _patch_confluence(
+        monkeypatch,
+        pages={"Access Control Standard": "<h1>Access Control Standard</h1><p>Yearly.</p>"},
+    )
     _write(tmp_path, "standards/a.md", _bound("Access Control Standard"))
 
     report = publish_tree(tmp_path, host="https://x")
@@ -390,6 +395,12 @@ def test_a_pulled_page_can_be_published_straight_back(tmp_path, monkeypatch):
     )
     report = publish_tree(tmp_path, host="https://x", dry_run=False)
 
+    # Not moved: the round trip closes. And nothing to write, since the file
+    # says what the page says (#391); an edit to the file is then published.
+    assert [r.action for r in report.results] == [UNCHANGED]
+    assert exported == []
+    _edit_pulled(tmp_path)
+    report = publish_tree(tmp_path, host="https://x", dry_run=False)
     assert [r.action for r in report.results] == [UPDATED]
     assert exported and exported[0][1] == "Access Control Standard"
 
@@ -504,7 +515,18 @@ def test_pull_then_publish_closes_the_loop_for_a_hand_edit(tmp_path, monkeypatch
     pull_pages(targets, root=tmp_path, host="https://x", dry_run=False)
     report = publish_tree(tmp_path, host="https://x", dry_run=False)
 
+    # The pulled edit is no longer a move, and there is nothing new to send.
+    assert [r.action for r in report.results] == [UNCHANGED]
+    _edit_pulled(tmp_path)
+    report = publish_tree(tmp_path, host="https://x", dry_run=False)
     assert [r.action for r in report.results] == [UPDATED]
+    assert exported
+
+
+def _edit_pulled(root: Path) -> None:
+    """Change the body of the one pulled file, as a reviewer would."""
+    [path] = root.rglob("*.md")
+    path.write_text(path.read_text(encoding="utf-8") + "\nReviewed again.\n", encoding="utf-8")
 
 
 def test_the_version_message_is_read_from_the_page():
@@ -708,3 +730,430 @@ def test_wiki_drift_reports_without_failing_unless_asked(tmp_path, monkeypatch):
     assert "changed on the wiki" in reported.output
     assert "policyforge pull" in reported.output
     assert gated.exit_code == 1
+
+
+# ---- a live edit is a wiki change the repository hasn't seen (383) ---------
+#
+# `edit-confluence` and `edit-topic --host` write the approved edit straight
+# to the live page. It used to carry the publish stamp, and its only local
+# record was output/edits/, so the next `publish --apply` from an unchanged
+# tree called the page safe and silently reverted the edit.
+
+
+def _live_edit_message(monkeypatch) -> str:
+    """The version message the real `update_page_body` writes, captured from
+    a fake Confluence: what `edit-confluence` actually stamps, not a constant
+    a test could share with the code under test."""
+    import requests
+
+    from policyforge.export import confluence_exporter
+
+    sent: dict = {}
+
+    class _Response:
+        def __init__(self, payload):
+            self._payload, self.status_code = payload, 200
+
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return self._payload
+
+    def put(url, json=None, **kwargs):
+        sent.update(json or {})
+        return _Response({"_links": {"webui": "/wiki/page"}})
+
+    monkeypatch.setattr(requests, "get", lambda *a, **k: _Response({"version": {"number": 4}}))
+    monkeypatch.setattr(requests, "put", put)
+    monkeypatch.setattr(confluence_exporter, "confluence_auth", lambda **k: (None, {}))
+    confluence_exporter.update_page_body(
+        "Accounts are reviewed every quarter.",
+        page_id="id-acs",
+        title="Access Control Standard",
+        space="SEC",
+        host="https://x",
+        expected_version=4,
+    )
+    return sent["version"]["message"]
+
+
+def _live_edited(message: str) -> FakePage:
+    return FakePage(
+        id="id-acs",
+        title="Access Control Standard",
+        storage_body="<h1>Access Control Standard</h1><p>Accounts are reviewed every quarter.</p>",
+        version=5,
+        version_message=message,
+    )
+
+
+def test_a_live_edit_is_refused_by_the_next_publish_not_reverted(tmp_path, monkeypatch):
+    message = _live_edit_message(monkeypatch)
+    exported = []
+    _patch_confluence(
+        monkeypatch, pages={"Access Control Standard": _live_edited(message)}, exported=exported
+    )
+    _write(tmp_path, "standards/a.md", _bound("Access Control Standard"))  # the tree never changed
+
+    report = publish_tree(tmp_path, host="https://x", dry_run=False)
+
+    assert exported == [], "the approved live edit must survive"
+    assert [r.action for r in report.results] == [MOVED]
+    assert "live edit" in report.moved[0].reason, report.moved[0].reason
+    assert "Changed on the wiki" in report.format_report()
+
+
+def test_wiki_drift_reports_a_live_edit_as_changed_on_the_wiki(tmp_path, monkeypatch):
+    message = _live_edit_message(monkeypatch)
+    _patch_confluence(monkeypatch, pages={"Access Control Standard": _live_edited(message)})
+    _write(tmp_path, "standards/a.md", _bound("Access Control Standard"))
+
+    text = _drift(tmp_path).format_report()
+
+    assert "live edit" in text, text
+
+
+def test_after_pull_a_live_edit_may_be_published_over(tmp_path, monkeypatch):
+    """The loop the refusal asks for: pull records version 5, then publish."""
+    message = _live_edit_message(monkeypatch)
+    exported = []
+    _patch_confluence(
+        monkeypatch, pages={"Access Control Standard": _live_edited(message)}, exported=exported
+    )
+
+    pull_pages(
+        [("SEC", "Access Control Standard", "standard")],
+        root=tmp_path,
+        host="https://x",
+        dry_run=False,
+    )
+    report = publish_tree(tmp_path, host="https://x", dry_run=False)
+
+    assert [r.action for r in report.results] != [MOVED]
+
+
+def test_the_live_edit_stamp_is_not_the_publish_stamp():
+    """`publish` matches its stamp as a substring, so a live-edit stamp that
+    contained it would still read as the tool's own publish."""
+    from policyforge.export.confluence_exporter import LIVE_EDIT_MARKER
+
+    assert PUBLISH_MARKER not in LIVE_EDIT_MARKER
+
+
+# --------------------------------------------------------------------------
+# pull writes into the bound file and keeps its frontmatter (#387)
+# --------------------------------------------------------------------------
+
+
+def _generated(title="Access Control Standard", *, path_tier_key="tier: standard\n", block=None):
+    """A document as `generate` writes it, bound to its page: the keys a pull
+    used to drop sit beside the binding."""
+    block = block or "confluence:\n  space: SEC\n  title: Access Control Standard\n  version: 2\n"
+    return (
+        f"---\ntopic: Access Control\nowner: IAM Engineering\n{path_tier_key}"
+        "generated_by:\n  models:\n    - fake-writer\n"
+        f"{block}---\n\n# {title}\n\nReviews happen yearly.\n"
+    )
+
+
+def _frontmatter(path: Path) -> dict:
+    import frontmatter
+
+    return dict(frontmatter.loads(path.read_text(encoding="utf-8")).metadata)
+
+
+def _pull_one(tmp_path, monkeypatch, tier="standard"):
+    _patch_confluence(monkeypatch, pages={"Access Control Standard": PLAIN_PAGE})
+    return pull_pages(
+        [("SEC", "Access Control Standard", tier)], root=tmp_path, host="https://x", dry_run=False
+    )
+
+
+def _md_files(root: Path) -> list[str]:
+    return sorted(p.relative_to(root).as_posix() for p in root.rglob("*.md"))
+
+
+def test_a_page_is_pulled_into_the_file_bound_to_it_whatever_its_name(tmp_path, monkeypatch):
+    """The file is named differently from the page's title. The pull updates
+    it in place, and no second copy appears at the title's slug, which
+    `check` would reject as two files claiming one page."""
+    bound = _write(tmp_path, "standards/ac-review.md", _generated())
+
+    report = _pull_one(tmp_path, monkeypatch)
+
+    assert [(r.path, r.action, r.note) for r in report.results] == [
+        ("standards/ac-review.md", WRITTEN, "")
+    ]
+    assert _md_files(tmp_path) == ["standards/ac-review.md"]
+    assert "quarterly" in bound.read_text(encoding="utf-8")
+
+
+def test_a_pull_keeps_every_key_but_the_binding_and_updates_the_version(tmp_path, monkeypatch):
+    bound = _write(tmp_path, "standards/ac-review.md", _generated())
+
+    _pull_one(tmp_path, monkeypatch)
+
+    metadata = _frontmatter(bound)
+    assert metadata["topic"] == "Access Control"
+    assert metadata["owner"] == "IAM Engineering"
+    assert metadata["tier"] == "standard"
+    assert metadata["generated_by"] == {"models": ["fake-writer"]}
+    assert metadata["confluence"] == {
+        "space": "SEC",
+        "title": "Access Control Standard",
+        "page_id": "id-Access Control Standard",
+        "version": 3,
+    }
+    # Its own title came from its heading; the pull adds none.
+    assert "title" not in metadata
+    assert check_tree(tmp_path).errors == []
+
+
+def test_the_owner_survives_a_pull_into_a_file_at_the_slug_too(tmp_path, monkeypatch):
+    """The second half of the defect, on its own: a bound file already at the
+    slug kept its place, but lost its topic and owner on every pull."""
+    bound = _write(tmp_path, "standards/access-control-standard.md", _generated())
+
+    _pull_one(tmp_path, monkeypatch)
+
+    metadata = _frontmatter(bound)
+    assert (metadata["topic"], metadata["owner"]) == ("Access Control", "IAM Engineering")
+
+
+def test_a_page_no_file_is_bound_to_is_placed_by_its_title_and_says_so(tmp_path, monkeypatch):
+    from policyforge.export.publisher import PLACED_BY_TITLE
+
+    _write(tmp_path, "standards/other.md", _bound("Other Standard"))
+
+    report = _pull_one(tmp_path, monkeypatch)
+
+    assert [(r.path, r.action, r.note) for r in report.results] == [
+        ("standards/access-control-standard.md", WRITTEN, PLACED_BY_TITLE)
+    ]
+    assert PLACED_BY_TITLE in report.format_report()
+    metadata = _frontmatter(tmp_path / "standards" / "access-control-standard.md")
+    assert (metadata["title"], metadata["tier"]) == ("Access Control Standard", "standard")
+
+
+def test_a_file_bound_by_its_directory_keeps_its_tier(tmp_path, monkeypatch):
+    """The file's tier comes from `policies/`, with no key. A pull run with
+    the registry's or `--tier`'s `standard` must not write a tier into it."""
+    bound = _write(
+        tmp_path,
+        "policies/ac.md",
+        _generated(
+            path_tier_key="",
+            block="confluence:\n  space: SEC\n  title: Access Control Standard\n",
+        ),
+    )
+
+    _pull_one(tmp_path, monkeypatch, tier="standard")
+
+    assert "tier" not in _frontmatter(bound)
+
+
+def test_a_binding_under_targets_is_updated_where_it_is(tmp_path, monkeypatch):
+    """A file spelling its binding `targets: confluence:` is updated there,
+    rather than gaining a second, top-level block for the same store."""
+    bound = _write(
+        tmp_path,
+        "standards/ac-review.md",
+        _generated(
+            block="targets:\n  confluence:\n    space: SEC\n    title: Access Control Standard\n"
+        ),
+    )
+
+    _pull_one(tmp_path, monkeypatch)
+
+    metadata = _frontmatter(bound)
+    assert "confluence" not in metadata
+    assert metadata["targets"]["confluence"]["version"] == 3
+    assert _md_files(tmp_path) == ["standards/ac-review.md"]
+
+
+def test_two_files_bound_to_one_page_are_refused_and_neither_is_written(tmp_path, monkeypatch):
+    first = _write(tmp_path, "standards/a.md", _generated())
+    second = _write(tmp_path, "standards/b.md", _generated())
+    before = (first.read_text(encoding="utf-8"), second.read_text(encoding="utf-8"))
+
+    report = _pull_one(tmp_path, monkeypatch)
+
+    [result] = report.results
+    assert (result.action, result.kind) == (REFUSED, "bound-twice")
+    assert "standards/a.md" in result.reason and "standards/b.md" in result.reason
+    assert (first.read_text(encoding="utf-8"), second.read_text(encoding="utf-8")) == before
+    assert _md_files(tmp_path) == ["standards/a.md", "standards/b.md"]
+
+
+def test_a_title_slug_that_another_page_owns_is_refused(tmp_path, monkeypatch):
+    """The same title in two spaces shares a slug. Placing the second page by
+    title would rebind the first page's file and replace its text."""
+    owned = _write(
+        tmp_path,
+        "standards/access-control-standard.md",
+        _bound("Access Control Standard", space="OPS"),
+    )
+    before = owned.read_text(encoding="utf-8")
+
+    report = _pull_one(tmp_path, monkeypatch)
+
+    [result] = report.results
+    assert (result.action, result.kind) == (REFUSED, "slug-taken")
+    assert "OPS" in result.reason
+    assert owned.read_text(encoding="utf-8") == before
+
+
+def test_a_generated_document_keeps_what_generate_wrote_through_a_pull(tmp_path, monkeypatch):
+    """The two halves together: `generate` writes topic, owner, tier, the
+    binding and its provenance stamp, and a pull of the bound page keeps
+    every one of them, in the file `generate` wrote."""
+    from tests.test_generate_frontmatter import TOPICS_YAML, _run_generate
+
+    result, out_path = _run_generate(tmp_path, monkeypatch, topics_yaml=TOPICS_YAML)
+    assert result.exit_code == 0, result.output
+    generated = _frontmatter(out_path)
+    assert {"topic", "owner", "tier", "confluence", "generated_by"} <= set(generated)
+
+    root = out_path.parent
+    _patch_confluence(monkeypatch, pages={"Access Control Standard": PLAIN_PAGE})
+    report = pull_pages(
+        [("SEC", "Access Control Standard", "standard")], root=root, host="https://x", dry_run=False
+    )
+
+    assert [(r.path, r.action) for r in report.results] == [(out_path.name, WRITTEN)]
+    assert _md_files(root) == [out_path.name]
+    pulled = _frontmatter(out_path)
+    for key in ("topic", "owner", "tier", "generated_by"):
+        assert pulled[key] == generated[key], key
+    assert pulled["confluence"]["title"] == "Access Control Standard"
+    assert pulled["confluence"]["version"] == 3
+
+
+def _two_spaces(tmp_path, monkeypatch, *, dry_run):
+    """One run pulling the same title from two spaces, as a registry pull
+    does when two topics declare it: the tree is read once, before either
+    page is written."""
+    _patch_confluence(monkeypatch, pages={"Access Control Standard": PLAIN_PAGE})
+    return pull_pages(
+        [
+            ("SEC", "Access Control Standard", "standard"),
+            ("OPS", "Access Control Standard", "standard"),
+        ],
+        root=tmp_path,
+        host="https://x",
+        dry_run=dry_run,
+    )
+
+
+def test_one_run_does_not_put_two_pages_in_one_file(tmp_path, monkeypatch):
+    report = _two_spaces(tmp_path, monkeypatch, dry_run=False)
+
+    first, second = report.results
+    assert (first.action, first.path) == (WRITTEN, "standards/access-control-standard.md")
+    assert (second.action, second.kind) == (REFUSED, "slug-taken")
+    assert "SEC" in second.reason and "earlier in this run" in second.reason
+    written = tmp_path / "standards" / "access-control-standard.md"
+    assert _frontmatter(written)["confluence"]["space"] == "SEC"
+    assert "Wrote 1 file(s)" in report.format_report()
+
+
+def test_a_dry_run_plans_the_same_refusal(tmp_path, monkeypatch):
+    """The plan says what --apply would do, so the claim is made without a
+    write too."""
+    report = _two_spaces(tmp_path, monkeypatch, dry_run=True)
+
+    assert [(r.action, r.kind) for r in report.results] == [(WRITTEN, ""), (REFUSED, "slug-taken")]
+    assert _md_files(tmp_path) == []
+
+
+def test_the_same_page_twice_in_one_run_is_not_a_conflict(tmp_path, monkeypatch):
+    """A page listed twice owns its own claim; only another page is refused."""
+    _patch_confluence(monkeypatch, pages={"Access Control Standard": PLAIN_PAGE})
+    targets = [("SEC", "Access Control Standard", "standard")] * 2
+
+    report = pull_pages(targets, root=tmp_path, host="https://x", dry_run=False)
+
+    assert REFUSED not in [r.action for r in report.results]
+
+
+# --------------------------------------------------------------------------
+# a page that already says what the file says is left alone (#391)
+# --------------------------------------------------------------------------
+
+
+def _remembering_wiki(monkeypatch) -> list[str]:
+    """A fake wiki that keeps what publish writes, stamped, so the next run
+    reads it back as the tool's own write. Returns the titles written."""
+    from policyforge.export.confluence_exporter import markdown_to_confluence
+
+    store: dict[str, FakePage] = {}
+    written: list[str] = []
+
+    def _fetch(*, space, title, host, **kwargs):
+        if title not in store:
+            raise LookupError(f"No Confluence page titled {title!r} in space {space!r}.")
+        return store[title]
+
+    def _export(markdown_text, *, space, title, host, **kwargs):
+        written.append(title)
+        version = store[title].version + 1 if title in store else 1
+        store[title] = FakePage(
+            id=f"id-{title}",
+            title=title,
+            storage_body=markdown_to_confluence(markdown_text),
+            version=version,
+        )
+        return f"https://x/wiki/{title}"
+
+    monkeypatch.setattr("policyforge.export.confluence_importer.fetch_confluence_page", _fetch)
+    monkeypatch.setattr("policyforge.export.confluence_exporter.export_to_confluence", _export)
+    return written
+
+
+def test_a_second_publish_with_no_edits_writes_nothing(tmp_path, monkeypatch):
+    """Every page got a new version on every run, and the next pull then
+    rewrote every file's version number."""
+    written = _remembering_wiki(monkeypatch)
+    for name, title in (
+        ("a", "Access Control Standard"),
+        ("b", "Audit Standard"),
+        ("c", "Backup Standard"),
+    ):
+        _write(tmp_path, f"standards/{name}.md", _bound(title))
+
+    first = publish_tree(tmp_path, host="https://x", dry_run=False)
+    assert [r.action for r in first.results] == [CREATED] * 3
+    second = publish_tree(tmp_path, host="https://x", dry_run=False)
+
+    assert [r.action for r in second.results] == [UNCHANGED] * 3
+    assert len(written) == 3, "the second run made no update call"
+    assert "3 already matched the page and were left alone" in second.format_report()
+
+
+def test_one_edited_file_is_the_only_update(tmp_path, monkeypatch):
+    written = _remembering_wiki(monkeypatch)
+    for name, title in (("a", "Access Control Standard"), ("b", "Audit Standard")):
+        _write(tmp_path, f"standards/{name}.md", _bound(title))
+    publish_tree(tmp_path, host="https://x", dry_run=False)
+    written.clear()
+
+    _write(tmp_path, "standards/b.md", _bound("Audit Standard", body="Logs are kept a year."))
+    report = publish_tree(tmp_path, host="https://x", dry_run=False)
+
+    assert {r.path: r.action for r in report.results} == {
+        "standards/a.md": UNCHANGED,
+        "standards/b.md": UPDATED,
+    }
+    assert written == ["Audit Standard"]
+
+
+def test_a_dry_run_plans_an_unchanged_page_as_unchanged(tmp_path, monkeypatch):
+    _remembering_wiki(monkeypatch)
+    _write(tmp_path, "standards/a.md", _bound("Access Control Standard"))
+    publish_tree(tmp_path, host="https://x", dry_run=False)
+
+    plan = publish_tree(tmp_path, host="https://x")
+
+    assert [r.action for r in plan.results] == [UNCHANGED]
+    assert "Nothing was written" not in plan.format_report()

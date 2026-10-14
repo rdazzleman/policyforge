@@ -419,3 +419,18 @@ def test_a_pair_rejected_by_editing_the_file_is_left_alone():
     assert row.status == REJECTED
     assert row.sources == [] and row.evidence == {} and row.flags == []
     assert not row.needs_review
+
+
+def test_a_spend_ceiling_ends_the_run_and_is_not_one_requirements_failure():
+    """The broad handler above records any provider failure and moves on, so a
+    ceiling that was recorded as one requirement's error would let the run
+    go on to the next requirement (#125)."""
+    from policyforge.llm.spend import SpendStopped
+
+    stop = SpendStopped("Stopped", spent=0.06, ceiling=0.05, completed=2)
+    provider = Sequence(stop, json.dumps({"mappings": [SI3]}))
+
+    with pytest.raises(SpendStopped):
+        _propose_with(provider)
+
+    assert len(provider.prompts) == 1

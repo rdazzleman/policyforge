@@ -76,10 +76,26 @@ MIXED_SITE_FUNCTIONS = {
     "DocumentEvidence.nist_anchors": (A, "the cited ids the crosswalk traversal starts from"),
     "DocumentEvidence.occurrences": (NEITHER, "counts citation instances"),
     "DocumentEvidence.distinct": (NEITHER, "counts distinct citations"),
-    "resolve_framework": (NEITHER, "maps a written framework name to a loaded catalog"),
+    "resolve_framework": (
+        A,
+        "maps a written name to a loaded catalog; `NIST` alone names the hub (6044 on #17)",
+    ),
     "split_citation": (NEITHER, "parses one tag part"),
+    "named_catalogs": (
+        NEITHER,
+        "which loaded catalogs a written name may mean; a bare `HIPAA` is the three of "
+        "45 CFR 164 (#420)",
+    ),
+    "citation_members": (NEITHER, "expands a range or comma list into its members (#421)"),
+    "_member": (NEITHER, "whether an id can be a range's member (#421)"),
+    "_is_qualifier": (NEITHER, "whether text after a member is its qualifier (#421)"),
+    "read_citation": (NEITHER, "reads one tag part: an id, its members, or reported whole (#421)"),
     "parse_citations": (NEITHER, "finds tags in a body"),
     "_catalog_index": (NEITHER, "indexes catalog ids by framework"),
+    "catalog_scope": (NEITHER, "builds the one citation scope from loaded catalogs (#215)"),
+    "CatalogScope.standing_for": (NEITHER, "resolves one cited id in its catalog (#215)"),
+    "CatalogScope.cites": (NEITHER, "whether a cited id stands for anything (#215)"),
+    "CatalogScope.leaf_residual": (NEITHER, "names catalogs not checked below a leaf (#441)"),
     "document_evidence": (A, "traverses the crosswalk from the cited 800-53 ids"),
     "_answers_for_an_anchor": (B, "whether a citation can answer for a topic anchor"),
     "build_report": (A, "hands the crosswalk to document_evidence; asks B only via the above"),
@@ -229,9 +245,13 @@ def test_exactly_which_catalogs_a_topic_may_anchor():
     was admitted, which is the guard working: a deliberate change to a
     decision should have to be written down twice.
     """
-    assert frozenset({NIST_ANCHOR, "nist-ai-rmf"}) == TOPIC_ANCHORS
+    assert frozenset({NIST_ANCHOR, "nist-ai-rmf", "hipaa-privacy", "hipaa-breach"}) == TOPIC_ANCHORS
     assert anchors_a_topic("NIST 800-53") is True
     assert anchors_a_topic("NIST AI RMF") is True
+    # The Privacy and Breach Notification Rules joined on 2026-10-11 (#420):
+    # NIST publishes no mapping for them, so a topic owns them directly.
+    assert anchors_a_topic("HIPAA Privacy Rule") is True
+    assert anchors_a_topic("HIPAA Breach Notification Rule") is True
     # Reachable only through the crosswalk, and must stay that way.
     assert anchors_a_topic("HIPAA Security Rule") is False
     assert anchors_a_topic("Information Blocking") is False
@@ -653,7 +673,9 @@ def test_third_party_ai_is_one_topic_across_three_functions():
 
 
 def _registry_without_ai(tmp_path):
-    """The shipped registry with every AI topic removed."""
+    """The shipped registry with every AI topic, and every PHI topic (#420),
+    removed: the registry of an organisation that does neither. The property
+    these tests hold is that such a user's number does not move."""
     import yaml
 
     doc = yaml.safe_load((ROOT / "config" / "topics.example.yaml").read_text(encoding="utf-8"))
@@ -661,7 +683,8 @@ def _registry_without_ai(tmp_path):
         t
         for t in doc["topics"]
         if not any(
-            str(c).split()[0] in ("Govern", "Map", "Measure", "Manage") for c in t["nist_controls"]
+            str(c).split()[0] in ("Govern", "Map", "Measure", "Manage") or str(c).startswith("164.")
+            for c in t["nist_controls"]
         )
     ]
     path = tmp_path / "topics.yaml"
@@ -746,7 +769,8 @@ def test_anchoring_one_ai_identifier_adopts_the_whole_catalog(tmp_path):
         t
         for t in doc["topics"]
         if not any(
-            str(c).split()[0] in ("Govern", "Map", "Measure", "Manage") for c in t["nist_controls"]
+            str(c).split()[0] in ("Govern", "Map", "Measure", "Manage") or str(c).startswith("164.")
+            for c in t["nist_controls"]
         )
     ]
     doc["topics"].append(
@@ -766,7 +790,12 @@ def test_anchoring_one_ai_identifier_adopts_the_whole_catalog(tmp_path):
     assert len(report.in_scope) == 1105, (
         "anchoring one AI RMF identifier did not bring the catalog into scope"
     )
-    assert not unadopted, "the catalog is adopted, so nothing should be reported unadopted"
+    # The AI RMF is adopted, so it is not named as unadopted. The PHI topics
+    # were removed above, so the two HIPAA rules are: named, not absent.
+    assert {c.framework for c in unadopted} == {
+        "HIPAA Privacy Rule",
+        "HIPAA Breach Notification Rule",
+    }, "the adopted catalog was reported unadopted, or an unadopted one went unnamed"
     # Govern 1 and its seven subcategories are owned; the rest are honest gaps.
     assert "Govern 1" not in report.orphaned
     assert "Map 1" in report.orphaned
@@ -874,7 +903,13 @@ def test_adoption_only_ever_narrows(tmp_path):
             f"adopted — narrowing fired when there was nothing to narrow to"
         )
         frameworks = {c.framework for c in in_scope}
-        assert frameworks == {"NIST 800-53", "NIST AI RMF"}, frameworks
+        # Everything anchorable: since #420 that includes the two HIPAA rules.
+        assert frameworks == {
+            "NIST 800-53",
+            "NIST AI RMF",
+            "HIPAA Privacy Rule",
+            "HIPAA Breach Notification Rule",
+        }, frameworks
 
     # The empty registry never reaches the scope rule: the parser refuses it.
     from policyforge.topics.registry import TopicRegistryError, parse_topics

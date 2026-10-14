@@ -17,7 +17,8 @@ which updated, and which skipped and why.
 Two guards stand between a merge and a live page:
 
 * **Macros.** A page somebody hand-wrote in Confluence may use `info`,
-  `expand`, `status` or page-properties macros, and this project's markdown
+  `expand` (other than a Standard's own source blocks), `status` or
+  page-properties macros, and this project's markdown
   conversion cannot round-trip them — publishing over such a page flattens
   work nobody agreed to lose. Those pages are skipped and named, rather
   than published with a warning printed after the damage.
@@ -29,7 +30,8 @@ Two guards stand between a merge and a live page:
   repository, or already says exactly what the repository would publish.
   Anything else has *moved*, and a moved page is reported on its own and
   fails the run — so the pull-and-review loop is triggered rather than
-  bypassed. `--force` is there for the decision to overwrite anyway.
+  bypassed. `--overwrite-wiki-changes` (`--force` until #372) is there for
+  the decision to overwrite anyway.
 
 The obvious design — store the page version in frontmatter at publish time
 and compare — does not work from CI. A publish job runs on a checkout and

@@ -44,7 +44,8 @@ the org's framework data.
    HIPAA-to-800-53 mapping; without it `synthesize` won't pull HIPAA in).
    HITRUST, GovRAMP and SOC 2 are bring-your-own, and their loaders are in
    the **licensed-framework plugin, distributed separately** from the public
-   PolicyForge. If it isn't installed, each command says so; don't promise
+   PolicyForge; to ask for it, the user emails info@zardoz.io with the subject
+   "PolicyForge licensed-framework plugin". If it isn't installed, each command says so; don't promise
    the user a parse, and see "Try `etl-hitrust`/`etl-govramp` before
    `generate-parser`" below.
    With the plugin, **`policyforge etl-hitrust --export <path>`**
@@ -373,9 +374,9 @@ standard to Confluence."
 1. Check env (above).
 1. `synthesize --topic-name "Authentication & Credential Management" --controls data/frameworks/*/controls.json`
 1. `generate --tier standard --synthesis output/synthesis/password-credential-management.md`
-1. `generate --tier policy --synthesis output/synthesis/password-credential-management.md --standard output/standards/password-credential-management.md`
+1. `generate --tier policy --synthesis output/synthesis/password-credential-management.md --standard docs/standards/password-credential-management.md`
 1. Show the user both drafts before publishing anything.
-1. On confirmation: `export-confluence --doc output/standards/password-credential-management.md --space <ask if unknown> --title "<from doc title>" --host <ask if unknown>`
+1. On confirmation: `export-confluence --doc docs/standards/password-credential-management.md --space <ask if unknown> --title "<from doc title>" --host <ask if unknown>`
 
 Don't skip step 5 — these are compliance documents; publish only after the
 user has actually looked at the draft.

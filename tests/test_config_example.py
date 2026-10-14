@@ -143,7 +143,15 @@ def _litellm_or_stub(monkeypatch) -> None:
     stub.BadRequestError = type("BadRequestError", (Exception,), {})
     stub.supports_response_schema = lambda model: True
     stub.suppress_debug_info = False
+    # What `llm.litellm_map.load()` touches the first time it runs in a
+    # process, and its guard reset per test (monkeypatch restores it), so
+    # the result doesn't depend on what ran first (#86; #248's shape).
+    stub.model_cost = {}
+    stub.register_model = lambda model_cost: None
     monkeypatch.setitem(sys.modules, "litellm", stub)
+    from policyforge.llm import litellm_map
+
+    monkeypatch.setattr(litellm_map, "_registered", None)
 
 
 @pytest.mark.parametrize("provider,config", _examples(), ids=[name for name, _ in _examples()])

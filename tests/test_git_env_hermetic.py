@@ -61,5 +61,7 @@ def test_an_exported_git_variable_does_not_change_the_suite(exported, tmp_path):
     assert "2 passed" in tail[0], tail
 
 
-def test_no_git_variable_survives_into_the_session():
-    assert not [k for k in os.environ if k.upper().startswith("GIT_")]
+def test_no_git_variable_survives_into_the_session_except_terminal_prompt():
+    survivors = [k for k in os.environ if k.upper().startswith("GIT_")]
+    assert survivors == ["GIT_TERMINAL_PROMPT"]
+    assert os.environ["GIT_TERMINAL_PROMPT"] == "0"

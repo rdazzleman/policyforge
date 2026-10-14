@@ -14,27 +14,39 @@ Two checks replace it, in the order a reviewer would want them:
 * **Static, over the AST** (`check_generated_parser`). An allowlist of
   imports rather than a denylist: a parser needs to read a CSV or a workbook
   and nothing more, so what it may import is a short list and what it must
-  not is unbounded. Calls that turn strings into code or attribute lookups,
-  reach through dunder attributes, or write anything are refused by name.
-  It is the walk `tests/test_byoc_boundary.py` already runs over the
-  hand-written loaders, applied at the one point where the code is not
-  hand-written.
+  not is unbounded. Calls that turn strings into code or attribute lookups
+  (the builtins, and what the admitted modules offer: `operator.attrgetter`,
+  `typing.get_type_hints`), reach through dunder attributes, reach the
+  interpreter's own machinery through an admitted module, by attribute or by
+  imported name (`pathlib.sys.modules["builtins"].eval`, `from pathlib
+  import os`), reach a private `_name` on any object (`typing._eval_type`;
+  namedtuple's `_asdict` and kin excepted), or write anything are refused by
+  name. It is the walk
+  `tests/test_byoc_boundary.py` already runs over the hand-written loaders,
+  applied at the one point where the code is not hand-written.
 * **Dynamic, in a child process** (`trial_run`). The candidate runs once
   against the sample under a PEP 578 audit hook that refuses sockets,
-  subprocesses and any file opened for writing, and the number of records
-  it returns is reported before anything is promoted into the package.
+  subprocesses, any file opened for writing, and any file read other than
+  the sample (and the interpreter's own), and the number of records it
+  returns is reported before anything is promoted into the package.
 
-Neither is a sandbox, and neither is described as one. Code clever enough
-can be written around a static check, and an audit hook runs inside the
-interpreter it watches. What the two together change is the default: model
-output used to land in `src/` and be imported on the next run; now it lands
-in `output/`, is checked, is run once under watch, and reaches the package
-only when somebody says so.
+Neither is a sandbox, and neither is described as one. **They catch
+known-dangerous shapes, not every one.** Code clever enough can be written
+around a static check, and an audit hook runs inside the interpreter it
+watches. **A payload that fires only on some inputs can't be found by
+either:** the trial run sees one sample, and a loader that misbehaves on a
+row the sample lacks behaves on this one. So the generated code is reviewed
+by a person before it is committed, and that review is the control; these
+checks only decide what reaches it. What the two together change is the
+default: model output used to land in `src/` and be imported on the next
+run; now it lands in `output/`, is checked, is run once under watch, and
+reaches the package only when somebody says so.
 """
 
 from __future__ import annotations
 
 import ast
+import os
 import subprocess  # nosec B404 - runs this interpreter on a fixed script, never a shell
 import sys
 from dataclasses import dataclass, field
@@ -125,6 +137,69 @@ FORBIDDEN_ATTRIBUTES = frozenset(
     }
 )
 
+#: Attribute names that reach the interpreter's own machinery through a
+#: module the allowlist admits: `pathlib.sys.modules["builtins"].eval(...)`
+#: imports nothing off the allowlist and names no forbidden builtin, and it
+#: passed both checks (CR-30). So the route is refused, whatever it starts
+#: from: the module table, the builtins module, `eval` and `exec` reached as
+#: attributes, and the modules that run or send things (`pathlib.os` is the
+#: same move one module over). `compile` and `open` are NOT here as
+#: attributes: `re.compile` and `Path(sample).open()` are in every parser,
+#: and the builtins they would otherwise be reached through are refused on
+#: the way (`.builtins`, `__builtins__`).
+ESCAPE_ATTRIBUTES = frozenset(
+    {
+        "sys",
+        "os",
+        "modules",
+        "builtins",
+        "eval",
+        "exec",
+        "importlib",
+        "subprocess",
+        "socket",
+        "shutil",
+        "ctypes",
+    }
+)
+
+#: What the allowed modules themselves offer that turns a string into an
+#: attribute lookup or into code, refused as a name and as an attribute:
+#: `operator.attrgetter("s" + "ys")(pathlib)` is `getattr` under another name
+#: (80 on #179's PR), and `typing.get_type_hints` and
+#: `functools.singledispatch` evaluate a string annotation (measured: each ran
+#: a `print` written as an annotation). Refused as an attribute and as an
+#: imported name. Not as a bare name: none is a builtin, so a bare name can
+#: only be bound to one through an import or an attribute, both refused, and
+#: a bare-name rule was a mutant no input could tell apart (ba measured it).
+STRING_EVALUATORS = frozenset(
+    {
+        "attrgetter",
+        "methodcaller",
+        "get_type_hints",
+        "ForwardRef",
+        "singledispatch",
+        "singledispatchmethod",
+        # `string.Formatter` resolves a dotted path held in a string: its
+        # `get_field` returns the object (1d on #179's PR), and a subclass
+        # overriding `format_field` captures it without naming `get_field`
+        # (ba measured both reaching eval). So the class is refused, which
+        # also refuses subclassing it; `get_field` itself isn't listed, since
+        # nothing allowed reaches a Formatter without naming it (an arm
+        # dropping `get_field` changed no result). `str.format`, `Template`
+        # and `capwords` stay allowed: they only ever produce a string.
+        "Formatter",
+    }
+)
+
+#: The same route by subscript: a string key that names the builtins, the
+#: module table or a builtin that runs code (`modules["builtins"]`). `os` and
+#: `open` are left out here because a CSV column can be called that
+#: (`row["open"]`), and the attribute that reaches the table is refused anyway.
+ESCAPE_KEYS = frozenset(
+    {"builtins", "__builtins__", "__import__", "eval", "exec", "compile", "sys", "modules"}
+)
+
 #: Dunder names with no escape route behind them. Everything else of that
 #: shape — `__class__`, `__subclasses__`, `__globals__`, `__builtins__` —
 #: is the classic way out of any restriction on what code may reach.
@@ -144,6 +219,25 @@ class Violation:
 
 def _is_dunder(name: str) -> bool:
     return name.startswith("__") and name.endswith("__") and name not in _HARMLESS_DUNDERS
+
+
+#: The underscore names that are a documented public API, not internals:
+#: namedtuple's. Everything else spelled `_x` is refused as an attribute.
+PUBLIC_UNDERSCORE = frozenset({"_asdict", "_replace", "_fields", "_make", "_field_defaults"})
+
+
+def _is_private(name: str) -> bool:
+    """`_x`: internals. `typing._eval_type` evaluates a string annotation
+    (ba measured it running a `print`), and a module's private helpers are
+    not something this check can audit one by one.
+
+    Refused on ANY object, not only on a name an import bound: which object a
+    name holds is not something a static check can know (`t = typing;
+    t._eval_type` passed a check keyed on the root's spelling, 1d on #179's
+    PR, and so would `self = typing; self._eval_type` in a plain function, ba
+    measured both reaching eval). The cost is that a parser's own `self._x`
+    is refused too: loud, and a person renames it."""
+    return name.startswith("_") and not name.startswith("__") and name not in PUBLIC_UNDERSCORE
 
 
 def _open_refusal(call: ast.Call) -> str | None:
@@ -213,6 +307,21 @@ def check_generated_parser(source: str, *, framework_slug: str) -> list[Violatio
                         )
             else:
                 flag(node, "a relative import reaching outside ingest/")
+            # The names, whatever module they come from: `from pathlib import
+            # os` is `pathlib.os` reached by import rather than attribute (80
+            # on #179's PR), and `*` brings in names nothing here can see.
+            for alias in node.names:
+                name = alias.name
+                if name == "*":
+                    flag(node, "a star import, whose names this check cannot see")
+                elif (
+                    name in ESCAPE_ATTRIBUTES
+                    or name in STRING_EVALUATORS
+                    or name in FORBIDDEN_NAMES
+                    or _is_dunder(name)
+                    or (node.level == 0 and _is_private(name))
+                ):
+                    flag(node, f"imports the name {name!r}, a route to code or to the interpreter")
         elif isinstance(node, ast.Name):
             if node.id in FORBIDDEN_NAMES:
                 flag(node, f"uses {node.id}, which turns data into code or a lookup")
@@ -221,8 +330,18 @@ def check_generated_parser(source: str, *, framework_slug: str) -> list[Violatio
         elif isinstance(node, ast.Attribute):
             if node.attr in FORBIDDEN_ATTRIBUTES:
                 flag(node, f"calls .{node.attr}, which writes or runs something")
+            elif node.attr in ESCAPE_ATTRIBUTES:
+                flag(node, f"reaches .{node.attr}, the interpreter's own machinery")
+            elif node.attr in STRING_EVALUATORS:
+                flag(node, f"uses .{node.attr}, which turns data into code or a lookup")
+            elif _is_private(node.attr):
+                flag(node, f"reaches .{node.attr}, a private name")
             elif _is_dunder(node.attr):
                 flag(node, f"reaches through .{node.attr}")
+        elif isinstance(node, ast.Subscript):
+            key = node.slice
+            if isinstance(key, ast.Constant) and key.value in ESCAPE_KEYS:
+                flag(node, f"looks up [{key.value!r}], the interpreter's own machinery")
         elif isinstance(node, ast.Call):
             reason = _open_refusal(node)
             if reason:
@@ -233,6 +352,35 @@ def check_generated_parser(source: str, *, framework_slug: str) -> list[Violatio
         found.append(Violation(0, f"defines no top-level {expected}()"))
 
     return sorted(found, key=lambda v: (v.line, v.reason))
+
+
+def path_key(path) -> str:
+    """A path as the trial's read rule compares it. Plain string work only:
+    it runs inside the audit hook, and a call that opened or resolved
+    anything here would raise the very event being judged."""
+    return os.path.normcase(os.path.abspath(os.fsdecode(path)))
+
+
+def readable_path(
+    path, files: tuple[str, ...], roots: tuple[str, ...], exists=os.path.exists
+) -> bool:
+    """Whether the trial run lets the candidate read `path`.
+
+    `files` and `roots` are `path_key`s. A name whose LAST component is
+    `<...>` and that is not a real file is a traceback's source lookup, not a
+    read: `<string>`, `<unknown>`, and on Python 3.10 an editable install's
+    `__editable__.policyforge-X.finder.__path_hook__/<string>`, which a test
+    of the whole name missed (9b on #179's PR: a crashing parser's own error
+    was replaced by a refusal). `exists` is `os.stat`, which raises no audit
+    event."""
+    if isinstance(path, int):
+        return True  # a descriptor already open
+    name = os.fsdecode(path)
+    base = os.path.basename(name)
+    if base.startswith("<") and base.endswith(">") and not exists(name):
+        return True
+    key = path_key(name)
+    return key in files or key.startswith(roots)
 
 
 #: Run in the child. Kept as a fixed string rather than assembled, so the
@@ -252,6 +400,17 @@ sys.path.insert(0, package_root)
 import policyforge.ingest
 import policyforge.ingest.levelled
 import policyforge.ingest.schema
+from policyforge.ingest.parser_gate import path_key, readable_path
+
+# Read once here, before the hook: openpyxl's first workbook load calls
+# mimetypes.init(), which reads the system's own mime.types files
+# (/etc/mime.types on Linux; Windows reads the registry instead). They are the
+# interpreter's environment, not a file the candidate chose, and the read
+# refusal below would otherwise fail every workbook parser on Linux (CI on
+# #179's PR caught it). A later init() naming other files still meets the hook.
+import mimetypes
+
+mimetypes.init()
 
 _WRITE_FLAGS = os.O_WRONLY | os.O_RDWR | os.O_APPEND | os.O_CREAT | os.O_TRUNC
 _REFUSED = (
@@ -271,12 +430,38 @@ def _refuse(what):
     raise PermissionError("refused: " + what)
 
 
+# What the candidate may READ: the sample it was given, its own source and
+# the bytecode cache import looks for beside it, this package, and the
+# interpreter's own files (lazy stdlib and openpyxl imports). Anything else is
+# a file the parser was not given (CR-30). The rule itself is
+# `parser_gate.readable_path`, imported before the hook, so it is tested.
+_READABLE_FILES = (path_key(sample_path), path_key(parser_path))
+_READABLE_ROOTS = tuple(
+    path_key(root).rstrip(os.sep) + os.sep
+    for root in {
+        package_root,
+        sys.prefix,
+        sys.base_prefix,
+        sys.exec_prefix,
+        sys.base_exec_prefix,
+        os.path.join(os.path.dirname(os.path.abspath(parser_path)), "__pycache__"),
+    }
+    if root
+)
+
+
+def _readable(path):
+    return readable_path(path, _READABLE_FILES, _READABLE_ROOTS)
+
+
 def _hook(event, args):
     if event == "open":
         path, mode, flags = args
         writes = any(c in mode for c in "wax+") if mode else bool(flags & _WRITE_FLAGS)
         if writes:
             _refuse("open for writing " + repr(path))
+        elif not _readable(path):
+            _refuse("read a file other than the sample " + repr(path))
     elif event.startswith(_REFUSED):
         _refuse(event)
 

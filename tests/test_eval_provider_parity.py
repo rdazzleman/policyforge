@@ -152,7 +152,11 @@ def test_eval_calls_land_in_their_own_ledger_file(tmp_path):
 
 
 def test_a_ledger_the_config_turned_off_stays_off_under_the_harness():
-    """Turning it off is the config's decision, and `--model` keeps it."""
+    """Turning it off is the config's decision, and `--model` keeps it.
+
+    Off means the wrapper records nothing. It still wraps (#327): the
+    boundary decision lives in it, and an unwrapped provider would be one
+    whose calls nobody decides."""
     base = {
         "llm": {
             "provider": "local",
@@ -164,7 +168,8 @@ def test_a_ledger_the_config_turned_off_stays_off_under_the_harness():
 
     measured = build_provider(eval_config(base=base))
 
-    assert not isinstance(measured.provider, RecordingProvider)
+    assert isinstance(measured.provider, RecordingProvider)
+    assert measured.provider._recording is False
     assert eval_config(model="x", base=base)["llm"]["ledger"]["enabled"] is False
 
 
@@ -230,7 +235,15 @@ def litellm_stub(monkeypatch):
     stub.BadRequestError = type("BadRequestError", (Exception,), {})
     stub.supports_response_schema = lambda model: True
     stub.suppress_debug_info = False
+    # What `llm.litellm_map.load()` touches the first time it runs in a
+    # process, and its guard reset per test (monkeypatch restores it), so
+    # the result doesn't depend on what ran first (#86; #248's shape).
+    stub.model_cost = {}
+    stub.register_model = lambda model_cost: None
     monkeypatch.setitem(sys.modules, "litellm", stub)
+    from policyforge.llm import litellm_map
+
+    monkeypatch.setattr(litellm_map, "_registered", None)
     return stub
 
 

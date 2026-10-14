@@ -66,7 +66,7 @@ def fetch_targets(targets: list[EditTarget], *, host: str) -> list[EditTarget]:
     """Fetch each target's current content and note any macros that wouldn't
     survive a round trip. Does not decide what to do about them — the caller
     owns that policy."""
-    from policyforge.export.confluence_importer import confluence_to_markdown, fetch_confluence_page
+    from policyforge.export.confluence_importer import convert_page, fetch_confluence_page
 
     for target in targets:
         page = fetch_confluence_page(space=target.space, title=target.title, host=host)
@@ -75,7 +75,7 @@ def fetch_targets(targets: list[EditTarget], *, host: str) -> list[EditTarget]:
         target.version = page.version
         target.webui_url = page.webui_url
         target.unsupported_macros = detect_unsupported_macros(page.storage_body)
-        target.original = confluence_to_markdown(page.storage_body)
+        target.original = convert_page(page.storage_body, title=page.title)
     return targets
 
 

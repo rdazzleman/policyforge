@@ -105,10 +105,24 @@ def entailment_provider(block: dict, config: dict | None = None):
     for key in ("api_base", "classification"):
         if block.get(key) is not None:
             llm_block[key] = block[key]
-    ledger = ((config or {}).get("llm") or {}).get("ledger")
-    if ledger is not None:
-        llm_block["ledger"] = ledger
-    return wrap(LiteLLMProvider(model=model, api_base=block.get("api_base")), {"llm": llm_block})
+    # The project's ledger, and its BOUNDARY (#327): the wrapper decides every
+    # call against these, and a judge built with only its own block read the
+    # default ceilings, so a tightened `llm.boundary` or a declared agreement
+    # never reached the second model. The agreement still has to name the
+    # judge's own party to cover it.
+    project = (config or {}).get("llm") or {}
+    for key in ("ledger", "boundary", "licensed_agreement"):
+        if project.get(key) is not None:
+            llm_block[key] = project[key]
+    # And its spend ceiling (#125). `budget:` is top-level, and the wrapper
+    # reads it from the config it is given, so a judge built from `llm:`
+    # alone had no meter: under `budget.max_usd` the answer stopped at the
+    # ceiling and the judge, one call per cited sentence, kept going (9b, PR
+    # 408, once the shell started judging answers).
+    wrapped = {"llm": llm_block}
+    if (config or {}).get("budget") is not None:
+        wrapped["budget"] = config["budget"]
+    return wrap(LiteLLMProvider(model=model, api_base=block.get("api_base")), wrapped)
 
 
 class LLMEntailer(Entailer):

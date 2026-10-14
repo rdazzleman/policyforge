@@ -304,6 +304,79 @@ def test_a_spec_path_is_read_as_windows_and_python_read_it():
         assert loads == {expected}, (path, loads)
 
 
+def test_a_spec_path_to_a_compiled_extension_module_is_the_module():
+    """#59 (ba on 47, from b5's measurement on 57): a parser built as an
+    extension module loads through `ExtensionFileLoader`, and its path read as
+    `file:`, a mention, which ships. Shapes as builds name them on each
+    platform, not as the rule spells them."""
+    for path, module in (
+        ('"ingest/hitrust.pyd"', _m("policyforge.ingest.@HITRUST@")),
+        ('"ingest/govramp.cp312-win_amd64.pyd"', _m("policyforge.ingest.@GOVRAMP@")),
+        ('"ingest/soc2_tsc.so"', _m("policyforge.ingest.@SOC2_TSC@")),
+        ('"src/policyforge/ingest/hitrust_export.cpython-312-x86_64-linux-gnu.so"',
+         _m("policyforge.ingest.@HITRUST_EXPORT@")),
+        ('"ingest/govramp_export.abi3.so"', _m("policyforge.ingest.@GOVRAMP_EXPORT@")),
+        # macOS, a free-threaded build, and a Windows debug build (`_d`).
+        ('"ingest/hitrust.cpython-313t-darwin.so"', _m("policyforge.ingest.@HITRUST@")),
+        ('"ingest/hitrust_d.cp314-win_amd64.pyd"', _m("policyforge.ingest.@HITRUST@")),
+        # Read as Windows reads it, as the .py forms are.
+        ('"INGEST/GOVRAMP.CP312-WIN_AMD64.PYD"', _m("policyforge.ingest.@GOVRAMP@")),
+        ('"ingest/soc2_tsc.pyd."', _m("policyforge.ingest.@SOC2_TSC@")),
+    ):  # fmt: skip
+        loads = release.dynamic_loads_of(f'spec_from_file_location("x", {path})')
+        assert loads == {module}, (path, loads)
+    # Outside ingest/ it is unknown, as a .py there is.
+    for path in ('"hitrust.pyd"', '"lib/soc2_tsc.cpython-312-x86_64-linux-gnu.so"'):
+        loads = release.dynamic_loads_of(f'spec_from_file_location("x", {path})')
+        assert loads == {release.UNKNOWN_LOAD}, (path, loads)
+    # What it must ALLOW: a public module's extension, a name that only starts
+    # like a licensed one, and files Python doesn't load as a module.
+    for path in (
+        "ingest/levelled.cp312-win_amd64.pyd",
+        "ingest/hitrust_notes.so",
+        "ingest/hitrust.so.txt",
+        "ingest/hitrust.dll",
+    ):
+        loads = release.dynamic_loads_of(f'spec_from_file_location("x", "{path}")')
+        assert loads == {f"file:{path}"}, (path, loads)
+
+
+def test_every_extension_suffix_of_this_interpreter_is_read():
+    """The rule spells `.pyd`/`.so` with any tags out by hand; the running
+    interpreter's own list is the other side of that check, not the rule's."""
+    from importlib.machinery import EXTENSION_SUFFIXES
+
+    assert EXTENSION_SUFFIXES, "premise: this interpreter loads extension modules"
+    for suffix in EXTENSION_SUFFIXES:
+        path = f"ingest/hitrust{suffix}"
+        loads = release.dynamic_loads_of(f'spec_from_file_location("x", "{path}")')
+        assert loads == {_m("policyforge.ingest.@HITRUST@")}, (path, loads)
+
+
+def test_an_extension_module_path_is_refused_by_the_build_itself(world):
+    """Through the real licensed_set (#59): the candidate search must reach a
+    file whose only spelling is an extension path, including a debug build's
+    upper-case `<M>_D.` name, which the `<m>.` file-name search alone misses."""
+    _write(
+        world["repo"],
+        "src/policyforge/linux_ext.py",
+        "from importlib.util import spec_from_file_location\n"
+        'SPEC = spec_from_file_location("x", "ingest/hitrust.cpython-312-x86_64-linux-gnu.so")\n',
+    )
+    _write(
+        world["repo"],
+        "src/policyforge/debug_ext.py",
+        "from importlib.util import spec_from_file_location\n"
+        'SPEC = spec_from_file_location("x", "INGEST/GOVRAMP_D.CP314-WIN_AMD64.PYD")\n',
+    )
+    _commit(world["repo"], "licensed modules loaded as extension modules")
+    _removed, refused, _classes = release.licensed_set(_ctx(world), "HEAD")
+    assert refused == {
+        "src/policyforge/linux_ext.py": "import",
+        "src/policyforge/debug_ext.py": "import",
+    }
+
+
 def test_an_upper_case_spec_path_is_refused_by_the_build_itself(world):
     """b5 on #57: the case-insensitive rule was only reached by a test of
     dynamic_loads_of. licensed_set's candidate search was case-sensitive, so

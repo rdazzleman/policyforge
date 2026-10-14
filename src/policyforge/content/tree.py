@@ -210,12 +210,40 @@ def parse_document(text: str, *, path: Path, root: Path) -> ContentDocument:
     Frontmatter is authoritative where present; everything it omits is
     inferred from the file's location and content.
     """
-    import frontmatter
+    from policyforge.textfile import loads_frontmatter, without_bom
 
+    # One leading U+FEFF (UTF-8 BOM) hid the `---` (#424). `loads_frontmatter`
+    # drops exactly one, as every reader does; the rule check below reads the
+    # same text it reads (b5 on PR 433: dropping one here too dropped two).
     try:
-        parsed = frontmatter.loads(text)
+        parsed = loads_frontmatter(text)
     except Exception as exc:  # the YAML parser raises several distinct types
         raise ContentError(f"frontmatter is not valid YAML: {exc}") from exc
+
+    # A file that opens with a horizontal rule and has another one later
+    # reads as a frontmatter block whose YAML is a string, a list or only a
+    # comment (a heading). python-frontmatter drops a block that isn't a
+    # mapping without a word, and the text between the rules went with it:
+    # `publish` and `export-confluence` sent the page without it (9b, PR
+    # 405). Refused by name instead. An empty block is fine.
+    from frontmatter.default_handlers import YAMLHandler
+
+    yaml_handler = YAMLHandler()
+    text = without_bom(text)  # what `loads_frontmatter` parsed
+    try:
+        # `detect` matches the opening fence alone; with no closing one,
+        # `split` raises, and python-frontmatter itself reads the file as
+        # having no frontmatter, so it is all body and nothing is lost.
+        block = yaml_handler.split(text)[0] if yaml_handler.detect(text) else ""
+    except ValueError:
+        block = ""
+    if block.strip() and not isinstance(yaml_handler.load(block), dict):
+        raise ContentError(
+            "the text between the opening `---` and the next one is read as "
+            "frontmatter, but it isn't `key: value` pairs, so it would be lost. "
+            "If the file opens with a horizontal rule, start it with its heading "
+            "instead, or write the rule as `***`."
+        )
 
     metadata = dict(parsed.metadata)
     body = parsed.content

@@ -7,7 +7,14 @@ unknown the moment a second joins. `NIST 800-53` keys to `nist-800-53` and
 resolves either way.
 
 So the example a model copies decides whether the documents it writes keep
-resolving when a user brings 800-171 or the CSF. Nothing else checks this:
+resolving when a user brings 800-171 or the CSF.
+
+**Since 80's 6044 on #17, `NIST` before an 800-53 id is the form**: the
+user confirmed `[NIST IR-1, IR-8 | ARC-AMPE]`, and `resolve_framework`
+reads `NIST` alone as 800-53 whatever else is loaded. So a generation
+example may write `[NIST IR-1`; what it may still not write is `NIST`
+before any other catalog's id (`[NIST 03.01.01]`), which names 800-53 and
+resolves nowhere. Nothing else checks this:
 a prompt is a string, every test passes with any string in it, and the
 failure appears later as unresolved citations in generated documents.
 
@@ -44,12 +51,14 @@ PRESERVES = [
     SRC / "edit" / "plan.py",
 ]
 
-#: `[NIST` not followed by a catalog-qualifying token.
+#: `[NIST` not followed by a catalog-qualifying token, nor by an 800-53 id.
 # "AI RMF" is a qualified catalog name, not a bare family: `NIST AI RMF` and
 # `NIST AI RMF Playbook` each key to their own catalog. Measured with
 # `normalize_framework` on #300, which also showed that "NIST AI" alone keys
-# to the shared `nist` bucket, so the exemption is "AI RMF", not "AI".
-BARE_NIST = re.compile(r"\[NIST\s+(?![0-9]|[Cc]ybersecurity|CSF|AI RMF\b)")
+# to the shared `nist` bucket, so the exemption is "AI RMF", not "AI". An
+# 800-53 id (`IR-1`) is exempt since 6044 on #17: `NIST` alone names 800-53.
+BARE_NIST = re.compile(r"\[NIST\s+(?![0-9]|[Cc]ybersecurity|CSF|AI RMF\b|[A-Z]{2}-\d)")
+_800_53_ID = re.compile(r"^[A-Z]{2}-\d")
 
 
 def test_qualifying_nist_changes_what_it_resolves_to() -> None:
@@ -69,9 +78,9 @@ def test_qualifying_hipaa_and_govramp_changes_nothing() -> None:
 def test_a_prompt_that_writes_tags_teaches_the_qualified_form(path: Path) -> None:
     bare = BARE_NIST.findall(path.read_text(encoding="utf-8"))
     assert not bare, (
-        f"{path.name} shows `[NIST ...` without naming which NIST catalog. A model "
-        "copying it writes citations that stop resolving as soon as a second "
-        "NIST-family catalog is loaded. Use `[NIST 800-53 AC-2 | ...]`."
+        f"{path.name} shows `[NIST ...` before an id that isn't 800-53's. `NIST` "
+        "alone names 800-53 (6044 on #17), so a model copying it writes citations "
+        "that resolve nowhere. Name the catalog: `[NIST 800-171 03.01.01]`."
     )
 
 
@@ -86,10 +95,14 @@ def test_every_framework_named_in_a_generation_example_resolves(path: Path) -> N
     for tag in re.findall(r"\[([A-Z][^\]\n]{3,80})\]", text):
         for segment in tag.split("|"):
             name = re.split(r"\s+(?=[A-Z]{2}-\d|\d{3}\.)", segment.strip())[0]
+            rest = segment.strip()[len(name) :].strip()
             key = normalize_framework(name)
-            assert key and key != "nist", (
+            # `NIST` before an 800-53 id names 800-53 (6044 on #17).
+            nist_800_53 = key == "nist" and bool(_800_53_ID.match(rest))
+            assert key and (key != "nist" or nist_800_53), (
                 f"{path.name}: example segment {segment.strip()!r} keys to {key!r}. "
-                "A bare `nist` key is the shared bucket the split removed."
+                "A bare `nist` key is the shared bucket the split removed, except "
+                "before an 800-53 id."
             )
 
 

@@ -57,10 +57,18 @@ def test_parses_the_shipped_example_registry():
 
     topics = parse_topics(yaml.safe_load(EXAMPLE_REGISTRY.read_text(encoding="utf-8")))
     assert topics
-    # README documents ~25 as the practical ceiling.
-    assert len(topics) <= 25
+    # The registry's header gives ~25 as the practical ceiling for what an
+    # organisation KEEPS. The shipped file is the POOL `init` draws from (22,
+    # part 3): the 16 core topics, the seven the scope facts turn on, and the
+    # AI block with its three role-only topics. `init` writes at most 25.
+    assert len(topics) == 33
     assert all(t.owner for t in topics), "every topic needs an accountable owner"
-    assert all(t.nist_controls for t in topics)
+    # Three topics are unanchored here on purpose: `init` gives each the
+    # categories it takes for the role declared, so they have none to share
+    # with the five AI topics that always have them. Named, so a fourth
+    # unanchored topic fails here instead of reading as one of these.
+    role_only = {"Responsible Use of AI", "Data for AI Systems", "Transparency to Affected People"}
+    assert {t.name for t in topics if not t.nist_controls} == role_only
 
 
 def test_every_topic_must_declare_an_owner():
@@ -534,7 +542,9 @@ def test_the_ai_block_names_topics_that_exist_and_ai_topics_anchor_only_outcomes
 
     outcome = re.compile(r"^(Govern|Map|Measure|Manage) \d")
     ai = [t for t in topics if " AI " in f" {t['name']} "]
-    assert len(ai) == 5, [t["name"] for t in ai]
+    # The five that always anchor AI RMF categories, and two of the three
+    # role-only topics (which anchor nothing in the pool: `init` assigns).
+    assert len(ai) == 7, [t["name"] for t in ai]
     for topic in ai:
         stray = [c for c in topic["nist_controls"] if not outcome.match(c)]
         assert not stray, f"{topic['name']} anchors non-outcome ids {stray}; the #188 text is false"

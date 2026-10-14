@@ -4,7 +4,7 @@
 block-structure reader in `policyforge.content.deontic` and `grounding`
 returned for each of them. `tests/test_deontic_conservation.py` holds the
 readers to that record, so a change to how `check` reads a document shows
-up row by row, not as a claim (#376).
+up row by row, not as a claim.
 
 ## What is here
 
@@ -37,7 +37,7 @@ SHA-256 over each tier's files, concatenated in name order:
 | Procedures |        45 | `61941ecff02bd8e9823eee462b82ce4ef9e58215a27d3586fb8a2ed3462a7c72` |
 
 Nothing was dropped. These are all 128 of the saved generated documents that
-#363, #226 and #376 measured, deduplicated by SHA-256. The size allowed all of
+three of the project's earlier measurements used, deduplicated by SHA-256. The size allowed all of
 them: 2.85 MB of documents and 4.07 MB of baseline. The population is the
 point, so no coverage trim was needed.
 
@@ -50,12 +50,12 @@ example organisation is the fictional **Acme Health**, or **Example Org**.
 No HITRUST, GovRAMP or other licensed export was loaded for any of them.
 
 **One is not plain model output:** `standards/*-seeded-governance.md.txt` is
-a generated AI Governance Standard with one sentence rewritten by hand for
-#301 ("Acme Health must, for Govern 1.1, maintain ..."), as a planted Playbook
+a generated AI Governance Standard with one sentence rewritten by hand
+("Acme Health must, for Govern 1.1, maintain ..."), as a planted Playbook
 violation. It is one of only two documents here where the Playbook check
 reports anything, so it stays, named. It was stored with CRLF line endings
 and is committed with LF; its text as read is unchanged.
-This is 80's condition on #376 for putting generated documents in a public
+This is 80's condition for putting generated documents in a public
 repository.
 
 `tests/test_deontic_corpus_content.py` checks the content, measured, not
@@ -88,6 +88,6 @@ python scripts/deontic_baseline.py --write   # the same printout, then write
 
 The printout names each changed (document, reader, line). **A PR that changes
 `baseline.json` carries that printout**, so a reader rules on each change. A
-baseline diff with no printout is changes-requested on sight (1d on #376).
+baseline diff with no printout is changes-requested on sight (1d's ruling).
 The test compares against the committed file and never recomputes its own
 expectation.

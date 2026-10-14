@@ -18,7 +18,7 @@ on the model's own knowledge of framework text).
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 
 from policyforge.ingest.schema import Control
 from policyforge.llm.base import LLMProvider
@@ -30,6 +30,28 @@ from policyforge.mapping.crosswalk import TOPIC_ANCHORS, normalize_framework
 class SynthesisTopic:
     name: str
     controls: list[Control]
+    #: {"<framework> <id>": requirements it resolved to}, for each id this
+    #: topic looked up that more than one distinct requirement carries
+    #: (80's ruling on #187). All of them are in `controls`; this names the
+    #: fact so the run can say it rather than merge them silently.
+    shared_ids: dict[str, int] = field(default_factory=dict)
+    #: {"<framework> <requirement id>": why}, for each level requirement the
+    #: crosswalk named that the declared level scope leaves out (#416). Not
+    #: sent; named so the run can say so.
+    scoped_out: dict[str, str] = field(default_factory=dict)
+    #: "<framework> <id>" for each crosswalk id that names a LOADED catalog
+    #: and resolves to nothing in it (#416). An id for a catalog that isn't
+    #: loaded is expected to resolve to nothing and is not listed.
+    unresolved: list[str] = field(default_factory=list)
+    #: Frameworks whose level statements this topic sends with no
+    #: `frameworks.scoping` declared for them, so every level the crosswalk
+    #: named went (80's ruling on #416: the run says so).
+    unscoped: list[str] = field(default_factory=list)
+    #: {reference id: levels the scope left out}, for each reference reached
+    #: WHOLE (by its own id) that lost levels to the scope. Summarised in one
+    #: line rather than named one by one (80's ruling on PR 419), so a
+    #: whole reference's levels don't bury the output.
+    whole_scoped_out: dict[str, int] = field(default_factory=dict)
 
 
 #: Frontmatter keys `synthesize` writes and `generate` reads back. The
@@ -47,6 +69,7 @@ class SynthesisTopic:
 SYNTHESIS_FRONTMATTER_KEYS = (
     "topic",
     "owner",
+    "policy",
     "cadence",
     "evidence",
     "nist_controls",
@@ -65,7 +88,9 @@ def write_synthesis(
     nist_controls: list[str] | None = None,
     content_class: str | None = None,
     derived_from: list[str] | None = None,
+    catalogs: list[dict] | None = None,
     playbook: list[dict] | None = None,
+    policy: str = "",
 ) -> str:
     """Render a synthesis file: YAML frontmatter, then the requirement list.
 
@@ -83,11 +108,15 @@ def write_synthesis(
     metadata = {
         "topic": topic,
         "owner": owner,
+        "policy": policy,
         "cadence": cadence,
         "evidence": evidence or [],
         "nist_controls": nist_controls or [],
         "content_class": content_class or "",
         "derived_from": derived_from or [],
+        # Each catalog's hash and library version (443 part 2), carried into
+        # every document `generate` drafts from this file.
+        "catalogs": catalogs or [],
         "playbook": playbook or [],
     }
     metadata = {k: v for k, v in metadata.items() if v}
@@ -165,9 +194,10 @@ def read_synthesis(text: str) -> tuple[dict, str]:
     A file with no frontmatter yields `({}, text)` — synthesis files written
     before this existed still load.
     """
-    import frontmatter
 
-    parsed = frontmatter.loads(text)
+    from policyforge.textfile import loads_frontmatter
+
+    parsed = loads_frontmatter(text)
     return dict(parsed.metadata), parsed.content
 
 
@@ -252,19 +282,31 @@ def _render_control(control: Control) -> str:
             f"Enhancement {enh.enhancement_id} ({enh.baseline}) — {enh.title}: {enh.description}"
         )
         lines.extend(_render_profile_additions(enh, prefix="  "))
+    # Level statements (HITRUST's), the sentences an assessor grades. Before
+    # #416 none were rendered, so a level-scoped control sent its heading
+    # alone. `build_synthesis_topic` narrows `requirements` to the levels
+    # the topic reached and the scope counts before this runs.
+    for requirement in control.requirements:
+        lines.append(f"Requirement {requirement.requirement_id}: {requirement.statement}")
     return "\n".join(lines)
+
+
+def synthesis_prompt(topic: SynthesisTopic) -> str:
+    """The request `synthesize_topic` sends for `topic`, built once, so the
+    estimate a spend ceiling plans from (#125) is the text that is sent."""
+    source_text = "\n\n".join(_render_control(c) for c in topic.controls)
+    return (
+        f"Topic: {topic.name}\n\n"
+        f"Source controls:\n\n{source_text}\n\n"
+        "Produce the merged requirement list per the rules above."
+    )
 
 
 def synthesize_topic(topic: SynthesisTopic, provider: LLMProvider) -> str:
     if not topic.controls:
         raise ValueError(f"SynthesisTopic {topic.name!r} has no controls to synthesize.")
 
-    source_text = "\n\n".join(_render_control(c) for c in topic.controls)
-    prompt = (
-        f"Topic: {topic.name}\n\n"
-        f"Source controls:\n\n{source_text}\n\n"
-        "Produce the merged requirement list per the rules above."
-    )
+    prompt = synthesis_prompt(topic)
     from policyforge.llm import effort
 
     # Only the system prompt repeats here — every topic brings different
@@ -303,6 +345,7 @@ def build_synthesis_topic(
     controls: list[Control],
     crosswalk: dict[str, dict[str, list[str]]],
     vacated: dict | None = None,
+    scopes: dict | None = None,
 ) -> SynthesisTopic:
     """Assemble a SynthesisTopic by pulling the given NIST controls plus,
     via `crosswalk` (see mapping/crosswalk.py's `build_crosswalk`), every
@@ -323,31 +366,114 @@ def build_synthesis_topic(
     `frameworks.vacated.for_generation`: vacated paragraphs are dropped, and
     a revised one is replaced by the pre-rule wording that binds again.
     `vacated` defaults to the manifests on disk.
+
+    **Two requirements can share an id, and both are kept** (80's ruling on
+    #187). A real HITRUST export has several such ids, and `/coverage` counts
+    each as its own requirement, so keying one control per id dropped all
+    but the last from the document while coverage still claimed it. Now:
+
+    - every control that carries an id as its OWN id is pulled in;
+    - an exact repeat (same framework, same id, and the same text as the
+      prompt would show it, `_render_control`) is one requirement written
+      twice, and is pulled in once;
+    - an enhancement id still resolves to the control carrying it only when
+      no control has that id as its own (today's precedence, unchanged), and
+      to the first such carrier;
+    - each id that resolved to more than one requirement is named in
+      `SynthesisTopic.shared_ids`, and `synthesize` prints it.
+
+    **A crosswalk id may name a LEVEL requirement** (#416). HITRUST maps per
+    level statement, so the crosswalk names `11.c Level 2`, an id carried by
+    `Control.requirements` and by no control or enhancement. Before #416
+    it resolved to nothing and HITRUST never reached synthesis, while
+    coverage counted it reached. Now it resolves to its control, narrowed
+    to the level statements the topic named (a control named by its own id
+    keeps all of them). Precedence: a control's own id, then an
+    enhancement id, then a level id.
+
+    **Levels follow the declared scope, as coverage counts them** (80's
+    ruling on #416). A level `frameworks.scoping` leaves out is not sent,
+    and is named in `SynthesisTopic.scoped_out` with coverage's reason.
+    With no scope declared for a framework, every named level is sent and
+    the framework is named in `SynthesisTopic.unscoped`. `scopes` defaults
+    to the config on disk.
+
+    **An id that resolves to nothing is named, never dropped** (#416): in
+    `SynthesisTopic.unresolved`, for each catalog that is loaded.
     """
     if vacated is None:
         from policyforge.frameworks.registry import config_or_defaults
         from policyforge.frameworks.vacated import declared_vacated
 
         vacated = declared_vacated(config_or_defaults("vacated paragraphs were read"))
-    by_framework_id = {(normalize_framework(c.framework), c.control_id): c for c in controls}
+    if scopes is None:
+        from policyforge.frameworks.registry import config_or_defaults
+        from policyforge.topics.coverage import level_scopes
+
+        scopes = level_scopes(config_or_defaults("level scoping was read"))
+    from policyforge.topics.coverage import scoped_out_levels
+
+    left_out = scoped_out_levels(controls, scopes)
+    by_framework_id: dict[tuple[str, str], list[Control]] = {}
+    rendered: dict[tuple[str, str], set[str]] = {}
+    for control in controls:
+        key = (normalize_framework(control.framework), control.control_id)
+        text = _render_control(control)
+        if text not in rendered.setdefault(key, set()):
+            rendered[key].add(text)
+            by_framework_id.setdefault(key, []).append(control)
     for control in controls:
         framework = normalize_framework(control.framework)
         for enhancement in control.enhancements:
-            by_framework_id.setdefault((framework, enhancement.enhancement_id), control)
+            by_framework_id.setdefault((framework, enhancement.enhancement_id), [control])
+    # Level ids last, so they never shadow a control or enhancement id.
+    by_level: dict[tuple[str, str], Control] = {}
+    for control in controls:
+        framework = normalize_framework(control.framework)
+        for requirement in control.requirements:
+            by_level.setdefault((framework, requirement.requirement_id), control)
+    # Each loaded catalog's own name by its key, so an unresolved id is
+    # spelt as a scoped-out one is (9b on PR 419).
+    loaded = {normalize_framework(c.framework): c.framework for c in controls}
 
-    topic_controls: list[Control] = []
-    seen: set[int] = set()
+    # Controls in the order the topic reached them, each with the level ids
+    # it was reached by, or None when it was reached whole.
+    order: list[Control] = []
+    reached_by: dict[int, set[str] | None] = {}
+    shared_ids: dict[str, int] = {}
+    scoped_out: dict[str, str] = {}
+    unresolved: list[str] = []
 
-    def _add(control: Control | None) -> None:
-        if control is not None and id(control) not in seen:
-            seen.add(id(control))
-            status = vacated.get(normalize_framework(control.framework))
-            if status is not None:
-                from policyforge.frameworks.vacated import for_generation
+    def _resolve(key: tuple[str, str]) -> list[Control]:
+        found = by_framework_id.get(key, [])
+        if len(found) > 1:
+            shared_ids[f"{found[0].framework} {key[1]}"] = len(found)
+        return found
 
-                control = for_generation(control, status)
-            if control is not None:
-                topic_controls.append(control)
+    def _add(control: Control, level: str | None = None) -> None:
+        if id(control) not in reached_by:
+            order.append(control)
+            reached_by[id(control)] = None if level is None else {level}
+        elif level is None:
+            reached_by[id(control)] = None
+        elif reached_by[id(control)] is not None:
+            reached_by[id(control)].add(level)
+
+    def _crosswalked(key: tuple[str, str]) -> None:
+        found = _resolve(key)
+        for control in found:
+            _add(control)
+        if found:
+            return
+        carrier = by_level.get(key)
+        if carrier is None:
+            label = f"{loaded.get(key[0], key[0])} {key[1]}"
+            if key[0] in loaded and label not in unresolved:
+                unresolved.append(label)
+        elif key in left_out:
+            scoped_out[f"{carrier.framework} {key[1]}"] = left_out[key]
+        else:
+            _add(carrier, key[1])
 
     for nist_id in nist_control_ids:
         # **Both meanings of "anchor" meet on these two lines, and they are
@@ -372,9 +498,51 @@ def build_synthesis_topic(
         # policyforge-80 found this: the A/B split that separated the two
         # constants was assigned per FILE, and this file does both.
         for anchor in TOPIC_ANCHORS:
-            _add(by_framework_id.get((anchor, nist_id)))
+            for control in _resolve((anchor, nist_id)):
+                _add(control)
         for framework, equivalent_ids in crosswalk.get(nist_id, {}).items():
             for equivalent_id in equivalent_ids:
-                _add(by_framework_id.get((framework, equivalent_id)))
+                _crosswalked((framework, equivalent_id))
 
-    return SynthesisTopic(name=name, controls=topic_controls)
+    topic_controls: list[Control] = []
+    unscoped: list[str] = []
+    whole_scoped_out: dict[str, int] = {}
+    for control in order:
+        framework = normalize_framework(control.framework)
+        if control.requirements:
+            if framework not in scopes and control.framework not in unscoped:
+                unscoped.append(control.framework)
+            levels = reached_by[id(control)]
+            kept = [
+                r
+                for r in control.requirements
+                if (levels is None or r.requirement_id in levels)
+                and (framework, r.requirement_id) not in left_out
+            ]
+            if levels is None:
+                dropped = sum(
+                    1 for r in control.requirements if (framework, r.requirement_id) in left_out
+                )
+                if dropped:
+                    whole_scoped_out[control.control_id] = (
+                        whole_scoped_out.get(control.control_id, 0) + dropped
+                    )
+            if len(kept) != len(control.requirements):
+                control = replace(control, requirements=kept)
+        status = vacated.get(framework)
+        if status is not None:
+            from policyforge.frameworks.vacated import for_generation
+
+            control = for_generation(control, status)
+        if control is not None:
+            topic_controls.append(control)
+
+    return SynthesisTopic(
+        name=name,
+        controls=topic_controls,
+        shared_ids=shared_ids,
+        scoped_out=scoped_out,
+        unresolved=unresolved,
+        unscoped=unscoped,
+        whole_scoped_out=whole_scoped_out,
+    )

@@ -468,32 +468,32 @@ def _licensed(doc) -> bool:
     stamp `generate` writes into it. Either is enough — a stamp recording a
     licensed source is exactly as binding as a hand-written declaration.
 
-    **An unrecognised class counts as not licensed, and that is deliberate.**
-    It is the opposite direction from unknown visibility a few lines above,
-    which counts as public, so the asymmetry is stated here rather than left
-    to be discovered and "corrected" in whichever direction the next reader
-    guesses. Unknown visibility is a question this tool asked and failed to
-    get an answer to, and there are only two answers it could have had.
-    Content class is an open field on a document anybody may hand-write, and
-    most documents in most trees carry none at all: failing closed on it
-    would refuse every unstamped document on every public wiki, which makes
-    the feature unusable and gets the check disabled rather than obeyed. So
-    the ceiling holds where the class is *said*, and `generate` says it on
-    everything it writes — all 59 documents of the measured corpus carry
-    `generated_by.content_class`. Where nothing says it, the wiki's
-    visibility rule is what stands between the document and the world.
+    **No class counts as not licensed; a class that can't be read counts as
+    licensed** (#336, 80's ruling). Most documents in most trees carry no
+    class at all, and failing closed on THAT would refuse every unstamped
+    document on every public wiki, which makes the feature unusable and gets
+    the check disabled rather than obeyed. So where nothing is said, the
+    wiki's visibility rule is what stands between the document and the
+    world, and `generate` says it on everything it writes (all 59 documents
+    of the measured corpus carry `generated_by.content_class`). But a value
+    that IS said and isn't a known class (`licenced`) said the author meant
+    to classify it: that is read as licensed, by `provenance.stamped_class`,
+    the one reading every boundary reader shares. It used to count as not
+    licensed, so a misspelt licensed stamp published to a public wiki.
 
-    Values are stripped before comparison because frontmatter is
-    hand-editable, and `content_class: "licensed "` is precisely the kind of
-    thing hand-editing produces.
+    Values are trimmed and casefolded, because frontmatter is hand-editable,
+    and `content_class: "licensed "` is precisely the kind of thing
+    hand-editing produces.
     """
+    from policyforge.content.provenance import stamped_class
+
     metadata = getattr(doc, "metadata", {}) or {}
-    if str(metadata.get("content_class") or "").strip().lower() == "licensed":
+    if stamped_class(metadata.get("content_class")) == "licensed":
         return True
 
     stamp = metadata.get("generated_by")
     if isinstance(stamp, dict):
-        return str(stamp.get("content_class") or "").strip().lower() == "licensed"
+        return stamped_class(stamp.get("content_class")) == "licensed"
     if isinstance(stamp, str):
         return "licensed" in stamp.lower()
     return False

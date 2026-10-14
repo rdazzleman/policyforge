@@ -15,7 +15,7 @@ Rule, *HIPAA Privacy Rule To Support Reproductive Health Care Privacy*
 That is *Purl v. HHS*, No. 2:24-cv-228-Z (N.D. Tex.), Amended Judgment
 (ECF 114), filed 2025-07-03. The appeal, No. 25-10743, was dismissed on
 2025-09-10. The quotation is transcribed from the court's scanned PDF, and
-its citations were repaired from OCR (this project's research, recorded on #409).
+its citations were repaired from OCR (this project's research).
 
 **eCFR has not removed the vacated text, and this catalog carries eCFR's
 text as eCFR prints it.** It does not splice in older text, because a
@@ -42,7 +42,7 @@ amendatory instructions. It is not legal advice.** Check the judgment
 yourself before relying on it. The set was identified by two independent
 instruments, which agree: eCFR's text on 2024-04-25 compared with the pinned
 text, paragraph by paragraph, and the rule's own amendatory instructions
-(ba, on #409). §164.520's other 2024 changes are kept, because the judgment
+(ba). §164.520's other 2024 changes are kept, because the judgment
 keeps them.
 
 When eCFR removes the vacated text, `etl-hipaa-privacy` refuses to write,
@@ -74,7 +74,7 @@ by `tests/test_hipaa_privacy.py`.
 
 ## No published mapping to 800-53
 
-NIST's OLIR and CPRT catalogs were enumerated (this project's research, #409), and
+NIST's OLIR and CPRT catalogs were enumerated (this project's research), and
 every HIPAA entry in them maps the **Security** Rule. HHS and third parties
 were not searched. The Privacy Rule governs uses and disclosures, not
 security controls, and placing it against 800-53 without a source's mapping

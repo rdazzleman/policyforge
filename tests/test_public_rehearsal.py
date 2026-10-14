@@ -241,3 +241,23 @@ def test_a_module_that_cannot_be_imported_is_exit_2_never_the_refusal_code(modul
     )
     assert r.returncode == 2, (r.returncode, r.stderr[-400:])
     assert "could not be imported" in r.stderr
+
+
+@pytest.mark.github_config
+def test_ci_runs_the_rehearsal_everywhere_but_the_public_repo():
+    """#163: on github.com the repo is the public single commit, where the
+    guard correctly refuses for want of licensed history. Forgejo's runner
+    sets `server_url` to its own address, so the step still runs there."""
+    import yaml
+
+    jobs = yaml.safe_load((ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8"))[
+        "jobs"
+    ]
+    steps = [
+        s
+        for job in jobs.values()
+        for s in job.get("steps", [])
+        if "public_rehearsal.py" in s.get("run", "")
+    ]
+    assert len(steps) == 1, steps
+    assert steps[0].get("if") == "${{ github.server_url != 'https://github.com' }}", steps[0]

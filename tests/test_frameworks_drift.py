@@ -18,6 +18,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from policyforge.frameworks.drift import (
     ADDED,
     CHANGED,
@@ -338,3 +340,59 @@ def test_without_a_baseline_to_compare_against_it_says_what_to_do(tmp_path):
 
     assert result.exit_code != 0
     assert "commit the current one" in result.output
+
+
+@pytest.fixture
+def committed_catalog(tmp_path):
+    """A repository holding `data/controls.json`, committed, then changed on
+    disk, so the committed text and the file differ."""
+    import subprocess
+
+    repo = tmp_path / "repo"
+    (repo / "data").mkdir(parents=True)
+    catalog = repo / "data" / "controls.json"
+    catalog.write_text("committed content\n", encoding="utf-8")
+
+    def git(*args):
+        subprocess.run(
+            ["git", "-c", "user.name=t", "-c", "user.email=t@example.com",
+             "-c", "commit.gpgsign=false", *args],
+            cwd=repo, check=True, capture_output=True,
+        )  # fmt: skip
+
+    git("init", "-q")
+    git("add", "data/controls.json")
+    git("commit", "-qm", "init")
+    catalog.write_text("modified content\n", encoding="utf-8")
+    return repo, catalog
+
+
+def test_an_absolute_path_reads_the_committed_text(committed_catalog, tmp_path, monkeypatch):
+    """Before #253, `git show HEAD:<absolute path>` named nothing: None."""
+    from policyforge.frameworks.drift import read_committed
+
+    _, catalog = committed_catalog
+    monkeypatch.chdir(tmp_path)  # in no repository
+
+    assert read_committed(catalog.resolve()) == "committed content\n"
+
+
+def test_a_relative_path_is_read_from_the_working_directory(committed_catalog, monkeypatch):
+    """As `drift --controls` reads the file itself. From a subdirectory, the
+    path used to go to git as though from the repository root: None."""
+    from policyforge.frameworks.drift import read_committed
+
+    repo, _ = committed_catalog
+    monkeypatch.chdir(repo)
+    assert read_committed(Path("data/controls.json")) == "committed content\n"
+    monkeypatch.chdir(repo / "data")
+    assert read_committed(Path("controls.json")) == "committed content\n"
+
+
+def test_a_path_in_no_repository_reads_none(tmp_path):
+    from policyforge.frameworks.drift import read_committed
+
+    outside = tmp_path / "outside.json"
+    outside.write_text("outside\n", encoding="utf-8")
+
+    assert read_committed(outside.resolve()) is None

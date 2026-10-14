@@ -1,5 +1,9 @@
-# Topic registry — copy to config/topics.yaml (gitignored) and set `owner`
-# to your own team names.
+# The topic POOL that `policyforge init` draws from, and a registry in its own
+# right. `init` reads the scope facts under `programme:` in config/config.yaml
+# (builds_software, own_facilities, personal_data, baseline, ai) and writes
+# config/topics.yaml (gitignored) with the topics they call for, at most 25;
+# set `owner` there to your own team names. Copying this file whole instead
+# gives every topic below, which is past that ceiling.
 #
 # A topic is a coherent operational process that ONE team can comfortably own
 # end to end. Cross-team steps are expected — user lifecycle touches HR, IAM,
@@ -20,34 +24,108 @@
 # Each page is planned separately and told which tier it is, so a cadence
 # change lands in the Standard and the Procedure and leaves the Policy alone.
 # Only the first topic below carries the block, as an example — add it to the
-# others as you publish them.
+# others as you publish them. A Policy's page is declared on the Policy, under
+# `policies:`, and not on a topic.
 #
 # Check your work with:
-#     policyforge coverage --baseline moderate
+#     policyforge coverage --controls data/frameworks/nist-800-53-r5/controls.json --controls data/frameworks/nist-ai-rmf/controls.json --controls data/frameworks/hipaa-security-rule/controls.json --controls data/frameworks/hipaa-privacy-rule/controls.json --controls data/frameworks/hipaa-breach-notification-rule/controls.json --baseline moderate
 #
 # which reports controls no topic claims (orphaned) and controls two topics
 # claim (contested). Roughly 25 topics is the practical ceiling; past that,
 # processes start getting sliced apart and accountability blurs again.
 #
-# THIS FILE IS A MENU, NOT A REGISTRY. It ships more topics than most
-# organisations should keep, so that the common shapes are here to be
-# recognised and cut down rather than invented from nothing. Delete freely:
-# a topic you keep because it was in the example is worse than one you never
-# had, because it owns requirements nobody is actually accountable for.
+# THIS FILE IS A POOL, NOT A STARTING REGISTRY. It ships more topics than any
+# organisation should keep (33), so that the shapes are here to be recognised
+# rather than invented from nothing. A topic you keep because it was in the
+# example is worse than one you never had, because it owns requirements
+# nobody is actually accountable for. How `init` picks, in order:
 #
-# The ceiling above applies to what you KEEP. This file is at it, which is
-# why it cannot grow without something going — and why it is a starting
-# point rather than a target.
+#   1. a topic is on when most reference structures name its area (the table
+#      is in `policyforge.topics.convergence`; it is read by `init`, and no
+#      document cites it);
+#   2. a scope fact turns the conditional ones on: Secure Development for
+#      builds_software, Physical & Environmental for own_facilities, Privacy
+#      for personal_data pii or phi (and the two HIPAA topics for phi),
+#      Personnel Security and System Maintenance for a baseline;
+#   3. a topic that is off folds into its nearest core topic, whose owner
+#      stays accountable, and `init` prints every fold;
+#   4. `ai` sizes the AI topics: three for a user of AI (Responsible Use of AI
+#      takes the categories the builder's other three hold), five for a
+#      builder, and up to two more (Data for AI Systems and Transparency to
+#      Affected People) while the ceiling has room. The three that appear
+#      with a role carry no anchors here: `init` assigns the categories they
+#      take from the topics that hold them in this file.
 #
-# Most organisations will not need all five AI topics, and many will need
-# none. They are here because the NIST AI RMF is bundled and anchorable, and
-# an anchorable catalog nobody owns is worth showing how to own. If you do
-# no AI, delete all five: `/coverage` then leaves the AI RMF out of your
-# numbers entirely and says so under the report, rather than counting 91
-# requirements against you that you never took on.
+# An organisation that does no AI declares `ai: none`, and `/coverage` then
+# leaves the AI RMF out of its numbers entirely and says so under the report,
+# rather than counting 91 requirements against it that it never took on.
+
+# Policies: one covers one or more Standards, and each Standard (a topic) names
+# exactly one with `policy:`. A Policy is read by the whole organisation, so it
+# states intent and scope and points to its Standards; the technical detail
+# stays in them. About half as many Policies as Standards is the aim. The owner
+# of a Policy is the accountable executive, who is often not a topic's owner.
+# A Policy's page is declared HERE, not on each topic: several topics would
+# otherwise claim one page. The executive titles below are examples to change.
+policies:
+  - name: Governance & Risk
+    owner: Chief Information Security Officer
+    cadence: annual
+    description: How the security programme is run and how risk is assessed and accepted.
+  - name: Access Control
+    owner: Chief Information Security Officer
+    cadence: annual
+    description: Who may use which systems, how that is granted, reviewed and removed.
+    # The Policy's page is declared here, on the Policy, and not on each topic
+    # under it: the three would otherwise claim one page.
+    confluence:
+      space: SEC
+      pages:
+        policy: Access Control Policy
+  - name: Network & Cryptography
+    owner: Chief Information Security Officer
+    cadence: annual
+    description: How networks are separated and monitored, and how data is encrypted.
+  - name: Operations Security
+    owner: Chief Information Officer
+    cadence: annual
+    description: How systems are configured, patched, protected and maintained.
+  - name: Monitoring & Incident
+    owner: Chief Information Security Officer
+    cadence: annual
+    description: How activity is logged and watched, and how incidents are handled.
+  - name: Continuity
+    owner: Chief Operating Officer
+    cadence: annual
+    description: How the organisation backs up, restores and keeps working.
+  - name: Data Protection & Privacy
+    owner: Chief Privacy Officer
+    cadence: annual
+    description: How data is classified, handled, kept and disposed of, and how privacy is protected.
+  - name: Third-Party Risk
+    owner: Chief Risk Officer
+    cadence: annual
+    description: How vendors and business associates are chosen, contracted and watched.
+  - name: People
+    owner: Chief People Officer
+    cadence: annual
+    description: How workforce members are made aware of, and trained for, their security duties.
+  - name: Physical
+    owner: Vice President, Facilities
+    cadence: annual
+    description: How buildings, equipment and environments are protected.
+  - name: Secure Development
+    owner: Vice President, Engineering
+    cadence: annual
+    description: How software is built, reviewed and released securely.
+  - name: AI Governance
+    owner: Chief Risk Officer
+    cadence: annual
+    description: How AI systems are governed, assessed, measured and treated for risk.
 
 topics:
   - name: Security Program Governance
+    policy: Governance & Risk
     owner: Security Program / GRC
     cadence: annual
     description: >-
@@ -55,12 +133,13 @@ topics:
       by the program rather than an engineering team — these are
       organizational obligations, not system ones.
     nist_controls: [PM-1, PM-2, PM-9, PL-1, PL-2, PL-4, PL-8, PL-10, PL-11,
-                    PS-1, PS-6, PS-7, PS-8, SA-1, SA-2]
+                    SA-1, SA-2]
     evidence:
       - Approved policy set with review dates
       - Program plan and org chart
 
   - name: Risk Assessment & Authorization
+    policy: Governance & Risk
     owner: Security Program / GRC
     cadence: annual
     description: >-
@@ -72,12 +151,13 @@ topics:
       - Authorization decision record
 
   - name: Identity Lifecycle & Access Review
+    policy: Access Control
     owner: IAM Engineering
     cadence: quarterly
     description: >-
       Joiner/mover/leaver, entitlement assignment and periodic access
       recertification. Spans HR, IAM and app owners; IAM owns the process.
-    nist_controls: [AC-1, AC-2, AC-3, AC-5, AC-6, AC-14, IA-4, IA-12, PS-4, PS-5]
+    nist_controls: [AC-1, AC-2, AC-3, AC-5, AC-6, AC-14, IA-4, IA-12]
     evidence:
       - Identity provider user export
       - HR active-employee roster
@@ -85,11 +165,11 @@ topics:
     confluence:
       space: SEC
       pages:
-        policy: Access Control Policy
         standard: Access Control Standard
         procedure: Access Review Procedure
 
   - name: Authentication & Credential Management
+    policy: Access Control
     owner: IAM Engineering
     cadence: continuous
     nist_controls: [AC-7, AC-8, AC-10, AC-11, AC-12, IA-1, IA-2, IA-3, IA-5, IA-6,
@@ -99,6 +179,7 @@ topics:
       - Authentication policy configuration export
 
   - name: Remote & Third-Party Access
+    policy: Access Control
     owner: Network Security
     cadence: quarterly
     nist_controls: [AC-17, AC-18, AC-19, AC-20, AC-22]
@@ -107,6 +188,7 @@ topics:
       - Third-party access register
 
   - name: Network & Boundary Protection
+    policy: Network & Cryptography
     owner: Network Security
     cadence: continuous
     nist_controls: [AC-4, CA-9, SC-1, SC-2, SC-3, SC-4, SC-5, SC-7, SC-8, SC-10,
@@ -116,6 +198,7 @@ topics:
       - External attack-surface scan
 
   - name: Encryption & Key Management
+    policy: Network & Cryptography
     owner: Platform Security
     cadence: annual
     nist_controls: [SC-12, SC-13, SC-17, SC-28]
@@ -124,6 +207,7 @@ topics:
       - Encryption-at-rest and in-transit configuration
 
   - name: Logging, Monitoring & Alerting
+    policy: Monitoring & Incident
     owner: Detection & Response
     cadence: continuous
     nist_controls: [AU-1, AU-2, AU-3, AU-4, AU-5, AU-6, AU-7, AU-8, AU-9, AU-10,
@@ -133,6 +217,7 @@ topics:
       - Alert tuning and review records
 
   - name: Incident Response
+    policy: Monitoring & Incident
     owner: Security Operations
     cadence: continuous
     nist_controls: [IR-1, IR-2, IR-3, IR-4, IR-5, IR-6, IR-7, IR-8]
@@ -141,6 +226,7 @@ topics:
       - Tabletop exercise report
 
   - name: Vulnerability & Patch Management
+    policy: Operations Security
     owner: Infrastructure Security
     cadence: monthly
     nist_controls: [SI-1, RA-5, SI-2, SI-5]
@@ -149,6 +235,7 @@ topics:
       - Patch compliance report
 
   - name: Endpoint Protection & Device Controls
+    policy: Operations Security
     owner: Endpoint Engineering
     cadence: continuous
     nist_controls: [SI-3, SI-6, SI-8, SI-16, MP-7, SC-18]
@@ -157,15 +244,30 @@ topics:
       - Removable media policy configuration
 
   - name: Change & Configuration Management
+    policy: Operations Security
     owner: Platform Engineering
     cadence: continuous
-    nist_controls: [CM-1, CM-2, CM-3, CM-4, CM-5, CM-6, CM-7, CM-8, CM-9, CM-10,
+    nist_controls: [CM-1, CM-2, CM-3, CM-4, CM-5, CM-6, CM-7, CM-9, CM-10,
                     CM-11, CM-12, SI-7]
     evidence:
       - Change tickets with approvals
       - Baseline configuration and drift report
 
+  - name: Asset Management
+    policy: Operations Security
+    owner: IT Asset Management
+    cadence: quarterly
+    description: >-
+      The inventory of systems, software and data stores the programme
+      answers for, who owns each, and the reconciliation that keeps it
+      true. CM-8 moved here from Change & Configuration Management.
+    nist_controls: [CM-8]
+    evidence:
+      - System and software inventory with owners
+      - Inventory reconciliation record
+
   - name: Secure Development Lifecycle
+    policy: Secure Development
     owner: Application Security
     cadence: continuous
     nist_controls: [SA-3, SA-4, SA-5, SA-8, SA-10, SA-11, SA-15, SA-16, SA-17,
@@ -176,6 +278,7 @@ topics:
       - Dependency and supply-chain scan output
 
   - name: Backup, Restore & Contingency
+    policy: Continuity
     owner: Site Reliability Engineering
     cadence: quarterly
     nist_controls: [CP-1, CP-2, CP-3, CP-4, CP-6, CP-7, CP-8, CP-9, CP-10]
@@ -184,6 +287,7 @@ topics:
       - Backup job success report
 
   - name: Media Handling & Disposal
+    policy: Data Protection & Privacy
     owner: IT Asset Management
     cadence: continuous
     nist_controls: [MP-1, MP-2, MP-3, MP-4, MP-5, MP-6]
@@ -192,6 +296,7 @@ topics:
       - Media transport log
 
   - name: Physical & Environmental Security
+    policy: Physical
     owner: Facilities / Physical Security
     cadence: quarterly
     nist_controls: [PE-1, PE-2, PE-3, PE-4, PE-5, PE-6, PE-8, PE-9, PE-10, PE-11,
@@ -201,6 +306,7 @@ topics:
       - Data centre environmental monitoring records
 
   - name: System Maintenance
+    policy: Operations Security
     owner: Infrastructure Security
     cadence: continuous
     nist_controls: [MA-1, MA-2, MA-3, MA-4, MA-5, MA-6]
@@ -209,6 +315,7 @@ topics:
       - Remote maintenance session logs
 
   - name: Business Associate & Vendor Risk
+    policy: Third-Party Risk
     owner: Third-Party Risk
     cadence: annual
     description: >-
@@ -220,23 +327,99 @@ topics:
       - Vendor security review records
 
   - name: Workforce Security Training
+    policy: People
     owner: Security Awareness
     cadence: annual
-    nist_controls: [AT-1, AT-2, AT-3, AT-4, PS-2, PS-3, PS-9]
+    nist_controls: [AT-1, AT-2, AT-3, AT-4]
     evidence:
       - Training completion report
       - Phishing simulation results
 
-  - name: Data Protection & Privacy
+  - name: Personnel Security
+    policy: People
+    owner: People Operations
+    cadence: annual
+    description: >-
+      Position risk, screening, access agreements, transfers, termination
+      and the sanctions process. On when an 800-53, FedRAMP or GovRAMP
+      baseline applies, since PS-1 is a policy an assessor asks for;
+      otherwise `init` folds it into Workforce Security Training.
+    nist_controls: [PS-1, PS-2, PS-3, PS-4, PS-5, PS-6, PS-7, PS-8, PS-9]
+    evidence:
+      - Screening and access-agreement records
+      - Termination and transfer checklists
+
+  - name: Data Protection
+    policy: Data Protection & Privacy
     owner: Data Governance
     cadence: annual
     description: >-
-      Data classification, minimization, retention and the privacy controls
-      that sit alongside the HIPAA Privacy Rule.
-    nist_controls: [PT-1, PT-2, PT-3, AC-21, SI-12, SI-18, PM-5]
+      Data classification, minimization and retention. Privacy (the PT
+      family) is its own topic once the organisation handles personal data.
+    nist_controls: [AC-21, SI-12, SI-18, PM-5]
     evidence:
       - Data inventory and classification register
       - Retention schedule
+
+  - name: Privacy
+    policy: Data Protection & Privacy
+    owner: Privacy
+    cadence: annual
+    description: >-
+      Processing authority, consent, notice and the privacy controls of
+      800-53's PT family. On when `personal_data` is `pii` or `phi`;
+      the HIPAA topics below add themselves for `phi`.
+    nist_controls: [PT-1, PT-2, PT-3]
+    evidence:
+      - Record of processing and its authority
+      - Privacy notices and consent records
+
+  # ---- HIPAA Privacy and Breach Notification (45 CFR 164, subparts E and D) -
+  #
+  # These two anchor the rules' own sections, not 800-53 controls: NIST
+  # publishes no mapping from either rule to 800-53, so a topic owns a
+  # requirement of theirs by anchoring its section (`164.502` claims every
+  # paragraph under it, as AC-2 claims AC-2(1)). Paragraphs a court vacated
+  # (Purl v. HHS) are left out of `/coverage`'s count and named under it.
+  # The Security Rule stays with the 800-53 topics above, through its own
+  # crosswalk. Delete both if you handle no PHI: `/coverage` then leaves
+  # both rules out of your numbers and says so under the report.
+
+  # On when `programme.personal_data` is `phi` (22, part 3): `init` includes it then.
+  - name: HIPAA Privacy Practices
+    policy: Data Protection & Privacy
+    owner: Privacy
+    cadence: annual
+    description: >-
+      Uses and disclosures of PHI, the notice of privacy practices, and
+      individuals' rights of access, amendment and accounting (45 CFR 164.500
+      to 164.535).
+    # Quoted: unquoted, YAML reads 164.510 as the number 164.51. 164.509 and
+    # 164.535 are left out: a court vacated both whole sections (Purl v. HHS).
+    nist_controls:
+      [
+        "164.500", "164.502", "164.504", "164.506", "164.508", "164.510", "164.512",
+        "164.514", "164.520", "164.522", "164.524", "164.526", "164.528", "164.530",
+        "164.532", "164.534",
+      ]
+    evidence:
+      - Notice of privacy practices and its distribution record
+      - Log of access, amendment and accounting requests, with response dates
+
+  # On when `programme.personal_data` is `phi` (22, part 3): `init` includes it then.
+  - name: Breach Notification
+    policy: Data Protection & Privacy
+    owner: Privacy
+    cadence: annual
+    description: >-
+      Deciding whether an incident is a breach of unsecured PHI, and
+      notifying individuals, the media and the Secretary (45 CFR 164.400 to
+      164.414). Incident Response contributes the incident record and the
+      timeline; Privacy owns the determination and the notices.
+    nist_controls: ["164.400", "164.404", "164.406", "164.408", "164.410", "164.412", "164.414"]
+    evidence:
+      - Breach risk assessments, with the determination and who made it
+      - Notice log: individuals, media, Secretary, with dates
 
   # ---- AI risk management (NIST AI RMF 1.0) --------------------------------
   #
@@ -269,6 +452,7 @@ topics:
   # decision (#188).
 
   - name: AI Governance & Accountability
+    policy: AI Governance
     owner: AI Risk / GRC
     cadence: annual
     description: >-
@@ -283,6 +467,7 @@ topics:
       - AI risk training completion records
 
   - name: AI System Inventory & Impact Assessment
+    policy: AI Governance
     owner: AI Risk / Product
     cadence: per-system, reviewed quarterly
     description: >-
@@ -297,6 +482,7 @@ topics:
       - Benchmark results against stated capability claims
 
   - name: AI Evaluation & Measurement
+    policy: AI Governance
     owner: AI / ML Engineering
     cadence: per-release
     description: >-
@@ -311,6 +497,7 @@ topics:
       - Record of measurement methods reviewed or retired
 
   - name: AI Risk Treatment & Incident Response
+    policy: AI Governance
     owner: AI Risk / Incident Response
     cadence: continuous
     description: >-
@@ -324,7 +511,57 @@ topics:
       - AI incident runbook
       - Post-incident reviews for AI-caused incidents
 
+  # ---- Roles (22 part 3). Not anchored here: `init` gives them what they own. --
+  #
+  # An organisation that USES AI (`ai: user`) runs three AI topics, not five:
+  # the Inventory and Impact, Evaluation and Risk Treatment topics fold into
+  # this one, and it takes their categories. One that BUILDS AI (`ai: builder`)
+  # has the five above, and up to two more that take one category each from
+  # the topic it came out of (Map 4 from Third-Party AI, Map 5 from Inventory
+  # and Impact), while the ceiling of 25 has room.
+  - name: Responsible Use of AI
+    policy: AI Governance
+    owner: AI Risk / GRC
+    cadence: annual
+    description: >-
+      How staff may use AI tools and systems the organisation did not build:
+      what is approved, what may not be put into them, and who answers when
+      it goes wrong. Feeds the acceptable use policy. For an organisation
+      that uses AI rather than builds it, this topic also holds the AI RMF's
+      Map, Measure and Manage categories.
+    nist_controls: []
+    evidence:
+      - Register of approved AI tools and their permitted uses
+      - Record of exceptions and incidents
+
+  - name: Data for AI Systems
+    policy: AI Governance
+    owner: Data Governance
+    cadence: annual
+    description: >-
+      Provenance, quality and rights for the data AI systems are trained,
+      tuned and grounded on (ISO/IEC 42001 Annex A.7). Anchored at the AI RMF
+      category level: Map 4 comes here from Third-Party AI & Data Supply Chain
+      while this topic is on.
+    nist_controls: []
+    evidence:
+      - Dataset register with provenance and licence
+
+  - name: Transparency to Affected People
+    policy: AI Governance
+    owner: AI Risk / Product
+    cadence: annual
+    description: >-
+      What people affected by an AI system's decisions are told, and how they
+      can contest it (ISO/IEC 42001 Annex A.8). For an organisation whose AI
+      decides about people. Anchored at the category level: Map 5 comes here
+      from AI System Inventory & Impact Assessment while this topic is on.
+    nist_controls: []
+    evidence:
+      - Notices given to affected people, and the contest process
+
   - name: Third-Party AI & Data Supply Chain
+    policy: AI Governance
     owner: Vendor Risk / AI Risk
     cadence: per-vendor, reviewed annually
     description: >-

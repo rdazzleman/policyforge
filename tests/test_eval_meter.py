@@ -114,6 +114,101 @@ def test_a_structured_call_that_raises_is_still_counted():
     assert metered.unpriced == 1
 
 
+def test_a_raised_call_carrying_a_cost_is_counted_as_priced():
+    class PricedException(RuntimeError):
+        def __init__(self, msg, cost):
+            super().__init__(msg)
+            self.cost_usd = cost
+
+    class FailingPriced(Capable):
+        def generate(self, **kwargs):
+            raise PricedException("upstream refused after compute", 0.05)
+
+    metered = _Metered(FailingPriced())
+    with pytest.raises(PricedException):
+        metered.generate(system="s", prompt="p")
+    assert metered.calls == 1
+    assert metered.unpriced == 0
+    assert metered.priced_calls == 1
+    assert metered.cost == pytest.approx(0.05)
+
+
+def test_a_raised_call_carrying_only_its_last_cost_counts_it_and_stays_raised():
+    class LastPricedException(RuntimeError):
+        def __init__(self, msg, cost):
+            super().__init__(msg)
+            self.last_cost_usd = cost
+
+    class FailingLastPriced(Capable):
+        def generate(self, **kwargs):
+            raise LastPricedException("schema failed", 0.07)
+
+    metered = _Metered(FailingLastPriced())
+    with pytest.raises(LastPricedException):
+        metered.generate(system="s", prompt="p")
+    assert metered.calls == 1
+    # The total is still unknown, and the call RAISED: it counts as raised,
+    # never as "returned no price", while its known last attempt counts.
+    assert metered.unpriced == 1
+    assert metered.returned_unpriced == 0
+    assert metered.priced_calls == 0
+    assert metered.cost == pytest.approx(0.07)
+    assert metered.summary() == (
+        "1 model call(s), $0.0700 known + 1 of unknown cost "
+        "(1 raised, billed but unpriced; 0 returned no price)"
+    )
+
+
+class _Billed(RuntimeError):
+    """An exception carrying what was billed, as `ReasoningBudgetExhausted`
+    and a schema reply error do."""
+
+    def __init__(self, cost_usd=None, last_cost_usd=None):
+        super().__init__("billed, then failed")
+        self.cost_usd = cost_usd
+        self.last_cost_usd = last_cost_usd
+
+
+class _Raises(Capable):
+    def __init__(self, exc, provider_class=None):
+        super().__init__()
+        self._exc = exc
+        if provider_class is not None:
+            self._provider_class = provider_class
+
+    def generate(self, **kwargs):
+        raise self._exc
+
+
+def _raise_once(exc, provider_class=None):
+    metered = _Metered(_Raises(exc, provider_class))
+    with pytest.raises(_Billed):
+        metered.generate(system="s", prompt="p")
+    return metered
+
+
+def test_a_raised_call_with_both_costs_counts_its_total_once():
+    """The ledger's order: a known total wins, and the last attempt is part
+    of it, never an addend (`ledger.cost_split`)."""
+    metered = _raise_once(_Billed(cost_usd=0.05, last_cost_usd=0.02))
+    assert metered.cost == pytest.approx(0.05)
+    assert (metered.priced_calls, metered.unpriced, metered.returned_unpriced) == (1, 0, 0)
+
+
+def test_a_local_call_that_raises_without_a_cost_is_free():
+    """As on the returned path: a local model is priced at 0.0 by its
+    boundary class, so its raise is not a call of unknown cost."""
+    metered = _raise_once(_Billed(), provider_class="local")
+    assert (metered.priced_calls, metered.unpriced, metered.returned_unpriced) == (1, 0, 0)
+    assert metered.cost == 0.0
+
+
+def test_a_raised_call_with_no_cost_stays_raised_and_unpriced():
+    metered = _raise_once(_Billed())
+    assert (metered.priced_calls, metered.unpriced, metered.returned_unpriced) == (0, 1, 0)
+    assert metered.cost == 0.0 and not metered.priced
+
+
 def test_routing_under_the_meter_takes_the_schema_path():
     """The end-to-end symptom: routing through the harness must use the
     same call production does."""

@@ -26,7 +26,7 @@ Two rules hold across all of them:
   section it came from, and "the documents do not say" is an expected
   outcome rather than a failure. A confidently wrong answer about what your
   own policy requires is worse than no answer, because somebody acts on it.
-* **Zardoz never writes.** It can draft a `policyforge edit-topic` command
-  for you to run, but the publish path with its gates is not in this
+* **Zardoz never writes.** Changing a page is `policyforge edit-topic`'s
+  job, run by a person, and the publish path with its gates is not in this
   package's import graph.
 """

@@ -130,8 +130,8 @@ measured on 2026-09-24; yours depends on which 800-53 controls your
 topics own. **The mapping is NIST's own.** NIST's OSCAL file for rev 3,
 the one this catalog is built from, links every one of the 97
 requirements to the 800-53 controls it was derived from: 157 links, 114
-to controls and 43 to enhancements. Since #259 this catalog carries them,
-so 800-171 reaches 800-53 through NIST's mapping. Before #259 it did not
+to controls and 43 to enhancements. This catalog carries them,
+so 800-171 reaches 800-53 through NIST's mapping. An earlier version did not
 read them, and this line read `0 of 97`. **Do not hand-map them with
 `crosswalk seed`**: the source asserts the mapping, and a hand-made one
 would compete with it.
@@ -158,7 +158,7 @@ template produces both; only literals do.
 ## Crosswalk
 
 **Every requirement carries NIST's own mapping to 800-53** as its
-`source_crosswalk` (#259): 97 of 97 requirements, 157 links. Each rev 3
+`source_crosswalk`: 97 of 97 requirements, 157 links. Each rev 3
 requirement links to its 800-53 source controls as `rel="reference"`
 entries in the catalog's back-matter, **in the same list as its
 literature references** (`IR 7874`, `SP 800-63-3`, `FIPS 199`: 199 of

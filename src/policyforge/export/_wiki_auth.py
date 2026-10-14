@@ -42,10 +42,12 @@ def wiki_git_env(token_env: str = "") -> dict[str, str]:  # nosec B107 - a var n
 
     token = os.environ.get(token_env)
     if not token:
-        raise RuntimeError(
-            f"Environment variable {token_env} is not set. Export a GitHub token "
-            f"with repository access before publishing to a wiki, e.g.:\n"
-            f"  export {token_env}=..."
+        from policyforge.config import MissingCredentialError
+
+        raise MissingCredentialError(
+            f"Environment variable {token_env} is not set, so there is no GitHub token "
+            f"for the wiki. Export one with repository access (`export {token_env}=...`), "
+            "or drop `publish.github_wiki.token_env` to use your git credential helper."
         )
 
     basic = base64.b64encode(f"x-access-token:{token}".encode()).decode()

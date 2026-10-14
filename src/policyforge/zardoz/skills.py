@@ -191,9 +191,13 @@ def _coverage(state, args: list[str]) -> str:
             + ", ".join(sorted({c.framework for c in controls}))
             + "."
         )
+    from policyforge.frameworks.registry import config_or_defaults
+    from policyforge.frameworks.vacated import declared_vacated
+
     report = analyze_coverage(
         state.topics,
         nist,
+        vacated=declared_vacated(config_or_defaults("vacated paragraphs were read")),
         scope=scope_label(nist, baseline),
         other_controls=other,
         crosswalk=build_crosswalk(controls),
@@ -1494,13 +1498,13 @@ def _route_also(question: str, first: str, provider) -> str:
 
     Its own call, after routing, for the reason argument filling is its own
     call: putting more into the routing schema measurably made routing worse
-    (MEASUREMENTS.md epoch 14), and routing is the decision that has to stay
+    (docs/measurements/epochs.md epoch 14), and routing is the decision that has to stay
     right. This call cannot change the first analysis — it only chooses among
     the others.
 
     Measured before it was built, on the routing suite's single-intent
     questions and on compound ones: no false second analysis in 52 runs across
-    two models, and every compound question fully routed (MEASUREMENTS.md
+    two models, and every compound question fully routed (docs/measurements/epochs.md
     epoch 15). Failure of any kind is `none` — one report where two were
     asked for is a follow-up question, not a wrong answer.
     """

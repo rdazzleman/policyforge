@@ -52,6 +52,7 @@ def _privileged_jobs() -> dict[str, dict]:
     return jobs
 
 
+@pytest.mark.github_config
 def test_the_population_contains_the_jobs_this_was_written_for():
     """Extent, not just consistency: if the derivation stops finding the two
     publish jobs, every test below passes over an empty set."""
@@ -138,6 +139,7 @@ CASES = [
 ]
 
 
+@pytest.mark.github_config
 @pytest.mark.parametrize("job", sorted(_privileged_jobs()))
 @pytest.mark.parametrize(("case", "context", "runs"), CASES, ids=[c[0] for c in CASES])
 def test_a_privileged_job_runs_only_where_it_should(job, case, context, runs):
@@ -146,6 +148,7 @@ def test_a_privileged_job_runs_only_where_it_should(job, case, context, runs):
     assert evaluate(fence, context) is runs, f"{job}: {case}"
 
 
+@pytest.mark.github_config
 def test_no_workflow_names_its_own_owner():
     """The class, not the instance: a comparison of the repository or its
     owner against a literal is exactly what broke, and nothing redirects it."""

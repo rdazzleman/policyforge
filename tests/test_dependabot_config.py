@@ -10,7 +10,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
 import yaml
+
+#: Reads GitHub's config, which the public snapshot leaves out (161).
+pytestmark = pytest.mark.github_config
 
 CONFIG = Path(__file__).resolve().parent.parent / ".github" / "dependabot.yml"
 

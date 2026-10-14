@@ -1,0 +1,39 @@
+# The suite's `slow` set: every test one serial run measured at
+# 6 s or more (5 s and 20% margin), with its time.
+# Written by scripts/slow_tests.py;
+# don't edit by hand, re-run it from a new measurement.
+# Source: a serial run (-p no:xdist, through heavy) at 99dbdaeb on Windows, Python 3.14, 2026-10-06 02:26-02:50 CDT: 6119 passed in 1420.6 s
+ 48.11  tests/test_fresh_corpus.py::test_comparing_the_committed_corpus_with_itself_finds_nothing_new
+ 47.65  tests/test_publish_public.py::test_the_next_release_fast_forwards_from_the_public_tip
+ 24.24  tests/test_publish_public.py::test_no_token_in_any_argument
+ 23.36  tests/test_deontic_conservation.py::test_the_comparison_can_fail
+ 22.94  tests/test_publish_public.py::test_the_public_tag_is_a_new_object_naming_p_not_the_private_tag
+ 20.30  tests/test_publish_public.py::test_an_unwanted_branch_on_github_stops_the_wait_and_is_named
+ 19.85  tests/test_deontic_conservation.py::test_every_reader_matches_the_committed_baseline
+ 17.09  tests/test_publish_public.py::test_a_mirror_that_never_arrives_times_out_loudly
+ 16.51  tests/test_publish_public.py::test_the_tap_carries_the_formula_that_passed_and_the_mirror_carries_the_tap
+ 15.64  tests/test_publish_public.py::test_an_archive_github_serves_that_is_not_p_is_not_recorded
+ 14.56  tests/test_publish_public.py::test_the_flow_waits_for_approval_then_publishes_p_and_its_tag
+ 13.54  tests/test_publish_public.py::test_a_public_main_that_moved_is_never_forced
+ 12.08  tests/test_publish_public.py::test_every_read_of_either_github_repo_is_signed_out
+ 11.76  tests/test_publish_public.py::test_a_tap_mirror_that_never_arrives_times_out_loudly
+ 10.44  tests/test_publish_public.py::test_a_tap_that_moved_is_never_forced
+  9.78  tests/test_publish_public.py::test_an_approval_for_another_version_does_not_approve
+  9.72  tests/test_publish_public.py::test_a_release_check_that_fails_fails_the_publish
+  8.96  tests/test_litellm_map.py::test_no_route_downloads_the_price_table[a re-send's price]
+  8.19  tests/test_publish_public.py::test_an_archive_github_re_encoded_after_the_proof_is_not_installed
+  8.13  tests/test_publish_public.py::test_only_the_users_approval_of_this_exact_p_releases_the_push[policyforge-80-right]
+  7.42  tests/test_github_wiki.py::test_drift_reports_absent_then_in_sync_then_moved
+  7.29  tests/test_publish_public.py::test_a_quoted_approval_line_does_not_approve
+  6.84  tests/test_litellm_map.py::test_no_route_downloads_the_price_table[building the provider]
+  6.81  tests/test_publish_public.py::test_the_check_line_counts_both_classes
+  6.80  tests/test_git_env_hermetic.py::test_an_exported_git_variable_does_not_change_the_suite[author-name-alone]
+  6.76  tests/test_litellm_map.py::test_no_route_downloads_the_price_table[the CLI, llm-check]
+  6.65  tests/test_git_env_hermetic.py::test_an_exported_git_variable_does_not_change_the_suite[git-dir-elsewhere]
+  6.63  tests/test_git_env_hermetic.py::test_an_exported_git_variable_does_not_change_the_suite[bot-identity]
+  6.57  tests/test_citation_scope.py::test_satisfies_and_the_placeholder_reader_agree_on_every_corpus_tag[6]
+  6.55  tests/test_litellm_map.py::test_no_route_downloads_the_price_table[the provider's error class]
+  6.30  tests/test_publish_public.py::test_one_unwanted_ref_fails_a_mirror_that_is_otherwise_right
+  6.24  tests/test_litellm_map.py::test_no_route_downloads_the_price_table[the output ceiling]
+  6.10  tests/test_litellm_map.py::test_no_route_downloads_the_price_table[the schema capability]
+  6.05  tests/test_publish_public.py::test_only_the_users_approval_of_this_exact_p_releases_the_push[rdazzleman-wrong]

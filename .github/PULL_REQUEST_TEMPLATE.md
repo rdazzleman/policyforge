@@ -13,14 +13,14 @@ such. -->
 
 ## Commitments and boundaries
 
-[docs/commitments.md](../docs/commitments.md) lists behaviour this project
+[The product commitments](https://zardoz.io/trust/commitments/) list behaviour this project
 states as a commitment. Tick anything this PR touches — ticking a box is not
 a problem, it is a request for the right reviewer.
 
 - [ ] Changes what may be sent to which provider (`llm/boundary.py`, `llm/channel.py`)
 - [ ] Changes what the ledger records (`llm/ledger.py`)
 - [ ] Changes a prompt, or how retrieved text is fenced into one
-- [ ] Adds or changes an outbound endpoint (also update `ALLOWED_HOSTS` and, if it receives content, `docs/subprocessors.md`)
+- [ ] Adds or changes an outbound endpoint (also update `ALLOWED_HOSTS` and, if it receives content, the [subprocessors page](https://zardoz.io/trust/subprocessors/))
 - [ ] Reads a new environment variable (also update `DECLARED_ENV_READERS`; add to `_CREDENTIALS` if it is a credential)
 - [ ] Touches the generated-parser gate (`ingest/parser_gate.py`)
 - [ ] Touches how licensed/BYOC content is read or written
@@ -30,6 +30,6 @@ a problem, it is a request for the right reviewer.
 
 ## Documentation
 
-- [ ] Behaviour described in [docs/](../docs/) is still accurate, or was updated in this PR
+- [ ] The [/trust pages](https://zardoz.io/trust/) are still accurate, or 5b has a pointer
 - [ ] Measurements affected by a prompt change have a new epoch rather than edited numbers
 - [ ] No licensed or organization-specific content is included

@@ -1,6 +1,6 @@
 """The two prompt records (#236).
 
-`evals/prompt-fingerprints.json` is the newest MEASUREMENTS.md epoch's
+`evals/prompt-fingerprints.json` is the newest epoch's (`docs/measurements/epochs.md`)
 fingerprints, by the runner's own definition. It lags on purpose, so it is
 held to its SHAPE only: it names the epoch, the PR, the pull ref and the
 commits the epoch ran at.

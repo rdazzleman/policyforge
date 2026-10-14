@@ -45,3 +45,6 @@ build/
 .vscode/
 .idea/
 .pytest_cache/
+
+# pytest-testmon data: per worktree, never committed (#291)
+.testmondata*

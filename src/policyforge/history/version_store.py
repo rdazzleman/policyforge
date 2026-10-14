@@ -29,7 +29,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
-from policyforge.textfile import write_text_lf
+from policyforge.textfile import normalise_newlines, write_text_lf
 
 
 @dataclass
@@ -111,7 +111,18 @@ def record_version(
     `source` should say what produced this version, e.g. "generate" or
     "confluence-import", so history readers can tell a fresh draft apart
     from an imported/reconciled one.
+
+    Line endings are folded to LF before hashing, as `write_text_lf` folds
+    them for the stored copy (`\\r\\n` and a bare `\\r` alike), so a CRLF twin
+    of the latest version is the same version.
+
+    A history written before that holds a hash of the unfolded text, which no
+    folded text matches. Rather than record one more phantom version on its
+    next write, a hash mismatch is checked against the stored latest copy,
+    which was always written with LF and reads back folded: equal text
+    records nothing. The old hash stays in the index as written.
     """
+    content = normalise_newlines(content)
     history = load_history(history_dir, slug)
     new_hash = _content_hash(content)
 
@@ -120,6 +131,8 @@ def record_version(
 
     previous_version = history[-1].version if history else 0
     previous_content = load_version_content(history_dir, slug, previous_version) if history else ""
+    if history and previous_content == content:
+        return None
 
     diff_lines = list(
         difflib.unified_diff(

@@ -185,7 +185,11 @@ def test_etl_hitrust_refuses_to_write_into_the_bundled_directory(tmp_path, monke
     "GovRAMP matrix" unnoticed.
     """
     result = _hitrust(
-        monkeypatch, tmp_path, "--out", "data/frameworks/hitrust/controls.json", "--force"
+        monkeypatch,
+        tmp_path,
+        "--out",
+        "data/frameworks/hitrust/controls.json",
+        "--allow-undeclared-licensed",
     )
 
     assert result.exit_code != 0
@@ -267,8 +271,8 @@ def test_a_licensed_catalog_never_lands_in_the_bundled_directory(
 
     Stated on disk rather than as "the command exits non-zero", because the
     disk is what matters: what must never happen, on any filesystem and with
-    --force, is a licensed catalog appearing inside the directory this
-    project bundles and pushes.
+    --allow-undeclared-licensed (--force until #372), is a licensed catalog
+    appearing inside the directory this project bundles and pushes.
     The rule used to be a substring test on the path's spelling, which the
     filesystem does not share.
     """
@@ -284,7 +288,14 @@ def test_a_licensed_catalog_never_lands_in_the_bundled_directory(
     monkeypatch.chdir(tmp_path / cwd_part if cwd_part else tmp_path)
     result = CliRunner().invoke(
         cli_mod.cli,
-        ["etl-govramp", "--export", str(matrix), "--out", out_spelling, "--force"],
+        [
+            "etl-govramp",
+            "--export",
+            str(matrix),
+            "--out",
+            out_spelling,
+            "--allow-undeclared-licensed",
+        ],
     )
 
     landed = list(bundled.rglob("*.json"))
@@ -325,7 +336,8 @@ def test_another_checkouts_bundled_directory_is_refused_from_outside_it(
 
     monkeypatch.chdir(elsewhere)
     result = CliRunner().invoke(
-        cli_mod.cli, ["etl-govramp", "--export", str(matrix), "--out", str(out), "--force"]
+        cli_mod.cli,
+        ["etl-govramp", "--export", str(matrix), "--out", str(out), "--allow-undeclared-licensed"],
     )
 
     assert result.exit_code != 0, result.output
@@ -352,7 +364,14 @@ def test_a_directory_that_only_resembles_the_bundled_one_is_not_refused(
     monkeypatch.chdir(tmp_path)
     result = CliRunner().invoke(
         cli_mod.cli,
-        ["etl-govramp", "--export", str(matrix), "--out", str(destination), "--force"],
+        [
+            "etl-govramp",
+            "--export",
+            str(matrix),
+            "--out",
+            str(destination),
+            "--allow-undeclared-licensed",
+        ],
     )
 
     assert result.exit_code == 0, result.output
@@ -379,7 +398,14 @@ def test_the_bundled_directory_rule_does_not_refuse_a_write_beside_it(
     monkeypatch.chdir(tmp_path / cwd_part if cwd_part else tmp_path)
     result = CliRunner().invoke(
         cli_mod.cli,
-        ["etl-govramp", "--export", str(matrix), "--out", str(destination), "--force"],
+        [
+            "etl-govramp",
+            "--export",
+            str(matrix),
+            "--out",
+            str(destination),
+            "--allow-undeclared-licensed",
+        ],
     )
 
     # The bundled-directory rule never fires on a write beside it, from any
@@ -520,7 +546,13 @@ def test_generate_standard_drafts_document_from_synthesis(tmp_path, monkeypatch)
 
     assert result.exit_code == 0
     assert "Acme Corp" in fake.calls[0]["prompt"]
-    assert out_path.read_text(encoding="utf-8").startswith("# Authenticator Management Standard")
+    # The document opens with its own frontmatter now (#384): the tier at
+    # least, from `--tier`. The draft follows it.
+    import frontmatter
+
+    post = frontmatter.loads(out_path.read_text(encoding="utf-8"))
+    assert post.metadata["tier"] == "standard"
+    assert post.content.lstrip().startswith("# Authenticator Management Standard")
 
     from policyforge.history.version_store import load_history
 
@@ -528,6 +560,41 @@ def test_generate_standard_drafts_document_from_synthesis(tmp_path, monkeypatch)
     assert len(history) == 1
     assert history[0].version == 1
     assert history[0].source == "generate"
+
+
+def test_generate_procedure_requires_standard(tmp_path, monkeypatch):
+    """The Procedure half of the tier rule (#191, CR-35): `--tier procedure`
+    without `--standard` is refused before any model call, by name, and
+    writes nothing. Its own test, so a mutation that lets a Procedure through
+    without its Standard is named by this test and not by the Policy one."""
+    import policyforge.cli as cli_mod
+
+    synthesis_path = tmp_path / "authenticator-mgmt.md"
+    synthesis_path.write_text("- Authenticators must be managed. [NIST IA-5]\n", encoding="utf-8")
+    fake = FakeProvider(text="# Authenticator Management Procedure\n\n1. Rotate keys.\n")
+    monkeypatch.setattr(cli_mod, "load_config", lambda: {"org": {"name": "Acme Corp"}})
+    monkeypatch.setattr(cli_mod, "get_provider", lambda config: fake)
+    out_path = tmp_path / "procedures" / "authenticator-mgmt.md"
+
+    result = CliRunner().invoke(
+        cli_mod.cli,
+        [
+            "generate",
+            "--tier",
+            "procedure",
+            "--synthesis",
+            str(synthesis_path),
+            "--out",
+            str(out_path),
+            "--history-dir",
+            str(tmp_path / "history"),
+        ],
+    )
+
+    assert result.exit_code == 2, result.output
+    assert "--standard is required when --tier procedure" in result.output
+    assert fake.calls == [], "refused before the model is asked"
+    assert not out_path.exists()
 
 
 def test_generate_policy_requires_standard_and_references_its_title(tmp_path, monkeypatch):
@@ -567,6 +634,7 @@ def test_generate_policy_requires_standard_and_references_its_title(tmp_path, mo
         ],
     )
     assert missing_standard.exit_code != 0
+    assert "--standard is required" in missing_standard.output
 
     result = CliRunner().invoke(
         cli_mod.cli,
@@ -587,7 +655,13 @@ def test_generate_policy_requires_standard_and_references_its_title(tmp_path, mo
 
     assert result.exit_code == 0
     assert "Authenticator Management Standard" in fake.calls[0]["prompt"]
-    assert out_path.read_text(encoding="utf-8").startswith("# Authenticator Management Policy")
+    # The document opens with its own frontmatter now (#384): the tier at
+    # least, from `--tier`. The draft follows it.
+    import frontmatter
+
+    post = frontmatter.loads(out_path.read_text(encoding="utf-8"))
+    assert post.metadata["tier"] == "policy"
+    assert post.content.lstrip().startswith("# Authenticator Management Policy")
 
 
 def test_generate_parser_writes_generated_module(tmp_path, monkeypatch):
@@ -779,6 +853,17 @@ def test_the_trial_reports_what_it_found_and_nothing_is_promoted_unasked(tmp_pat
     assert candidate.exists()
     assert not target.exists()
     assert "--promote" in result.output
+
+
+@pytest.mark.parametrize("extra", [(), ("--promote",)], ids=["kept", "promoted"])
+def test_a_parser_that_passed_both_checks_is_told_to_be_reviewed(tmp_path, monkeypatch, extra):
+    """The checks' limit is said where the decision is made, promoted or not
+    (80's ruling on CR-30): passing them is not the same as safe."""
+    result, _, _ = _generate(monkeypatch, tmp_path, _READS_THE_SAMPLE, *extra)
+
+    assert result.exit_code == 0, result.output
+    assert "catch known-dangerous shapes, not every one" in result.output
+    assert "reviews it before it is committed" in result.output
 
 
 def test_promote_installs_a_parser_that_passed_both_checks(tmp_path, monkeypatch):
@@ -1378,3 +1463,293 @@ def test_ssp_builds_the_workbook_from_licensed_controls_without_narratives(tmp_p
     assert result.exit_code == 0, result.output
     assert out_path.exists()
     assert fake.calls == []
+
+
+def test_topics_example_coverage_command_parses():
+    """#259: the 'Check your work' command in config/topics.example.yaml must parse cleanly."""
+    import re
+    from pathlib import Path
+
+    import click
+    import pytest
+
+    from policyforge.cli import cli
+
+    registry_path = Path(__file__).parent.parent / "config" / "topics.example.yaml"
+    content = registry_path.read_text(encoding="utf-8")
+
+    match = re.search(r"#\s+policyforge (coverage[^\n]*)", content)
+    assert match, "Command not found in example registry"
+
+    # We use shlex to parse the arguments like a shell would
+    import shlex
+
+    args = shlex.split(match.group(1))
+    if "--topics" not in args:
+        args.extend(["--topics", "config/topics.example.yaml"])
+
+    try:
+        # Run through the real Click command, standalone_mode=False, so a
+        # usage error raises rather than exiting (#259's test).
+        cli(args, standalone_mode=False)
+    except click.UsageError as e:
+        pytest.fail(f"Command printed in topics.example.yaml is invalid: {e}")
+    except SystemExit:
+        # If it parsed successfully and executed but exited with 0 (or some other status),
+        # we don't care about the execution result, just that it didn't fail parsing.
+        # Actually, `coverage` without valid files might fail execution. The requirement
+        # just said "can't parse goes red".
+        pass
+
+
+def test_missing_config_yaml_exits_2_without_traceback(monkeypatch, tmp_path):
+    from click.testing import CliRunner
+
+    import policyforge.cli as cli_mod
+
+    # Force resolve_config_path to point to a non-existent file
+    monkeypatch.setenv("POLICYFORGE_CONFIG", str(tmp_path / "nonexistent.yaml"))
+
+    # llm-check
+    result = CliRunner().invoke(cli_mod.cli, ["llm-check"])
+    assert result.exit_code == 2
+    assert "nonexistent.yaml not found" in result.output
+    assert "Traceback" not in result.output
+    assert result.output.count("\n") <= 4
+
+    dummy = tmp_path / "dummy.md"
+    dummy.write_text("# Dummy Title\n", encoding="utf-8")
+    result2 = CliRunner().invoke(
+        cli_mod.cli,
+        [
+            "generate",
+            "--tier",
+            "policy",
+            "--synthesis",
+            str(dummy),
+            "--standard",
+            str(dummy),
+            "--history-dir",
+            str(tmp_path),
+        ],
+    )
+    assert result2.exit_code == 2
+    assert "nonexistent.yaml not found" in result2.output
+
+
+def test_unrelated_exception_still_produces_traceback(monkeypatch):
+    import pytest
+    from click.testing import CliRunner
+
+    import policyforge.cli as cli_mod
+
+    monkeypatch.setattr(
+        cli_mod, "load_config", lambda: {"llm": {"provider": "anthropic", "model": "m"}}
+    )
+
+    def crash(*args, **kwargs):
+        raise RuntimeError("Something else went wrong")
+
+    monkeypatch.setattr(cli_mod, "get_provider", crash)
+    with pytest.raises(RuntimeError, match="Something else went wrong"):
+        CliRunner().invoke(cli_mod.cli, ["llm-check"], catch_exceptions=False)
+
+
+# export-confluence sends the body, not the frontmatter (#390)
+
+_GENERATED_BODY = "# Access Control Standard\n\nReviews happen quarterly.\n"
+_GENERATED = (
+    "---\ntopic: Access Control\nowner: IAM Engineering\ntier: standard\n"
+    "generated_by:\n  models:\n    - fake-writer\n  calls: 1\n---\n\n" + _GENERATED_BODY
+)
+
+
+def _export(tmp_path, text, *extra):
+    from policyforge.cli import cli
+
+    doc_path = tmp_path / "access-control-standard.md"
+    doc_path.write_text(text, encoding="utf-8")
+    return CliRunner().invoke(
+        cli,
+        [
+            "export-confluence",
+            "--doc",
+            str(doc_path),
+            "--space",
+            "SEC",
+            "--title",
+            "Access Control Standard",
+            "--host",
+            "https://example.atlassian.net/wiki",
+            *extra,
+        ],
+    )
+
+
+def test_export_confluence_converts_the_body_not_the_frontmatter(tmp_path):
+    """The frontmatter used to be converted with the rest: a `---` rule, then
+    `generated_by` and the other keys as a heading above the title."""
+    result = _export(tmp_path, _GENERATED, "--dry-run")
+
+    assert result.exit_code == 0, result.output
+    assert "generated_by" not in result.output
+    assert "fake-writer" not in result.output
+    assert "<hr" not in result.output
+    assert "<h2" not in result.output
+    assert result.output.lstrip().startswith("<h1>Access Control Standard</h1>")
+
+
+def test_export_confluence_sends_the_same_body_with_or_without_frontmatter(tmp_path):
+    """The body is unchanged: the same document with its frontmatter removed
+    by hand converts to exactly the same storage format."""
+    with_frontmatter = _export(tmp_path, _GENERATED, "--dry-run")
+    without = _export(tmp_path, _GENERATED_BODY, "--dry-run")
+
+    assert with_frontmatter.exit_code == 0 and without.exit_code == 0
+    assert with_frontmatter.output == without.output
+
+
+def test_export_confluence_publishes_the_body_only(tmp_path, monkeypatch):
+    """The live path, not only the dry run: what reaches the exporter."""
+    sent: list[str] = []
+
+    def _export_to_confluence(markdown_text, **kwargs):
+        sent.append(markdown_text)
+        return "https://example.atlassian.net/wiki/page"
+
+    monkeypatch.setattr(
+        "policyforge.export.confluence_exporter.export_to_confluence", _export_to_confluence
+    )
+
+    result = _export(tmp_path, _GENERATED)
+
+    assert result.exit_code == 0, result.output
+    assert sent == [_GENERATED_BODY.strip()]
+
+
+def test_export_confluence_sends_what_publish_sends(tmp_path, monkeypatch):
+    """Same file, same body: `publish` reads it through the content tree, and
+    export-confluence through the same reader."""
+    from policyforge.content.tree import load_content_tree
+
+    sent: list[str] = []
+    monkeypatch.setattr(
+        "policyforge.export.confluence_exporter.export_to_confluence",
+        lambda markdown_text, **kwargs: sent.append(markdown_text) or "https://x/page",
+    )
+    _export(tmp_path, _GENERATED)
+    [doc], _problems = load_content_tree(tmp_path)
+
+    assert sent == [doc.body]
+
+
+def test_export_confluence_refuses_frontmatter_it_cannot_read(tmp_path, monkeypatch):
+    """Broken YAML used to be sent as text. It is named, and nothing is sent."""
+    sent: list[str] = []
+    monkeypatch.setattr(
+        "policyforge.export.confluence_exporter.export_to_confluence",
+        lambda markdown_text, **kwargs: sent.append(markdown_text) or "https://x/page",
+    )
+
+    result = _export(tmp_path, "---\ntopic: [unclosed\n---\n\n" + _GENERATED_BODY)
+
+    assert result.exit_code == 1
+    assert "access-control-standard.md" in result.output
+    assert "frontmatter is not valid YAML" in result.output
+    assert sent == []
+
+
+# A file opening with a horizontal rule, and another later, reads as a
+# frontmatter block that isn't a mapping. The text between was dropped
+# silently (9b, PR 405); it is refused by name instead.
+_RULE_FIRST = {
+    "a paragraph between rules": "---\n\nIntro text.\n\n---\n\nMore.\n",
+    "a single line between rules": "---\nsingle line\n---\nTail\n",
+    "a list between rules": "---\n- a\n- b\n---\nTail\n",
+    "a heading between rules": "---\n# Access Control Standard\n---\n\nBody.\n",
+}
+
+
+@pytest.mark.parametrize("name", list(_RULE_FIRST))
+def test_export_confluence_refuses_text_it_would_read_as_frontmatter(name, tmp_path, monkeypatch):
+    sent: list[str] = []
+    monkeypatch.setattr(
+        "policyforge.export.confluence_exporter.export_to_confluence",
+        lambda markdown_text, **kwargs: sent.append(markdown_text) or "https://x/page",
+    )
+
+    result = _export(tmp_path, _RULE_FIRST[name])
+
+    assert result.exit_code == 1, name
+    assert "isn't `key: value` pairs" in result.output
+    assert sent == []
+
+
+@pytest.mark.parametrize("name", list(_RULE_FIRST))
+def test_check_reports_text_it_would_read_as_frontmatter(name, tmp_path):
+    """The shared reader refuses it, so `check` (and so `publish`) names the
+    file instead of loading it without that text."""
+    from policyforge.content.check import check_tree
+
+    standards = tmp_path / "standards"
+    standards.mkdir()
+    (standards / "rule-first.md").write_text(_RULE_FIRST[name], encoding="utf-8")
+
+    report = check_tree(tmp_path)
+
+    assert any("isn't `key: value` pairs" in e.message for e in report.errors), name
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "---\n---\n# Access Control Standard\n\nBody.\n",
+        "---\ntitle: Access Control Standard\n---\n\n# Access Control Standard\n\nBody.\n",
+        "***\n\nIntro text.\n\n***\n\nMore.\n",
+    ],
+)
+def test_frontmatter_that_is_empty_or_a_mapping_and_a_starred_rule_still_read(text, tmp_path):
+    from policyforge.content.tree import parse_document
+
+    doc = parse_document(text, path=tmp_path / "a.md", root=tmp_path)
+
+    assert "Body." in doc.body or "More." in doc.body
+    if text.startswith("***"):
+        assert "Intro text." in doc.body
+
+
+_UNCLOSED = "---\n\n# Access Control Standard\n\nBody with no closing fence.\n"
+
+
+def test_an_unclosed_fence_is_body_and_the_tree_still_loads(tmp_path):
+    """A file opening with `---` and no closing one has no frontmatter, as
+    python-frontmatter reads it. The guard's split raised on it, and one such
+    file took down every command that loads the tree (9b, PR 405)."""
+    from policyforge.content.tree import load_content_tree
+
+    standards = tmp_path / "standards"
+    standards.mkdir()
+    (standards / "unclosed.md").write_text(_UNCLOSED, encoding="utf-8")
+    (standards / "good.md").write_text(
+        "---\ntitle: Good Standard\n---\n\n# Good Standard\n\nFine.\n", encoding="utf-8"
+    )
+
+    documents, problems = load_content_tree(tmp_path)
+
+    assert problems == []
+    by_name = {doc.path.name: doc for doc in documents}
+    assert set(by_name) == {"unclosed.md", "good.md"}
+    assert "Body with no closing fence." in by_name["unclosed.md"].body
+
+
+def test_an_unclosed_fence_goes_through_check_and_export(tmp_path):
+    from policyforge.content.check import check_tree
+
+    standards = tmp_path / "standards"
+    standards.mkdir()
+    (standards / "unclosed.md").write_text(_UNCLOSED, encoding="utf-8")
+
+    check_tree(tmp_path)
+    result = _export(tmp_path, _UNCLOSED, "--dry-run")
+    assert result.exit_code == 0, result.output
+    assert "Body with no closing fence." in result.output

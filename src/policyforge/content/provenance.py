@@ -56,7 +56,9 @@ def stamp_document(text: str, stamp: dict) -> str:
     import frontmatter
     import mdformat
 
-    parsed = frontmatter.loads(text)
+    from policyforge.textfile import loads_frontmatter
+
+    parsed = loads_frontmatter(text)
     parsed.metadata[GENERATED_BY] = dict(stamp)
     # `dumps` emits frontmatter followed by the body, and appends no trailing
     # newline; the caller's text kept its own.
@@ -78,6 +80,83 @@ def read_generated_by(metadata: dict) -> dict:
     return dict(block) if isinstance(block, dict) else {}
 
 
+# -- has this document been edited since `generate` wrote it? (#385) ----------
+#
+# `generate` writes into the content tree people edit and pull into, so it
+# must not replace a person's work. It records a hash of the BODY it wrote in
+# the stamp, and the next run compares the file's body to it (80's ruling).
+# Frontmatter is not part of the hash: it is rebuilt from the synthesis and
+# the registry on every run, and `publish` and `pull` write into it.
+
+#: The key in `generated_by` holding the hash of the body `generate` wrote.
+BODY_SHA256 = "body_sha256"
+
+#: What `edit_state` says about a document.
+UNEDITED = "unedited"  # its body is what `generate` wrote
+EDITED = "edited"  # it has a recorded hash and the body no longer matches
+NO_HASH = "no-hash"  # stamped, but written before the hash was recorded
+UNSTAMPED = "unstamped"  # no `generated_by` block at all, or unparseable
+
+
+def body_digest(text: str) -> str:
+    """The sha256 of `text`'s body: the document without its frontmatter and
+    with surrounding whitespace dropped, so an editor's newline at the end of
+    the file is not an edit. `frontmatter` folds CRLF to LF itself (measured,
+    and held by a test), so a checkout with Windows line endings hashes the
+    same."""
+    import hashlib
+
+    from policyforge.textfile import loads_frontmatter
+
+    body = loads_frontmatter(text).content
+    return hashlib.sha256(body.strip().encode("utf-8")).hexdigest()
+
+
+def stamp_with_body_hash(text: str, stamp: dict) -> str:
+    """`stamp_document`, with the hash of the body it ends up with recorded
+    under `generated_by.body_sha256`.
+
+    The hash is taken from the stored text, after the markdown normalisation
+    `stamp_document` applies, and checked again after the stamp that holds it
+    is written: a hash of a body the file doesn't have would call every
+    untouched document edited.
+    """
+    stamped = stamp_document(text, stamp)
+    for _ in range(3):
+        digest = body_digest(stamped)
+        again = stamp_document(stamped, {**stamp, BODY_SHA256: digest})
+        if body_digest(again) == digest:
+            return again
+        stamped = again
+    raise ValueError("the document body kept changing under markdown normalisation")
+
+
+def edit_state(text: str) -> str:
+    """Whether the document `text` is what `generate` last wrote there.
+
+    `UNEDITED` only when it carries a recorded hash and its body matches.
+    Everything else is a reason to ask before overwriting: a body that no
+    longer matches, a stamp from before the hash was recorded, and a document
+    `generate` never stamped (hand-written, imported, or unparseable).
+    """
+
+    import yaml
+
+    from policyforge.textfile import loads_frontmatter
+
+    try:
+        metadata = loads_frontmatter(text).metadata
+    except (ValueError, yaml.YAMLError):
+        return UNSTAMPED
+    block = metadata.get(GENERATED_BY)
+    if not isinstance(block, dict):
+        return UNSTAMPED
+    recorded = block.get(BODY_SHA256)
+    if not isinstance(recorded, str) or not recorded:
+        return NO_HASH
+    return UNEDITED if recorded == body_digest(text) else EDITED
+
+
 # -- an import from Confluence (#197) ------------------------------------------
 #
 # A page pulled back from Confluence comes home as the page body only, and
@@ -89,7 +168,9 @@ def read_generated_by(metadata: dict) -> dict:
 # ruling on #197 fixes what that record may say:
 #
 #   - `content_class` is CARRIED from a local predecessor, never invented.
-#     With no predecessor it is left out, and the command says so.
+#     With no predecessor it is left out, and the command says so. A
+#     predecessor's value that isn't a known class is carried as `licensed`
+#     (#336): read the most guarded way, not dropped.
 #   - `imported_from` records the import. There is no `generated_by` block:
 #     the page may have been edited by a person, and `models` on that text
 #     would be a false attribution.
@@ -107,32 +188,99 @@ CONTENT_CLASS = "content_class"
 def declared_content_class(metadata: dict) -> str:
     """The content class a document states, normalised, or "".
 
-    The same two places the wiki exporter reads, in the same order: a
-    top-level `content_class`, then `generated_by.content_class`. Stripped
-    and lower-cased, because frontmatter is hand-editable.
+    The same two places the wiki exporter reads: a top-level
+    `content_class` and `generated_by.content_class`. Stripped and
+    lower-cased, because frontmatter is hand-editable.
+
+    **When both say something, the most guarded wins** (#339, 80's ruling).
+    The top-level value used to win alone whenever present, so a hand-added
+    `content_class: public-domain` lowered a licensed `generated_by` stamp in
+    the Zardoz corpus, while the wiki exporter refused if either said
+    licensed: two readers, one document, two answers. Ranked by
+    `stamped_class`, so an unreadable value counts as licensed here too (and
+    is the text returned, for `unknown_stamp` to name). On a tie the
+    top-level text is returned.
+
+    **Presence is `is not None`, not truthiness** (#336, 9b on PR 338). YAML
+    reads `content_class: no` as False, `0` as 0 and `{}` as an empty mapping,
+    and `or ""` turned each into "" (no class), while `stamped_class` reads
+    the same value as present and licensed: the corpus and the wiki
+    exporter disagreed about one stamp. A present value is kept as its text
+    (`false`, `0`, `{}`), so `stamped_class` reads it as licensed and
+    `unknown_stamp` names it. Only None, or an empty or whitespace string,
+    is absent.
     """
-    top = str((metadata or {}).get(CONTENT_CLASS) or "").strip().lower()
-    if top:
-        return top
-    return str(read_generated_by(metadata or {}).get(CONTENT_CLASS) or "").strip().lower()
+
+    def _said(value) -> str:
+        return "" if value is None else str(value).strip().lower()
+
+    from policyforge.llm.boundary import CONTENT_CLASSES
+
+    said = [
+        text
+        for text in (
+            _said((metadata or {}).get(CONTENT_CLASS)),
+            _said(read_generated_by(metadata or {}).get(CONTENT_CLASS)),
+        )
+        if text
+    ]
+    if not said:
+        return ""
+    # `max` keeps the first of equals, so a tie returns the top-level text.
+    return max(said, key=lambda text: CONTENT_CLASSES.index(stamped_class(text)))
+
+
+def stamped_class(value) -> str | None:
+    """A stamped `content_class` as the boundary reads it (#336, 80's ruling).
+
+    - **Absent** (missing, None, empty): None. Nothing was said, and every
+      reader treats that as the organization's own, as before.
+    - **A known class**, trimmed and casefolded: that class.
+    - **Anything else** (`licenced`, `bogus`): `licensed`. A present value
+      says the author meant to classify the document, and we can't tell how,
+      so it's read the most guarded way. It used to be dropped as "no
+      class", which let a misspelt licensed stamp through to a hosted model.
+
+    The stamp-field twin of 320's `ingest.schema.is_licensed`, the envelope
+    rule, and the same idea: fail closed on what can't be read. It isn't
+    that function because the vocabularies differ: an envelope has two
+    outcomes (public, or licensed), and a stamp has three known classes, so
+    routing a stamp through `is_licensed` would read every `organization-
+    internal` stamp as licensed. `unknown_stamp` gives the raw value for the
+    one warning a reader prints per document.
+    """
+    from policyforge.llm.boundary import CONTENT_CLASSES, LICENSED
+
+    text = str(value if value is not None else "").strip().casefold()
+    if not text:
+        return None
+    return text if text in CONTENT_CLASSES else LICENSED
+
+
+def unknown_stamp(value) -> str:
+    """`value`, stripped, when it is stamped but not a known class; else ""
+    (#336). What a reader names in its warning."""
+    from policyforge.llm.boundary import CONTENT_CLASSES
+
+    text = str(value if value is not None else "").strip()
+    return text if text and text.casefold() not in CONTENT_CLASSES else ""
 
 
 def carried_content_class(classes) -> str | None:
-    """The class an import carries forward from what its predecessors said.
+    """The most guarded class among what predecessors or inputs stamped.
 
     **The most guarded wins.** If the generated file says `licensed` and an
     older history record says `org-internal`, the import is `licensed`: a
     disagreement between predecessors must never be what lowers the
-    ceiling. A value that is not a known class is not carried. Carrying it
-    would not help, because the exporter treats an unknown class as not
-    licensed, and substituting a known class for it would be inventing one.
-    Returns None when nothing known was said. The caller reports that as
-    unknown and does not guess.
+    ceiling. Each value is read by `stamped_class`, so **a value that isn't
+    a known class counts as `licensed`** (#336). This used to drop it, on the
+    reasoning that the wiki exporter read an unknown class as not licensed;
+    both now fail closed. Returns None only when nothing was stamped at all.
     """
     from policyforge.llm.boundary import CONTENT_CLASSES
 
-    known = {str(c or "").strip().lower() for c in classes} & set(CONTENT_CLASSES)
-    return max(known, key=CONTENT_CLASSES.index) if known else None
+    read = {stamped_class(c) for c in classes} - {None}
+    return max(read, key=CONTENT_CLASSES.index) if read else None
 
 
 def import_metadata(
@@ -252,3 +400,129 @@ def attribution_summary(documents) -> str:
             f"Confluence has none, and nothing is inferred from absence.",
         ]
     return "\n".join(lines)
+
+
+# -- regenerating over a document that already has frontmatter (#404) ----------
+#
+# `generate` used to build a document's frontmatter from scratch, so a hand-set
+# `owner:`, a key somebody added, and the page version `pull` records inside
+# `confluence:` were all replaced without a word (1d, on PR 402; the body hash
+# there covers the body only). 80's ruling: merge, as `pull` does. `generate`
+# updates the keys it owns and keeps every other one.
+
+#: The keys `generate` writes from its own inputs: the stamp, and the topic
+#: and tier from the synthesis and the command line.
+OWNED_KEYS = frozenset({GENERATED_BY, "topic", "tier", "policy"})
+
+#: What belongs to one topic's page and owner, and so is not carried onto a
+#: document of another topic.
+TOPIC_BOUND_KEYS = ("confluence", "targets", "owner")
+
+
+def existing_metadata(text: str | None) -> dict:
+    """The frontmatter of the document already at the target, or {} where
+    there is none or it doesn't parse (which the overwrite guard has already
+    asked about)."""
+    if not text:
+        return {}
+
+    import yaml
+
+    from policyforge.textfile import loads_frontmatter
+
+    try:
+        return dict(loads_frontmatter(text).metadata)
+    except (ValueError, yaml.YAMLError):
+        return {}
+
+
+def merge_frontmatter(
+    draft: dict,
+    existing: dict,
+    *,
+    tier: str,
+    topic: str,
+    owner: str,
+    binding: dict | None,
+    policy: str | None = None,
+) -> tuple[dict, str]:
+    """The frontmatter a regenerated document is written with, and the one
+    line to print when a hand-set owner was kept over the synthesis's.
+
+    - `generated_by` is not here: the caller stamps it, always.
+    - `topic` and `tier` are `generate`'s: set from the synthesis and the
+      command line (an absent topic leaves the document's own).
+    - **every other key of the existing document is kept**, `owner` and the
+      `confluence:` binding and its pulled `version` included, **when it is
+      the same document**: if its `topic` names another topic than the one
+      being written, what belongs to that topic's page (`confluence`,
+      `targets`, `owner`) is not carried, and the line says so. A binding
+      carried across would have `publish` write this topic's text over the
+      other topic's page (9b, on PR 407).
+    - `owner`: the synthesis's value fills a document with none. One already
+      there that differs is kept, and named in the line, because a person set
+      it (or `pull` carried it) and the synthesis can't tell which.
+    - `confluence:` from the registry fills what the document's own block
+      lacks, wherever the document spells it (`confluence:` or
+      `targets: {confluence: ...}`, as `pull` does); it never overwrites a
+      value the document has.
+    """
+    metadata = dict(draft)
+    carried = {key: value for key, value in existing.items() if key not in OWNED_KEYS}
+    note = ""
+    earlier = existing.get("topic")
+    if (
+        topic
+        and earlier not in (None, "")
+        and str(earlier).strip().lower() != topic.strip().lower()
+    ):
+        left = [key for key in TOPIC_BOUND_KEYS if key in carried]
+        for key in left:
+            del carried[key]
+        existing = {k: v for k, v in existing.items() if k not in TOPIC_BOUND_KEYS}
+        if left:
+            note = (
+                f"The document was about {str(earlier)!r}, not {topic!r}, so its "
+                f"{', '.join(left)} {'was' if len(left) == 1 else 'were'} not carried over."
+            )
+    metadata.update(carried)
+    metadata["tier"] = tier
+    # The parent Policy of a Standard is `generate`'s, from the synthesis (22,
+    # part 2): a regenerated Standard is written with the registry's current
+    # one, or with none. `None` is a tier that has no parent Policy to write.
+    if policy:
+        metadata["policy"] = policy
+    elif policy is None and "policy" in existing:
+        metadata["policy"] = existing["policy"]
+    if topic:
+        metadata["topic"] = topic
+    elif "topic" in existing:
+        metadata["topic"] = existing["topic"]
+
+    kept = existing.get("owner")
+    if kept not in (None, ""):
+        metadata["owner"] = kept
+        if owner and str(kept) != owner:
+            note = (  # one line: the topic note above has dropped `owner` already
+                f"Kept the owner already in the document, {str(kept)!r}; the synthesis "
+                f"names {owner!r}. Remove the `owner:` line to take the synthesis's."
+            )
+    elif owner:
+        metadata["owner"] = owner
+
+    if binding:
+        current = metadata.get("confluence")
+        targets = metadata.get("targets")
+        under_targets = isinstance(targets, dict) and isinstance(targets.get("confluence"), dict)
+        if current is None and under_targets:
+            # The document spells its binding under `targets:`: that block is
+            # the one filled, so it doesn't end up with two for one store.
+            metadata["targets"] = {
+                **targets,
+                "confluence": {**binding, **targets["confluence"]},
+            }
+        elif current is None:
+            metadata["confluence"] = dict(binding)
+        elif isinstance(current, dict):
+            metadata["confluence"] = {**binding, **current}
+    return metadata, note

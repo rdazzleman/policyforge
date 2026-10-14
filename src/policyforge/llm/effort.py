@@ -20,7 +20,7 @@ terms is `LOW`. A call that writes a document somebody will be audited
 against is `HIGH`.
 
 Nothing here lowers a budget. The budgets were measured, and changing them
-is a measured change: `MEASUREMENTS.md` epoch 2 records what happened when
+is a measured change: `docs/measurements/epochs.md` epoch 2 records what happened when
 they were set too tight, and the same evidence is owed before setting them
 back down. Effort goes in first, and the budgets come down when a sweep says
 they can.

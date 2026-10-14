@@ -94,6 +94,11 @@ class LivePage:
     #: What the round trip would flatten — macro names, or a page format —
     #: empty when the page can be published over safely.
     unsupported: tuple[str, ...] = ()
+    #: The latest version is a live edit this tool made (`edit-confluence`,
+    #: `edit-topic --host`): approved, but not in the repository. Not
+    #: `written_by_tool`, so it is refused like a hand edit; this only lets
+    #: the report say what it was (#383).
+    live_edit: bool = False
 
 
 class Publisher(ABC):
@@ -239,11 +244,12 @@ def moved_reason(publisher: Publisher, doc, live: LivePage) -> str:
         if recorded is not None
         else "the repository has no pulled version on record"
     )
-    by = (
-        f"last written by {live.author}"
-        if live.author
-        else "last written by someone other than this tool"
-    )
+    if live.live_edit:
+        by = "last written by a live edit (edit-confluence or edit-topic --host)"
+    elif live.author:
+        by = f"last written by {live.author}"
+    else:
+        by = "last written by someone other than this tool"
     return f"the live page is at version {live.version}, {by}, and {known}"
 
 
@@ -303,9 +309,13 @@ class PublishReport:
     def format_report(self) -> str:
         verb = "Would publish" if self.dry_run else "Published"
         lines = [self.header] if self.header else []
+        unchanged = len(self._of(UNCHANGED))
         lines.append(
             f"{verb} {len(self.published)} page(s): "
             f"{len(self._of(CREATED))} new, {len(self._of(UPDATED))} updated"
+            # Said only when there are some: a page left alone because it
+            # already matched (#391), not written, so not in the count before.
+            + (f"; {unchanged} already matched the page and were left alone" if unchanged else "")
         )
         for result in self.published:
             mark = "+" if result.action == CREATED else "~"
@@ -429,6 +439,23 @@ def publish_documents(
                     )
                 )
                 continue
+
+        # A page that already says what the file says is left alone (#391).
+        # Writing it anyway made a new version of every page on every run, and
+        # the next `pull` rewrote every file's version number. Not for a page
+        # being adopted: that write is what stamps it, and an unstamped page
+        # would read as a hand edit the first time the file changed.
+        if live is not None and reason != ADOPTED and publisher.same_content(doc, live):
+            report.results.append(
+                PublishResult(
+                    path=doc.relative_path,
+                    space=location,
+                    title=title,
+                    action=UNCHANGED,
+                    url=live.url,
+                )
+            )
+            continue
 
         action = UPDATED if live is not None else CREATED
         url = ""
@@ -590,6 +617,14 @@ def drift_documents(publisher: Publisher, documents, *, only: str = "") -> Drift
 WRITTEN = "written"
 UNCHANGED = "unchanged"
 REFUSED = "refused"
+#: The reason `pull` gives a page the converter can't take for its depth
+#: (#252): markdownify recurses once per nested element.
+TOO_DEEP = "page is nested too deeply to convert"
+#: Each kind of refusal `pull` makes, and so each kind the report advises on.
+REFUSAL_KINDS = ("macros", "not-found", "too-deep", "bound-twice", "slug-taken")
+#: Said beside a page that no file is bound to, so it was placed by its
+#: title (#387): the one case where `pull` chose the file itself.
+PLACED_BY_TITLE = "no file is bound to this page, so it is placed by its title"
 
 
 @dataclass
@@ -598,6 +633,16 @@ class PullResult:
     path: str
     action: str
     reason: str = ""
+    #: Which advice the report gives a refusal: one of `REFUSAL_KINDS`.
+    kind: str = ""
+    #: Said beside a written page, e.g. `PLACED_BY_TITLE`.
+    note: str = ""
+
+    def __post_init__(self) -> None:
+        # A refusal of no known kind would get no advice at all, and look
+        # complete doing it, so it fails here rather than in the report.
+        if self.action == REFUSED and self.kind not in REFUSAL_KINDS:
+            raise ValueError(f"refusal of unknown kind {self.kind!r}: {self.title}")
 
 
 @dataclass
@@ -617,17 +662,41 @@ class PullReport:
         unchanged = self._of(UNCHANGED)
         verb = "Would write" if self.dry_run else "Wrote"
         lines = [f"{verb} {len(written)} file(s); {len(unchanged)} already matched the tree."]
-        lines += [f"  {r.title} -> {r.path}" for r in written]
+        lines += [f"  {r.title} -> {r.path}" + (f" ({r.note})" if r.note else "") for r in written]
 
         if self.refused:
             lines += ["", f"Refused {len(self.refused)}:"]
             lines += [f"  {r.title}: {r.reason}" for r in self.refused]
-            lines += [
-                "",
-                "These pages read fine but would be damaged by a publish, so they are "
-                "not brought into the tree. Rewrite them in Confluence without those "
-                "macros, or keep them wiki-only.",
-            ]
+            if any(r.kind == "macros" for r in self.refused):
+                lines += [
+                    "",
+                    "These pages read fine but would be damaged by a publish, so they are "
+                    "not brought into the tree. Rewrite them in Confluence without those "
+                    "macros, or keep them wiki-only.",
+                ]
+            if any(r.kind == "too-deep" for r in self.refused):
+                lines += [
+                    "",
+                    "Pages nested too deeply to convert are not brought into the tree. "
+                    "Flatten their nesting in Confluence, or keep them wiki-only.",
+                ]
+            if any(r.kind == "not-found" for r in self.refused):
+                lines += [
+                    "",
+                    "Check the page title and space.",
+                ]
+            if any(r.kind == "bound-twice" for r in self.refused):
+                lines += [
+                    "",
+                    "Several files claim one page, so pull can't tell which to update. "
+                    "Remove the binding from all but one (`check` reports the same pair).",
+                ]
+            if any(r.kind == "slug-taken" for r in self.refused):
+                lines += [
+                    "",
+                    "The file this page would be placed in belongs to another page. Bind a "
+                    "file to this page in its frontmatter, and pull writes into that one.",
+                ]
 
         if self.dry_run and written:
             lines += ["", "Nothing was written. Pass --apply to write these files."]
@@ -647,20 +716,40 @@ def pull_documents(
 
     Takes an explicit list rather than discovering pages itself, so the
     caller decides what is in scope. `target_path(root, tier=, slug=)` says
-    where a pulled page lands; it is passed in because the layout of the
-    tree is the tree's business, not the store's.
+    where a pulled page lands when no file is bound to it; it is passed in
+    because the layout of the tree is the tree's business, not the store's.
+
+    **A page goes into the file bound to it** (#387): the one whose
+    frontmatter names it as its target in this store, whatever that file
+    is called. Placing it by its title instead put a second copy beside a
+    differently named original, which `check` then rejected. Only a page
+    no file is bound to is placed by title, and the report says so.
+
+    **Frontmatter is merged, not replaced.** The binding (page id, version)
+    is updated and every other key the file carries is kept: `topic`,
+    `owner`, `generated_by`, its own `title` and `tier`. Replacing it
+    dropped them on the first pull.
     """
-    from policyforge.content.tree import render_document
+    from policyforge.content.tree import load_content_tree, render_document
+    from policyforge.export.confluence_importer import PageTooDeepError
     from policyforge.textfile import normalise_newlines, write_text_lf
     from policyforge.zardoz.corpus import slugify
 
     report = PullReport(dry_run=dry_run)
+    documents, _problems = load_content_tree(root)
+    by_path = {doc.path.resolve(): doc for doc in documents}
+    # The tree above is read once, so a file this run writes is not in it.
+    # Each destination the run writes or plans is claimed here for its page,
+    # so a later page in the same run can't take the file over either.
+    claimed: dict[Path, tuple[str, str]] = {}
 
     for location, title, tier in pages:
         try:
             live = publisher.fetch(location, title)
         except LookupError as exc:
-            report.results.append(PullResult(title=title, path="", action=REFUSED, reason=str(exc)))
+            report.results.append(
+                PullResult(title=title, path="", action=REFUSED, reason=str(exc), kind="not-found")
+            )
             continue
 
         if live.unsupported and not allow_unsupported:
@@ -673,19 +762,77 @@ def pull_documents(
                         "uses macros that would not survive a publish "
                         f"({', '.join(live.unsupported)})"
                     ),
+                    kind="macros",
                 )
             )
             continue
 
-        body = publisher.as_markdown(live)
-        slug = slugify(title) or slugify(live.page_id)
-        destination = target_path(root, tier=tier, slug=slug)
+        try:
+            body = publisher.as_markdown(live)
+        except PageTooDeepError:
+            report.results.append(
+                PullResult(
+                    title=title,
+                    path="",
+                    action=REFUSED,
+                    reason=TOO_DEEP,
+                    kind="too-deep",
+                )
+            )
+            continue
+        bound = [doc for doc in documents if _names_page(publisher, doc, location, title)]
+        if len(bound) > 1:
+            report.results.append(
+                PullResult(
+                    title=title,
+                    path="",
+                    action=REFUSED,
+                    reason="bound to it: " + ", ".join(doc.relative_path for doc in bound),
+                    kind="bound-twice",
+                )
+            )
+            continue
+
+        note = ""
+        if bound:
+            destination = bound[0].path
+            existing = bound[0]
+        else:
+            slug = slugify(title) or slugify(live.page_id)
+            destination = target_path(root, tier=tier, slug=slug)
+            existing = by_path.get(destination.resolve())
+            # Placing by title must not take over a file another page owns:
+            # merging this page's binding into it would rebind that file and
+            # replace the other page's text (two pages with one title in two
+            # spaces share a slug). The owner is the page the file is bound
+            # to on disk, or the page this run has already put there.
+            owner, when = claimed.get(destination.resolve()), " earlier in this run"
+            if owner is None and existing is not None and publisher.location(existing):
+                owner, when = (publisher.location(existing), publisher.title(existing)), ""
+            if owner is not None and owner != (location, title):
+                report.results.append(
+                    PullResult(
+                        title=title,
+                        path="",
+                        action=REFUSED,
+                        reason=(
+                            f"{destination.relative_to(root).as_posix()} is bound to another "
+                            f"page ({owner[0]}: {owner[1]}){when}"
+                        ),
+                        kind="slug-taken",
+                    )
+                )
+                continue
+            note = PLACED_BY_TITLE
+        claimed[destination.resolve()] = (location, title)
 
         # The binding travels too: it is how `publish` knows a person has
         # already pulled and reviewed this edit, and so may overwrite the
         # page without destroying anything unseen.
         rendered = render_document(
-            {"title": title, "tier": tier, **publisher.binding(location, title, live)},
+            _pulled_frontmatter(
+                existing, title=title, tier=tier, binding=publisher.binding(location, title, live)
+            ),
             body,
         )
         relative = destination.relative_to(root).as_posix()
@@ -704,9 +851,63 @@ def pull_documents(
             # A pulled page lands in a tracked tree, where the gate runs
             # mdformat over it: LF, whatever platform pulled it.
             write_text_lf(destination, rendered)
-        report.results.append(PullResult(title=title, path=relative, action=WRITTEN))
+        report.results.append(PullResult(title=title, path=relative, action=WRITTEN, note=note))
 
     return report
+
+
+def _names_page(publisher: Publisher, doc, location: str, title: str) -> bool:
+    """Whether `doc` is bound, in this publisher's store, to the page at
+    `location` titled `title`.
+
+    The same reading `publish` makes of the file, so a page is pulled into
+    exactly the file that would be published over it. A document that
+    declares no target in this store is bound to nothing. An empty
+    `location` is a wiki page whose repository comes from configuration,
+    which every wiki-bound file shares, so the title alone decides.
+    """
+    doc_location = publisher.location(doc)
+    if not doc_location:
+        return False
+    return publisher.title(doc) == title and (not location or doc_location == location)
+
+
+def _merge(into: dict, new: dict) -> dict:
+    """`into` updated from `new`, nested mappings merged rather than replaced."""
+    merged = dict(into)
+    for key, value in new.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = _merge(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def _pulled_frontmatter(existing, *, title: str, tier: str, binding: dict) -> dict:
+    """The frontmatter a pulled page is written with.
+
+    A new file gets the title, the tier and the binding. A file already in
+    the tree keeps all of its own keys, and only the binding is updated. Its
+    title is its own, from its frontmatter or its heading, and may differ
+    from the page's on purpose. Its tier is the one its frontmatter or its
+    directory gives, which a pull's tier (the registry's, or `--tier`'s
+    default) must not overrule; a file with neither gets the pull's.
+    """
+    if existing is None:
+        return {"title": title, "tier": tier, **binding}
+
+    metadata = dict(existing.metadata)
+    if not existing.tier:
+        metadata["tier"] = tier
+    # A file that spells its binding under `targets:` is updated there, so
+    # it doesn't end up with two blocks for one store.
+    for key, value in binding.items():
+        targets = metadata.get("targets")
+        if key not in metadata and isinstance(targets, dict) and isinstance(targets.get(key), dict):
+            metadata = _merge(metadata, {"targets": {key: value}})
+        else:
+            metadata = _merge(metadata, {key: value})
+    return metadata
 
 
 # --------------------------------------------------------------------------
@@ -715,15 +916,25 @@ def pull_documents(
 
 
 def _storage_key(storage: str) -> str:
-    """Storage markup with the whitespace between tags collapsed.
+    """Storage markup with the whitespace between tags collapsed, and the
+    bookkeeping a server adds to each macro taken off.
 
     Confluence may reflow storage format when it saves a page, and a
     difference in the gaps between elements is not an edit anybody made.
-    Nothing else is normalized: any other difference counts as an edit,
-    which is the direction to be wrong in.
+    It also stamps every macro with `ac:schema-version` and an `ac:macro-id`
+    (the page shape b5 found on PR 431), which the exporter never writes, so
+    a page with a macro never read as the same and was written again on every
+    run (449). Nothing else is normalized: any other difference counts as an
+    edit, which is the direction to be wrong in.
     """
     import re
 
+    # Only inside a macro's opening tag, so text that spells one stays.
+    storage = re.sub(
+        r"<ac:structured-macro\b[^>]*>",
+        lambda tag: re.sub(r'\s+ac:(?:schema-version|macro-id)="[^"]*"', "", tag.group(0)),
+        storage,
+    )
     return re.sub(r">\s+<", "><", storage.strip())
 
 
@@ -765,13 +976,15 @@ class ConfluencePublisher(Publisher):
     def live_page(page) -> LivePage:
         """A `ConfluencePage` in the publisher's terms."""
         from policyforge.edit.apply import detect_unsupported_macros
-        from policyforge.export.confluence_exporter import PUBLISH_MARKER
+        from policyforge.export.confluence_exporter import LIVE_EDIT_MARKER, PUBLISH_MARKER
 
+        # `getattr`: a `ConfluencePage` always carries the message, but
+        # `pull` never needed it, and the fakes its tests hand in do not.
+        message = getattr(page, "version_message", "") or ""
         return LivePage(
             version=str(page.version),
-            # `getattr`: a `ConfluencePage` always carries the message, but
-            # `pull` never needed it, and the fakes its tests hand in do not.
-            written_by_tool=PUBLISH_MARKER in (getattr(page, "version_message", "") or ""),
+            written_by_tool=PUBLISH_MARKER in message,
+            live_edit=LIVE_EDIT_MARKER in message,
             url=page.webui_url,
             body=page.storage_body or "",
             page_id=page.id,
@@ -788,10 +1001,12 @@ class ConfluencePublisher(Publisher):
 
     def as_markdown(self, live: LivePage) -> str:
         from policyforge.export import confluence_search
-        from policyforge.export.confluence_importer import confluence_to_markdown, extract_user_ids
+        from policyforge.export.confluence_importer import convert_page, extract_user_ids
 
         names = confluence_search.fetch_user_names(extract_user_ids(live.body), host=self.host)
-        return confluence_to_markdown(live.body, user_names=names)
+        # A LivePage has no title; pull's refusal names the page by its own
+        # title and the TOO_DEEP reason, so the id only has to identify it.
+        return convert_page(live.body, title=live.page_id or live.url, user_names=names)
 
     def binding(self, location: str, title: str, live: LivePage) -> dict:
         return {

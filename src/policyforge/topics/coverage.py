@@ -39,6 +39,7 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import dataclass, field
 
+from policyforge.frameworks.vacated import VACATED
 from policyforge.ingest.schema import MATURITY, Control, Requirement
 from policyforge.mapping.crosswalk import normalize_framework
 from policyforge.topics.anchoring import parent_of
@@ -302,6 +303,35 @@ def _scoped_requirements(
     return counted, stood_in, scoped_out
 
 
+def scoped_out_levels(
+    controls: list[Control], scopes: dict[str, LevelScope]
+) -> dict[tuple[str, str], str]:
+    """`{(framework key, requirement id): why}` for every level requirement
+    the declared `scopes` leave out, by the rule `coverage` counts with.
+
+    For synthesis (#416): a level statement coverage does not count is not
+    sent to the model either, so the two never disagree about which levels
+    apply.
+
+    A scope key naming no loaded per-level framework is NOT refused here
+    (9b on PR 419): `synthesize` loads the catalogs a run lists, a subset by
+    design, so a key for a catalog left out of this run is not a typo.
+    `coverage` counts every loaded catalog and still refuses one."""
+    by_framework: dict[str, list[Control]] = {}
+    for control in controls:
+        if control.requirements:
+            by_framework.setdefault(normalize_framework(control.framework), []).append(control)
+    out: dict[tuple[str, str], str] = {}
+    for framework, scoped in by_framework.items():
+        if framework not in scopes:
+            continue
+        _, _, scoped_out = _scoped_requirements(scoped, framework, scopes[framework])
+        for kind, pairs in scoped_out.items():
+            for requirement_id, why in pairs:
+                out[(framework, requirement_id)] = f"{kind}: {why}"
+    return out
+
+
 def _describe(scope: LevelScope) -> str:
     maturity = (
         f"maturity Level {scope.maturity} (the highest statement at or below it, per reference)"
@@ -310,6 +340,15 @@ def _describe(scope: LevelScope) -> str:
     )
     overlays = f"overlays {', '.join(scope.overlays)}" if scope.overlays else "no overlays"
     return f"{maturity}; {overlays}"
+
+
+@dataclass
+class SetAside:
+    """Paragraphs a court vacated, left out of the denominator and named."""
+
+    #: The judgment's short name, `Purl v. HHS`.
+    judgment: str
+    ids: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -334,6 +373,19 @@ class CoverageReport:
     #: topic name -> number of in-scope requirements it claims
     by_topic: dict[str, int] = field(default_factory=dict)
     framework_coverage: list[FrameworkCoverage] = field(default_factory=list)
+    #: framework name -> the paragraphs a court vacated that are NOT in
+    #: `in_scope` (#420, 80's ruling): text that binds nobody can't be work
+    #: left undone. Read from the same `frameworks.vacated` manifests
+    #: generation reads, so the two can't disagree about what is dropped.
+    vacated: dict[str, SetAside] = field(default_factory=dict)
+    #: topic name -> anchors that are text a court vacated. Named as that, not
+    #: as "out of scope", which would give the reason no scope excludes them
+    #: (1d on #420).
+    vacated_anchors: dict[str, list[str]] = field(default_factory=dict)
+    #: Policy name -> the topics that name it, where no `policies:` entry
+    #: declares it (22, part 2; 80's 5919). Empty when no declared set was
+    #: given, which is "not asked", not "all declared".
+    undeclared_policies: dict[str, list[str]] = field(default_factory=dict)
 
     @property
     def is_clean(self) -> bool:
@@ -501,6 +553,8 @@ def analyze_coverage(
     relationships: dict[tuple[str, str, str], str] | None = None,
     crosswalk_sources: dict[str, str] | None = None,
     scopes: dict[str, LevelScope] | None = None,
+    vacated: dict | None = None,
+    declared_policies: set[str] | None = None,
 ) -> CoverageReport:
     """Compute ownership coverage of `nist_controls` by `topics`.
 
@@ -518,11 +572,38 @@ def analyze_coverage(
     framework key (`registry.declared_crosswalk_sources`, #408). It is read
     from the manifests on disk only when a `source-untyped` framework is in
     the report, so no other report pays for it.
+
+    `vacated` is `frameworks.vacated.declared_vacated`: paragraphs a court
+    vacated (`VACATED`, text the rule added) are not requirements, so they
+    leave the denominator and are named in `report.vacated` (80's ruling on
+    #420, as on #409 for generation). A `vacated-revision` paragraph stays:
+    the pre-rule wording binds again. **The caller passes it** -- reading
+    the manifests costs about 0.15 s, which no report that has none should
+    pay -- and `None` sets nothing aside. Both callers in `src` pass it, and
+    `tests/test_hipaa_anchoring.py` fails a call that does not.
     """
     report = CoverageReport(scope=scope)
-    report.in_scope = _in_scope_ids(nist_controls)
+    if declared_policies is not None:
+        known = {name.strip().casefold() for name in declared_policies}
+        for topic in topics:
+            if topic.policy and topic.policy.strip().casefold() not in known:
+                report.undeclared_policies.setdefault(topic.policy, []).append(topic.name)
+    report.in_scope = []
+    for requirement_id, framework in _in_scope_pairs(nist_controls):
+        status = (vacated or {}).get(normalize_framework(framework))
+        if status is not None and status.status(requirement_id) == VACATED:
+            aside = report.vacated.setdefault(
+                framework, SetAside(status.judgment.split(",")[0].strip())
+            )
+            aside.ids.append(requirement_id)
+        else:
+            report.in_scope.append(requirement_id)
     in_scope = set(report.in_scope)
-    catalog_ids = set(_in_scope_ids(catalog)) if catalog is not None else set(in_scope)
+    set_aside = {i for aside in report.vacated.values() for i in aside.ids}
+    # With no catalog given, the ids of `nist_controls` themselves, vacated
+    # ones included: an anchor a court vacated is named as that, not as an
+    # id the catalog doesn't have (a caller that passes no `catalog`).
+    catalog_ids = set(_in_scope_ids(catalog if catalog is not None else nist_controls))
 
     direct: dict[str, list[str]] = {}
     inherited: dict[str, list[str]] = {}
@@ -538,7 +619,10 @@ def analyze_coverage(
                 report.unknown_anchors.setdefault(topic.name, []).append(anchor)
                 continue
             if anchor not in in_scope:
-                report.out_of_scope_anchors.setdefault(topic.name, []).append(anchor)
+                if anchor in set_aside:
+                    report.vacated_anchors.setdefault(topic.name, []).append(anchor)
+                else:
+                    report.out_of_scope_anchors.setdefault(topic.name, []).append(anchor)
                 continue
             direct.setdefault(anchor, []).append(topic.name)
             # Anchoring a control also claims its enhancements.
@@ -735,12 +819,30 @@ def format_report(report: CoverageReport, *, show_all: bool = False) -> str:
     lines.append(f"  Owned           {owned}" + (f" ({owned / total:.0%})" if total else ""))
     lines.append(f"  Orphaned        {len(report.orphaned)}")
     lines.append(f"  Contested       {len(report.contested)}")
+    for framework, aside in sorted(report.vacated.items()):
+        lines.append(
+            f"  {len(aside.ids)} vacated paragraph(s) of {framework} not counted ({aside.judgment})"
+        )
 
     if report.unknown_anchors:
         lines.append("")
         lines.append("Unknown anchors — these control IDs don't exist in the catalog")
         lines.append("-" * 60)
         for topic, anchors in sorted(report.unknown_anchors.items()):
+            lines.append(f"  {topic}: {', '.join(anchors)}")
+
+    if report.undeclared_policies:
+        lines.append("")
+        lines.append("Policies a topic names but `policies:` doesn't declare")
+        lines.append("-" * 60)
+        for policy, topics in sorted(report.undeclared_policies.items()):
+            lines.append(f"  {policy}: {', '.join(topics)}")
+
+    if report.vacated_anchors:
+        lines.append("")
+        lines.append("Anchored but vacated — a court vacated this text; it binds nobody")
+        lines.append("-" * 60)
+        for topic, anchors in sorted(report.vacated_anchors.items()):
             lines.append(f"  {topic}: {', '.join(anchors)}")
 
     if report.out_of_scope_anchors:

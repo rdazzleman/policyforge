@@ -14,9 +14,9 @@ this package, implementing the same `list[Control]` output contract.
 NIST 800-53 control text is a US federal government work — public domain —
 so this loader is safe to point at bundled, redistributable output. It is
 NOT safe to point at a vault's HITRUST or GovRAMP control notes and bundle
-the result; see README's licensing table. That's why `parse_control_file`
-strips non-public-domain crosswalk columns by default (see
-`keep_crosswalk_columns`).
+the result; see the README's "What you may redistribute" table. That's why
+`parse_control_file` strips non-public-domain crosswalk columns by default
+(see `keep_crosswalk_columns`).
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-import frontmatter
+from policyforge.textfile import loads_frontmatter
 
 from .schema import Control, ControlEnhancement
 
@@ -112,7 +112,7 @@ def parse_control_file(
     *,
     keep_crosswalk_columns: set[str] = _DEFAULT_SAFE_CROSSWALK_COLUMNS,
 ) -> Control:
-    post = frontmatter.load(path)
+    post = loads_frontmatter(Path(path).read_text(encoding="utf-8"))
     fm = post.metadata
     body = post.content
     sections = _sections(body)

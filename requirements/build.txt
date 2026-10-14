@@ -1,0 +1,12 @@
+# The build backend for `pip install --no-deps --no-build-isolation -e .`,
+# hashed (173, CR-14). pyproject.toml's [build-system] asks for
+# setuptools>=77, and build isolation fetched the newest one unhashed in every
+# job that installs the project, while every other package is hashed.
+#
+# Update the pin and both hashes together, from PyPI's own record of the
+# release (https://pypi.org/pypi/setuptools/<version>/json, "digests"), and
+# keep it inside [build-system]'s range. setuptools 84 needs Python >= 3.10,
+# the project's own floor.
+setuptools==84.0.0 \
+    --hash=sha256:51a52592b3b99e102b609654876bd65f19f999935166d1352678931132b0c670 \
+    --hash=sha256:f4695c21257f0d9b537ec2692c941d02ee143b7cc1276941349a546573b2ef73

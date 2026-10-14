@@ -94,6 +94,139 @@ class CheckReport:
         return "\n".join(lines)
 
 
+def _check_policies(
+    documents: list[ContentDocument], registry, registry_path: str
+) -> list[Finding]:
+    """The Policy grouping holds together (22, part 2; 80's 5919).
+
+    - **Error:** a Standard whose `policy:` names no declared Policy. It
+      would publish under a parent nobody described.
+    - **Error:** two Policies the registry sends to one page, as two files
+      are refused for one page above: the second would overwrite the first.
+    - **Warning:** a declared Policy no Standard names (nothing to publish).
+    - **Warning:** a topic with no `policy:`, which keeps today's behaviour
+      (it is its own Policy, named after the topic) and is said to.
+    - **Warning:** a topic that names a Policy and also declares a Policy
+      page of its own. The page belongs on the Policy (80's 5919): topics
+      sharing a Policy would otherwise each claim it. Its page still takes
+      part in the claims above, so two topics, or a topic and a Policy,
+      sending one page is an error.
+
+    `registry` is `topics.registry.Registry`, or None when there is no
+    registry to check against (nothing is reported, since nothing is known).
+    """
+    if registry is None:
+        return []
+    findings: list[Finding] = []
+    declared = {p.name.strip().casefold() for p in registry.policies}
+    named: set[str] = set()
+
+    by_topic = {t.name.strip().casefold(): t for t in registry.topics}
+    for doc in documents:
+        if (doc.tier or "").lower() != "standard":
+            continue
+        parent = str(doc.metadata.get("policy") or "").strip()
+        # A Standard drifts from its topic when the registry moves it, or when
+        # it was generated before it had a parent (ba on PR 439): said, so a
+        # stale "no parent Policy" is not silent.
+        topic = by_topic.get(str(doc.metadata.get("topic") or "").strip().casefold())
+        if topic is not None and topic.policy and parent.casefold() != topic.policy.casefold():
+            says = f"names Policy {parent!r}" if parent else "names no Policy"
+            findings.append(
+                Finding(
+                    doc.relative_path,
+                    f"its `policy:` {says}, but topic {topic.name!r} names {topic.policy!r} "
+                    f"in {registry_path}; regenerate it",
+                    WARNING,
+                )
+            )
+        if not parent:
+            continue
+        named.add(parent.casefold())
+        if parent.casefold() not in declared:
+            findings.append(
+                Finding(
+                    doc.relative_path,
+                    f"its `policy:` names {parent!r}, which {registry_path} doesn't declare "
+                    "under `policies:`",
+                )
+            )
+
+    claims: dict[tuple[str, str, str], str] = {}
+    for policy in registry.policies:
+        for kind in ("confluence", *sorted(k for k in policy.targets if k != "confluence")):
+            page = policy.page(kind)
+            if page is None:
+                continue
+            key = (kind, page[0].lower(), page[1].lower())
+            first = claims.get(key)
+            if first is not None:
+                place = f"{page[0]}/{page[1]!r}" if page[0] else f"{page[1]!r}"
+                findings.append(
+                    Finding(
+                        registry_path,
+                        f"Policy {policy.name!r} publishes to {place}, which {first} "
+                        "already claims — one of them would silently overwrite the other",
+                    )
+                )
+                continue
+            claims[key] = f"Policy {policy.name!r}"
+
+    for topic in registry.topics:
+        for kind in ("confluence", *sorted(k for k in topic.targets if k != "confluence")):
+            pages = dict(topic.pages(kind))
+            title = str(pages.get("policy") or "").strip()
+            if not title:
+                continue
+            block = topic.target(kind)
+            container = str(block.get("space") or block.get("repository") or "").strip()
+            key = (kind, container.lower(), title.lower())
+            first = claims.get(key)
+            place = f"{container}/{title!r}" if container else f"{title!r}"
+            if first is not None:
+                findings.append(
+                    Finding(
+                        registry_path,
+                        f"topic {topic.name!r} publishes its Policy to {place}, which "
+                        f"{first} already claims — one of them would silently overwrite "
+                        "the other",
+                    )
+                )
+            else:
+                claims[key] = f"topic {topic.name!r}"
+            if topic.policy:
+                findings.append(
+                    Finding(
+                        registry_path,
+                        f"topic {topic.name!r} declares a Policy page ({place}) and names "
+                        f"Policy {topic.policy!r}; declare the page on the Policy, under "
+                        "`policies:`, so topics sharing it don't each claim it",
+                        WARNING,
+                    )
+                )
+        if topic.policy:
+            named.add(topic.policy.casefold())
+        else:
+            findings.append(
+                Finding(
+                    registry_path,
+                    f"topic {topic.name!r} names no `policy:`, so it is its own Policy, "
+                    "named after the topic",
+                    WARNING,
+                )
+            )
+    for policy in registry.policies:
+        if policy.name.strip().casefold() not in named:
+            findings.append(
+                Finding(
+                    registry_path,
+                    f"Policy {policy.name!r} is declared but no topic or Standard names it",
+                    WARNING,
+                )
+            )
+    return findings
+
+
 def _check_page_claims(documents: list[ContentDocument]) -> list[Finding]:
     """No two files may publish to the same page.
 
@@ -249,16 +382,29 @@ def _check_citations(documents: list[ContentDocument], synthesis_dir: Path) -> l
     in one and not the other means the traceability an assessor needs was
     dropped somewhere between them, which is a compliance defect rather than
     a formatting one — and it is invisible in a diff of the prose.
+
+    **Compared by citation, not by tag text** (#17). `generate` rewrites a
+    Standard's tags into the confirmed form (`content.sources
+    .normalize_tag`), so `[NIST 800-53 IR-1 | ARC-AMPE IR-1]` arrives as
+    `[NIST IR-1 | ARC-AMPE]`: different text, the same citations. Each side
+    is read into (catalog, id) pairs against every catalog on disk, and a
+    tailoring's id counts as kept when its 800-53 twin is (`covered`).
     """
-    from policyforge.content.tags import source_tags
+    from policyforge.content.sources import citation_keys, covered, tailorings
+    from policyforge.content.tags import disk_scope, source_tags
 
     if not synthesis_dir.exists():
         return []
+    scope = disk_scope()
+    tailored = tailorings(scope)
+
+    def keys(text: str) -> set[tuple[str, str]]:
+        return {key for tag in source_tags(text) for key in citation_keys(tag, scope)}
 
     findings: list[Finding] = []
     for doc in documents:
         # A Policy drops framework/control citations by design: "that
-        # traceability lives in the Standard" (README; `policy_writer`). Once
+        # traceability lives in the Standard" (`policy_writer`'s docstring). Once
         # `check` could read a generated Policy as one (#411), this rule was
         # still warning on the citations it deliberately leaves out.
         if doc.tier == "policy":
@@ -266,9 +412,13 @@ def _check_citations(documents: list[ContentDocument], synthesis_dir: Path) -> l
         source = synthesis_dir / f"{doc.slug}.md"
         if not source.exists():
             continue
-        expected = set(source_tags(source.read_text(encoding="utf-8")))
-        present = set(source_tags(doc.body))
-        missing = sorted(expected - present)
+        expected = keys(source.read_text(encoding="utf-8"))
+        present = keys(doc.body)
+        missing = sorted(
+            f"{catalog} {rid}" if catalog else rid
+            for catalog, rid in expected
+            if not covered((catalog, rid), present, tailored)
+        )
         if missing:
             shown = ", ".join(missing[:5]) + (" ..." if len(missing) > 5 else "")
             findings.append(
@@ -431,6 +581,53 @@ def _check_playbook_obligations(
     return findings
 
 
+def _check_source_blocks(documents: list[ContentDocument]) -> list[Finding]:
+    """A Standard's source block that lost its `</details>` (#17).
+
+    Its quoted text is then read as the document's own sentences
+    (`content.sources.blank_source_blocks` leaves it, the loud direction),
+    and the page renders everything after it inside the block."""
+    from .sources import unclosed_source_blocks
+
+    return [
+        Finding(
+            doc.relative_path,
+            f"source block opened at line {line} is not closed, so its quoted text is "
+            "read as the document's own",
+            WARNING,
+        )
+        for doc in documents
+        for line in unclosed_source_blocks(doc.body)
+    ]
+
+
+def _check_source_fidelity(
+    documents: list[ContentDocument], config: dict | None = None
+) -> list[Finding]:
+    """Every quote in a Standard's source blocks is its catalog's text (#17,
+    part 2b; 80's 6048: a mis-quote is an ERROR).
+
+    Read against every catalog on disk (`content.sources.fidelity_findings`):
+    a block is markdown anyone can edit, so the marker that keeps `deontic`
+    from reading a quote as an obligation proves nothing about what the quote
+    says. A block naming a catalog that isn't on this machine is a warning,
+    since it can't be checked here. The index is built only when some
+    document has a block."""
+    from policyforge.frameworks.registry import catalogs_by_id
+
+    from .sources import fidelity_findings, has_source_blocks, source_index_of
+
+    with_blocks = [doc for doc in documents if has_source_blocks(doc.body)]
+    if not with_blocks:
+        return []
+    sources = source_index_of(f for f in catalogs_by_id(config).values() if f.has_controls)
+    return [
+        Finding(doc.relative_path, f"line {line}: {message}", ERROR if error else WARNING)
+        for doc in with_blocks
+        for line, message, error in fidelity_findings(doc.body, sources)
+    ]
+
+
 def _check_unanchored(documents: list[ContentDocument]) -> list[Finding]:
     """An obligation that binds while citing nothing, beside ones that cite.
 
@@ -476,7 +673,9 @@ def _check_unanchored(documents: list[ContentDocument]) -> list[Finding]:
     return findings
 
 
-def _check_vacated_citations(documents: list[ContentDocument], vacated=None) -> list[Finding]:
+def _check_vacated_citations(
+    documents: list[ContentDocument], vacated=None, scope=None
+) -> list[Finding]:
     """A citation to text a court vacated that the catalog's source still
     prints (80's ruling on #409), named with the judgment.
 
@@ -490,6 +689,10 @@ def _check_vacated_citations(documents: list[ContentDocument], vacated=None) -> 
     A warning, not an error: this is the project's reading of the judgment,
     not legal advice, and a document may cite vacated text on purpose, to say
     it no longer applies.
+
+    Citations are read in `scope` (every catalog on disk by default), so a
+    range or a list of vacated paragraphs warns for each member (b5 on PR
+    437): without catalogs, `164.502(a)(5)(iii)(A)(1)-(3)` expands to nothing.
     """
     from policyforge.topics.satisfies import parse_citations
 
@@ -503,9 +706,15 @@ def _check_vacated_citations(documents: list[ContentDocument], vacated=None) -> 
     from policyforge.frameworks.vacated import VACATED
     from policyforge.mapping.crosswalk import normalize_framework
 
+    if scope is None:
+        from policyforge.content.tags import disk_scope
+
+        scope = disk_scope()
     findings: list[Finding] = []
     for doc in documents:
-        for framework, requirement_id, _, section in parse_citations(doc.body):
+        for framework, requirement_id, _, section in parse_citations(
+            doc.body, scope.names, scope.index, scope
+        ):
             status = vacated.get(normalize_framework(framework))
             if status is None:
                 continue
@@ -560,18 +769,41 @@ def _check_unmarked_licensed_catalogs(project: Path, config: dict | None) -> lis
     return findings
 
 
+def _check_secrets(documents: list[ContentDocument]) -> list[Finding]:
+    """Generated documents must not carry credentials (#139)."""
+    from policyforge.secrets import scan_document
+
+    findings: list[Finding] = []
+    for doc in documents:
+        for secret in scan_document(doc):
+            findings.append(
+                Finding(
+                    path=secret.path,
+                    message=f"line {secret.line}: {secret.kind} ({secret.prefix}...)",
+                    severity=WARNING,
+                )
+            )
+    return findings
+
+
 def check_tree(
     root: Path,
     *,
     synthesis_dir: Path | None = None,
     org_actors: tuple[str, ...] = (),
     config: dict | None = None,
+    registry=None,
+    registry_path: str = "config/topics.yaml",
 ) -> CheckReport:
     """Run every local check over a content tree.
 
     `config` is the project config, read by the unmarked-licensed-catalog
     scan to classify files as the boundary does; without it that scan sees
     only the default locations.
+
+    `registry` is the topic registry (`topics.registry.Registry`) the Policy
+    grouping is checked against (22, part 2); `None` skips those checks, and
+    `registry_path` is how its findings name it.
 
     `org_actors` are the names the organization acts under, from its config
     (`org.context.org_actors`): the Playbook check refuses one opening a
@@ -584,14 +816,18 @@ def check_tree(
     report.findings.extend(Finding(path, reason) for path, reason in problems)
     report.findings.extend(_check_target_alias(documents))
     report.findings.extend(_check_page_claims(documents))
+    report.findings.extend(_check_policies(documents, registry, registry_path))
     report.findings.extend(_check_references(documents, root))
     report.findings.extend(_check_publishable(documents))
     report.findings.extend(_check_uncited(documents))
     report.findings.extend(_check_unanchored(documents))
+    report.findings.extend(_check_source_blocks(documents))
+    report.findings.extend(_check_source_fidelity(documents, config))
     report.findings.extend(_check_requirement_strength(documents))
     report.findings.extend(_check_playbook_obligations(documents, org_actors))
     report.findings.extend(_check_vacated_citations(documents))
     report.findings.extend(_check_unmarked_licensed_catalogs(Path.cwd(), config))
+    report.findings.extend(_check_secrets(documents))
     if synthesis_dir is not None:
         report.findings.extend(_check_citations(documents, synthesis_dir))
 

@@ -9,14 +9,18 @@ refusal nobody warned them about.
 
 The command set comes from the plugin seam (`plugins.LICENSED_FRAMEWORK_NAMES`),
 not from a list here, so a fourth licensed command is covered when it's added.
+Each command's own `--help` is held to the same rule (#107: `etl-soc2-tsc`'s
+didn't name the plugin while the other two did), rendered through the CLI as
+a user sees it, with the whitespace click wraps it in folded away.
 The pages come from the tracked tree (`git ls-files '*.md'`), not from the
 pages this fix happened to edit. The changelog is history: it records what
 shipped while the parsers were part of the tool, so it's excluded by name.
 
 A second check covers the same review's other finding (5b's): public docs
-named perishable sessions (`policyforge-f8`, and in MEASUREMENTS.md `-d8` and
-`-f2`). Stable handles, derived from `review_lines.STABLE_HANDLES`, are allowed;
-any other `policyforge-<hex><hex>` on a public page fails.
+named perishable sessions (`policyforge-f8`, and in what is now
+`docs/measurements/epochs.md` `-d8` and `-f2`). Stable handles, derived
+from `review_lines.STABLE_HANDLES`, are allowed; any other
+`policyforge-<hex><hex>` on a public page fails.
 """
 
 from __future__ import annotations
@@ -75,7 +79,7 @@ def _pages_missing_the_plugin(pages: dict[str, str]) -> list[str]:
     return sorted(
         f"{path}: names {sorted(named)}"
         for path, text in pages.items()
-        if (named := _commands_named(text)) and PLUGIN not in text
+        if (named := _commands_named(text)) and (PLUGIN not in text or "info@zardoz.io" not in text)
     )
 
 
@@ -90,6 +94,27 @@ def _stray_session_names(pages: dict[str, str]) -> list[str]:
 
 def _read(paths: list[str]) -> dict[str, str]:
     return {p: (ROOT / p).read_text(encoding="utf-8") for p in paths}
+
+
+def _fold(text: str) -> str:
+    """Every run of whitespace as one space: click re-wraps a docstring to the
+    terminal, so the phrase can break across a line."""
+    return " ".join(text.split())
+
+
+def _help(command: str) -> str:
+    """`policyforge <command> --help` as a user gets it, folded."""
+    from click.testing import CliRunner
+
+    from policyforge.cli import cli
+
+    result = CliRunner().invoke(cli, [command, "--help"])
+    assert result.exit_code == 0, f"{command} --help exited {result.exit_code}: {result.output}"
+    return _fold(result.output)
+
+
+def _help_missing_the_plugin(helps: dict[str, str]) -> list[str]:
+    return sorted(command for command, text in helps.items() if PLUGIN not in text)
 
 
 # ---- the real tree ----------------------------------------------------------
@@ -108,6 +133,13 @@ def test_every_public_page_that_names_a_licensed_command_names_the_plugin():
     assert _pages_missing_the_plugin(pages) == []
 
 
+def test_every_licensed_commands_help_names_the_plugin():
+    """#107. Every command from the seam, rendered: a command the CLI no longer
+    has fails in `_help` (exit 2), so the set can't shrink unseen."""
+    helps = {command: _help(command) for command in LICENSED_FRAMEWORK_NAMES}
+    assert _help_missing_the_plugin(helps) == []
+
+
 def test_public_docs_name_no_perishable_session():
     """Over the same population as the plugin rule: every tracked page but the
     changelog (1d on #105: a narrower set let CONTRIBUTING.md and
@@ -124,7 +156,10 @@ def test_a_page_naming_a_command_without_the_plugin_fails():
 
 
 def test_a_page_naming_the_plugin_passes():
-    text = "Run `etl-soc2-tsc`. It is part of the licensed-framework plugin."
+    text = (
+        "Run `etl-soc2-tsc`. It is part of the licensed-framework plugin "
+        "(contact info@zardoz.io about the plugin)."
+    )
     assert _pages_missing_the_plugin({"x/README.md": text}) == []
 
 
@@ -137,3 +172,16 @@ def test_a_longer_name_is_not_a_licensed_command():
 def test_a_session_name_fails_and_a_stable_handle_passes():
     pages = {"data/x/README.md": "as policyforge-f8 read them; found by policyforge-80"}
     assert _stray_session_names(pages) == ["data/x/README.md: policyforge-f8"]
+
+
+def test_a_help_screen_without_the_plugin_fails():
+    helps = {"etl-soc2-tsc": "Parse YOUR OWN copy of the AICPA Trust Services Criteria."}
+    assert _help_missing_the_plugin(helps) == ["etl-soc2-tsc"]
+
+
+def test_a_help_screen_wrapped_mid_phrase_still_passes():
+    """click can break "licensed-framework plugin" across lines; `_fold` joins
+    that, so a correct screen isn't failed for where the terminal wrapped it."""
+    wrapped = "The parser is part of the licensed-framework\n  plugin, which is distributed"
+    assert PLUGIN not in wrapped, "the case must actually break the phrase"
+    assert _help_missing_the_plugin({"etl-hitrust": _fold(wrapped)}) == []

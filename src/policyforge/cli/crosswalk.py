@@ -8,7 +8,15 @@ from pathlib import Path
 import click
 
 from policyforge.cli import cli
-from policyforge.cli._common import get_provider, load_config_or_empty
+from policyforge.cli._common import (
+    budgeted,
+    controls_option,
+    get_provider,
+    load_config_or_empty,
+    max_cost_option,
+    plan_spend,
+    resolve_catalogs,
+)
 
 _DEFAULT_CONTROLS = (
     Path("data/frameworks/nist-800-53-r5/controls.json"),
@@ -54,13 +62,9 @@ def _framework_slug(framework: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", framework.lower()).strip("-")
 
 
-_controls_option = click.option(
-    "--controls",
-    "controls_paths",
-    multiple=True,
-    default=_DEFAULT_CONTROLS,
-    type=click.Path(exists=True, path_type=Path),
-    help="A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's.",
+_controls_option = controls_option(
+    "A controls.json. Repeatable; pass the 800-53 catalog and the mapped framework's.",
+    fallback="the 800-53 and HIPAA Security Rule catalogs",
 )
 
 
@@ -97,6 +101,7 @@ def crosswalk_seed(framework: str, controls_paths, out: Path | None, force: bool
     before. It is the file you then review: reject a pair by changing its
     status, add one with a new row, and record why.
     """
+    controls_paths = resolve_catalogs(controls_paths, default=_DEFAULT_CONTROLS)
     from policyforge.crosswalk.overlay import (
         DEFAULT_OVERLAY_DIR,
         OverlayError,
@@ -137,6 +142,7 @@ def crosswalk_seed(framework: str, controls_paths, out: Path | None, force: bool
 @click.option("--strict", is_flag=True, help="Exit non-zero when anything needs attention.")
 def crosswalk_check(controls_paths, overlay_dir: Path | None, strict: bool):
     """Report what in each overlay no longer matches the catalogs."""
+    controls_paths = resolve_catalogs(controls_paths, default=_DEFAULT_CONTROLS)
     from policyforge.crosswalk.overlay import (
         DEFAULT_OVERLAY_DIR,
         OverlayError,
@@ -224,7 +230,10 @@ def _save(overlay) -> None:
     "seeded from the published mapping when it does not exist).",
 )
 @click.option("--only", multiple=True, help="Propose for this requirement id only. Repeatable.")
-def crosswalk_propose(framework: str, controls_paths, overlay: Path | None, only):
+@max_cost_option
+def crosswalk_propose(
+    framework: str, controls_paths, overlay: Path | None, only, max_cost: float | None
+):
     """Ask the configured model to read each requirement against 800-53.
 
     One call per requirement. Nothing it says is a decision: a published
@@ -238,7 +247,8 @@ def crosswalk_propose(framework: str, controls_paths, overlay: Path | None, only
     from policyforge.crosswalk.propose import MergeReport, merge, propose_for, requirements_of
     from policyforge.llm import ledger
 
-    config = load_config_or_empty()
+    config = budgeted(load_config_or_empty(), max_cost)
+    controls_paths = resolve_catalogs(controls_paths, default=_DEFAULT_CONTROLS, config=config)
     # Catalog text is sent to the provider, so a catalog that may not leave is
     # refused here exactly as `synthesize` refuses it.
     classified = _enforce_catalogs(controls_paths, config)
@@ -262,6 +272,41 @@ def crosswalk_propose(framework: str, controls_paths, overlay: Path | None, only
     if not entries:
         raise click.UsageError("No 800-53 catalog among --controls to map onto.")
 
+    # Planned against a spend ceiling before a provider is built (#125): one
+    # request per requirement, each priced at its own candidate list and at
+    # the reply limit. A reply read as unusable is asked once more, so the
+    # figure is at most twice that when it happens, which the stop covers.
+    from policyforge.crosswalk.candidates import candidates_for
+    from policyforge.crosswalk.propose import PROPOSE_PROMPT, PROPOSE_TOKENS, _render
+    from policyforge.llm import spend
+
+    published_for_plan = published_pairs(controls, framework)
+    plan_index = WordIndex(entries)
+    plan = plan_spend(
+        config,
+        calls=len(requirements),
+        input_tokens=sum(
+            spend.input_tokens_of(
+                PROPOSE_PROMPT,
+                _render(
+                    r,
+                    framework,
+                    candidates_for(
+                        f"{r.title} {r.text}",
+                        published=published_for_plan.get(r.requirement_id, []),
+                        entries=entries,
+                        index=plan_index,
+                    ),
+                    entries,
+                ),
+            )
+            for r in requirements
+        ),
+        max_tokens=PROPOSE_TOKENS,
+    )
+    if plan:
+        click.echo(plan)
+
     provider = get_provider(config)
     if not getattr(provider, "supports_schema", lambda: False)():
         raise click.ClickException(
@@ -277,7 +322,7 @@ def crosswalk_propose(framework: str, controls_paths, overlay: Path | None, only
     total = MergeReport()
 
     with (
-        ledger.run(report=click.echo),
+        ledger.run(report=click.echo, planned=len(requirements)),
         ledger.about(  # #379
             f"crosswalk/{_framework_slug(framework)}",
             site="crosswalk-propose",
@@ -375,6 +420,7 @@ def crosswalk_review(framework: str, controls_paths, overlay: Path | None, who: 
     with who made it and when. Accept keeps or adds the pair; reject removes
     it from everything built on this crosswalk.
     """
+    controls_paths = resolve_catalogs(controls_paths, default=_DEFAULT_CONTROLS)
     from datetime import date
 
     from policyforge.crosswalk.candidates import catalog_entries

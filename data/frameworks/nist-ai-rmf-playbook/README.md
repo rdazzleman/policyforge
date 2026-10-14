@@ -12,7 +12,7 @@ action. It must never say NIST requires one.** In NIST's own words:
   suggestions or to go through it as an ordered series of steps."
   ([AIRC FAQ](https://airc.nist.gov/airmf-resources/playbook/faq/))
 
-**How PolicyForge holds to this (#300).** The Standard and Procedure prompts
+**How PolicyForge holds to this.** The Standard and Procedure prompts
 tell the model to write a Playbook-tagged action as NIST suggesting it, and to
 put any requirement the organization adopts in a separate sentence without
 the Playbook tag. `policyforge check` then reports, **as an error**, any
@@ -42,7 +42,7 @@ too. Limits:
   under one reads as NIST's instruction wherever its tag sits. In a local
   test, a generated Procedure moved every Playbook tag onto its steps, and the
   check above reports every one. No bundled topic anchors Playbook actions
-  yet. When the AI topics do (#301), the Procedure tier is to be left
+  yet. When the AI topics do, the Procedure tier is to be left
   without them, citing its Standard and binding sources instead.
 
 ## What this catalog is
@@ -69,7 +69,7 @@ action and attribute it to NIST without PolicyForge inventing it.
 
 The Playbook export restates each subcategory's outcome. On the pinned export,
 that wording **differs from the AI RMF 1.0 Core's in 30 of the 72
-subcategories**, and in 8 more only in capitalisation (observed when this catalog was built, #177). For example:
+subcategories**, and in 8 more only in capitalisation (observed when this catalog was built). For example:
 
 | Subcategory | AI RMF 1.0 Core                                        | Playbook export                            |
 | ----------- | ------------------------------------------------------ | ------------------------------------------ |
@@ -97,7 +97,7 @@ it. So the revision this catalog asserts is **the export itself**:
   be updated after the AI RMF is revised, so the two can drift, and each is
   checked against its own source.
 - The number of actions per subcategory is pinned to a count taken
-  independently of the parser. This project's research counted it two ways on #177:
+  independently of the parser. This project's research counted it two ways:
   from the export's Markdown, and from NIST's rendered pages. A parse that is
   short or long is refused whole, never shipped partial.
 
@@ -118,7 +118,7 @@ it. So the revision this catalog asserts is **the export itself**:
 ## Not yet
 
 - **Topics do not anchor this catalog yet.** Letting the AI topics anchor
-  Playbook entries, as well as the Core, is #301. It moves `/coverage` figures,
+  Playbook entries, as well as the Core, is planned separately. It moves `/coverage` figures,
   so it lands separately.
 - **There is no crosswalk.** A Playbook action is a voluntary suggestion that
   serves an outcome, not a control.

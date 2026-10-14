@@ -8,7 +8,7 @@ one it could not is flagged; a pair nobody published is added as proposed.
 Only a person moves a row's status.
 
 **Why it cannot decide.** Measured on the 75 HIPAA requirements before this
-was built (see MEASUREMENTS.md): two models confirmed 31% and 41% of NIST's
+was built (see docs/measurements/epochs.md): two models confirmed 31% and 41% of NIST's
 published pairs while being shown every one of them, and agreed with each
 other on 58% of what they asserted. Reading the disagreements, the models
 were not simply wrong. NIST's mapping links a requirement to controls that
@@ -43,6 +43,7 @@ from policyforge.crosswalk.overlay import (
 )
 from policyforge.llm.base import SchemaReplyError, TruncatedResponse
 from policyforge.llm.prompts import REGISTRY, Prompt, register
+from policyforge.llm.spend import SpendRefused, SpendStopped
 
 #: The relationships a model may assert. `unspecified` is for published pairs
 #: whose relationship nobody stated, never an answer.
@@ -249,6 +250,10 @@ def parse_reply(text: str) -> list:
     return data
 
 
+#: The output allowed for one requirement's reply (#125 prices the run at it).
+PROPOSE_TOKENS = 6000
+
+
 def _render(requirement: Requirement, framework: str, candidates, entries) -> str:
     catalog = "\n\n".join(f"{i} — {entries[i].title}\n{entries[i].text[:900]}" for i in candidates)
     context = f"UNDER THE STANDARD\n\n{requirement.parent}\n\n" if requirement.parent else ""
@@ -293,7 +298,7 @@ def propose_for(
                 prompt=_render(requirement, framework, candidates, entries),
                 schema=_schema(candidates),
                 temperature=0.0,
-                max_tokens=6000,
+                max_tokens=PROPOSE_TOKENS,
             )
             rows = parse_reply(response.text)
             if _named_nothing(rows, candidates):
@@ -308,6 +313,9 @@ def propose_for(
                 rows = None
                 proposal.error = "every row named no control on the candidate list"
                 continue
+        except (SpendRefused, SpendStopped):
+            # A ceiling ends the run; it is not one requirement's failure.
+            raise
         except TruncatedResponse as exc:
             # Never retried here. `effort.call_json` has already asked again
             # at a larger budget, so a second attempt would buy a third

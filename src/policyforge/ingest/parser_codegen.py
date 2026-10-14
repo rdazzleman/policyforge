@@ -36,8 +36,7 @@ WARNING: this sends the *entire content* of the sample export you point it
 at to your configured LLM provider's API. If that sample is licensed/
 contractual content (a real MyCSF or GovRAMP export), confirm your license
 terms actually permit sending it to a third-party API processor before
-running this -- see this project's README "A note on using this at work"
-section for the same concern in reverse (employer content vs. this repo).
+running this.
 Passing a *trimmed* sample -- a dozen rows with the header intact -- is
 usually enough to derive a parser and sends far less.
 """

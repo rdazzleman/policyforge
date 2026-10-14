@@ -1,12 +1,11 @@
 """Refuse a gate run on libraries other than the ones CI installs (#44).
 
-    python scripts/lock_drift.py [--semgrep PATH]
+    python scripts/lock_drift.py
 
-CI installs `requirements/ci.txt`, a hashed lock, and semgrep from its own
-lock, `requirements/semgrep/semgrep.txt`. `scripts/check.py` runs in whatever
-environment the caller has, and the shared `.venv` drifted: b5 measured 34
-of 126 pins different and 7 missing (#44), and the gate's semgrep was 1.174.0
-where CI's is 1.177.0 (1d). So a local exit 0 and a CI green were answers
+CI installs `requirements/ci.txt`, a hashed lock. `scripts/check.py` runs in
+whatever environment the caller has, and the shared `.venv` drifted: b5
+measured 34 of 126 pins different and 7 missing (#44), and the gate's semgrep
+was 1.174.0 where CI's was 1.177.0 (1d). So a local exit 0 and a CI green were answers
 about different libraries, which is how #31's 87 CI failures stayed
 invisible locally. This makes the gate say which libraries it measured, and
 refuse when they are not CI's.
@@ -22,16 +21,17 @@ someone judged important. Each pin is classified, so none can drop out:
     not for here    its marker is false on this platform (e.g. pywin32 on
                     Linux), so CI on this platform would not install it
 
-Installed packages the lock doesn't name are counted and listed, not refused:
-the project itself, and semgrep with its dependencies when semgrep lives in
-the same environment.
-
-SEMGREP is compared by its OWN version only, against `semgrep==` in its lock.
-Its dependencies are pinned for a separate environment and may legitimately
-disagree with `ci.txt`, so comparing them here would refuse a correct setup.
+An installed package the lock doesn't name is an EXTRA, and REFUSED (#116),
+unless it is in `ALLOWED_EXTRAS` (the project itself, and `uv`). The gate
+audits the installed environment, so an extra is a package CI never sees: a
+stray pypdf with new advisories turned every local gate red on 2026-10-02.
+semgrep's dependencies are extras too if semgrep is installed here. It isn't
+installed anywhere now: the gate and CI run one container image, pinned by
+digest (`semgrep_gate.SEMGREP_IMAGE`, #83), so its version can't drift from
+CI's and there is nothing of it to compare here.
 
 EXIT: 0 every applicable pin is the same; 1 drift, every difference named;
-2 nothing to compare (no pins parsed, or semgrep's version unreadable).
+2 nothing to compare (no pins parsed).
 Zero pins parsed is a broken parse, not a clean environment.
 
 WHAT IT CANNOT SEE: a package installed at the locked version from other
@@ -46,7 +46,6 @@ from __future__ import annotations
 
 import argparse
 import re
-import subprocess
 import sys
 from dataclasses import dataclass, field
 from importlib import metadata
@@ -64,8 +63,16 @@ except ImportError:  # it is in the lock; without it nothing here can be measure
     sys.exit(2)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+#: Installed but in no lock, and allowed (#116). Anything else installed is an
+#: EXTRA and refused: the gate audits the installed environment, so a stray
+#: package (pypdf 6.16.2, on 2026-10-02) turned every local gate red for a reason
+#: CI, built from the locks, never sees.
+#:   policyforge  the project itself, installed editable
+#:   uv           the tool that writes these locks (`uv pip compile`)
+#: Not `gh`: that pip package is unrelated to GitHub CLI and shadows it
+#: (CLAUDE.md, "gh is shadowed by the venv"), so it is removed, not allowed.
+ALLOWED_EXTRAS = frozenset({"policyforge", "uv"})
 CI_LOCK = REPO_ROOT / "requirements" / "ci.txt"
-SEMGREP_LOCK = REPO_ROOT / "requirements" / "semgrep" / "semgrep.txt"
 
 #: A pin line as `uv pip compile --generate-hashes` writes it:
 #: `name==version`, an optional `; marker`, then ` \` before the hashes.
@@ -83,10 +90,11 @@ class Report:
     missing: dict[str, str] = field(default_factory=dict)
     not_here: list[str] = field(default_factory=list)
     unlocked: list[str] = field(default_factory=list)
+    unallowed: list[str] = field(default_factory=list)
 
     @property
     def ok(self) -> bool:
-        return not self.different and not self.missing
+        return not self.different and not self.missing and not self.unallowed
 
 
 def pins(text: str) -> dict[str, tuple[str, str | None]]:
@@ -130,37 +138,15 @@ def classify(
         else:
             report.same.append(name)
     report.unlocked = sorted(set(have) - set(locked))
+    report.unallowed = sorted(set(report.unlocked) - ALLOWED_EXTRAS)
     return report
-
-
-def semgrep_version(exe: str) -> str:
-    out = subprocess.run(  # nosec B603: our own tool, argv list, no shell
-        [exe, "--version"],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        check=False,
-    )
-    lines = [ln.strip() for ln in (out.stdout or "").splitlines() if ln.strip()]
-    version = lines[-1] if lines else ""
-    if not re.fullmatch(r"\d+(\.\d+)+", version):
-        raise NothingToCompare(f"could not read semgrep's version from {exe!r}: {version!r}")
-    return version
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--semgrep", help="the semgrep the gate will run; omitted: not compared")
-    args = parser.parse_args(argv)
+    parser.parse_args(argv)
     try:
         report = classify(pins(CI_LOCK.read_text(encoding="utf-8")), installed())
-        semgrep = None
-        if args.semgrep:
-            want = pins(SEMGREP_LOCK.read_text(encoding="utf-8")).get("semgrep")
-            if want is None:
-                raise NothingToCompare(f"{SEMGREP_LOCK.name} pins no semgrep")
-            semgrep = (want[0], semgrep_version(args.semgrep))
     except NothingToCompare as exc:
         print(f"lock_drift: {exc}", file=sys.stderr)
         return 2
@@ -170,27 +156,33 @@ def main(argv: list[str] | None = None) -> int:
         f"{CI_LOCK.name}: {applicable} pin(s) for this platform: {len(report.same)} same, "
         f"{len(report.different)} DIFFERENT, {len(report.missing)} MISSING; "
         f"{len(report.not_here)} not for this platform; "
-        f"{len(report.unlocked)} installed and not in the lock"
+        f"{len(report.unallowed)} EXTRA"
     )
     for name, (want, have) in report.different.items():
         print(f"  DIFFERENT  {name}  lock {want}, installed {have}")
     for name, want in report.missing.items():
         print(f"  MISSING    {name}  lock {want}")
-    if report.unlocked:
-        print(f"  not in the lock (listed, not refused): {', '.join(report.unlocked)}")
+    for name in report.unallowed:
+        print(f"  EXTRA      {name}  installed and not in the lock")
+
+    allowed = [u for u in report.unlocked if u in ALLOWED_EXTRAS]
+    if allowed:
+        print(f"  not in the lock (allowed): {', '.join(allowed)}")
     drift = not report.ok
-    if semgrep:
-        want, have = semgrep
-        same = want == have
-        print(f"semgrep: lock {want}, the gate's {have}: {'same' if same else 'DIFFERENT'}")
-        drift = drift or not same
     if drift:
         print(
             "This environment is not CI's, so the gate would measure other libraries.\n"
             "Re-install from the lock when no run depends on this environment:\n"
-            "  pip install --require-hashes -r requirements/ci.txt && pip install --no-deps -e .\n"
-            "and semgrep from requirements/semgrep/semgrep.txt (see check.py's docstring)."
+            "  pip install --require-hashes -r requirements/ci.txt"
+            " && pip install --require-hashes -r requirements/build.txt"
+            " && pip install --no-deps --no-build-isolation -e ."
         )
+        if report.unallowed:
+            # An install can't remove a package, so name the command that does.
+            print(
+                "An EXTRA is removed, not re-installed (say first if anyone uses it):\n"
+                f"  pip uninstall -y {' '.join(report.unallowed)}"
+            )
         return 1
     return 0
 

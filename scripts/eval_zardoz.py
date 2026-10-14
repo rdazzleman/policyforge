@@ -73,6 +73,33 @@ for _stream in (sys.stdout, sys.stderr):
 _Metered = Metered
 
 
+def write_json(path: Path, results, *, grading: str, repeat: int, requested) -> None:
+    """The run's per-case counts, for a program to compare against another run.
+
+    Counts, not rates: a rate hides how many runs it rests on, and errored
+    runs (the API refused, so the prompt was never graded) are kept apart
+    from failed ones, as the report keeps them.
+    """
+    import json
+
+    record = {
+        "grading": grading,
+        "repeat": repeat,
+        "requested": list(requested),
+        "cases": [
+            {
+                "suite": r.suite,
+                "name": r.name,
+                "passes": r.passes,
+                "runs": r.runs,
+                "errors": len(r.errors),
+            }
+            for r in results
+        ],
+    }
+    path.write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--suite", choices=sorted(SUITES), action="append", default=None)
@@ -109,6 +136,25 @@ def main() -> int:
             "this LiteLLM model string: config's entail.answering, but for one run. "
             "One extra model call per cited sentence on top of the answer, priced "
             "separately in the summary. Name a model other than the one being graded"
+        ),
+    )
+    parser.add_argument(
+        "--max-cost",
+        type=float,
+        default=None,
+        help=(
+            "stop the run once its cost passes this many dollars (overrides budget.max_usd "
+            "in config). No estimate is made first: how many requests a case makes is "
+            "not known until it runs. A hosted model the map can't price is refused"
+        ),
+    )
+    parser.add_argument(
+        "--json",
+        type=Path,
+        default=None,
+        help=(
+            "also write each case's passes, runs and errors to this file, for a "
+            "program to compare runs (scripts/scheduled_eval.py)"
         ),
     )
     args = parser.parse_args()
@@ -180,6 +226,13 @@ def main() -> int:
     # become overrides on production's config, and get_provider builds from
     # that. Nothing here constructs a provider class by name.
     config = eval_config(model=args.model, min_interval=args.min_interval)
+    from policyforge.llm import spend
+
+    try:
+        config = spend.with_max_cost(config, args.max_cost)
+    except ValueError as exc:
+        print(f"{exc} Nothing was run.")
+        return 2
     provider = build_provider(config)
     if args.model:
         grading = args.model
@@ -199,6 +252,10 @@ def main() -> int:
         # top of every run.
         with ledger.about("probe", site=EVAL_SITE):
             provider.generate(system="Reply with one word.", prompt="ok?", max_tokens=64)
+    except spend.SpendRefused as exc:
+        # Not "unreachable": the ceiling refused a model it can't price.
+        print(f"Refused by the spend ceiling, so nothing was run:\n  {exc}")
+        return 2
     except Exception as exc:  # noqa: BLE001 - any failure means do not proceed
         print(f"The API is not reachable, so nothing was run:\n  {exc}")
         return 2
@@ -229,8 +286,17 @@ def main() -> int:
     print()
 
     results = []
+    stopped = False
     for suite, case in planned:
         result = run_case(suite, case, provider, repeat=args.repeat, corpora=corpora)
+        # Several paths under test swallow a provider failure on purpose and
+        # grade the fallback. A case during which the ceiling refused a request
+        # is therefore not a result: what it got is that fallback (#125).
+        # `getattr`: a provider a test (or another harness) hands in may not keep one.
+        meter = getattr(provider, "spend_meter", lambda: None)()
+        if meter is not None and meter.stopped:
+            stopped = True
+            break
         results.append(result)
         mark = (
             "!"
@@ -239,17 +305,27 @@ def main() -> int:
         )
         print(mark, end="", flush=True)
     print("\n")
-    print(format_report(results, repeat=args.repeat, requested=wanted))
+    if stopped:
+        print(
+            f"STOPPED at the spend ceiling of {spend.usd(meter.ceiling)}: REQUESTED "
+            f"{len(planned)} case(s), COMPLETED {len(results)}. The case that crossed it is "
+            "not counted, because its later requests were refused. This is not a full run."
+        )
+        print()
+    if results:
+        print(format_report(results, repeat=args.repeat, requested=wanted))
     print(f"\n{provider.summary()}")
     if judge is not None:
         print(f"entailment: {judge_meter.summary()}")
+    if args.json is not None:
+        write_json(args.json, results, grading=grading, repeat=args.repeat, requested=wanted)
 
     # Flaky is a failure. The whole reason this exists is that a case which
     # is right most of the time is indistinguishable, from one run, from a
     # case that is right always.
     # An exit code of 2 for "could not run" so a caller can tell a dead key
     # from a regression. 1 stays the graded failure.
-    if any(r.errors for r in results):
+    if stopped or any(r.errors for r in results):
         return 2
     return 1 if any(r.rate < 1.0 for r in results) else 0
 

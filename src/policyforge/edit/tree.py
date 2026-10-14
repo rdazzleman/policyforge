@@ -59,11 +59,19 @@ _FRONTMATTER_RE = re.compile(r"\A---\r?\n.*?\r?\n---\r?\n(?:\r?\n)*", re.DOTALL)
 
 
 def split_frontmatter(text: str) -> tuple[str, str]:
-    """`(raw frontmatter block, body)`. The block is "" when there is none."""
-    match = _FRONTMATTER_RE.match(text)
+    """`(raw frontmatter block, body)`. The block is "" when there is none.
+
+    One leading U+FEFF is looked past (#424), and kept in the raw block, so
+    the edit path writes the file back with the bytes it had: a BOM hid the
+    frontmatter, which then went to the model as body text."""
+    from policyforge.textfile import without_bom
+
+    offset = len(text) - len(without_bom(text))
+    match = _FRONTMATTER_RE.match(text[offset:])
     if not match:
         return "", text
-    return match.group(0), text[match.end() :]
+    end = offset + match.end()
+    return text[:end], text[end:]
 
 
 def join_frontmatter(frontmatter: str, body: str) -> str:
@@ -116,8 +124,16 @@ class TreeSelection:
     ambiguous: dict[str, list[str]] = field(default_factory=dict)
 
 
-def select_topic_files(content_dir: Path, topic, *, tiers: set[str] | None = None) -> TreeSelection:
+def select_topic_files(
+    content_dir: Path, topic, *, tiers: set[str] | None = None, policy=None, documents=None
+) -> TreeSelection:
     """The topic's documents in the tree, one per tier.
+
+    With `policy` (the registry's Policy the topic's Standard sits under,
+    22 part 2b), a topic that has no Policy document of its own is also given
+    the Policy's: the file whose `policy:` names it, or the one bound to the
+    page the registry declares for it. It is a candidate like the others, and
+    a plan that finds nothing to change in it leaves it alone.
 
     A file belongs to the topic when its frontmatter says so (`topic:`), or
     when it is bound to one of the pages the registry declares for the topic
@@ -132,7 +148,8 @@ def select_topic_files(content_dir: Path, topic, *, tiers: set[str] | None = Non
     """
     from policyforge.content.tree import load_content_tree
 
-    documents, _problems = load_content_tree(content_dir)
+    if documents is None:
+        documents, _problems = load_content_tree(content_dir)
     # Every kind of store the topic declares pages in, so a file pulled from
     # any of them is matched the way a Confluence-pulled file is.
     kinds = ["confluence"] + [
@@ -165,6 +182,31 @@ def select_topic_files(content_dir: Path, topic, *, tiers: set[str] | None = Non
         else:
             continue
         by_tier.setdefault(tier, []).append((document, rule))
+
+    if policy is not None and "policy" not in by_tier and (not tiers or "policy" in tiers):
+        wanted = policy.name.strip().casefold()
+        page = {
+            kind: str((block.get("pages") or {}).get("policy") or block.get("title") or "")
+            for kind in ("confluence", *(k for k in (policy.targets or {}) if k != "confluence"))
+            for block in [policy.target(kind)]
+        }
+        for document in documents:
+            if (document.tier or "").lower() != "policy" or document.topic.strip():
+                continue
+            if str(document.metadata.get("policy") or "").strip().casefold() == wanted:
+                rule = f"names Policy {policy.name!r}"
+            elif bound := next(
+                (
+                    title
+                    for kind, title in page.items()
+                    if title and document.target(kind).get("title") == title
+                ),
+                "",
+            ):
+                rule = f"bound to Policy page {bound!r}"
+            else:
+                continue
+            by_tier.setdefault("policy", []).append((document, rule))
 
     selection = TreeSelection()
     # Policy, then Standard, then Procedure — the order `Topic.confluence_pages`

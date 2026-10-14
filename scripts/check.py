@@ -30,15 +30,9 @@ Usage:
 
 Requires: pip install -e ".[dev]"
 
-semgrep is not in the dev extra: it pins its own dependencies exactly, and
-installed beside the project those pins became the project's. It is found on
-PATH or in `.tools/semgrep`, built from its own hashed lock:
-
-    python -m venv .tools/semgrep
-    .tools/semgrep/Scripts/pip install --require-hashes -r requirements/semgrep/semgrep.txt
-
-(`bin/` rather than `Scripts/` outside Windows). Without it, that check is
-skipped with a note, as gitleaks is.
+semgrep is not in the dev extra and has no lock here: it runs from one
+container image, pinned by digest (`semgrep_gate.SEMGREP_IMAGE`, #83), through
+Docker. Without Docker, that check is skipped with a note, as gitleaks is.
 
 Optional: install the gitleaks binary to get the secrets scan locally too
 (Windows: `winget install gitleaks.gitleaks`; otherwise download from
@@ -49,6 +43,8 @@ is skipped with a note, not silently ignored.
 from __future__ import annotations
 
 import argparse
+import os
+import re
 import shutil
 import subprocess
 import sys
@@ -139,31 +135,6 @@ def run(label: str, cmd: list[str]) -> bool:
 NOTES: dict[str, str] = {}
 
 
-def check_semgrep_lock(label: str) -> bool:
-    """semgrep's lock, audited in advisory mode (#82; 80's ruling 1774).
-
-    Its output is echoed as it would be, and its `semgrep lock: N advisories
-    ...` line is kept for the summary, so a pass that carries advisories is
-    never a bare PASS (80's condition 2). A run that printed no such line
-    didn't get as far as counting, so it fails whatever its exit code."""
-    print(f"\n{'=' * 60}\n{label}\n{'=' * 60}", flush=True)
-    result = subprocess.run(
-        [sys.executable, "scripts/semgrep_lock_audit.py"],
-        cwd=REPO_ROOT,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
-    sys.stdout.write(result.stdout)
-    sys.stderr.write(result.stderr)
-    counted = [line for line in result.stdout.splitlines() if line.startswith("semgrep lock: ")]
-    if not counted:
-        NOTES[label] = "semgrep lock: NOT COUNTED (the audit didn't finish)"
-        return False
-    NOTES[label] = counted[-1]
-    return result.returncode == 0
-
-
 #: What gitleaks scans: the history of the commit under test, `HEAD`. The
 #: same scope CI's step uses, and a test holds the two equal (#30).
 GITLEAKS_ARGS = ("detect", "--verbose", "--redact", "--log-opts=HEAD")
@@ -202,68 +173,44 @@ def check_gitleaks() -> bool | None:
     )
 
 
-def _tool_roots() -> list[Path]:
-    """Where a `.tools/` may be: this checkout, then the MAIN checkout of the
-    repository this one is a worktree of (#46). Every session gates in its
-    own worktree, whose REPO_ROOT has no `.tools/`; one semgrep built from its
-    lock in the shared clone serves them all."""
-    roots = [REPO_ROOT]
-    common = _git("rev-parse", "--path-format=absolute", "--git-common-dir", root=REPO_ROOT)
-    if common.returncode == 0 and common.stdout.strip():
-        main = Path(common.stdout.strip()).parent
-        if main.resolve() != REPO_ROOT.resolve():
-            roots.append(main)
-    return roots
-
-
-def find_semgrep() -> str | None:
-    """semgrep on PATH, else a `.tools/semgrep` environment (this checkout's,
-    then the main checkout's), else None."""
-    on_path = shutil.which("semgrep")
-    if on_path:
-        return on_path
-    for root in _tool_roots():
-        for scripts in ("Scripts", "bin"):
-            found = shutil.which("semgrep", path=str(root / ".tools" / "semgrep" / scripts))
-            if found:
-                return found
-    return None
-
-
 def check_semgrep() -> bool | None:
-    """True/False if it ran, None if skipped (semgrep not installed)."""
-    semgrep = find_semgrep()
-    if semgrep is None:
+    """True/False if it ran, None if skipped (no Docker to run the image in).
+
+    semgrep runs from the pinned container (#83), through semgrep_gate, not
+    `semgrep --error`: --error fails only on findings, so a rule timeout, a
+    partial parse or a file over the size limit was a warning and the step
+    passed (#43). A Docker that is installed but not running reaches
+    semgrep_gate, which can't read a report and exits 2: a failure, never a
+    skip."""
+    if shutil.which("docker") is None:
         print(
             f"\n{'=' * 60}\nsemgrep (broader SAST)\n{'=' * 60}\n"
-            "SKIPPED — semgrep not found on PATH or in .tools/semgrep.\n"
-            "It has its own lock, kept out of the dev extra. Install it once:\n"
-            "  python -m venv .tools/semgrep\n"
-            "  .tools/semgrep/Scripts/pip install --require-hashes "
-            "-r requirements/semgrep/semgrep.txt\n"
-            "(bin/ instead of Scripts/ outside Windows), then re-run this "
-            "script. CI runs this check regardless."
+            "SKIPPED -- docker isn't on PATH. semgrep runs from a pinned "
+            "container image (scripts/semgrep_gate.py's SEMGREP_IMAGE), so this "
+            "check needs Docker. CI runs it regardless."
         )
         return None
-    # Through semgrep_gate, not `semgrep --error`: --error fails only on
-    # findings, so a rule timeout, a partial parse or a file over the size
-    # limit was a warning and the step passed (#43).
-    return run(
-        "semgrep",
-        [sys.executable, "scripts/semgrep_gate.py", "--semgrep", semgrep],
-    )
+    return run("semgrep", [sys.executable, "scripts/semgrep_gate.py", "--image"])
 
 
 def _git(*args: str, root: Path | None = None) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        ["git", *args],
-        cwd=root or REPO_ROOT,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        check=False,
-    )
+    try:
+        return subprocess.run(
+            ["git", *args],
+            cwd=root or REPO_ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+        )
+    except FileNotFoundError:
+        return subprocess.CompletedProcess(
+            args=["git", *args],
+            returncode=127,
+            stdout="",
+            stderr="git: command not found",
+        )
 
 
 def _tree_identity(root: Path | None = None) -> str:
@@ -278,6 +225,15 @@ def _tree_identity(root: Path | None = None) -> str:
     rather than floating free.
     """
     head = _git("rev-parse", "--short", "HEAD", root=root)
+    if head.returncode == 127:
+        # No git at all (#61): say so, rather than print "no commits, clean, 0
+        # untracked", which reads as a measurement nobody took.
+        return "tree: git unavailable, so the tree was not identified"
+    status = _git("status", "--porcelain", root=root)
+    if status.returncode != 0:
+        # Not a repository, say (ba on #184): `rev-parse` fails there too, and
+        # reading empty output as "no commits, clean" is the same unmeasured line.
+        return f"tree: not identified, `git status` exited {status.returncode}"
     sha = head.stdout.strip() if head.returncode == 0 else "no commits"
     # `??` is an untracked file and is counted separately below. Reading
     # its second column as a modification state counts it as "unstaged",
@@ -285,9 +241,7 @@ def _tree_identity(root: Path | None = None) -> str:
     # file as "0 staged, 1 unstaged, 1 untracked" — the same file twice,
     # once under a name that does not describe it.
     dirty = [
-        line
-        for line in _git("status", "--porcelain", root=root).stdout.splitlines()
-        if line.strip() and not line.startswith("??")
+        line for line in status.stdout.splitlines() if line.strip() and not line.startswith("??")
     ]
     staged = sum(1 for line in dirty if line[:1] not in {" ", ""})
     unstaged = sum(1 for line in dirty if line[1:2] not in {" ", ""})
@@ -457,7 +411,145 @@ def parse_allow_skip(argv: list[str] | None) -> set[str]:
             "Repeatable. Without it, a check that did not run fails the gate."
         ),
     )
+    _presence_arguments(parser)
     return set(parser.parse_args(argv or []).allow_skip)
+
+
+def _presence_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--base",
+        help=(
+            "Branch point for the changelog presence check: a ref or a SHA. "
+            "Without it, the nearest release/* or main remote-tracking ref is used."
+        ),
+    )
+    parser.add_argument(
+        "--body-file",
+        type=Path,
+        help="The pull request body, so the presence check can see an exemption.",
+    )
+    parser.add_argument(
+        "--record-selection",
+        type=Path,
+        metavar="DIR",
+        help=(
+            "The batch gate's option (#291): run the full suite under testmon "
+            "without deselecting anything, and on a pass save its data to "
+            "DIR/<tree>.testmondata for scripts/affected_tests.py."
+        ),
+    )
+    parser.add_argument(
+        "--no-changelog-presence",
+        metavar="REASON",
+        help=(
+            "Skip the presence check, saying why (a multi-PR batch: one body file "
+            "can't stand for several PRs). Reported as SKIPPED, never PASS."
+        ),
+    )
+
+
+def parse_args(argv: list[str] | None) -> argparse.Namespace:
+    """All of check.py's arguments; `parse_allow_skip` is the old single view."""
+    parser = argparse.ArgumentParser(prog="check.py")
+    parser.add_argument(
+        "--allow-skip",
+        action="append",
+        default=[],
+        choices=sorted(set(SKIP_FLAGS.values())),
+        metavar="TOOL",
+    )
+    _presence_arguments(parser)
+    return parser.parse_args(argv or [])
+
+
+PRESENCE = "changelog presence (a fragment, or an exemption)"
+
+#: A train's or main's remote-tracking ref, on any remote: `forgejo/release/1.8`
+#: here, `origin/release/1.8` in a CI checkout. Not `forgejo/ba/release/x`.
+_TRAIN_REF = re.compile(r"^[^/]+/(main|release/[^/]+)$")
+
+
+def derive_base(root: Path = REPO_ROOT) -> tuple[str | None, str]:
+    """(base ref, how it was chosen), or (None, why not).
+
+    The nearest train: the release/* or main remote-tracking ref whose
+    merge-base with HEAD is the fewest commits back. Two refs equally near
+    with DIFFERENT merge-bases refuse (9b on #197): which one the branch is
+    for is a fact the gate can't know, so it says so. Equally near with the
+    same merge-base is one answer, since `base..HEAD` is the same for both.
+    """
+    refs = [
+        r
+        for r in _git(
+            "for-each-ref", "--format=%(refname:short)", "refs/remotes", root=root
+        ).stdout.split()
+        if _TRAIN_REF.match(r)
+    ]
+    if not refs:
+        return None, "no release/* or main remote-tracking ref (fetch first)"
+    scored = []
+    for ref in refs:
+        mb = _git("merge-base", "HEAD", ref, root=root)
+        if mb.returncode != 0:
+            continue
+        base = mb.stdout.strip()
+        count = _git("rev-list", "--count", f"{base}..HEAD", root=root).stdout.strip()
+        scored.append((int(count or 0), base, ref))
+    if not scored:
+        return None, f"HEAD shares no history with any of {sorted(refs)}"
+    nearest = min(n for n, _, _ in scored)
+    tied = sorted((ref, base) for n, base, ref in scored if n == nearest)
+    if len({base for _, base in tied}) > 1:
+        names = ", ".join(f"{ref} ({base[:12]})" for ref, base in tied)
+        return None, f"tie: {names} are each {nearest} commit(s) back, from different merge-bases"
+    ref = tied[0][0]
+    sha = _git("rev-parse", ref, root=root).stdout.strip()
+    return (
+        ref,
+        f"{ref} ({sha[:12]}), the nearest of {len(refs)} train ref(s), {nearest} commit(s) back",
+    )
+
+
+def check_changelog_presence(args: argparse.Namespace) -> bool | None:
+    """`changelog_guard.py` against the branch's train (#197): CI runs it,
+    and without it a branch with user-facing changes and no fragment passed
+    this gate and went red in CI (PR 192). Fails before CI does, instead of
+    after."""
+    if args.no_changelog_presence is not None:
+        if not args.no_changelog_presence.strip():
+            # The guard's own exemption needs a reason (`\S`), and so does
+            # this skip: a blank one is a silent skip wearing a flag (9b).
+            print("FAILED -- --no-changelog-presence needs a reason, and it was blank.")
+            return False
+        print(f"SKIPPED -- declared: {args.no_changelog_presence}")
+        return None
+    if args.base:
+        base, how = args.base, f"{args.base} (given with --base)"
+    else:
+        base, how = derive_base()
+    if base is None:
+        print(f"FAILED -- no base for the presence check: {how}.\nPass --base <ref or SHA>.")
+        return False
+    if args.body_file and not args.body_file.is_file():
+        print(f"FAILED -- --body-file {args.body_file} is not a file, so no exemption can be read.")
+        return False
+    print(f"changelog presence: base {how}")
+    # A literal list at each run() call, so test_lock_drift's guard can see
+    # every tool the gate runs is run through the venv's interpreter.
+    if args.body_file:
+        return run(
+            "changelog_guard",
+            [
+                sys.executable,
+                "scripts/changelog_guard.py",
+                "--base",
+                base,
+                "--body-file",
+                str(args.body_file),
+            ],
+        )
+    print("  (no --body-file: an exemption in the PR body can't be seen here)")
+    return run("changelog_guard", [sys.executable, "scripts/changelog_guard.py", "--base", base])
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -474,6 +566,9 @@ def main(argv: list[str] | None = None) -> int:
 
 def _main(argv: list[str] | None = None) -> int:
     allow_skip = parse_allow_skip(argv)
+    args = parse_args(argv)
+    reason = (args.no_changelog_presence or "").strip()
+    declared = {PRESENCE: reason} if reason else {}
 
     # Before anything runs: the `policyforge` every check below would import
     # has to be this tree's. In a git worktree it is not — the editable
@@ -506,14 +601,18 @@ def _main(argv: list[str] | None = None) -> int:
 
     lint_targets = ["src", "tests", "scripts"]
 
-    semgrep = find_semgrep()
+    testmon = ["--testmon-noselect"] if args.record_selection else []
+    if testmon:
+        # coverage's default core on 3.14 is sysmon, which warns it can't
+        # record the per-test contexts testmon attributes by (ba on PR 303).
+        os.environ.setdefault("COVERAGE_CORE", "ctrace")
     results: dict[str, bool | None] = {
         # First, so every result below says which libraries it measured:
         # CI installs the locks, and a drifted environment makes this gate
         # answer a different question from CI's (#44; #31's 87 failures).
         "environment matches CI's locks": run(
             "lock_drift",
-            [sys.executable, "scripts/lock_drift.py", *(["--semgrep", semgrep] if semgrep else [])],
+            [sys.executable, "scripts/lock_drift.py"],
         ),
         # Lint/format first: they're the fastest checks and the most likely
         # to fail on a fresh edit, so failing here saves waiting on semgrep.
@@ -521,7 +620,13 @@ def _main(argv: list[str] | None = None) -> int:
         "ruff (format)": run(
             "ruff format --check", _tool("ruff", "format", "--check", *lint_targets)
         ),
-        "pytest (test suite)": run("pytest", _tool("pytest", "-q", "-rs", f"--junitxml={JUNIT}")),
+        # -n auto: every core (pytest-xdist, #86), as CI runs it. With
+        # --record-selection, testmon records which tests ran which code, and
+        # `--testmon-noselect` keeps it from deselecting anything: the gate
+        # still runs every test (#291).
+        "pytest (test suite)": run(
+            "pytest", _tool("pytest", "-q", "-rs", "-n", "auto", f"--junitxml={JUNIT}", *testmon)
+        ),
         # The same list CI checks (#31). The project venv has every extra
         # installed and skips exactly the listed tests, as CI now does, so
         # one list holds on both. A machine missing an extra or the gitleaks
@@ -542,10 +647,6 @@ def _main(argv: list[str] | None = None) -> int:
         ),
         "semgrep (broader SAST)": check_semgrep(),
         "pip-audit (dependency CVEs)": run("pip-audit", _tool("pip_audit")),
-        # Advisory mode for semgrep's own lock only (#82; 80's ruling 1774):
-        # every advisory is listed and counted, and the count is repeated in
-        # the summary. The gate, CI and ci_in_docker all run the same script.
-        "pip-audit (semgrep's lock)": check_semgrep_lock("pip-audit (semgrep's lock)"),
         "mdformat (markdown quality)": run(
             "mdformat --check", _tool("mdformat", "--check", *md_targets)
         ),
@@ -562,6 +663,10 @@ def _main(argv: list[str] | None = None) -> int:
             "changelog_fragments --check",
             [sys.executable, "scripts/changelog_fragments.py", "--check"],
         ),
+        # The PRESENCE half CI also runs (#197). Skippable only by an explicit
+        # --no-changelog-presence REASON (a multi-PR batch), never by a tool
+        # being absent: it's a script in this repository.
+        PRESENCE: check_changelog_presence(args),
         "committed shell (exit status)": run(
             "shell_status",
             [sys.executable, "scripts/shell_status.py"],
@@ -573,10 +678,60 @@ def _main(argv: list[str] | None = None) -> int:
         "conflict markers (tracked and untracked)": check_conflict_markers(),
     }
 
-    return summarise(results, allow_skip)
+    code = summarise(results, allow_skip, declared)
+    if args.record_selection:
+        record_selection(args.record_selection, passed=code == 0)
+    return code
 
 
-def summarise(results: dict[str, bool | None], allow_skip: set[str]) -> int:
+def record_selection(snapshots: Path, *, passed: bool, keep: int = 10) -> bool:
+    """Save this run's testmon data as `<snapshots>/<tree>.testmondata` (#291).
+
+    Named by HEAD's TREE, not its commit: the batch gate runs on a merge of
+    the PRs, and the squash merges that follow give the tip new commits with
+    the same tree. Recorded only when the whole gate passed and the working
+    tree is HEAD's, so the name says exactly what the data describes. Copied
+    through sqlite's backup, so a write-ahead log can't be left behind. A
+    failure here is said loudly and doesn't fail the gate: carriers fall back
+    to the targeted set by hand (`scripts/affected_tests.py`). The newest
+    `keep` snapshots are kept."""
+    import sqlite3
+
+    data = REPO_ROOT / ".testmondata"
+    why = (
+        "the gate did not pass"
+        if not passed
+        else "the working tree isn't HEAD's"
+        if _git("status", "--porcelain", "--untracked-files=no").stdout.strip()
+        else f"{data} doesn't exist"
+        if not data.is_file()
+        else ""
+    )
+    if why:
+        print(f"\nWARNING: selection data NOT recorded: {why}.")
+        return False
+    tree = _git("rev-parse", "HEAD^{tree}").stdout.strip()
+    snapshots.mkdir(parents=True, exist_ok=True)
+    dest = snapshots / f"{tree}.testmondata"
+    partial = dest.with_name(dest.name + ".partial")
+    source, copy = sqlite3.connect(data), sqlite3.connect(partial)
+    try:
+        source.backup(copy)
+    finally:  # closed, not only committed: Windows won't replace an open file
+        source.close()
+        copy.close()
+    partial.replace(dest)
+    for old in sorted(snapshots.glob("*.testmondata"), key=lambda p: p.stat().st_mtime)[:-keep]:
+        old.unlink()
+    print(f"\nselection data recorded for tree {tree[:12]}: {dest}")
+    return True
+
+
+def summarise(
+    results: dict[str, bool | None],
+    allow_skip: set[str],
+    declared: dict[str, str] | None = None,
+) -> int:
     """Print the summary and return the exit code.
 
     Separate from `main` so the exit rule can be tested without installing
@@ -606,8 +761,14 @@ def summarise(results: dict[str, bool | None], allow_skip: set[str]) -> int:
     # fall out of the accounting below and be reported as a pass. Stop
     # instead: the failure mode this whole change exists to remove is
     # exactly "absent, and therefore counted as fine".
+    # A skip DECLARED by its own flag, with a reason (only the changelog
+    # presence check has one), is acknowledged by that flag; every other skip
+    # needs a SKIP_FLAGS name and --allow-skip.
+    declared = declared or {}
     undeclared = [
-        label for label, passed in results.items() if passed is None and label not in SKIP_FLAGS
+        label
+        for label, passed in results.items()
+        if passed is None and label not in SKIP_FLAGS and label not in declared
     ]
     if undeclared:
         print(
@@ -617,7 +778,9 @@ def summarise(results: dict[str, bool | None], allow_skip: set[str]) -> int:
         return 2
 
     skipped = [label for label, passed in results.items() if passed is None]
-    unacknowledged = [label for label in skipped if SKIP_FLAGS[label] not in allow_skip]
+    unacknowledged = [
+        label for label in skipped if label not in declared and SKIP_FLAGS[label] not in allow_skip
+    ]
 
     # What did NOT run comes first, before the wall of PASS. A reader
     # scanning a summary is looking for the word FAIL, and a SKIP sitting
@@ -626,7 +789,10 @@ def summarise(results: dict[str, bool | None], allow_skip: set[str]) -> int:
     if skipped:
         print(f"  {len(skipped)} of {len(results)} checks DID NOT RUN:")
         for label in skipped:
-            note = "" if SKIP_FLAGS[label] in allow_skip else "  <- not acknowledged"
+            if label in declared:
+                note = f"  (declared: {declared[label]})"
+            else:
+                note = "" if SKIP_FLAGS[label] in allow_skip else "  <- not acknowledged"
             print(f"      {label}{note}")
         print()
 

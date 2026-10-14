@@ -152,7 +152,15 @@ def stubbed_sdks(monkeypatch):
     litellm.completion = completion
     litellm.supports_response_schema = lambda model: False
     litellm.suppress_debug_info = False
+    # What `llm.litellm_map.load()` touches the first time it runs in a
+    # process, and its guard reset per test (monkeypatch restores it), so
+    # the result doesn't depend on what ran first (#86; #248's shape).
+    litellm.model_cost = {}
+    litellm.register_model = lambda model_cost: None
     monkeypatch.setitem(sys.modules, "litellm", litellm)
+    from policyforge.llm import litellm_map
+
+    monkeypatch.setattr(litellm_map, "_registered", None)
     return anthropic
 
 

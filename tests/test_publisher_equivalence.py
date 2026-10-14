@@ -629,6 +629,18 @@ def test_publish_produces_the_same_report_and_the_same_exporter_calls(name, tmp_
     def rows(report):
         return [(r.path, r.space, r.title, r.action, r.reason, r.url) for r in report.results]
 
+    if name == "existing stamped page":
+        # The one intended difference (#391): this page already says what the
+        # file says. The old loop wrote it again, a new version every run;
+        # the new one leaves it alone and says so.
+        from policyforge.export.publisher import UNCHANGED, UPDATED
+
+        assert [r.action for r in before.results] == [UPDATED] and exported_before
+        assert [r.action for r in after.results] == [UNCHANGED]
+        assert exported_after == []
+        assert "1 already matched the page and were left alone" in after.format_report()
+        return
+
     # The paths are relative to each root, so the two reports compare
     # field by field: every result, the dry-run flag, the undeclared count,
     # and the formatted report — the only assertion over what a user reads,
@@ -697,12 +709,31 @@ def test_pull_writes_the_same_files_and_reports_the_same_results(name, tmp_path,
     def rows(report):
         return [(r.title, r.path, r.action, r.reason) for r in report.results]
 
+    def with_notes(text, report):
+        # #387: a page no file is bound to is placed by its title, and the
+        # report now says so beside it. Only the first pull of each scenario
+        # does that; the second finds the file the first one bound.
+        noted = {f"  {r.title} -> {r.path}": r.note for r in report.results if r.note}
+        return "\n".join(
+            f"{line} ({noted[line]})" if line in noted else line for line in text.split("\n")
+        )
+
     # Compared the way publish is compared: every result, the dry-run flag
     # that decides what the user is told, and the formatted report itself.
     for new_report, old_report in ((new_first, old_first), (new_second, old_second)):
         assert rows(new_report) == rows(old_report)
         assert new_report.dry_run == old_report.dry_run
-        assert new_report.format_report() == old_report.format_report()
+        if name == "a missing page":
+            # #275: a not-found refusal gets its own advice, not the macro footer
+            expected_report = old_report.format_report().replace(
+                "\nThese pages read fine but would be damaged by a publish, so they are "
+                "not brought into the tree. Rewrite them in Confluence without those "
+                "macros, or keep them wiki-only.",
+                "\nCheck the page title and space.",
+            )
+            assert new_report.format_report() == with_notes(expected_report, new_report)
+        else:
+            assert new_report.format_report() == with_notes(old_report.format_report(), new_report)
     assert new_files == old_files, "byte-identical files, binding and all"
 
 

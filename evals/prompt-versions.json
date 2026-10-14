@@ -76,6 +76,12 @@
           "fingerprint": "becb0f33c587",
           "first_seen": "5be6b0e6989576fa65d3dfaf234abbb3ca5088c5"
         }
+      ],
+      "4": [
+        {
+          "fingerprint": "1c0806cc96c8",
+          "first_seen": "5ee301a44ed11de8733493ac738a7fb39751774d"
+        }
       ]
     },
     "generate.standard": {
@@ -111,6 +117,12 @@
         {
           "fingerprint": "ee664b5a81d2",
           "first_seen": "b0e15f596802ba318123d2348fed182f9613565a"
+        }
+      ],
+      "7": [
+        {
+          "fingerprint": "ff0ae6aa2d13",
+          "first_seen": "1b239323cbce2b77d431bebe1764d26608d0e9b5"
         }
       ]
     },
@@ -183,6 +195,22 @@
         {
           "fingerprint": "b76112165eeb",
           "first_seen": "28d066a2b3c9a91302481e911e355adafcb1748b"
+        }
+      ]
+    },
+    "generate.policy_group": {
+      "1": [
+        {
+          "fingerprint": "6851712b9c8c",
+          "first_seen": "f67f3d0d48f59c857ee907e8084e88a0c19c4501"
+        }
+      ]
+    },
+    "generate.acceptable_use": {
+      "1": [
+        {
+          "fingerprint": "97bd2b64fa49",
+          "first_seen": "e45ae37c57146342c30084a00892aee1e88be5b4"
         }
       ]
     }

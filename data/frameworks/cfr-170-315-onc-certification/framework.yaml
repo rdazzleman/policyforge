@@ -17,3 +17,9 @@ fetched_at: '2026-09-24'
 # ruling on #423): the certification criterion, 170.315(x)(n). A citation of
 # a paragraph inside one (170.315(b)(1)(iii)) reaches it.
 family: criterion
+# Below a leaf (an id the catalog doesn't subdivide), a cited part stands only
+# when the leaf's own text lists it as a list item (441; 80's 6235 rule 2 on
+# #438). Switched on per catalog, with what it rests on.
+leaf_parts: listed
+leaf_parts_measured: >-
+  2026-10-12 at release/1.8 937b6df5: 59 of 59 ids are leaves (criteria), whose texts list 302 first-level parts; in tests/fixtures/ecfr_45cfr170_315.xml, 436 of 437 paragraphs joining a criterion keep their marker where the check reads it (the other is in 170.315(a)(9), which the catalog doesn't carry); the committed corpus and the user's fresh-corpus run (431 files, 2,517 distinct citations): 0 turned red

@@ -462,3 +462,66 @@ def test_a_cut_off_answer_comes_back_as_text_without_the_partial_answer():
     # Routing asked twice (cut off, said aloud, sent to the documents), then
     # answering asked twice (cut off, refused). Never more: no third try.
     assert provider.calls == 4
+
+
+#: The commands #257 names, with a case and an alias variant: dispatch
+#: lowercases the word and resolves aliases (`/exit` is `/quit`).
+_SLASH = ("/quit", "/forget", "/boundary", "  /help", "/QUIT", "/exit")
+
+
+def _recording_dispatch(monkeypatch):
+    """Stand in for `zardoz.shell.dispatch` (which `call_tool` imports when
+    called), recording each line it is given."""
+    import policyforge.zardoz.shell
+
+    called = []
+
+    def stub(line, state):
+        called.append(line)
+        return "Stub answer"
+
+    monkeypatch.setattr(policyforge.zardoz.shell, "dispatch", stub)
+    return called
+
+
+def test_the_commands_change_the_state_this_refusal_protects(empty_state):
+    """The premise, through the real dispatch: `/quit` sets `running` False
+    and `/forget` empties the conversation. These are the attributes the
+    refusal test below watches, so it can't pass by watching the wrong one."""
+    from policyforge.zardoz.shell import dispatch
+
+    empty_state.conversation.add(object())
+    dispatch("/forget", empty_state)
+    assert len(empty_state.conversation) == 0
+    dispatch("/quit", empty_state)
+    assert empty_state.running is False
+
+
+@pytest.mark.parametrize("command", _SLASH)
+def test_ask_documents_refuses_a_command_before_dispatch(empty_state, monkeypatch, command):
+    """#257: through MCP, a line starting with / is refused, not run: the
+    server isn't told to stop, the conversation stays, and dispatch is never
+    called with it."""
+    from policyforge.mcp.server import call_tool
+
+    called = _recording_dispatch(monkeypatch)
+    turn = object()
+    empty_state.conversation.add(turn)
+
+    answer = call_tool(empty_state, "ask_documents", {"question": command})
+
+    assert answer == "This tool answers questions. Commands are not available through it."
+    assert called == []
+    assert empty_state.running is True
+    assert empty_state.conversation.turns == [turn]
+
+
+def test_ask_documents_passes_ordinary_questions_to_dispatch(empty_state, monkeypatch):
+    from policyforge.mcp.server import call_tool
+
+    called = _recording_dispatch(monkeypatch)
+
+    answer = call_tool(empty_state, "ask_documents", {"question": "What is the policy?"})
+
+    assert answer.startswith("Stub answer")
+    assert called == ["What is the policy?"]

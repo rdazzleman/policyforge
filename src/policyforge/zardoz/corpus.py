@@ -51,7 +51,23 @@ from policyforge.textfile import write_text_lf
 from policyforge.topics.registry import Topic
 
 DEFAULT_CORPUS_DIR = Path("output/.zardoz")
-DEFAULT_CONTENT_DIR = Path("output")
+DEFAULT_CONTENT_DIR = Path("docs")
+
+
+def content_tree(config: dict | None, override: Path | None = None) -> Path:
+    """The markdown content tree: `override`, then `zardoz.content_dir`, then
+    `DEFAULT_CONTENT_DIR`.
+
+    The one place the order is written. It takes the config it is handed and
+    reads no file, so a caller that holds a config dict (the shell, the MCP
+    server) and one that loads the project's (`cli._common._content_dir`)
+    cannot disagree about where the tree is.
+    """
+    if override is not None:
+        return override
+    configured = ((config or {}).get("zardoz") or {}).get("content_dir") or ""
+    return Path(configured) if configured else DEFAULT_CONTENT_DIR
+
 
 TRUSTED = "trusted"
 SUPPORTING = "supporting"
@@ -62,7 +78,11 @@ CONFLUENCE = "confluence"
 #: Bumped whenever the manifest gains a field an older reader would need in
 #: order to make sense of it. A corpus written by a newer PolicyForge is
 #: refused with an instruction to re-sync, rather than crashed into.
-CORPUS_SCHEMA = 1
+CORPUS_SCHEMA = 2
+#: The first schema whose documents carry `content_class` (#327). An older
+#: snapshot reads every document as the organization's own, which is wrong
+#: for a licensed-stamped file, so the session says so until it is re-synced.
+CLASSES_FROM_SCHEMA = 2
 
 #: How old a snapshot gets before answering from it deserves a warning.
 #: Published documents change; a month-old snapshot quoted with confidence
@@ -167,6 +187,12 @@ class CorpusDocument:
     #: it" instead of proposing an edit that would flatten them.
     unsupported_macros: list[str] = field(default_factory=list)
     synced_at: str = ""
+    #: What the document says it is, from its stamp (`content_class`, or
+    #: `generated_by.content_class`), as a known class or "" (#327, CR-01).
+    #: The class an answer drawing on it carries to the model: it used to be
+    #: dropped here, so a licensed-derived Standard synced into the corpus
+    #: was answered through any model. A Confluence page carries no stamp.
+    content_class: str = ""
     body: str = ""
 
     @property
@@ -200,7 +226,18 @@ class CorpusDocument:
         """
         from .injection import scan_document
 
-        return scan_document(self.title, self.body)
+        return scan_document(self.title, self.body, self.frontmatter_fields())
+
+    #: The string fields a document's frontmatter (or page properties) sets,
+    #: which an answer can show: `owner` is printed inside the answer fence.
+    #: Scanned with the body (#329).
+    FRONTMATTER_FIELDS = ("owner", "topic", "tier", "published_title", "space", "page_id")
+
+    def frontmatter_fields(self) -> list[tuple[str, str]]:
+        """`(name, value)` for every non-empty frontmatter string, and each label."""
+        fields = [(name, str(getattr(self, name))) for name in self.FRONTMATTER_FIELDS]
+        fields += [("labels", str(label)) for label in self.labels]
+        return [(name, value) for name, value in fields if value]
 
     @property
     def is_editable(self) -> bool:
@@ -221,6 +258,13 @@ class Corpus:
     documents: list[CorpusDocument] = field(default_factory=list)
     synced_at: str = ""
     host: str = ""
+    #: The manifest schema it was written with: below `CLASSES_FROM_SCHEMA`,
+    #: no document's content class was recorded (#327).
+    schema: int = CORPUS_SCHEMA
+
+    @property
+    def classes_recorded(self) -> bool:
+        return self.schema >= CLASSES_FROM_SCHEMA
 
     def __len__(self) -> int:
         return len(self.documents)
@@ -278,6 +322,10 @@ class SyncReport:
     #: Set when the run resolved nothing and an existing corpus was left
     #: alone rather than replaced with an empty one.
     refused_empty: bool = False
+    #: (document, the stamped value) for each document whose `content_class`
+    #: isn't a known class (#336). Read as licensed, and said once per document
+    #: so a typo is visible, not silently over-protected (80's ruling).
+    unknown_classes: list[tuple[str, str]] = field(default_factory=list)
 
     @property
     def unresolved_users(self) -> int:
@@ -322,6 +370,14 @@ class SyncReport:
                 "profiles, or write the owner as plain text on the page.",
             ]
 
+        if self.unknown_classes:
+            lines += [""]
+            lines += [
+                f"Warning: {what} says content_class: {value!r}, which isn't a known class, "
+                "so it is read as licensed."
+                for what, value in self.unknown_classes
+            ]
+
         brittle = [doc for doc in self.synced if doc.unsupported_macros]
         if brittle:
             lines += [
@@ -332,10 +388,10 @@ class SyncReport:
             if len(brittle) > 10:
                 lines.append(f"  ... and {len(brittle) - 10} more")
 
-        # Reported here rather than on the answer, and that is the whole
-        # design. A warning at sync time reaches somebody who can still open
-        # the page and look; the same warning stapled to an answer arrives
-        # after the fact and teaches its reader to click past warnings.
+        # Named here, where somebody can still open the page and look. Since
+        # issue 288 a flagged document is also left out of every answer
+        # (`RetrievalIndex.excluded`, by this same `reader_directed`), and an
+        # answer says only how many were left out, in one line, pointing here.
         directed = [(doc, doc.reader_directed()) for doc in self.synced]
         directed = [(doc, findings) for doc, findings in directed if findings]
         if directed:
@@ -355,10 +411,9 @@ class SyncReport:
             if len(directed) > 10:
                 lines.append(f"  ... and {len(directed) - 10} more document(s)")
             lines += [
-                "  Zardoz fences passage text so it cannot be read as instruction, so this "
-                "is not an outage.",
-                "  It is worth looking at anyway: usually a page somebody pasted a chat "
-                "transcript into, occasionally not.",
+                "  These documents are left out of answers until the page no longer reads "
+                "this way.",
+                "  Usually a page somebody pasted a chat transcript into, occasionally not.",
             ]
 
         return "\n".join(lines)
@@ -399,13 +454,13 @@ def _document_from_page(page, *, confidence: str, **known) -> CorpusDocument:
     from policyforge.edit.apply import detect_unsupported_macros
     from policyforge.export.confluence_importer import (
         UNRESOLVED_USER,
-        confluence_to_markdown,
+        convert_page,
         extract_references,
     )
 
     user_names = known.pop("user_names", {}) or {}
     space = known.get("space", "")
-    body = confluence_to_markdown(page.storage_body, user_names=user_names)
+    body = convert_page(page.storage_body, title=page.title, user_names=user_names)
     return CorpusDocument(
         doc_id=_doc_id(prefix=space, name=page.title, identity=f"{space}\x00{page.title}"),
         title=page.title,
@@ -458,18 +513,32 @@ def _document_from_file(doc, *, topics: list[Topic]) -> CorpusDocument:
         owner=owner,
         references=doc.references,
         synced_at=_now(),
+        content_class=_stamped_class(doc.metadata),
         body=doc.body,
     )
+
+
+def _stamped_class(metadata: dict) -> str:
+    """The known content class a file's frontmatter states, or "" (#327).
+    The provenance module's reading, so the corpus and the wiki exporter
+    agree on what a stamp says."""
+    from policyforge.content.provenance import carried_content_class, declared_content_class
+
+    return carried_content_class([declared_content_class(metadata)]) or ""
 
 
 def sync_markdown(
     content_dir: Path, topics: list[Topic], *, report: SyncReport
 ) -> list[CorpusDocument]:
     """Read the content tree into corpus documents, recording what failed."""
+    from policyforge.content.provenance import declared_content_class, unknown_stamp
     from policyforge.content.tree import load_content_tree
 
     documents, problems = load_content_tree(content_dir)
     report.skipped.extend(problems)
+    for doc in documents:
+        if value := unknown_stamp(declared_content_class(doc.metadata)):
+            report.unknown_classes.append((doc.relative_path, value))
     return [_document_from_file(doc, topics=topics) for doc in documents]
 
 
@@ -488,7 +557,11 @@ def sync_confluence(
     what the registry declares. The supporting space is discovered with one
     CQL query, because nobody has listed its contents.
     """
-    from policyforge.export.confluence_importer import extract_user_ids, fetch_confluence_page
+    from policyforge.export.confluence_importer import (
+        PageTooDeepError,
+        extract_user_ids,
+        fetch_confluence_page,
+    )
     from policyforge.export.confluence_search import SearchLimitExceeded, search_pages, space_cql
 
     names = _UserNames(host)
@@ -532,17 +605,21 @@ def sync_confluence(
                 report.skipped.append((f"{title} ({tier})", str(exc)))
                 continue
 
-            documents.append(
-                _document_from_page(
-                    page,
-                    confidence=TRUSTED,
-                    space=space,
-                    tier=tier,
-                    topic=topic.name,
-                    owner=topic.owner,
-                    user_names=names.resolve(extract_user_ids(page.storage_body)),
+            try:
+                documents.append(
+                    _document_from_page(
+                        page,
+                        confidence=TRUSTED,
+                        space=space,
+                        tier=tier,
+                        topic=topic.name,
+                        owner=topic.owner,
+                        user_names=names.resolve(extract_user_ids(page.storage_body)),
+                    )
                 )
-            )
+            except PageTooDeepError as exc:
+                report.skipped.append((f"{title} ({tier})", str(exc)))
+                continue
             seen_titles.add(title.lower())
 
     if supporting_space:
@@ -563,14 +640,18 @@ def sync_confluence(
             # The claimed one wins.
             if page.title.lower() in seen_titles:
                 continue
-            documents.append(
-                _document_from_page(
-                    page,
-                    confidence=SUPPORTING,
-                    space=supporting_space,
-                    user_names=names.resolve(extract_user_ids(page.storage_body)),
+            try:
+                documents.append(
+                    _document_from_page(
+                        page,
+                        confidence=SUPPORTING,
+                        space=supporting_space,
+                        user_names=names.resolve(extract_user_ids(page.storage_body)),
+                    )
                 )
-            )
+            except PageTooDeepError as exc:
+                report.skipped.append((page.title, str(exc)))
+                continue
             seen_titles.add(page.title.lower())
 
     return documents
@@ -723,4 +804,5 @@ def load_corpus(corpus_dir: Path = DEFAULT_CORPUS_DIR) -> Corpus:
         documents=documents,
         synced_at=manifest.get("synced_at", ""),
         host=manifest.get("host", ""),
+        schema=schema,
     )

@@ -275,7 +275,7 @@ def test_opening_the_pr_pushes_to_forgejo_then_posts_it():
     fake = Forgejo()
     release._open_pr(_ctx(fake, run=run))
     pushes = [a for a in calls if "push" in a]
-    assert pushes and pushes[0][4] == release.FORGEJO_REMOTE, pushes
+    assert pushes and pushes[0][4] == release.FORGEJO_REPO_URL, pushes
     assert not any("origin" in a for a in calls), "nothing goes to GitHub"
     posted = [c for c in fake.calls if c[0] == "POST"]
     assert posted and posted[0][1] == f"/repos/{R}/pulls" and posted[0][2]["base"] == "main"
@@ -303,8 +303,8 @@ def test_the_main_check_reads_forgejo_main():
     ctx = _ctx(Forgejo(lists={PULLS: [_pr("closed", True)]}), run=run)
     check = release._main_merged(ctx)
     assert check.ok, check.measured
-    assert any(a[3:6] == ["fetch", "-q", release.FORGEJO_REMOTE] for a in calls), calls
-    assert any(f"{release.FORGEJO_REMOTE}/main" in a for a in calls)
+    assert any(a[3:6] == ["fetch", "-q", release.FORGEJO_REPO_URL] for a in calls), calls
+    assert any(release.FORGEJO_MAIN_REF in a for a in calls)
 
 
 def test_the_install_record_is_posted_to_forgejo(monkeypatch):
@@ -349,11 +349,18 @@ def test_the_token_reaches_git_by_environment_never_argv(monkeypatch):
     monkeypatch.setenv("FORGEJO_TOKEN", "t0ken")
     monkeypatch.delenv("GIT_CONFIG_COUNT", raising=False)
     env = release._git_env()
-    values = [env[k] for k in env if k.startswith("GIT_CONFIG_VALUE_")]
-    keys = [env[k] for k in env if k.startswith("GIT_CONFIG_KEY_")]
-    assert values and all(v == "Authorization: token t0ken" for v in values)
-    assert all(k.startswith("http.http://") and k.endswith(".extraHeader") for k in keys), keys
-    assert env["GIT_CONFIG_COUNT"] == str(len(keys))
+    count = int(env["GIT_CONFIG_COUNT"])
+    pairs = [(env[f"GIT_CONFIG_KEY_{i}"], env[f"GIT_CONFIG_VALUE_{i}"]) for i in range(count)]
+    headers = [(k, v) for k, v in pairs if v == "Authorization: token t0ken"]
+    assert headers and all(
+        k.startswith("http.http://") and k.endswith(".extraHeader") for k, _ in headers
+    ), pairs
+    # The only other entries: the credential helpers reset for exactly those
+    # Forgejo prefixes, so the header is Forgejo's only credential (ba on
+    # #124) and GitHub keeps the operator's own helper (1d on #124).
+    prefixes = [k.removeprefix("http.").removesuffix(".extraHeader") for k, _ in headers]
+    resets = [(f"credential.{prefix}.helper", "") for prefix in prefixes]
+    assert sorted(p for p in pairs if p not in headers) == sorted(resets), pairs
 
 
 def test_no_token_leaves_git_environment_alone(monkeypatch):

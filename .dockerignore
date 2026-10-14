@@ -14,13 +14,22 @@
 !LICENSE
 !requirements/runtime.txt
 !src/
-# The four public catalogs by name. HITRUST and GovRAMP are bring-your-own
+# The public catalogs by name. HITRUST and GovRAMP are bring-your-own
 # and licensed: only their READMEs come in, so a controls.json someone copied
 # into data/frameworks/hitrust-csf/ by hand still stays out.
 !data/frameworks/nist-800-53-r5/
 !data/frameworks/fedramp/
 !data/frameworks/arc-ampe/
 !data/frameworks/hipaa-security-rule/
+!data/frameworks/cfr-170-315-onc-certification/
+!data/frameworks/cfr-171-information-blocking/
+!data/frameworks/cfr-42-part-2-sud-records/
+!data/frameworks/hipaa-breach-notification-rule/
+!data/frameworks/hipaa-privacy-rule/
+!data/frameworks/nist-800-171-r3/
+!data/frameworks/nist-ai-rmf/
+!data/frameworks/nist-ai-rmf-playbook/
+!data/frameworks/nist-csf-2-0/
 !data/frameworks/*/README.md
 !config/config.example.yaml
 !config/topics.example.yaml

@@ -14,6 +14,11 @@ autofilter, list validation bound to a named range, and simple cross-sheet
 formulas. No pivot tables, rich text, or conditional formatting, all of
 which are where Excel/LibreOffice fidelity actually diverges.
 
+**Every cell filled from input is written as text** (`_as_text`, `_put`,
+`_text_row`), never left to openpyxl, which stores any string beginning with
+`=` as a formula (#218, CR-13). The CIS Summary's `=IF` cells are the only
+formulas, and the only cells built by `_formula`.
+
 Structure, and where it comes from:
 
 * **System Information** — the plan elements NIST SP 800-18 expects of an
@@ -121,6 +126,64 @@ class SSPBuildResult:
     narrative_count: int
 
 
+#: First characters a spreadsheet reads as the start of a formula when a cell
+#: is typed, edited or pasted: `=`, and `+ - @` which Excel and LibreOffice
+#: also evaluate, plus a leading tab or line break, which some apps strip
+#: before reading what follows (#218, CR-13). A line feed is one too: a
+#: carriage return is written as one (#230), so a text that began with CR
+#: still begins with a line break.
+_FORMULA_LEADS = ("=", "+", "-", "@", "\t", "\r", "\n")
+
+
+def _as_text(cell, value):
+    """Put `value` in `cell` as TEXT, never as a formula (#218, CR-13).
+
+    openpyxl stores any string beginning with `=` as a formula, and every
+    string this writer puts in a cell comes from a catalog, the system profile,
+    a crosswalk or a drafted narrative, none of which is a formula. So the
+    type is set, not inferred: the cell is a string cell, and a text that
+    begins with one of `_FORMULA_LEADS` also carries the quote-prefix style,
+    so a user editing the cell later doesn't turn it into a formula either.
+    The text is written as given, except that every CR and CRLF becomes LF
+    (#230): openpyxl writes a CR raw and XML reads it back as LF, so a CRLF
+    came back as two line breaks; writing LF makes what's read back what was
+    meant. A non-string value (none is written today) keeps the type openpyxl
+    gives it, so a number stays a number.
+    """
+    if isinstance(value, str):
+        value = value.replace("\r\n", "\n").replace("\r", "\n")
+    cell.value = value
+    if isinstance(value, str) and value:
+        cell.data_type = "s"
+        if value.startswith(_FORMULA_LEADS):
+            cell.quotePrefix = True
+    return cell
+
+
+def _text_row(worksheet, values) -> list:
+    """`values` as cells to `append`, each written by `_as_text`."""
+    from openpyxl.cell.cell import Cell
+
+    return [_as_text(Cell(worksheet), value) for value in values]
+
+
+def _put(worksheet, ref: str, value) -> None:
+    """`worksheet[ref] = value`, as text (`_as_text`)."""
+    _as_text(worksheet[ref], value)
+
+
+def _formula(worksheet, formula: str):
+    """A cell the writer means as a formula: the CIS Summary's `=IF(...)`
+    cells, which are this module's own text, built from its own sheet names
+    and vocabularies. The only formulas in the workbook (#218)."""
+    from openpyxl.cell.cell import Cell
+
+    cell = Cell(worksheet, value=formula)
+    if cell.data_type != "f":
+        raise ValueError(f"not a formula: {formula!r}")
+    return cell
+
+
 def _style_header(worksheet, row: int, columns: int) -> None:
     from openpyxl.styles import Alignment, Font, PatternFill
 
@@ -164,39 +227,47 @@ def _add_list_validation(worksheet, cell_range: str, source_range: str) -> None:
 
 
 def _build_reference_sheet(worksheet, catalog_version: str, generated: str) -> None:
-    worksheet["A1"] = "Implementation Status"
-    worksheet["B1"] = "Definition"
-    worksheet["D1"] = "Control Origination"
-    worksheet["F1"] = "Review Status"
+    _put(worksheet, "A1", "Implementation Status")
+    _put(worksheet, "B1", "Definition")
+    _put(worksheet, "D1", "Control Origination")
+    _put(worksheet, "F1", "Review Status")
     for row, status in enumerate(IMPLEMENTATION_STATUS, start=2):
-        worksheet[f"A{row}"] = status
-        worksheet[f"B{row}"] = STATUS_DEFINITIONS[status]
+        _put(worksheet, f"A{row}", status)
+        _put(worksheet, f"B{row}", STATUS_DEFINITIONS[status])
     for row, origination in enumerate(CONTROL_ORIGINATION, start=2):
-        worksheet[f"D{row}"] = origination
+        _put(worksheet, f"D{row}", origination)
     for row, review in enumerate(REVIEW_STATUS, start=2):
-        worksheet[f"F{row}"] = review
+        _put(worksheet, f"F{row}", review)
 
     notes_row = max(len(IMPLEMENTATION_STATUS), len(CONTROL_ORIGINATION), len(REVIEW_STATUS)) + 4
-    worksheet[f"A{notes_row}"] = "Provenance"
-    worksheet[f"A{notes_row + 1}"] = "Control catalog"
-    worksheet[f"B{notes_row + 1}"] = f"NIST SP 800-53 {catalog_version} (OSCAL, public domain)"
-    worksheet[f"A{notes_row + 2}"] = "Catalog source"
-    worksheet[f"B{notes_row + 2}"] = "https://github.com/usnistgov/oscal-content"
-    worksheet[f"A{notes_row + 3}"] = "Status/origination vocabulary"
-    worksheet[f"B{notes_row + 3}"] = "FedRAMP SSP Appendix J CIS/CRM Workbook"
-    worksheet[f"A{notes_row + 4}"] = "Plan elements"
-    worksheet[f"B{notes_row + 4}"] = "NIST SP 800-18 Rev. 1"
-    worksheet[f"A{notes_row + 5}"] = "Generated"
-    worksheet[f"B{notes_row + 5}"] = generated
-    worksheet[f"A{notes_row + 7}"] = "Note"
-    worksheet[f"B{notes_row + 7}"] = (
-        "Control text is reproduced verbatim from the NIST catalog. Implementation "
-        f"narratives marked '{DRAFT_PREFIX}' are machine-drafted scaffolds and must be "
-        "reviewed and corrected by the system owner before this plan is relied upon."
+    _put(worksheet, f"A{notes_row}", "Provenance")
+    _put(worksheet, f"A{notes_row + 1}", "Control catalog")
+    _put(worksheet, f"B{notes_row + 1}", f"NIST SP 800-53 {catalog_version} (OSCAL, public domain)")
+    _put(worksheet, f"A{notes_row + 2}", "Catalog source")
+    _put(worksheet, f"B{notes_row + 2}", "https://github.com/usnistgov/oscal-content")
+    _put(worksheet, f"A{notes_row + 3}", "Status/origination vocabulary")
+    _put(worksheet, f"B{notes_row + 3}", "FedRAMP SSP Appendix J CIS/CRM Workbook")
+    _put(worksheet, f"A{notes_row + 4}", "Plan elements")
+    _put(worksheet, f"B{notes_row + 4}", "NIST SP 800-18 Rev. 1")
+    _put(worksheet, f"A{notes_row + 5}", "Generated")
+    _put(worksheet, f"B{notes_row + 5}", generated)
+    _put(worksheet, f"A{notes_row + 7}", "Note")
+    _put(
+        worksheet,
+        f"B{notes_row + 7}",
+        (
+            "Control text is reproduced verbatim from the NIST catalog. Implementation "
+            f"narratives marked '{DRAFT_PREFIX}' are machine-drafted scaffolds and must be "
+            "reviewed and corrected by the system owner before this plan is relied upon."
+        ),
     )
-    worksheet[f"B{notes_row + 8}"] = (
-        "The CIS Summary sheet is derived by formula from the Control Implementation "
-        "sheet — set status and origination there, not on that sheet."
+    _put(
+        worksheet,
+        f"B{notes_row + 8}",
+        (
+            "The CIS Summary sheet is derived by formula from the Control Implementation "
+            "sheet — set status and origination there, not on that sheet."
+        ),
     )
 
     _style_header(worksheet, 1, 6)
@@ -205,8 +276,8 @@ def _build_reference_sheet(worksheet, catalog_version: str, generated: str) -> N
 
 
 def _build_system_sheet(worksheet, system: SystemProfile, org: OrgContext) -> None:
-    worksheet["A1"] = "System Security Plan"
-    worksheet["B1"] = system.name or "[System Name]"
+    _put(worksheet, "A1", "System Security Plan")
+    _put(worksheet, "B1", system.name or "[System Name]")
     _style_header(worksheet, 1, 2)
 
     rows = [
@@ -239,11 +310,11 @@ def _build_system_sheet(worksheet, system: SystemProfile, org: OrgContext) -> No
     for index, (label, value) in enumerate(rows, start=3):
         if not label:
             continue
-        worksheet[f"A{index}"] = label
+        _put(worksheet, f"A{index}", label)
         worksheet[f"A{index}"].font = Font(bold=True)
         # An empty field becomes a visible placeholder rather than a blank
         # cell, so what still needs filling in is obvious at a glance.
-        worksheet[f"B{index}"] = value or f"[{label}]"
+        _put(worksheet, f"B{index}", value or f"[{label}]")
 
     _set_widths(worksheet, {"A": 34, "B": 90})
     _wrap(worksheet, ["B"], 3, len(rows) + 3)
@@ -287,7 +358,7 @@ def _build_controls_sheet(
         "Related Controls",
     ] + [f"Maps to: {name.upper()}" for name in frameworks]
 
-    worksheet.append(headers)
+    worksheet.append(_text_row(worksheet, headers))
     _style_header(worksheet, 1, len(headers))
 
     for control in controls:
@@ -306,7 +377,7 @@ def _build_controls_sheet(
             REVIEW_STATUS[0] if narratives.get(control.control_id) else "",
             ", ".join(control.related_controls),
         ] + [", ".join(mappings.get(name, [])) for name in frameworks]
-        worksheet.append(row)
+        worksheet.append(_text_row(worksheet, row))
 
     last_row = worksheet.max_row
     _set_widths(
@@ -349,24 +420,27 @@ def _build_enhancements_sheet(worksheet, controls: list[Control]) -> None:
         "Implementation Description",
         "Review Status",
     ]
-    worksheet.append(headers)
+    worksheet.append(_text_row(worksheet, headers))
     _style_header(worksheet, 1, len(headers))
 
     for control in controls:
         for enhancement in control.enhancements:
             worksheet.append(
-                [
-                    control.control_id,
-                    enhancement.enhancement_id,
-                    enhancement.title,
-                    enhancement.baseline or "",
-                    enhancement.description,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                ]
+                _text_row(
+                    worksheet,
+                    [
+                        control.control_id,
+                        enhancement.enhancement_id,
+                        enhancement.title,
+                        enhancement.baseline or "",
+                        enhancement.description,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    ],
+                )
             )
 
     last_row = worksheet.max_row
@@ -397,25 +471,35 @@ def _build_enhancements_sheet(worksheet, controls: list[Control]) -> None:
 
 def _build_cis_sheet(worksheet, controls: list[Control]) -> None:
     """FedRAMP-style CIS matrix, derived by formula from the controls sheet."""
-    worksheet["A1"] = "Control Implementation Summary"
-    worksheet["B1"] = (
-        "Derived from the Control Implementation sheet — do not edit; "
-        "change status and origination there."
+    _put(worksheet, "A1", "Control Implementation Summary")
+    _put(
+        worksheet,
+        "B1",
+        (
+            "Derived from the Control Implementation sheet — do not edit; "
+            "change status and origination there."
+        ),
     )
     worksheet.append([])
 
     headers = ["Control ID", *IMPLEMENTATION_STATUS, *CONTROL_ORIGINATION]
-    worksheet.append(headers)
+    worksheet.append(_text_row(worksheet, headers))
     header_row = worksheet.max_row
     _style_header(worksheet, header_row, len(headers))
 
     for index, control in enumerate(controls):
         source_row = index + 2  # Control Implementation data starts at row 2.
-        row = [control.control_id]
+        row = _text_row(worksheet, [control.control_id])
         for status in IMPLEMENTATION_STATUS:
-            row.append(f'=IF(\'{SHEET_CONTROLS}\'!$G{source_row}="{status}","X","")')
+            row.append(
+                _formula(worksheet, f'=IF(\'{SHEET_CONTROLS}\'!$G{source_row}="{status}","X","")')
+            )
         for origination in CONTROL_ORIGINATION:
-            row.append(f'=IF(\'{SHEET_CONTROLS}\'!$H{source_row}="{origination}","X","")')
+            row.append(
+                _formula(
+                    worksheet, f'=IF(\'{SHEET_CONTROLS}\'!$H{source_row}="{origination}","X","")'
+                )
+            )
         worksheet.append(row)
 
     last_row = worksheet.max_row

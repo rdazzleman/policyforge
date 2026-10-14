@@ -51,12 +51,14 @@ def _without_source(args) -> set[str]:
     return set(args)
 
 
+@pytest.mark.github_config
 def test_ci_and_check_py_scan_the_same_scope():
     ci = _without_source(_ci_detect_args())
     local = _without_source(check.GITLEAKS_ARGS)
     assert ci == local, f"CI scans with {sorted(ci)}, check.py with {sorted(local)}"
 
 
+@pytest.mark.github_config
 def test_both_scan_only_the_commit_under_test():
     assert "--log-opts=HEAD" in _ci_detect_args()
     assert "--log-opts=HEAD" in check.GITLEAKS_ARGS

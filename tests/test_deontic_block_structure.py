@@ -13,6 +13,7 @@ from markdown_it import MarkdownIt
 from policyforge.content.deontic import _line_kinds, analyze
 
 AC2 = "[NIST 800-53 AC-2]"
+NL = chr(10)
 CP2 = "*[NIST CP-2(7)]*"
 AU2 = "[NIST 800-53 AU-2]"
 
@@ -54,6 +55,92 @@ def test_a_dotted_section_number_is_not_a_statement():
     ):
         assert _texts(kept + "\n") == [kept], kept
     assert _texts("See section 6.2. The owner must act.\n")[0] == "See section 6.2."
+
+
+def test_a_dotted_number_after_a_bullet_is_not_a_statement():
+    """#18 (a): `- 6.2. Staff must ...` emitted `- 6.2.` (1d's finding). The
+    item now reads as the same bullet without its number does."""
+    for bullet in ("-", "*", "+"):
+        text = f"{bullet} 6.2. Staff must report incidents.\n"
+        assert _texts(text) == _texts(f"{bullet} Staff must report incidents.\n"), bullet
+    # Kept as they were: the splitter never cut these off.
+    for kept in ("- 6.2. staff must report incidents.", "- 6.2 Staff must report incidents."):
+        assert _texts(kept + "\n") == [kept], kept
+
+
+def test_a_dotted_number_after_an_ordered_marker_is_not_a_statement():
+    """#18 (a) for numbered steps (b5 on PR 280): `1. 6.2. Staff must ...`
+    emitted `1. 6.2.`. Both the item's number and the section number go."""
+    for marker in ("1.", "1)", "3.", "   1.", "> 1."):
+        text = f"{marker} 6.2. Staff must report incidents.{NL}"
+        prefix = "> " if marker.startswith(">") else ""
+        assert _texts(text) == [f"{prefix}Staff must report incidents."], marker
+    steps = f"1. 6.2. Staff must report incidents.{NL}2. 6.3. The owner must review access.{NL}"
+    assert _texts(steps) == ["Staff must report incidents.", "The owner must review access."]
+
+
+def test_an_ordered_marker_keeps_its_role_where_no_section_number_is_cut():
+    """A plain numbered step, a number the splitter never cuts off, and a
+    later line that only looks like a step (only `1.` interrupts a
+    paragraph, so `2. 6.3.` there is continuation text) read as at the tip."""
+    plain = f"1. Staff must report incidents.{NL}2. The owner must review access.{NL}"
+    assert _texts(plain) == ["Staff must report incidents.", "The owner must review access."]
+    assert _texts(f"1. 6.2. staff must report incidents.{NL}") == [
+        "1. 6.2. staff must report incidents."
+    ]
+    continued = f"The owner reviews access.{NL}2. 6.3. Staff must report incidents.{NL}"
+    assert _texts(continued) == [
+        "The owner reviews access. 2. 6.3.",
+        "Staff must report incidents.",
+    ]
+
+
+def test_a_dotted_number_opening_a_later_line_is_not_glued_to_the_sentence_above():
+    """#18 (b): a `6.2.` opening a paragraph's second line stayed on the
+    sentence above (`... quarter. 6.2.`, 9b's finding)."""
+    text = "The owner reviews access every quarter.\n6.2. Staff must report incidents.\n"
+    assert _texts(text) == [
+        "The owner reviews access every quarter.",
+        "Staff must report incidents.",
+    ]
+    # A citation trailing the line above doesn't hide the sentence's end.
+    cited = f"The owner reviews access every quarter. {AC2}\n6.2. Staff must report incidents.\n"
+    assert _texts(cited) == [
+        "The owner reviews access every quarter.",
+        "Staff must report incidents.",
+    ], "no stray 6.2. statement between them"
+    # A cross-reference wrapped onto the next line keeps its number: the line
+    # above didn't end its sentence (9b: all 32 corpus cases are this).
+    wrapped = "Staff must follow the steps in section\n6.2. The owner approves exceptions.\n"
+    assert _texts(wrapped)[0] == "Staff must follow the steps in section 6.2."
+
+
+def test_blanking_a_later_number_never_merges_two_statements():
+    """ba on the carry: the line above judged alone, emphasis removed, said
+    it ended its sentence, but the splitter reads `.**` and a block quote's
+    `>` as no boundary. Blanking the number then joined two requirements into
+    one statement. Each case is still two statements, as before the issue."""
+    for above, below in (
+        ("**The owner reviews access.**", "6.2. Staff must report incidents."),
+        ("> The owner reviews access.", "> 6.2. Staff must report incidents."),
+        ("The owner reviews access (quarterly.)", "6.2. Staff must report incidents."),
+    ):
+        texts = _texts(above + NL + below + NL)
+        assert len(texts) == 2 and texts[-1] == "Staff must report incidents.", texts
+
+
+def test_a_later_number_is_cut_off_after_any_sentence_end_the_splitter_reads():
+    """#18 (b) beyond a full stop: a question, an exclamation, a hard break,
+    a list item's continuation line and a three-part number."""
+    for above, below in (
+        ("Who reviews access?", "6.2. Staff must report incidents."),
+        ("Review access now!", "6.2. Staff must report incidents."),
+        ("The owner reviews access.  ", "6.2. Staff must report incidents."),
+        ("- The owner reviews access.", "  6.2. Staff must report incidents."),
+        ("The owner reviews access.", "6.2.1. Staff must report incidents."),
+    ):
+        texts = _texts(above + NL + below + NL)
+        assert texts[0] == above.strip() and texts[1:] == ["Staff must report incidents."], texts
 
 
 def test_a_number_under_a_sentence_is_not_glued_to_its_end():

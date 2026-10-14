@@ -273,14 +273,25 @@ def framework_readme(command: str) -> str:
     return f"data/frameworks/{directory}/README.md in the PolicyForge repository"
 
 
+#: How to ask for the licensed-framework plugin, in the words zardoz.io uses
+#: ("contact us about the plugin": a mailto to info@zardoz.io with this
+#: subject). The user's decision on #156: the plugin is obtained by asking.
+#: Said wherever PolicyForge says the plugin is distributed separately, and
+#: `tests/test_plugin_contact.py` keeps the two together.
+PLUGIN_CONTACT = (
+    "To ask for it, contact info@zardoz.io with the subject "
+    '"PolicyForge licensed-framework plugin".'
+)
+
+
 def require(command: str) -> Parser:
     """The parser for `command`, or a refusal naming why there isn't one.
 
     Absent, it says the plugin is distributed separately from the public
-    tool, and gives a next step that exists: `generate-parser` where it
+    tool and how to ask for it (`PLUGIN_CONTACT`, the user's decision on
+    #156), and gives a next step that exists: `generate-parser` where it
     drafts this framework's loader, and always the framework's README
-    (#101). It says nothing about where the plugin comes from until the user
-    decides that (80, 2073)."""
+    (#101)."""
     parser = parsers().get(command)
     if parser is None:
         framework = GENERATE_PARSER_FRAMEWORK.get(command)
@@ -296,7 +307,7 @@ def require(command: str) -> Parser:
         raise PluginAbsent(
             f"`{command}` needs the licensed-framework plugin, which isn't installed. The "
             "parsers for licensed frameworks aren't part of the public PolicyForge: the "
-            "plugin is distributed separately. If your organisation has it, install it "
-            f"into this environment.{draft}{read}"
+            f"plugin is distributed separately. {PLUGIN_CONTACT} If your organisation "
+            f"has it, install it into this environment.{draft}{read}"
         )
     return parser

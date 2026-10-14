@@ -24,9 +24,8 @@ Output contract: every generator here must return portable, well-formed
 CommonMark markdown — no Obsidian wikilinks, no vault-relative-only paths.
 This is the *canonical* output; export/confluence_exporter.py converts this
 same markdown to Confluence storage format rather than generating
-Confluence content independently. See README's "Output format priority"
-section — getting this contract right is what keeps both output formats
-correct.
+Confluence content independently. Getting this contract right is what
+keeps both output formats correct.
 
 Documents get `[Square-Bracket Placeholder]` placeholders wherever a detail
 isn't available from the organization context below (a vendor, an owning
@@ -35,6 +34,7 @@ team, an exceptions contact) rather than inventing a specific name.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 
 from policyforge.llm.base import LLMProvider
@@ -75,6 +75,10 @@ class TopicContext:
     #: sentences are the organization's commitments and a Procedure's are
     #: instructions, so a voluntary suggestion reaching either becomes one.
     playbook: list[dict] = field(default_factory=list)
+    #: The Policy this topic's Standard belongs to (22, part 2), from the
+    #: synthesis frontmatter. Written into the Standard by `generate`, not
+    #: asked of the model.
+    policy: str = ""
 
 
 #: The one sentence form a Standard uses for a Playbook subcategory (#301).
@@ -99,7 +103,8 @@ PLAYBOOK_MERGED_TAG_EXAMPLE = (
 _STANDARD_SYSTEM_PROMPT = register(
     Prompt(
         name="generate.standard",
-        version=6,
+        # 7: the tag form the user confirmed, and no quoted source text (#17).
+        version=7,
         text=f"""You are a compliance policy drafting engine. \
 Turn a set of already-synthesized, source-tagged requirement statements \
 into a formal information security STANDARD document for one \
@@ -114,9 +119,15 @@ Rules:
 - Every requirement in the input must be reflected in the output — do not
   drop or water down a requirement, and do not add requirements that
   weren't in the input.
-- Preserve each requirement's inline source tag (e.g. `[NIST 800-53 IA-5 |
-  GovRAMP IA-5]`) so the document stays traceable back to the frameworks it
-  was drawn from.
+- Keep each requirement's inline source tag, so the document stays
+  traceable back to the frameworks it was drawn from, and write it in this
+  form: `[HITRUST 11.a, 11.c | NIST IR-1, IR-8 | ARC-AMPE]`. List NIST SP
+  800-53 ids once, under `NIST`. Name a tailoring of 800-53 (ARC-AMPE,
+  FedRAMP, GovRAMP) with no ids, unless it adds an enhancement the tag
+  doesn't cite under `NIST` (e.g. `[NIST RA-5 | ARC-AMPE RA-5(11)]`). Other
+  frameworks keep their own ids. Never drop a cited id.
+- Don't quote the source frameworks' wording: each section's cited
+  requirements are added below it, from the catalogs, after drafting.
 - A requirement tagged `[NIST AI RMF Playbook ...]` is NIST's voluntary
   suggestion, not a requirement. Write it as NIST suggesting the action
   ("NIST suggests ..."), keep its tag, and never give that sentence "must",
@@ -215,7 +226,7 @@ Rules:
 _PROCEDURE_SYSTEM_PROMPT = register(
     Prompt(
         name="generate.procedure",
-        version=3,
+        version=4,
         text="""You are a compliance policy drafting engine. \
 Turn a set of already-synthesized, source-tagged requirement statements \
 into a formal information security PROCEDURE document for one \
@@ -241,8 +252,11 @@ Rules:
   input must be reflected here; do not drop, water down, or merge unrelated
   requirements together the way the Policy tier does. Preserve each
   requirement's inline source tag (e.g. `[NIST 800-53 IA-5 | GovRAMP IA-5]`) at the
-  end of its subsection heading or its first step, so the document stays
-  traceable back to the frameworks it was drawn from.
+  end of its subsection heading or its first step. PolicyForge reads each tag
+  to link the section to the Standard section that cites the same
+  requirement, and then moves it into a Traceability section at the end of
+  the document, so a tag must be the requirement's own and must not be
+  reworded.
 - A requirement tagged `[NIST AI RMF Playbook ...]` is NIST's voluntary
   suggestion, not a requirement. Write it as NIST suggesting the action
   ("NIST suggests ..."), keep its tag, and never give that sentence "must",
@@ -356,6 +370,68 @@ def _render_context(org: OrgContext, topic: TopicContext | None) -> str:
     return "\n".join(lines)
 
 
+def parent_policy_sentence(policy: str) -> str:
+    """The one sentence a Standard says about its parent Policy (22, part 2;
+    80's 5919), or that it has none."""
+    name = policy.strip()
+    if not name:
+        return "This Standard has no parent Policy."
+    if not re.search(r"\bpolicy\b", name, re.IGNORECASE):
+        name = f"{name} Policy"
+    return f"This Standard implements the {name}."
+
+
+_FENCE_RE = re.compile(r"^\s{0,3}(`{3,}|~{3,})")
+_ATX_RE = re.compile(r"^\s{0,3}(#{1,6})(?:\s|$)")
+_SETEXT_RE = re.compile(r"^\s{0,3}(=+|-+)\s*$")
+
+
+def with_parent_policy(markdown_text: str, policy: str) -> tuple[str, bool]:
+    """`markdown_text` with `parent_policy_sentence` as the first paragraph
+    after its title, and whether it had one.
+
+    The title is the document's first heading outside a code fence, when that
+    is a level-one heading, written `# Title` or underlined with `===`. A
+    draft whose first heading is another level (a model that titled with
+    `##`) has no title to follow: the sentence is then its first line, and
+    the caller says so, so the sentence is never silently missing (1d on PR
+    439). Nothing else is touched, and the sentence carries no citation tag.
+    """
+    lines = markdown_text.split("\n")
+    sentence = parent_policy_sentence(policy)
+    fence = ""
+    for index, line in enumerate(lines):
+        opened = _FENCE_RE.match(line)
+        if fence:
+            stripped = line.strip()
+            if stripped and set(stripped) == {fence[0]} and len(stripped) >= len(fence):
+                fence = ""
+            continue
+        if opened:
+            fence = opened.group(1)
+            continue
+        end = None
+        atx = _ATX_RE.match(line)
+        if atx:
+            level = len(atx.group(1))
+            end = index if level == 1 else -1
+        elif (
+            line.strip()
+            and index + 1 < len(lines)
+            and (underline := _SETEXT_RE.match(lines[index + 1]))
+        ):
+            end = index + 1 if underline.group(1).startswith("=") else -1
+        if end is None:
+            continue
+        if end == -1:
+            break
+        rest = lines[end + 1 :]
+        while rest and not rest[0].strip():
+            rest = rest[1:]
+        return "\n".join([*lines[: end + 1], "", sentence, "", *rest]), True
+    return "\n".join([sentence, "", *lines]), False
+
+
 def extract_title(markdown_text: str) -> str:
     """Pull the document title out of a generated document's leading '# '
     heading — used to have a Policy reference its Standard by name without
@@ -416,7 +492,7 @@ def generate_standard(
 #: the budget is doubled; `llm/effort.py` retries once at twice this.
 #:
 #: Doubled again to 32768 by #3, measured uncensored (the first budget at
-#: 32768, the 8x re-send off; MEASUREMENTS.md epoch 25). Standards for five
+#: 32768, the 8x re-send off; docs/measurements/epochs.md epoch 25). Standards for five
 #: topics needed at most 9,110 tokens on glm, 25,386 on sonnet-5 and 24,070
 #: on opus-5.5, so 3 of 5 sonnet and 2 of 5 opus Standards were cut off at
 #: 16384 and paid for twice. Across 25 topics at 16384 with the retry, every

@@ -187,7 +187,12 @@ class Statement:
         from policyforge.crosswalk.overlay import NON_BINDING_FRAMEWORKS
         from policyforge.mapping.crosswalk import normalize_framework
 
-        parts = [part for tag in self.citations for part in _attributed_parts(tag)]
+        # A baseline reference (`ARC-AMPE` or `NIST` named alone) cites no
+        # requirement (5928 on #17), so it can't make a Playbook sentence
+        # mixed and lift it out of the gate (b5 on PR 429).
+        parts = [
+            part for tag in self.citations for part in _attributed_parts(tag) if not part.baseline
+        ]
         if not parts:
             return False
         frameworks = [normalize_framework(part.framework or "") for part in parts]
@@ -242,6 +247,8 @@ def _parts(tag: str) -> list[str]:
     """
     out: list[str] = []
     for part in _attributed_parts(tag):
+        if part.baseline:
+            continue  # a baseline reference cites nothing (5928 on #17)
         out.append(_PLAYBOOK + part.rest if part.framework == _PLAYBOOK_NAME else part.citation)
     return out
 
@@ -286,6 +293,17 @@ def unresolved_playbook_parts(text: str) -> list[tuple[int, str]]:
 
 def _is_playbook(reference: str) -> bool:
     return reference.startswith(_PLAYBOOK)
+
+
+def cites_playbook(tag: str) -> bool:
+    """Whether any part of `tag` names the NIST AI RMF Playbook.
+
+    The question `Statement.cites_the_playbook` asks of a sentence, asked of
+    one tag by the same two functions (`_parts`, `_is_playbook`), so a writer
+    that has to frame a Playbook citation as NIST's (`content/traceability`)
+    and the gate that checks the framing can't disagree about which tag is one.
+    """
+    return any(_is_playbook(part) for part in _parts(tag))
 
 
 #: A sentence framed as NIST's: its subject is NIST or the Playbook. Matched
@@ -1063,8 +1081,15 @@ def analyze(text: str) -> list[Statement]:
     and the gate read CAT-01's obligation and citation as NIST's suggestion
     (18 of 2,501 statements across 33 generated Standards). Sentences are
     now split within each run of lines between headings, ATX or setext.
+
+    **A Standard's source blocks are not read** (#17): they quote catalog
+    text ("The organization shall ..."), which is the source's wording, not
+    the organisation's obligation. `content.sources.blank_source_blocks`
+    empties them, line for line.
     """
-    text, blocks = _heading_blocks(text)
+    from .sources import blank_source_blocks
+
+    text, blocks = _heading_blocks(blank_source_blocks(text))
 
     statements: list[Statement] = []
     for block_offset, block in blocks:
@@ -1170,7 +1195,11 @@ def _structure(text: str) -> _Structure:
       reads it. Before, it was a list line, read as a sentence;
     - `## x` indented four spaces or more is indented code, read as prose,
       as CommonMark reads it. Before, it was a heading (9b on #421).
+    - A Standard's source blocks are blanked first, as in `analyze` (#17).
     """
+    from .sources import blank_source_blocks
+
+    text = blank_source_blocks(text)
     lines = text.split("\n")
     kinds: list[str | None] = [None] * len(lines)
     tokens = _MD.parse(text)
@@ -1233,13 +1262,8 @@ def _structure(text: str) -> _Structure:
                 last -= 1
             leaves.append(_leaf(lines, first, last, stack, previous_last))
             previous_last = last
-            section = _SECTION_NUMBER_RE.match(lines[first])
-            if (
-                token.type == "paragraph_open"
-                and section
-                and _splits_off(lines[first][section.start(2) :], section.group(2))
-            ):
-                markers.append((first, section.start(2), section.end(2)))
+            if token.type == "paragraph_open":
+                markers.extend(_section_numbers(lines, first, last))
 
     blocks, colon_lists = _group(lines, leaves, boundaries)
     return _Structure(kinds=kinds, blocks=blocks, colon_lists=colon_lists, markers=markers)
@@ -1249,8 +1273,77 @@ def _structure(text: str) -> _Structure:
 _ORDERED_MARKER_RE = re.compile(r"^([ \t]*(?:>[ \t]?)*[ \t]*)(\d{1,9}[.)])(?=[ \t]|$)")
 #: A section number opening a paragraph (`6.2. The owner ...`). Not a list
 #: marker to CommonMark, but the same noise to the splitter (#365; ba on
-#: #421 counted 426 of them left over the corpus).
-_SECTION_NUMBER_RE = re.compile(r"^([ \t]*(?:>[ \t]?)*[ \t]*)(\d{1,9}(?:\.\d{1,9})+\.)(?=[ \t]|$)")
+#: #421 counted 426 of them left over the corpus). A list marker may come
+#: first (#18 (a)): a bullet (`- 6.2. Staff must ...`) or an ordered marker
+#: (`1. 6.2. Staff must ...`, b5 on PR 280; Procedures are mostly numbered
+#: steps). A paragraph line that opens with a bullet is always its item's
+#: first line. An ordered marker is taken on a paragraph's first line only:
+#: only `1.` can interrupt a paragraph, so a later `2. 6.3.` is continuation
+#: text, not a list item (`_section_numbers`).
+_SECTION_NUMBER_RE = re.compile(
+    r"^([ \t]*(?:>[ \t]?)*[ \t]*(?:(?P<marker>[-*+]|\d{1,9}[.)])[ \t]+)?)"
+    r"(?P<number>\d{1,9}(?:\.\d{1,9})+\.)(?=[ \t]|$)"
+)
+
+
+def _section_numbers(lines: list[str], first: int, last: int) -> list[tuple[int, int, int]]:
+    """Each section number in a paragraph that the splitter would cut off, as
+    (line, start, end) columns.
+
+    The paragraph's first line, as #421 read it, and now (#18 (b)) any later
+    line that opens with one **right after a line that ended its sentence**:
+    `The owner reviews access.` / `6.2. Staff must ...` glued `6.2.` to the
+    sentence above. A line that did not end its sentence is a cross-reference
+    wrapped onto the next line (`... set out in section` / `6.2. The owner
+    ...`); 9b checked all 32 corpus sentences ending in a dotted number, and
+    every one is that, so those keep their text.
+
+    **Blanking a number removes a split point**, so a later line's number is
+    blanked only if the splitter still ends a sentence before the text after
+    it (`_still_splits`), judged on the two lines as `analyze` joins them.
+    The line above's end judged alone, with its emphasis removed, said yes
+    to `**The owner reviews access.**` and to a block quote's `> ...`, and
+    blanking then merged two requirements into one statement (ba on the
+    carry). Where it would, the number stays, as before this issue.
+    """
+    found = []
+    for index in range(first, last + 1):
+        section = _SECTION_NUMBER_RE.match(lines[index])
+        if not section:
+            continue
+        start, end = section.start("number"), section.end("number")
+        if not _splits_off(lines[index][start:], section.group("number")):
+            continue
+        ordered = (section.group("marker") or "")[:1].isdigit()
+        if index > first and (
+            ordered or not _still_splits(lines[index - 1], lines[index], start, end)
+        ):
+            continue
+        found.append((index, start, end))
+        if ordered:
+            # The item's own `1.` too: the ordered-marker check left it,
+            # since the splitter's first piece was `1. 6.2.`, and with only
+            # the section number blanked `1.` would be a statement of its own.
+            found.append((index, section.start("marker"), section.end("marker")))
+    return found
+
+
+def _still_splits(above: str, line: str, start: int, end: int) -> bool:
+    """Whether the splitter ends a sentence between `above` and the text after
+    `line`'s number once columns `start:end` are blanked. Citations that
+    `above` ends with may open the next piece: `_analyze_block` peels them
+    off and credits them back to the sentence above."""
+    blanked = line[:start] + " " * (end - start) + line[end:]
+    joined = above + "\n" + blanked
+    rest = blanked[end:]
+    content = len(above) + 1 + end + len(rest) - len(rest.lstrip())
+    for offset, piece in _sentences(joined):
+        if offset <= content < offset + len(piece):
+            before = _CITATION_RE.sub("", joined[offset:content])
+            return not before.strip(" \t\r\n.;:|")
+    return False
+
+
 #: A line that is not setext heading text here: a table row (`_MD` has no
 #: tables, so markdown-it reads one as paragraph text) or a line opening a
 #: list item. 74779c4's `_LIST_OR_TABLE_RE`, kept (ba and 9b on #421).

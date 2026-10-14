@@ -17,9 +17,10 @@ for no gain.
 **The key is a subprocessor question the operator has to answer, not one
 this project can answer for them.** Google's published terms treat the free
 tier of the Gemini API differently from the paid tier where content use is
-concerned, and those terms are theirs to change. `docs/subprocessors.md`
-says what this project can say — that content goes to Google when you
-configure this provider — and names the rest as something you confirm. Do
+concerned, and those terms are theirs to change. The project's published
+subprocessors page says what this project can say: that content goes to
+Google when you configure this provider. It names the rest as something you
+confirm. Do
 not read the absence of a warning here as an assurance.
 
 Capability flags are deliberately sparse, and the reason is `bedrock`: that
@@ -34,7 +35,14 @@ from __future__ import annotations
 
 import os
 
-from .base import LLMProvider, LLMResponse, ProviderRejected
+from ..config import ProviderSetupError
+from .base import (
+    LLMProvider,
+    LLMResponse,
+    ProviderHttpError,
+    ProviderRejected,
+    recordable_endpoint,
+)
 
 #: Where AI Studio keys are honoured. Not a Vertex endpoint: Vertex lives on
 #: `*-aiplatform.googleapis.com` behind cloud credentials.
@@ -78,7 +86,7 @@ class GeminiProvider(LLMProvider):
 
         api_key = os.environ.get(api_key_env)
         if not api_key:
-            raise RuntimeError(
+            raise ProviderSetupError(
                 f"Environment variable {api_key_env} is not set. Create a key at "
                 f"Google AI Studio and export it before running policyforge, e.g.:\n"
                 f"  export {api_key_env}=..."
@@ -120,7 +128,12 @@ class GeminiProvider(LLMProvider):
                 model=self.model,
             )
         if response.status_code != 200:
-            raise RuntimeError(f"{url} returned HTTP {response.status_code}: {response.text[:400]}")
+            raise ProviderHttpError(
+                f"{url} returned HTTP {response.status_code}: {response.text[:400]}",
+                status=response.status_code,
+                url=url,
+                reason=str(getattr(response, "reason", "") or ""),
+            )
         return response.json()
 
     def _body(
@@ -173,7 +186,7 @@ class GeminiProvider(LLMProvider):
         return body
 
     @staticmethod
-    def _response(data: dict, *, model: str) -> LLMResponse:
+    def _response(data: dict, *, model: str, endpoint: str | None = None) -> LLMResponse:
         """One `generateContent` reply, in this project's terms.
 
         Every field is read defensively because a refusal comes back as a
@@ -207,6 +220,7 @@ class GeminiProvider(LLMProvider):
             hidden_output_tokens=usage.get("thoughtsTokenCount"),
             stop_reason=first.get("finishReason"),
             request_id=data.get("responseId"),
+            endpoint=endpoint,
         )
 
     # -- the calls ---------------------------------------------------------
@@ -233,7 +247,7 @@ class GeminiProvider(LLMProvider):
         data = self._post(
             self._body(system=system, prompt=prompt, max_tokens=max_tokens, temperature=temperature)
         )
-        return self._response(data, model=self.model)
+        return self._response(data, model=self.model, endpoint=recordable_endpoint(self.base_url))
 
     def supports_schema(self) -> bool:
         """`generationConfig.responseSchema` constrains the reply.
@@ -265,7 +279,7 @@ class GeminiProvider(LLMProvider):
                 schema=schema,
             )
         )
-        return self._response(data, model=self.model)
+        return self._response(data, model=self.model, endpoint=recordable_endpoint(self.base_url))
 
     # -- what this provider does not do ------------------------------------
     #

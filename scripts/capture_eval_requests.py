@@ -27,7 +27,7 @@ branch: identical means the numbers stay comparable, and a difference is
 either the point of the change or a finding.
 
 Only LiteLLM-backed runs are captured, which is what `--model` builds and
-what `MEASUREMENTS.md` was measured with. `--compare` prints the first
+what the recorded epochs were measured with. `--compare` prints the first
 differing request and key, and exits non-zero on any difference.
 """
 

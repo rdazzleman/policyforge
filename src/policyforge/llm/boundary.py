@@ -865,7 +865,11 @@ def classify_path(
     if by_path.klass == LICENSED or assume_written:
         return by_path
     marked = _marked_licence(path)
-    if marked == LICENSED:
+    # Fail closed (#320): any envelope value but an explicit public one, in
+    # any case or spelling, is licensed; `is_licensed` is the one rule.
+    from policyforge.ingest.schema import is_licensed
+
+    if is_licensed(marked):
         return ContentClassification(
             LICENSED,
             f"{path.name} is marked licensed by the ETL that wrote it (#459); the "
@@ -1163,7 +1167,7 @@ def agreement_lines(config: dict | None, provider: ProviderClassification) -> li
 
 
 def matrix(config: dict | None = None) -> str:
-    """The ceilings as a table, for `policyforge boundary` and the README."""
+    """The ceilings as a table, for `policyforge boundary`."""
     resolved = ceilings(config)
     width = max(len(name) for name in CONTENT_CLASSES)
     header = "  ".join(klass.ljust(11) for klass in PROVIDER_CLASSES)

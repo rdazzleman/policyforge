@@ -19,3 +19,7 @@ fetched_at: '2026-09-19'
 # ruling on #423): the section. 2.16 "Security for records ..." with its
 # paragraphs, so a change to 2.16(a) reaches a document citing 2.16(b).
 family: section
+# leaf_parts is not set (441): a part below a leaf stands whether or not it
+# exists. Measured 2026-10-12 at 937b6df5: 3 of the 4 leaf texts list parts, and
+# the excerpt in tests/fixtures/ecfr_42cfr2_excerpt.xml keeps all 29 of its
+# markers, but the whole source isn't on disk, so the catalog isn't measured whole.

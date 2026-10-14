@@ -23,13 +23,30 @@ MODEL = "openrouter/deepseek/deepseek-v4-flash"
 
 @pytest.fixture
 def litellm_stub(monkeypatch):
-    """What `LiteLLMProvider` reads from the module, and nothing else."""
+    """What `LiteLLMProvider` reads from the module, and what
+    `llm.litellm_map.load()` touches the first time it runs in a process.
+
+    `load()` registers PolicyForge's price overrides once per process,
+    guarded by `litellm_map._registered`. This file used to pass only when an
+    earlier test had already run the real `load()` (#248): run alone, the
+    stub had no `register_model`, and the first load raised. So the stub
+    provides `register_model` (recording) and `model_cost`, and the guard is
+    reset for each test (monkeypatch restores it), so every test here loads
+    against this stub whatever ran before it. Reset here, not in conftest:
+    a global reset would make the next real `load()` compare against a map
+    that already holds the earlier registration, and register nothing."""
+    from policyforge.llm import litellm_map
+
     stub = types.ModuleType("litellm")
     stub.completion = lambda **kwargs: None
     stub.BadRequestError = type("BadRequestError", (Exception,), {})
     stub.supports_response_schema = lambda model: True
     stub.suppress_debug_info = False
+    stub.model_cost = {}
+    stub.registered = []
+    stub.register_model = lambda model_cost: stub.registered.append(model_cost)
     monkeypatch.setitem(sys.modules, "litellm", stub)
+    monkeypatch.setattr(litellm_map, "_registered", None)
     return stub
 
 
@@ -50,6 +67,8 @@ def test_a_capture_records_the_harness_requests_and_reaches_nothing(litellm_stub
     assert all(request["_has_api_key"] is False for request in recorded)
     # The recorder is gone afterwards.
     assert litellm_stub.completion is not capture_module.capture
+    # It ran against this stub, not against an earlier test's real LiteLLM.
+    assert litellm_stub.registered, "load() never reached the stub"
 
 
 def test_a_capture_is_json_and_argv_is_restored(litellm_stub, tmp_path, monkeypatch):
@@ -63,6 +82,7 @@ def test_a_capture_is_json_and_argv_is_restored(litellm_stub, tmp_path, monkeypa
 
     recorded = json.loads(out.read_text(encoding="utf-8"))
     assert recorded and recorded[0]["model"] == MODEL
+    assert litellm_stub.registered, "load() never reached the stub"
     monkeypatch.undo()
     assert sys.argv == before
 

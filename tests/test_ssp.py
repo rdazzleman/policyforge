@@ -323,3 +323,32 @@ def test_draft_narratives_reports_progress_per_control():
 
     assert seen == [c.control_id for c in controls]
     assert set(result) == {"AC-1", "AC-2"}
+
+
+def test_crlf_round_trips_to_lf_in_cells(tmp_path):
+    from openpyxl import Workbook, load_workbook
+
+    from policyforge.ssp.workbook import _put
+
+    wb = Workbook()
+    ws = wb.active
+
+    _put(ws, "A1", "\r=1+1")
+    _put(ws, "B1", "a\rb")
+    _put(ws, "C1", "a\r\nb")
+    _put(ws, "D1", "a\r")
+    _put(ws, "E1", "plain")
+    _put(ws, "F1", 42)
+
+    path = tmp_path / "test.xlsx"
+    wb.save(path)
+
+    read_wb = load_workbook(path)
+    read_ws = read_wb.active
+
+    assert read_ws["A1"].value == "\n=1+1"
+    assert read_ws["B1"].value == "a\nb"
+    assert read_ws["C1"].value == "a\nb"
+    assert read_ws["D1"].value == "a\n"
+    assert read_ws["E1"].value == "plain"
+    assert read_ws["F1"].value == 42

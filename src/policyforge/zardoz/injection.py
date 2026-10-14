@@ -44,6 +44,7 @@ holds; this is the part that tells you to go and look.
 from __future__ import annotations
 
 import re
+import unicodedata
 from dataclasses import dataclass
 
 #: The sentinel `answer.py` asks for when the passages do not answer the
@@ -65,9 +66,13 @@ class Finding:
     excerpt: str
     #: 1-indexed line within the text that was scanned.
     line: int
+    #: The frontmatter field the text came from (#329), or "" for the title
+    #: and the body.
+    field: str = ""
 
     def __str__(self) -> str:
-        return f"line {self.line}: {self.kind} — {self.excerpt!r}"
+        where = self.field or f"line {self.line}"
+        return f"{where}: {self.kind} — {self.excerpt!r}"
 
 
 #: Trimmed to a length that shows the phrasing without reprinting a page.
@@ -142,6 +147,37 @@ _RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
             r"(?:ai|a\.i\.|language\s+model|llm|chatbot|chat\s+bot|assistant|copilot)"
             r"|as\s+an?\s+(?:ai|language\s+model|llm|chatbot|assistant)\s*,\s*you"
             r"|dear\s+(?:ai|assistant|model|chatbot))\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        # Directing the model as reader (#369). An injection that names the
+        # reader as a model or assistant in third person or in an editor's note
+        # and directs what it says or does. Both conditions together, so text
+        # that only mentions AI ("paste nothing into an AI assistant", "the
+        # model risk committee") is not flagged. A policy sentence that does
+        # both ("The AI must not answer questions about salaries") IS flagged:
+        # it reads to the model as an instruction, and is reported, not
+        # blocked (1d measured 7 of 12 such sentences on #369's PR; 0 of 138
+        # and 1 of 303 findings on two real corpora).
+        "directs the model or assistant as reader",
+        re.compile(
+            r"\b(?:"
+            r"(?:to\s+)?(?:the\s+|an?\s+)?(?:ai\s+assistant|language\s+model|llm|chatbot)"
+            r"|to\s+the\s+(?:assistant|ai|model)"
+            r"|the\s+(?:assistant|ai|model)"
+            r"|(?:to\s+)?zardoz"
+            r")\b"
+            r"(?:"
+            r"\s*[:]\s*(?:(?:please|now|always)\s+)?"
+            r"\b(?:should|must|disregard|say|print|reply|answer|respond|tell)\b"
+            r"|"
+            r"\s+(?:"
+            r"(?:should|must)\s+(?:\w+\s+){0,2}?"
+            r"(?:disregard|say|print|reply|answer|respond|tell)"
+            r"|(?:disregard|say|print|reply|answer|respond|tell)"
+            r")\b"
+            r")",
             re.IGNORECASE,
         ),
     ),
@@ -235,6 +271,152 @@ def _line_of(text: str, index: int) -> int:
     return text.count("\n", 0, index) + 1
 
 
+#: A run of characters outside ASCII: the only places a format character
+#: can be, and the only places NFKC changes anything.
+_NON_ASCII = re.compile("[^" + chr(0) + "-" + chr(0x7F) + "]+")
+
+
+#: The longest stretch handed to one NFKC call, give or take a run's search
+#: for a safe cut (at most twice this). `unicodedata.normalize` is quadratic
+#: on a long run that expands: 1 MB of U+FDFA took about 3 minutes (1d,
+#: #377), and anyone who can edit a page could stall `sync` with one.
+_NFKC_CHUNK = 2048
+
+
+#: How many characters before a cut the check reads. Starters compose in
+#: chains, not only in pairs: Hangul L + V make a syllable that then takes a
+#: T, so the pair V | T alone looks safe and isn't (ba measured it, carrying
+#: #377). L + V + T is the longest such chain, so three is enough.
+_CUT_CONTEXT = 3
+
+
+def _safe_cut(before: str, char: str) -> bool:
+    """Whether NFKC may be applied on each side of a cut before `char` alone,
+    with `before` the characters just before it (80's ruling on #377, read
+    over a context rather than one character). It takes three things:
+
+    - `char`'s decomposition starts with a starter (`combining` 0), so no
+      mark after the cut belongs to what's before it. That covers `char`
+      being a mark itself, and U+0F73, which has class 0 but decomposes into
+      marks that could reorder past what's before it into text the check
+      never sees (ba, carrying #377). A separate test of `char`'s own class
+      was subsumed: an arm dropping it changed no result;
+    - NFKC of `before` + `char` is NFKC of each, which rejects anything that
+      composes across the cut (Hangul L V | T, `e` + a combining form). With
+      a starter first on the right, nothing reaches further back than the
+      chain the context holds.
+    """
+    lead = unicodedata.normalize("NFKD", char)[:1]
+    if lead and unicodedata.combining(lead):
+        return False
+    whole = unicodedata.normalize("NFKC", before + char)
+    return whole == unicodedata.normalize("NFKC", before) + unicodedata.normalize("NFKC", char)
+
+
+def _nfkc_pieces(given: str) -> list[tuple[str, bool]]:
+    """`given` cut into pieces NFKC can take one at a time, each paired with
+    whether to normalise it. A run with no safe cut within twice the bound
+    is handed back whole and un-normalised from there on, and `scan` reports
+    it (the ruling's loud fallback): never silently, never in one huge call."""
+    pieces: list[tuple[str, bool]] = []
+    start = 0
+    while len(given) - start > _NFKC_CHUNK:
+        window = range(start + _NFKC_CHUNK, min(len(given), start + 2 * _NFKC_CHUNK))
+        cut = next((i for i in window if _safe_cut(given[i - _CUT_CONTEXT : i], given[i])), None)
+        if cut is None:
+            pieces.append((given[start:], False))
+            return pieces
+        pieces.append((given[start:cut], True))
+        start = cut
+    pieces.append((given[start:], True))
+    return pieces
+
+
+def _normalise(text: str) -> tuple[str, list[int], list[tuple[int, int]]]:
+    """Remove Unicode Cf (format) characters, then apply NFKC (#368).
+
+    Returns (normalised_text, norm_to_orig, too_long) where norm_to_orig[i]
+    is the index in `text` corresponding to index i in `normalised_text`, and
+    too_long lists the (start, end) of each stretch in `text` left
+    un-normalised because no safe cut was found (#377).
+    """
+    if text.isascii():  # no format characters, and nothing NFKC changes
+        return text, list(range(len(text) + 1)), []
+
+    # Format characters are all outside ASCII, so only the non-ASCII runs
+    # are looked at, one character at a time; ASCII is copied in bulk.
+    pieces: list[str] = []
+    step1_to_orig: list[int] = []
+    pos = 0
+    for run in _NON_ASCII.finditer(text):
+        pieces.append(text[pos : run.start()])
+        step1_to_orig.extend(range(pos, run.start()))
+        for j in range(run.start(), run.end()):
+            if unicodedata.category(text[j]) != "Cf":
+                pieces.append(text[j])
+                step1_to_orig.append(j)
+        pos = run.end()
+    pieces.append(text[pos:])
+    step1_to_orig.extend(range(pos, len(text)))
+    step1_to_orig.append(len(text))
+    step1_text = "".join(pieces)
+
+    # Linear, segment by segment (9b on #368's PR: a `difflib` alignment of
+    # the whole page was quadratic on varied prose, 12.6 s for 260 KB with one
+    # non-breaking space). NFKC decomposes each character alone, and no
+    # composition has an ASCII character as its second element, so nothing
+    # reaches across the start of an ASCII character. Each run of non-ASCII
+    # characters is normalised with the one ASCII character before it, which
+    # can compose with it (`e` + U+0301); everything else is ASCII, which NFKC
+    # leaves alone, and maps one to one. Inside a segment, an ASCII character
+    # that composed with nothing maps to itself and the rest of the output
+    # maps proportionally into the run, so no output character after a
+    # newline maps onto the newline (a property test holds the line count).
+    out: list[str] = []
+    norm_to_step1: list[int] = []
+    too_long: list[tuple[int, int]] = []
+    pos = 0
+    for run in _NON_ASCII.finditer(step1_text):
+        # The ASCII character before the run, if any, goes with it.
+        start = run.start() - 1 if run.start() > pos else run.start()
+        out.append(step1_text[pos:start])
+        norm_to_step1.extend(range(pos, start))
+        offset = start
+        # A long run goes to NFKC a piece at a time, cut only where nothing
+        # composes across the cut (#377); a short one is one piece.
+        for piece, normalise in _nfkc_pieces(step1_text[start : run.end()]):
+            segment = unicodedata.normalize("NFKC", piece) if normalise else piece
+            if not normalise:
+                # From the run itself, not the ASCII character leading it: a
+                # newline there would put the report a line early.
+                first = offset + 1 if offset == start < run.start() else offset
+                too_long.append((first, offset + len(piece)))
+            out.append(segment)
+            if offset == start < run.start() and segment[:1] == piece[0]:
+                # The ASCII character came through unchanged, so it composed
+                # with nothing: it maps to itself, and only the rest maps into
+                # the run. Mapped proportionally over the whole segment
+                # instead, an expanding run after a newline put its first
+                # characters back on the newline, one line early (1d on
+                # #368's PR).
+                norm_to_step1.append(offset)
+                rest, rest_start = len(segment) - 1, offset + 1
+            else:
+                rest, rest_start = len(segment), offset
+            width = offset + len(piece) - rest_start
+            norm_to_step1.extend(rest_start + k * width // rest for k in range(rest))
+            offset += len(piece)
+        pos = run.end()
+    out.append(step1_text[pos:])
+    norm_to_step1.extend(range(pos, len(step1_text)))
+    norm_to_step1.append(len(step1_text))
+    norm_text = "".join(out)
+
+    norm_to_orig = [step1_to_orig[idx] for idx in norm_to_step1]
+    spans = [(step1_to_orig[a], step1_to_orig[b]) for a, b in too_long]
+    return norm_text, norm_to_orig, spans
+
+
 def scan(text: str) -> list[Finding]:
     """Every stretch of `text` that addresses its reader rather than its org.
 
@@ -244,9 +426,25 @@ def scan(text: str) -> list[Finding]:
     findings: list[Finding] = []
     seen: set[tuple[int, int]] = set()
 
+    norm_text, norm_to_orig, too_long = _normalise(text)
+
+    # Loud, not silent (80's ruling on #377): a stretch left un-normalised
+    # is a finding of its own, named and counted, since a split instruction
+    # inside it would not be read the way a model reads it.
+    for start, end in too_long:
+        findings.append(
+            Finding(
+                kind=f"a run of {end - start} characters too long to normalise safely",
+                excerpt=_excerpt(text, start, end),
+                line=_line_of(text, start),
+            )
+        )
+
     for kind, pattern in (*_RULES, *_CONTROL_TOKENS):
-        for match in pattern.finditer(text):
-            span = (match.start(), match.end())
+        for match in pattern.finditer(norm_text):
+            orig_start = norm_to_orig[match.start()]
+            orig_end = norm_to_orig[match.end()]
+            span = (orig_start, orig_end)
             if span in seen:
                 continue
             seen.add(span)
@@ -254,20 +452,28 @@ def scan(text: str) -> list[Finding]:
                 Finding(
                     kind=kind,
                     excerpt=_excerpt(text, *span),
-                    line=_line_of(text, match.start()),
+                    line=_line_of(text, orig_start),
                 )
             )
 
     return sorted(findings, key=lambda f: (f.line, f.excerpt))
 
 
-def scan_document(title: str, body: str) -> list[Finding]:
-    """Scan a document's title as well as its body.
+def scan_document(title: str, body: str, fields=()) -> list[Finding]:
+    """Scan a document's title and its frontmatter as well as its body.
 
     The title is written by whoever wrote the page and carries the same
     trust as its text, so a check that read only the body would miss the
     one line a reader is most likely to skim past. Reported at line 0, so
     it sorts above the body and does not claim a line the body has.
+
+    `fields` is `(name, value)` pairs, every frontmatter string the answer
+    can show (#329): `owner` is printed inside the answer fence, so a line
+    planted there reached the model unscanned. Each finding is named by its
+    field, at line 0. The same scanner, so what counts as a finding is
+    unchanged.
     """
     findings = [Finding(f.kind, f.excerpt, 0) for f in scan(title)]
+    for name, value in fields:
+        findings += [Finding(f.kind, f.excerpt, 0, name) for f in scan(value)]
     return findings + scan(body)

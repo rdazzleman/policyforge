@@ -15,7 +15,7 @@ rewrote their catalog from 65 crosswalk mappings to 0 and reported nothing
 wrong. The tag is not the deliverable. For anyone following the README, the
 tap is.
 
-Four assertions, in the order they fail:
+Five assertions, in the order they fail:
 
 1. The published formula's `url` names the tag just cut.
 1b. ...and its `sha256` matches the archive that URL actually serves. A
@@ -24,7 +24,14 @@ Four assertions, in the order they fail:
 2. The formula's pinned resource versions match the lock at that tag.
 3. `changelog.d/` is empty — no fragment survived the release.
 4. A user can actually install it — `brew install --build-from-source` in
-   a clean container, then the CLI runs.
+   a clean container, then the CLI runs, and from 1.8.0 `policyforge
+   --version` prints exactly the version cut, with nothing on stderr.
+5. The archive the formula names carries no licensed parser: by PATH (a
+   licensed module's path at any depth), and by CONTENT, `publish_guard`'s
+   own L2 to L4 over the archive's files, against the parsers in the local
+   release tag's history (#237). The content layers find the bytes whatever
+   the member is called. A tag that gives no reference set is CANNOT ANSWER,
+   never a pass.
 
 **Assertion 4 exists because this script was the substitution.** The
 recorded procedure was: verify in a container BEFORE pushing the formula.
@@ -61,7 +68,9 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import posixpath
 import re
+import shlex
 import sys
 import urllib.request
 from pathlib import Path
@@ -221,8 +230,10 @@ def lock_pins(text: str) -> dict[str, str]:
 #: status is read rather than inherited.
 #:
 #: **The smoke tests here are the corrected ones.** The 1.6.0 run used
-#: `policyforge --version`, which does not exist — the flag was invented,
-#: click exits 2, and that reads as a broken release to anyone skimming.
+#: `policyforge --version`, which did not exist in 1.6.0 — the flag was
+#: invented, click exits 2, and that reads as a broken release to anyone
+#: skimming. It exists from 1.8.0 (#219), and `version_step` adds it, for
+#: those releases only, because its expected output names the version cut.
 #: And it ran `policyforge frameworks` in an empty directory, which exits 1
 #: by design: every command reads `data/frameworks/` relative to where it
 #: runs, and the install's own caveats say so three lines above. **A smoke
@@ -239,24 +250,168 @@ INSTALL_STEPS: tuple[tuple[str, str], ...] = (
 
 CONTAINER_IMAGE = "homebrew/brew"
 
+#: The first release with `policyforge --version` (#219 landed on the 1.8
+#: train; `v1.7.0` has no such option, measured on #224). Against an older
+#: release the step would exit 2 and read as a broken release, which is the
+#: 1.6.0 mistake above, so it is left out there and the output says so.
+FIRST_WITH_VERSION = (1, 8, 0)
+
+#: What a check prints in place of the step for an older release: one
+#: definition, so `release._install_script`'s chain (#232) says the same.
+VERSION_NOT_RUN = "version: not run, `policyforge --version` first ships in " + ".".join(
+    map(str, FIRST_WITH_VERSION)
+)
+
+#: A version as a cut names it. It goes into a shell command, so nothing
+#: else is accepted: ASCII digits only, since `\d` (and `int`) also take
+#: other scripts' digits.
+_RELEASE_VERSION = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+")
+
+
+def version_step(version: str) -> tuple[str, str] | None:
+    """The container step that requires `policyforge --version` to print
+    exactly `policyforge <version>` with NOTHING on stderr (#224), or None
+    for a release older than `FIRST_WITH_VERSION`.
+
+    **The empty stderr is the point.** `--version` reads the installed
+    distribution's metadata and writes a note to stderr when the running
+    code's `policyforge.__version__` disagrees, so a skew between the two in
+    what a user installed fails here. `release._install_script` runs this
+    same step before the user approves (#232), beside its own read of
+    `__version__` (the source string), which can't see that skew; the two
+    read different things, and both stay.
+
+    Each failure says which rule it broke, on stderr, because the caller
+    shows the run's last lines and stderr comes last. An exit from
+    `--version` itself (click's 2 for a missing option, or 1 for "not
+    installed") stops the chain and prints its stderr. A pass prints
+    `version: <what it read>` on stdout, so a run's output shows what was
+    checked (b5 on #231).
+    """
+    bare = version[1:] if version.startswith("v") else version
+    if not _RELEASE_VERSION.fullmatch(bare):
+        raise ValueError(f"not a release version (X.Y.Z): {version!r}")
+    if tuple(int(part) for part in bare.split(".")) < FIRST_WITH_VERSION:
+        return None
+    expected = shlex.quote(f"policyforge {bare}")
+    return (
+        "version",
+        " && ".join(
+            [
+                "e=$(mktemp)",
+                '{ v=$(policyforge --version 2>"$e") || { s=$?; '
+                'echo "version: policyforge --version exited $s" >&2; cat "$e" >&2; false; }; }',
+                '{ [ "$v" = '
+                + expected
+                + ' ] || { echo "version: expected "'
+                + expected
+                + '", got [$v]" >&2; false; }; }',
+                '{ [ ! -s "$e" ] || { echo "version: policyforge --version wrote to stderr:" >&2; '
+                'cat "$e" >&2; false; }; }',
+                'echo "version: $v"',
+            ]
+        ),
+    )
+
+
+def install_steps(version: str) -> tuple[tuple[str, str], ...]:
+    """`INSTALL_STEPS` for this release: the version step goes right after
+    the install, when there is one (`version_step`)."""
+    steps = list(INSTALL_STEPS)
+    step = version_step(version)
+    if step is not None:
+        steps.insert([name for name, _ in steps].index("install") + 1, step)
+    return tuple(steps)
+
+
 #: The licensed-framework parsers that stay private from 1.7 (the user's
 #: decision; #32, #33). One definition: release.py reads these too, so the
 #: set it removes from the public commit and the set this checks the released
 #: archive for are the same set.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import publish_guard  # noqa: E402  (#237: its content layers, not a copy of them)
+
 # LICENSED_MODULES is re-exported: release.py reads release_check.LICENSED_MODULES.
 from licensed_modules import LICENSED_MODULES, LICENSED_PATHS  # noqa: E402, F401  (#48: one list)
 
+#: The repository whose local release tag gives the content layers their
+#: reference set: this checkout, which is the private one on the machine
+#: that cuts the release (80's ruling on #237). A test points it elsewhere.
+SOURCE_ROOT = REPO_ROOT
+
+
+def _path_key(name: str) -> str:
+    """A member name or an entry as `licensed_in_archive` compares them: `\\`
+    as `/` (#239); a `:<stream>` suffix off the last component, and trailing
+    dots and spaces off every component (#306); then normalised and
+    casefolded. A `.` or `..` segment is left for `normpath`, or `x/../` would
+    become `x//`."""
+    parts = name.replace("\\", "/").split("/")
+    parts[-1] = parts[-1].split(":", 1)[0]
+    parts = [part if part in (".", "..") else part.rstrip(". ") for part in parts]
+    return posixpath.normpath("/".join(parts)).casefold()
+
 
 def licensed_in_archive(names: list[str]) -> list[str]:
-    """The licensed module paths among a source archive's member names. A
-    GitHub archive nests everything under one top directory
-    (`policyforge-1.7.0/src/...`), so a member matches on its path after it."""
-    return sorted(name for name in names if "/" in name and name.split("/", 1)[1] in LICENSED_PATHS)
+    """The licensed module paths among a source archive's member names.
+
+    **At any depth, the archive root included** (80's ruling on #236): a
+    member matches when its path IS a `LICENSED_PATHS` entry, or ENDS WITH
+    `/` plus one. A GitHub archive nests everything under one top directory
+    (`policyforge-1.7.0/src/...`), and this used to match only on the path
+    after it, so a licensed parser at the root or under any other prefix
+    passed silently. This is the last check before licensed code is public,
+    so it doesn't depend on the archive's layout.
+
+    The `/` is the component boundary: `.../mysrc/policyforge/...` is not the
+    entry. A basename alone never matches. That's this PATH rule's limit, not a
+    claim that such a file is clean: a copy of a licensed parser under another
+    name or directory is for the content layers to find (#237).
+
+    **Case-insensitive** (80's ruling on PR 238, from ba's question): both
+    sides are casefolded, because on the filesystems most users unpack onto
+    (Windows, and macOS by default) a differently capitalised path IS the
+    same file, and this check is about publishing those bytes. (Not because
+    Python imports it: 1d measured that the importer checks case on 3.14,
+    win32.) A finding keeps the archive's own spelling.
+
+    **Normalised first** (1d on PR 238): a member is matched on
+    `posixpath.normpath` of its name, so `src//…`, `src/./…` and
+    `src/x/../…` (which `tarfile` extracts to the plain path) are the entry
+    too. That also makes `<entry>/` match, which errs toward failing, and is
+    what `archive_names` reports for a directory anyway: `tarfile` gives a
+    directory member's name without its trailing `/`.
+
+    **`\\` is a separator too** (80's ruling (a) on #239): a member named
+    `pkg\\src\\policyforge\\...` is one name with no `/`, but on win32 both
+    Python's `tarfile` and Windows' own `tar.exe` (bsdtar 3.8.8) extract it as
+    the nested path (ba measured both), so it publishes those bytes at the
+    licensed module's place. Every `\\` is mapped to `/` before `normpath`,
+    on member and entry alike, which errs toward failing.
+
+    **So are Windows' other spellings of the same path** (80's ruling (a) on
+    #306): Windows drops trailing dots and spaces from each path component,
+    and `<file>::$DATA` (or any `:<stream>`) names a file's main stream, so on
+    win32 `…/ingest/<module>.py.`, `…/ingest/<module>.py `, `…/ingest./…` and
+    `…/<module>.py::$DATA` all extract at the licensed path (b5 measured each
+    through `tarfile`). Each component loses its trailing dots and spaces, and
+    the last loses a `:<stream>` suffix, before matching. **Not claimed:** 8.3
+    short names (`STAND_~1.PY`) and any other Windows aliasing are the content
+    layer's to find (#237), not this path rule's."""
+    # The entries go through the same normalisation as a member (1d on PR 238).
+    licensed = tuple(_path_key(path) for path in LICENSED_PATHS)
+
+    def matches(name: str) -> bool:
+        folded = _path_key(name)
+        return any(folded == path or folded.endswith("/" + path) for path in licensed)
+
+    return sorted(name for name in names if matches(name))
 
 
-def archive_names(url: str) -> list[str]:
-    """The member names of the .tar.gz a URL serves."""
+def archive_members(url: str) -> list[tuple[str, bytes | None]]:
+    """Every member of the .tar.gz a URL serves, in order: its name, and its
+    bytes if it is a regular file (None for a directory or a link). Read in
+    memory; nothing is extracted."""
     import io
     import tarfile
     import urllib.request
@@ -265,8 +420,31 @@ def archive_names(url: str) -> list[str]:
         raise ValueError(f"refusing a non-https archive URL: {url!r}")
     with urllib.request.urlopen(url, timeout=120) as response:  # nosec B310  # nosemgrep
         data = response.read()
+    members: list[tuple[str, bytes | None]] = []
     with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as tar:
-        return tar.getnames()
+        for member in tar.getmembers():
+            handle = tar.extractfile(member) if member.isfile() else None
+            members.append((member.name, handle.read() if handle else None))
+    return members
+
+
+def archive_names(url: str) -> list[str]:
+    """The member names of the .tar.gz a URL serves."""
+    return [name for name, _ in archive_members(url)]
+
+
+def content_findings(files: list[tuple[str, bytes]], tag: str) -> list:
+    """`publish_guard`'s content layers (L2 renamed blobs, L3 AST content, L4
+    licensed catalogs) over an archive's files, against the parsers in the
+    history of the local release tag `tag` (80's ruling on #237). Raises
+    `publish_guard.NothingToCheck` when that tag or its history can't give a
+    reference set: the caller reports CANNOT ANSWER, never "none".
+
+    These find a licensed parser's BYTES whatever its member is called, which
+    the path rule can't: a renamed file, a backslash-separated name (#239),
+    a Windows 8.3 short name. What they can't see is the guard's own stated
+    limit: a copy renamed with its names and imports rewritten."""
+    return publish_guard.check_files(files, publish_guard.reference(tag, SOURCE_ROOT))
 
 
 def _run(cmd: list[str], *, timeout: int):
@@ -300,8 +478,13 @@ def _run(cmd: list[str], *, timeout: int):
     )
 
 
-def run_install_check(image: str = CONTAINER_IMAGE) -> tuple[bool, list[str]]:
+def run_install_check(version: str, image: str = CONTAINER_IMAGE) -> tuple[bool, list[str]]:
     """Install the published formula in a clean container and run the CLI.
+
+    `version` is the release just cut. It is required, not defaulted, so a
+    caller can't leave out the `--version` step by forgetting it
+    (`install_steps`). A release older than `FIRST_WITH_VERSION` gets a
+    line saying the step was not run, never a silent pass.
 
     Returns `(ran, lines)`. **`ran` is False when the container could not
     be started at all** — no docker, no daemon, no image — which is a
@@ -338,9 +521,14 @@ def run_install_check(image: str = CONTAINER_IMAGE) -> tuple[bool, list[str]]:
     """
     import shutil
 
+    # Built before docker is asked anything, so a bad version is refused
+    # wherever this runs.
+    steps = install_steps(version)
     lines: list[str] = []
+    if not any(name == "version" for name, _ in steps):
+        lines.append(VERSION_NOT_RUN)
     if shutil.which("docker") is None:
-        return False, ["docker is not on PATH"]
+        return False, [*lines, "docker is not on PATH"]
 
     # Can docker start this image at all? Cheap, and it is the only way to
     # tell "the container never ran" from "the install failed", because
@@ -348,9 +536,9 @@ def run_install_check(image: str = CONTAINER_IMAGE) -> tuple[bool, list[str]]:
     probe = _run(["docker", "run", "--rm", image, "true"], timeout=600)
     if probe.returncode != 0:
         detail = (probe.stderr or probe.stdout or "").strip().splitlines()[-1:] or ["no output"]
-        return False, [f"could not start {image}: {detail[0]}"]
+        return False, [*lines, f"could not start {image}: {detail[0]}"]
 
-    script = " && ".join(command for _, command in INSTALL_STEPS)
+    script = " && ".join(command for _, command in steps)
     # One container, but the steps are joined with `&&` so the FIRST
     # failure stops the run and its status propagates. `;` would not --
     # that is the `cmd; echo; tail` shape the header warns about, and it
@@ -586,7 +774,7 @@ def main(argv: list[str] | None = None) -> int:
     print("=" * 62)
     print("4. A user can actually install it")
     print("=" * 62)
-    ran, lines = run_install_check()
+    ran, lines = run_install_check(args.version)
     for line in lines:
         print(f"    {line}")
     if not ran:
@@ -624,7 +812,8 @@ def main(argv: list[str] | None = None) -> int:
         print("  -> not answered")
     else:
         try:
-            found = licensed_in_archive(archive_names(source))
+            members = archive_members(source)
+            found = licensed_in_archive([name for name, _ in members])
         except Exception as exc:  # noqa: BLE001 - not knowing is a failure
             print(f"  could not read the archive: {type(exc).__name__}: {exc}")
             failures.append(
@@ -632,6 +821,7 @@ def main(argv: list[str] | None = None) -> int:
                 "carries a licensed parser is unknown; retry"
             )
             print("  -> CANNOT ANSWER")
+            members = None
         else:
             print(f"  licensed parser paths in {source}: {len(found)}")
             for name in found:
@@ -644,6 +834,32 @@ def main(argv: list[str] | None = None) -> int:
                 print("  -> PRESENT")
             else:
                 print("  -> none")
+        if members is not None:
+            # The path rule reads names; a licensed parser under any other
+            # name is only found by its bytes (#237).
+            files = [(name, data) for name, data in members if data is not None]
+            print(f"  content layers (L2-L4) over {len(files)} file(s), against {expected_tag}:")
+            try:
+                content = content_findings(files, expected_tag)
+            except publish_guard.NothingToCheck as exc:
+                print(f"    could not derive the reference set: {exc}")
+                failures.append(
+                    f"the content layers could not run: {expected_tag}'s history gave no "
+                    "reference set, so a licensed parser under another name would read "
+                    "clean -- this is not a pass (80's ruling on #237)"
+                )
+                print("  -> CANNOT ANSWER")
+            else:
+                for finding in content:
+                    print(f"    {finding}")
+                if content:
+                    failures.append(
+                        f"the released archive carries licensed content: {len(content)} "
+                        "content-layer finding(s) -- the public tool must not (#32, #33)"
+                    )
+                    print("  -> PRESENT")
+                else:
+                    print("  -> none")
 
     # ----------------------------------------------------------------
     print()

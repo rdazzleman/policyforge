@@ -107,6 +107,11 @@ def test_the_gate_script_runs_normally_when_the_tree_is_its_own(monkeypatch):
     monkeypatch.setattr(check, "run", lambda label, cmd: ran.append(label) or True)
     monkeypatch.setattr(check, "check_semgrep", lambda: None)
     monkeypatch.setattr(check, "check_gitleaks", lambda: None)
+    # The presence check's base is derived from the checkout's release/* or
+    # main remote-tracking refs, and a tree with none (an archive, the cut's
+    # 3.10 leg) fails there, before the guard's part matters (#354). `run`
+    # is faked, so the base is never used; it only has to exist.
+    monkeypatch.setattr(check, "derive_base", lambda root=None: ("HEAD", "HEAD (faked here)"))
     monkeypatch.setattr(
         check.tree_guard,
         "resolved_origin",

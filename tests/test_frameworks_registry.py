@@ -307,14 +307,16 @@ def test_the_frameworks_command_outside_a_project_names_init_and_fails(tmp_path,
     assert "policyforge init" in result.output
 
 
+@pytest.mark.own_config
 def test_the_frameworks_command_succeeds_in_an_initialised_project(tmp_path, monkeypatch):
-    """The Homebrew formula's test runs exactly this: init, then frameworks."""
+    """The Homebrew formula's test runs exactly this: init, then frameworks.
+    `init` writes a `config/config.yaml` now (#176), and the command reads
+    the one it wrote."""
     from click.testing import CliRunner
 
     import policyforge.cli as cli_mod
 
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setattr(cli_mod, "load_config", lambda: {})
     runner = CliRunner()
     assert runner.invoke(cli_mod.cli, ["init"]).exit_code == 0
 

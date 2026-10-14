@@ -64,11 +64,6 @@ NOT_A_POPULATION = {
         "('N untracked (not ignored)') and gates nothing. Zero untracked "
         "files is the normal state of a clean checkout"
     ),
-    "counted": (
-        "in `check_semgrep_lock`, the audit's `semgrep lock: N advisories` line, "
-        "looked for in its output. Zero is not a quiet pass there: it means the "
-        "audit never got as far as counting, and the step FAILS on it (#82)"
-    ),
 }
 
 

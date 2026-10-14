@@ -23,7 +23,7 @@ Two guards worth knowing about:
 
 from __future__ import annotations
 
-from ._confluence_auth import confluence_auth
+from ._confluence_auth import confluence_auth, reports_as_confluence
 from .confluence_importer import _PAGE_EXPAND, ConfluencePage, _parse_page
 
 API_SEARCH_PATH = "rest/api/content/search"
@@ -58,6 +58,7 @@ def space_cql(space: str) -> str:
     return f'space = "{escaped}" AND type = page'
 
 
+@reports_as_confluence
 def search_pages(
     *,
     host: str,
@@ -105,6 +106,7 @@ def search_pages(
         start += _PAGE_SIZE
 
 
+@reports_as_confluence
 def fetch_user_names(
     account_ids: set[str],
     *,

@@ -8,7 +8,7 @@ fetches nothing from the AICPA, and no copy of the criteria was used to
 build or test it.
 
 `etl-soc2-tsc` is part of the licensed-framework plugin, which is distributed
-separately from the public PolicyForge. Without it, the command says so.
+separately from the public PolicyForge (to ask for it, email [info@zardoz.io](mailto:info@zardoz.io?subject=PolicyForge%20licensed-framework%20plugin)). Without it, the command says so.
 `generate-parser` doesn't draft SOC 2 loaders.
 
 ## The AICPA's terms govern your copy
@@ -17,7 +17,7 @@ Whether these terms permit parsing your copy into a catalog, or sending it
 to a model, is **your licensing decision**. This project doesn't interpret
 them for you. The site's Terms & Conditions, which govern the download, are
 at <https://www.aicpa-cima.com/help/terms-and-conditions> ("Version 4").
-Verbatim, as this project's research read them on 2026-09-26 (#410):
+Verbatim, as this project's research read them on 2026-09-26:
 
 > "You may download material displayed on the Website for non-commercial,
 > personal use provided you also retain all copyright and other proprietary

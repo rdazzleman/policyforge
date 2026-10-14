@@ -441,11 +441,10 @@ def test_a_later_line_without_the_token_counts_again_and_says_so(monkeypatch, ca
     assert "policyforge-ba: uncounted -> counted at" in out
 
 
-def test_a_latest_line_at_another_sha_leaves_no_head_approval(monkeypatch, capsys, head):
-    """9b on #53: approved at head, then a later line at another commit.
-    The earlier head approval no longer stands for that reader."""
-    parent = subprocess.run(
-        ["git", "rev-parse", "HEAD~1"],
+def _git_out(*args: str) -> str:
+    """git in this clone, with the identity `commit-tree` needs and CI lacks."""
+    return subprocess.run(
+        ["git", "-c", "user.name=policyforge-test", "-c", "user.email=test@invalid", *args],
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -453,14 +452,29 @@ def test_a_latest_line_at_another_sha_leaves_no_head_approval(monkeypatch, capsy
         cwd=ROOT,
         check=True,
     ).stdout.strip()
+
+
+@pytest.mark.parametrize("other", ["ancestor", "fabricated"])
+def test_a_latest_line_at_another_sha_leaves_no_head_approval(monkeypatch, capsys, other):
+    """9b on #53: approved at head, then a later line at another commit.
+    The earlier head approval no longer stands for that reader.
+
+    The head and its parent are built with `commit-tree` rather than read as
+    `HEAD~1`, which doesn't exist in the public repo's single root commit
+    (#163). The fabricated SHA is ag's version, kept as a second case."""
+    tree = _git_out("rev-parse", "HEAD^{tree}")
+    parent = _git_out("commit-tree", tree, "-m", "parent")
+    head = _git_out("commit-tree", tree, "-p", parent, "-m", "head")
+    sha = parent if other == "ancestor" else "a" * 40
+    at_head = _item(_line(head, "approved", "policyforge-b5"), "policyforge-b5")
+    # The passing case first: the built head is one the reader can place.
+    _, out = _report(monkeypatch, capsys, head, [at_head])
+    assert _summary(out)["approvals at head from counted readers"] == "policyforge-b5"
     _, out = _report(
         monkeypatch,
         capsys,
         head,
-        [
-            _item(_line(head, "approved", "policyforge-b5"), "policyforge-b5"),
-            _item(_line(parent, "approved", "policyforge-b5"), "policyforge-b5"),
-        ],
+        [at_head, _item(_line(sha, "approved", "policyforge-b5"), "policyforge-b5")],
     )
     assert _summary(out)["approvals at head from counted readers"] == "none"
 

@@ -13,6 +13,8 @@ refused before a packet is built, and aims at TEST-NET besides.
 
 from __future__ import annotations
 
+import os
+
 import pytest
 
 from policyforge.ingest.parser_gate import check_generated_parser, trial_run
@@ -305,3 +307,270 @@ def test_a_parser_that_never_returns_is_stopped(tmp_path):
 
     assert not result.ok
     assert "did not finish" in result.detail
+
+
+# --------------------------------------------------------------------------
+# CR-30: the interpreter's machinery reached through an allowed module, and
+# reads of files the parser was not given (80's ruling on #179)
+# --------------------------------------------------------------------------
+
+#: The review's case, verbatim in shape: nothing off the allowlist is
+#: imported and no forbidden builtin is named, and it passed both checks.
+REVIEW_ESCAPE = "import pathlib\n" + (
+    "def load_govramp_export(export_path):\n"
+    "    pathlib.sys.modules['builtins'].eval('print(1)')\n"
+    "    return [1]\n"
+)
+
+
+def test_the_reviews_escape_through_pathlib_sys_modules_is_refused():
+    reasons = _reasons(REVIEW_ESCAPE)
+    assert any("reaches .sys" in r for r in reasons), reasons
+    assert any("reaches .modules" in r for r in reasons), reasons
+    assert any("['builtins']" in r for r in reasons), reasons
+    assert any("reaches .eval" in r for r in reasons), reasons
+
+
+@pytest.mark.parametrize(
+    "body, named",
+    [
+        # Each route on its own, written from what the allowed modules expose
+        # (pathlib imports os and sys; csv and json import re), not from the
+        # gate's own lists.
+        ("import csv\ncsv.sys.modules\nreturn []", ".sys"),
+        ("import pathlib\npathlib.os.getcwd()\nreturn []", ".os"),
+        ("import json\nlookup = {}\nlookup['builtins']\nreturn []", "['builtins']"),
+        ("import re\nlookup = {}\nlookup['__import__']('os')\nreturn []", "['__import__']"),
+        ("import pathlib\nmod = pathlib.sys\nmod.modules\nreturn []", ".modules"),
+        ("import io\nio.builtins\nreturn []", ".builtins"),
+        ("import functools\nfunctools.reduce.__self__.exec('1')\nreturn []", ".exec"),
+    ],
+)
+def test_each_route_to_the_machinery_is_refused_on_its_own(body, named):
+    reasons = _reasons(_with_body(body))
+    assert any(named in r for r in reasons), reasons
+
+
+@pytest.mark.parametrize(
+    "body, imports",
+    [
+        # What must stay: the names that sit next to the refused ones.
+        ("pattern = re.compile(r'\\d+')\nreturn pattern.findall('AC-1')", "import re"),
+        (
+            "with Path(export_path).open(encoding='utf-8') as handle:\n"
+            "    return list(csv.DictReader(handle))",
+            "import csv\nfrom pathlib import Path",
+        ),
+        (
+            "rows = list(csv.DictReader(open(export_path, encoding='utf-8')))\n"
+            "return [r['open'] for r in rows] + [r['os'] for r in rows]",
+            "import csv",
+        ),
+        (
+            "book = openpyxl.load_workbook(export_path, read_only=True)\n"
+            "return [row for row in book.active.iter_rows(values_only=True)]",
+            "import openpyxl",
+        ),
+    ],
+    ids=["re.compile", "Path.open on the sample", "a column called open or os", "openpyxl read"],
+)
+def test_the_neighbours_of_the_refused_names_still_pass(body, imports):
+    assert _reasons(_with_body(body, imports=imports)) == []
+
+
+@pytest.mark.parametrize(
+    "source, named",
+    [
+        # 80's two routes (5413) and 1d's chain (on the same PR), then the two
+        # string-evaluating functions ba found in the allowed modules: each
+        # printed from an annotation when run.
+        ("from pathlib import os\n\ndef load_govramp_export(p):\n    return os.listdir('.')\n",
+         "'os'"),
+        ("from pathlib import sys\n\ndef load_govramp_export(p):\n    return sys.argv\n",
+         "'sys'"),
+        ("import operator\nimport pathlib\n\ndef load_govramp_export(p):\n"
+         "    return [operator.attrgetter('s' + 'ys')(pathlib)]\n", ".attrgetter"),
+        ("import operator\nimport pathlib\n\ndef load_govramp_export(p):\n"
+         "    table = operator.attrgetter('sys.modules')(pathlib)\n"
+         "    builtins = operator.itemgetter('built' + 'ins')(table)\n"
+         "    return [operator.attrgetter('ev' + 'al')(builtins)('1')]\n", ".attrgetter"),
+        ("from operator import attrgetter\n\ndef load_govramp_export(p):\n"
+         "    return [attrgetter('x')(p)]\n", "'attrgetter'"),
+        ("from operator import methodcaller\n\ndef load_govramp_export(p):\n"
+         "    return [methodcaller('upper')('x')]\n", "'methodcaller'"),
+        ("import typing\n\ndef f(x: \"print(1) or int\"):\n    pass\n\n"
+         "def load_govramp_export(p):\n    typing.get_type_hints(f)\n    return [1]\n",
+         ".get_type_hints"),
+        ("import functools\n\n@functools.singledispatch\ndef g(x):\n    return x\n\n"
+         "def load_govramp_export(p):\n    return [g(1)]\n", ".singledispatch"),
+        ("from csv import *\n\ndef load_govramp_export(p):\n    return []\n", "star import"),
+        ("import pathlib\nimport string\n\ndef load_govramp_export(p):\n"
+         "    f = string.Formatter()\n"
+         "    table = f.get_field('0.sys.modules', (pathlib,), {})[0]\n"
+         "    return [f.get_field('0.eval', (table.get('built' + 'ins'),), {})[0]]\n",
+         ".Formatter"),
+        ("import pathlib\nfrom string import Formatter\n\nclass Grab(Formatter):\n"
+         "    def format_field(self, value, spec):\n        self.got = value\n        return ''\n\n"
+         "def load_govramp_export(p):\n    g = Grab()\n    g.format('{0.sys.modules}', pathlib)\n"
+         "    return [g.got]\n", "'Formatter'"),
+        ("import typing\n\ndef load_govramp_export(p):\n"
+         "    hint = typing.List[\"print(1) or int\"]\n"
+         "    return [typing._eval_type(hint, {}, {})]\n", "._eval_type, a private name"),
+        ("import typing as t\n\ndef load_govramp_export(p):\n"
+         "    return [t.List._name]\n", "._name, a private name"),
+        ("from typing import _eval_type\n\ndef load_govramp_export(p):\n    return []\n",
+         "'_eval_type'"),
+        # 1d's alias (on 5a55e4f7), and the spelling an exemption for `self`
+        # would have let through: both reached eval when run (ba measured).
+        ("import typing\n\ndef load_govramp_export(p):\n    t = typing\n"
+         "    return [t._eval_type(typing.List['int'], {}, None)]\n",
+         "._eval_type, a private name"),
+        ("import typing\n\ndef load_govramp_export(p):\n    self = typing\n"
+         "    return [self._eval_type(typing.List['int'], {}, None)]\n",
+         "._eval_type, a private name"),
+        # The stated cost: a parser's own `_x` is refused too, loudly.
+        ("class Reader:\n    def __init__(self):\n        self._rows = []\n\n"
+         "def load_govramp_export(p):\n    return Reader()._rows\n", "._rows, a private name"),
+    ],
+    ids=["from pathlib import os", "from pathlib import sys", "attrgetter of a built string",
+         "1d's attrgetter chain", "attrgetter by name", "methodcaller", "get_type_hints",
+         "singledispatch", "star import", "Formatter.get_field", "a Formatter subclass",
+         "typing._eval_type", "a private name through an alias", "importing a private name",
+         "1d's assigned alias", "an alias called self", "its own _x, the stated cost"],
+)  # fmt: skip
+def test_a_string_or_an_import_name_that_reaches_code_is_refused(source, named):
+    reasons = _reasons(source)
+    assert any(named in r for r in reasons), reasons
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "from typing import Optional\n\n"
+        "def load_govramp_export(p) -> Optional[list]:\n    return []\n",
+        "from operator import itemgetter\n\ndef load_govramp_export(p):\n"
+        "    return sorted([{'id': 'b'}, {'id': 'a'}], key=itemgetter('id'))\n",
+        "import dataclasses\n\n@dataclasses.dataclass\nclass Row:\n    id: 'str'\n\n"
+        "def load_govramp_export(p):\n    return [Row('AC-1')]\n",
+        "from functools import lru_cache\n\n@lru_cache\ndef norm(x):\n    return x.strip()\n\n"
+        "def load_govramp_export(p):\n    return [norm(' AC-1 ')]\n",
+        "def load_govramp_export(p):\n    return ['{0}-{1}'.format('AC', 1)]\n",
+        "import string\n\ndef load_govramp_export(p):\n"
+        "    return [string.Template('$id').substitute(id='AC-1'), string.capwords('access')]\n",
+        "from collections import namedtuple\n\nRow = namedtuple('Row', 'id title')\n\n"
+        "def load_govramp_export(p):\n    row = Row('AC-1', 'x')._replace(title='y')\n"
+        "    return [row._asdict(), Row._fields, Row._make(['a', 'b'])]\n",
+        "class Reader:\n    def __init__(self):\n        self.rows = []\n\n"
+        "    def add(self, row):\n        self.rows.append(row)\n        return self.rows\n\n"
+        "def load_govramp_export(p):\n    return Reader().add('AC-1')\n",
+    ],
+    ids=["typing names", "itemgetter as a sort key", "a dataclass with a string annotation",
+         "lru_cache", "str.format", "string.Template and capwords",
+         "namedtuple's _asdict, _replace, _fields and _make", "its own public attributes"],
+)  # fmt: skip
+def test_the_neighbours_of_the_refused_imports_still_pass(source):
+    assert _reasons(source) == []
+
+
+def _read_rule(path, *, exists):
+    """The trial's read rule, as the child calls it, with `exists` given."""
+    from policyforge.ingest.parser_gate import path_key, readable_path
+
+    sample = os.path.join(os.sep, "data", "export.csv")
+    root = path_key(os.path.join(os.sep, "py")).rstrip(os.sep) + os.sep
+    return readable_path(path, (path_key(sample),), (root,), exists=exists)
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "<string>",
+        "<unknown>",
+        # Python 3.10, an editable install: a traceback looks up the source of
+        # the finder's frame (9b on #179's PR). The whole name doesn't start
+        # with "<", so a test of the whole name refused it.
+        "__editable__.policyforge-1.7.0.finder.__path_hook__/<string>",
+        os.path.join("somewhere", "<frozen importlib._bootstrap>"),
+    ],
+)
+def test_a_tracebacks_source_lookup_is_not_a_read(name):
+    assert _read_rule(name, exists=lambda p: False)
+
+
+@pytest.mark.parametrize(
+    "name, exists",
+    [
+        # A real file that is spelled like a lookup is still a file.
+        (os.path.join(os.sep, "elsewhere", "<string>"), True),
+        # Ends in ">" but its last part doesn't start with "<".
+        (os.path.join(os.sep, "elsewhere", "secret>"), False),
+        (os.path.join(os.sep, "elsewhere", "<dir>", "secret"), False),
+        (os.path.join(os.sep, "elsewhere", "secret.txt"), True),
+    ],
+)
+def test_anything_else_outside_the_sample_is_still_refused(name, exists):
+    assert not _read_rule(name, exists=lambda p: exists)
+
+
+def test_the_sample_the_roots_and_an_open_descriptor_are_readable():
+    assert _read_rule(os.path.join(os.sep, "data", "export.csv"), exists=lambda p: True)
+    assert _read_rule(os.path.join(os.sep, "py", "lib", "csv.py"), exists=lambda p: True)
+    assert _read_rule(3, exists=lambda p: True)
+
+
+def test_reading_a_file_other_than_the_sample_is_refused_in_the_trial(tmp_path):
+    """The review's second case: a read the static check can't see, since
+    a parser's `open` for reading is allowed and the path is only data."""
+    elsewhere = tmp_path / "elsewhere.txt"
+    elsewhere.write_text("not the sample\n", encoding="utf-8")
+    parser, export = _write(
+        tmp_path,
+        "def load_govramp_export(export_path):\n"
+        f"    open({str(elsewhere)!r}).read()\n"
+        "    return [1]\n",
+    )
+    assert _reasons(parser.read_text(encoding="utf-8")) == [], "the static check can't see it"
+
+    result = trial_run(parser, export, framework_slug="govramp")
+
+    assert not result.ok
+    assert any("read a file other than the sample" in r for r in result.refused), result
+    assert any("elsewhere.txt" in r for r in result.refused), result
+
+
+def test_reading_the_sample_by_path_open_runs_in_the_trial(tmp_path):
+    parser, export = _write(
+        tmp_path,
+        "import csv\nfrom pathlib import Path\n\n"
+        "def load_govramp_export(export_path):\n"
+        "    with Path(export_path).open(encoding='utf-8', newline='') as handle:\n"
+        "        return list(csv.DictReader(handle))\n",
+    )
+    result = trial_run(parser, export, framework_slug="govramp")
+
+    assert result.ok, result.detail
+    assert result.records == 2
+
+
+def test_reading_a_workbook_sample_runs_in_the_trial(tmp_path):
+    """openpyxl imports lazily, after the hook goes in: its own files must
+    stay readable, or every workbook parser fails the trial."""
+    import openpyxl
+
+    book = openpyxl.Workbook()
+    book.active.append(["id", "title"])
+    book.active.append(["AC-1", "Policy"])
+    export = tmp_path / "export.xlsx"
+    book.save(export)
+    parser = tmp_path / "govramp_loader.py"
+    parser.write_text(
+        "import openpyxl\n\n"
+        "def load_govramp_export(export_path):\n"
+        "    book = openpyxl.load_workbook(export_path, read_only=True)\n"
+        "    return list(book.active.iter_rows(min_row=2, values_only=True))\n",
+        encoding="utf-8",
+    )
+    result = trial_run(parser, export, framework_slug="govramp")
+
+    assert result.ok, result.detail
+    assert result.records == 1

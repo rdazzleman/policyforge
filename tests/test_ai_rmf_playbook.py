@@ -265,8 +265,13 @@ def test_the_readme_says_voluntary_first_and_that_generation_does_not_enforce_it
     readme = (CATALOG / "README.md").read_text(encoding="utf-8")
     first = readme.split("\n\n")[1]
     assert "voluntary" in first and "never say NIST requires" in " ".join(first.split())
-    assert "#300" in readme, "the README must say generation does not yet enforce 'suggests'"
-    assert "#301" in readme
+    # The content the issue numbers once stood beside (public docs cite none): how
+    # generation and `check` hold to "suggests", and that Procedures carry no
+    # Playbook actions once the AI topics anchor them.
+    flat = " ".join(readme.split())
+    assert "**How PolicyForge holds to this.**" in flat
+    assert "reports, **as an error**, any sentence that cites only the Playbook" in flat
+    assert "the Procedure tier is to be left without them" in flat
 
 
 def test_the_readme_s_counts_are_the_catalog_s(parsed):

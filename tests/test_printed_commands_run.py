@@ -146,14 +146,18 @@ def test_every_flag_in_a_printed_command_exists(where: str, printed: str):
     stop = next((i for i, w in enumerate(words) if w.startswith("-")), len(words))
     command = list(words[:stop])
     flags = {w.split("=")[0] for w in words if w.startswith("--")}
-    if not command:
-        pytest.skip(f"{where} names no subcommand")
+    # A printed command with no subcommand names the top-level group's own
+    # options (`policyforge --version`, #219), so its flags are checked
+    # against `policyforge --help`. Only a bare `policyforge` has nothing
+    # to check.
+    if not command and not flags:
+        pytest.skip(f"{where} names no subcommand and no flag")
 
     help_text = _cli_help(*command)
     for flag in sorted(flags):
         assert flag in help_text, (
             f"{where} prints `policyforge {printed}`, but {flag!r} is not on "
-            f"`policyforge {' '.join(command)} --help`. The product is telling a "
+            f"`policyforge {' '.join([*command, '--help'])}`. The product is telling a "
             f"user to run something it does not accept."
         )
 
@@ -420,9 +424,13 @@ def _interpolations_in_printed_commands() -> list[tuple[str, str, str]]:
 #: Every interpolation the scan must find, by module and expression, with
 #: how many times. **Members, not a count** — see the test below for why.
 EXPECTED_INTERPOLATIONS = {
+    ("policyforge/cli/content.py", "shlex.quote(host)"): 2,
     ("policyforge/cli/content.py", "shlex.quote(current)"): 1,
     ("policyforge/cli/content.py", "shlex.quote(name)"): 1,
     ("policyforge/cli/content.py", "shlex.quote(previous)"): 1,
+    ("policyforge/cli/content.py", "shlex.quote(target.space)"): 2,
+    ("policyforge/cli/content.py", "shlex.quote(target.tier)"): 1,
+    ("policyforge/cli/content.py", "shlex.quote(target.title)"): 2,
     ("policyforge/cli/content.py", "shlex.quote(tier)"): 1,
     # #32: the two licensed commands' hints became one, in `_run_licensed`,
     # which now names the framework too; and the resolver's absence message.

@@ -1,4 +1,0 @@
-# semgrep, alone. Kept out of the project lock (requirements/ci.txt) because
-# it pins its own dependencies exactly, and those pins would otherwise hold
-# this project's back. Same version as the pre-commit hook.
-semgrep==1.177.0

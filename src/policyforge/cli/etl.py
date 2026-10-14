@@ -12,8 +12,9 @@ from policyforge.cli._common import (
     get_provider,
     load_config,
     load_config_or_empty,
+    retired_force,
 )
-from policyforge.textfile import write_text_lf
+from policyforge.textfile import replace_bytes, replace_text_lf, write_text_lf
 
 
 @cli.command("etl-vault")
@@ -953,6 +954,33 @@ def _lands_in_bundled_catalogs(out: Path) -> bool:
     return False
 
 
+def _bundled_file_at(path: Path) -> Path | None:
+    """The bundled catalog file that `path` already IS, if any (#319, CR-29).
+
+    The two tests above ask about DIRECTORIES: where the new file would land.
+    A path outside `data/frameworks/` can still be the bundled file itself,
+    as a hard link, and opening it for writing changes the bundled file
+    (measured with exit 0, Windows and Linux). So this asks the filesystem
+    whether `path` is the same file (`os.path.samestat`, as `samefile` does)
+    as any file under a bundled directory. A symlink is followed, so it is
+    caught here too, besides by the spelling test's resolved path.
+    """
+    import os
+
+    try:
+        here = os.stat(path)
+    except OSError:  # not there yet: a new file can't be anything else
+        return None
+    for directory in _bundled_catalog_dirs():
+        for candidate in directory.rglob("*"):
+            try:
+                if candidate.is_file() and os.path.samestat(here, os.stat(candidate)):
+                    return candidate
+            except OSError:
+                continue
+    return None
+
+
 def _add_framework_id(manifest: Path, key: str) -> str:
     """Add `framework_id: key` to the user's own `manifest`, or say why not.
 
@@ -988,13 +1016,13 @@ def _add_framework_id(manifest: Path, key: str) -> str:
         return f"{manifest} already declares framework_id {key}."
 
     text = original.decode("utf-8")
-    write_text_lf(manifest, text.rstrip("\r\n") + f"\nframework_id: {key}\n")
+    replace_text_lf(manifest, text.rstrip("\r\n") + f"\nframework_id: {key}\n")
     try:
         after = yaml.safe_load(manifest.read_text(encoding="utf-8"))
     except yaml.YAMLError:
         after = None
     if after != {**before, "framework_id": key}:
-        manifest.write_bytes(original)
+        replace_bytes(manifest, original)
         return (
             f"{manifest} did not take an appended framework_id (it would have changed what "
             f"the file says), so it was put back as it was. {add}"
@@ -1022,7 +1050,7 @@ def _declare_catalog(out: Path, *, framework: str, source: str) -> str:
     key = prose_framework_key(framework)
     manifest = out.parent / "framework.yaml"
     if not manifest.exists():
-        write_text_lf(
+        replace_text_lf(
             manifest,
             f"name: {framework}\nframework_id: {key}\nlicence: licensed\nsource: {source}\n",
         )
@@ -1064,14 +1092,15 @@ def _guard_licensed_write(out: Path, *, force: bool, product: str, licence: str,
     under `local_content/`, or in a framework directory with no manifest. This
     guard used to ask only whether git would stage the file, so `--out
     output/...` passed it and the catalog then classified as
-    organization-internal, which a hosted model may read. `--force` does not
+    organization-internal, which a hosted model may read.
+    `--allow-undeclared-licensed` (`force` here; `--force` until #372) does not
     bypass this: it grants a repository permission to carry licensed content,
     which is a different question from which models may read it.
 
     Anywhere licensed, a gitignored destination needs no permission, because a
     file git will never stage cannot be redistributed by accident; a tracked
     one needs the repository to have declared it may hold licensed content,
-    or an explicit --force.
+    or an explicit --allow-undeclared-licensed.
     """
     from policyforge.frameworks.registry import frameworks_config, is_ignored
 
@@ -1090,6 +1119,20 @@ def _guard_licensed_write(out: Path, *, force: bool, product: str, licence: str,
             f"public content. A {product} must never be written there. Use "
             "local_content/ or your own repository's frameworks/ directory."
         )
+    # A third test, of FILES (#319): an --out elsewhere that is a hard link to
+    # a bundled file would write the catalog into it. The manifest beside it
+    # is written too, so it is asked the same. The writes also replace rather
+    # than write through (`replace_text_lf`), so a link this misses still
+    # can't carry the catalog into the bundled file: each covers the other.
+    for target in (out, out.parent / "framework.yaml"):
+        twin = _bundled_file_at(target)
+        if twin is not None:
+            raise click.ClickException(
+                f"{target} is the same file as {twin} (a link to it), inside "
+                f"data/frameworks/, which is this project's bundled public content. A "
+                f"{product} must never be written there. Use a new file under "
+                "local_content/ or your own repository's frameworks/ directory."
+            )
 
     # No config file is a supported way to run (`load_config_or_empty`): the
     # boundary then applies its defaults, the strictest reading, rather than
@@ -1123,9 +1166,44 @@ def _guard_licensed_write(out: Path, *, force: bool, product: str, licence: str,
             "declared `frameworks.allow_licensed_in_repo`, so writing a licensed "
             "catalog there is refused. Write it under local_content/, set that "
             f"flag in config.yaml if your {licence} licence permits your repository "
-            f"to carry the {noun}, or pass --force."
+            f"to carry the {noun}, or pass --allow-undeclared-licensed."
         )
         raise SystemExit(1)
+
+
+def plugin_parse(command: str, *, sample: Path, **options):
+    """(the parser, what it returned) for a licensed `command`, from its
+    plugin (#32), or a refusal saying why there is none, it refused the file,
+    or it returned something other than a catalog. The ONE call into a
+    licensed plugin: `_run_licensed` and `library add` (443) both make it, and
+    both write what it returns themselves."""
+    from policyforge import plugins
+    from policyforge.ingest.schema import Control
+
+    try:
+        parser = plugins.require(command)
+    except plugins.PluginError as exc:
+        raise click.ClickException(str(exc)) from exc
+    try:
+        result = parser.parse(**options)
+    except plugins.ParseRefused as exc:
+        framework = plugins.GENERATE_PARSER_FRAMEWORK.get(command)
+        hint = (
+            f"\n\nIf this file's layout is one this project has not seen, run:\n  "
+            f"policyforge generate-parser --framework {shlex.quote(framework)} --sample "
+            f"{shlex.quote(str(sample))}"
+            if exc.suggest_generate_parser and framework
+            else ""
+        )
+        raise click.ClickException(f"{exc}\nNothing was written.{hint}") from exc
+    if not isinstance(result, plugins.ParseResult) or not all(
+        isinstance(c, Control) for c in result.controls
+    ):
+        raise click.ClickException(
+            f"The plugin that provides `{command}` ({parser.origin}) returned something other "
+            "than a catalog of controls. Nothing was written."
+        )
+    return parser, result
 
 
 def _run_licensed(
@@ -1152,34 +1230,11 @@ def _run_licensed(
     """
     import dataclasses
 
-    from policyforge import plugins
-    from policyforge.ingest.schema import LICENSED_MARKER, Control, catalog_json
+    from policyforge.ingest.schema import LICENSED_MARKER, catalog_json
 
     if out is not None:
         _guard_licensed_write(out, force=force, product=product, licence=licence, noun=noun)
-    try:
-        parser = plugins.require(command)
-    except plugins.PluginError as exc:
-        raise click.ClickException(str(exc)) from exc
-    try:
-        result = parser.parse(**options)
-    except plugins.ParseRefused as exc:
-        framework = plugins.GENERATE_PARSER_FRAMEWORK.get(command)
-        hint = (
-            f"\n\nIf this file's layout is one this project has not seen, run:\n  "
-            f"policyforge generate-parser --framework {shlex.quote(framework)} --sample "
-            f"{shlex.quote(str(sample))}"
-            if exc.suggest_generate_parser and framework
-            else ""
-        )
-        raise click.ClickException(f"{exc}\nNothing was written.{hint}") from exc
-    if not isinstance(result, plugins.ParseResult) or not all(
-        isinstance(c, Control) for c in result.controls
-    ):
-        raise click.ClickException(
-            f"The plugin that provides `{command}` ({parser.origin}) returned something other "
-            "than a catalog of controls. Nothing was written."
-        )
+    parser, result = plugin_parse(command, sample=sample, **options)
     click.echo(result.report)
     if out is None:
         click.echo(unwritten)
@@ -1194,7 +1249,8 @@ def _run_licensed(
         declared = _read_manifest(manifest_path)
     out.parent.mkdir(parents=True, exist_ok=True)
     # The catalog carries its licence (#459 (b)): licensed wherever it is saved.
-    write_text_lf(
+    # Replaced, never written through: see `replace_text_lf` (#319).
+    replace_text_lf(
         out,
         catalog_json([dataclasses.asdict(c) for c in result.controls], licence=LICENSED_MARKER),
     )
@@ -1208,7 +1264,7 @@ def _run_licensed(
     declared.update({"name": parser.framework, "framework_id": result.framework_id})
     declared["source"] = result.source
     declared["licence"] = "licensed"  # last, so no plugin key can change it
-    write_text_lf(
+    replace_text_lf(
         manifest_path, yaml.safe_dump(declared, sort_keys=False, allow_unicode=True, width=88)
     )
     click.echo(
@@ -1264,12 +1320,16 @@ def _read_manifest(manifest_path: Path) -> dict:
     "content.",
 )
 @click.option(
-    "--force",
+    "--allow-undeclared-licensed",
     is_flag=True,
     help="Write --out even though this repository has not declared "
     "`frameworks.allow_licensed_in_repo`.",
 )
-def etl_hitrust(export_path: Path, version: str, out: Path | None, force: bool):
+@retired_force(
+    "--allow-undeclared-licensed",
+    "to write --out without `frameworks.allow_licensed_in_repo`",
+)
+def etl_hitrust(export_path: Path, version: str, out: Path | None, allow_undeclared_licensed: bool):
     """Parse your own licensed HITRUST CSF export into this project's schema.
 
     HITRUST CSF is licensed content. This project never bundles it and never
@@ -1282,14 +1342,16 @@ def etl_hitrust(export_path: Path, version: str, out: Path | None, force: bool):
     worth ingesting.
 
     The parser is part of the licensed-framework plugin, which is
-    distributed separately; without it, this command says so. If the
-    plugin can't read your export, or you don't have it, `policyforge
-    generate-parser --framework hitrust` drafts a loader from a sample.
+    distributed separately: to ask for it, contact info@zardoz.io with the
+    subject "PolicyForge licensed-framework plugin". Without it, this
+    command says so. If the plugin can't read your export, or you don't
+    have it, `policyforge generate-parser --framework hitrust` drafts a
+    loader from a sample.
     """
     _run_licensed(
         "etl-hitrust",
         out=out,
-        force=force,
+        force=allow_undeclared_licensed,
         product="HITRUST export",
         licence="MyCSF",
         noun="export",
@@ -1336,12 +1398,22 @@ def etl_hitrust(export_path: Path, version: str, out: Path | None, force: bool):
     "content.",
 )
 @click.option(
-    "--force",
+    "--allow-undeclared-licensed",
     is_flag=True,
     help="Write --out even though this repository has not declared "
     "`frameworks.allow_licensed_in_repo`.",
 )
-def etl_govramp(export_path: Path, impact_level: str | None, version: str, out: Path | None, force):
+@retired_force(
+    "--allow-undeclared-licensed",
+    "to write --out without `frameworks.allow_licensed_in_repo`",
+)
+def etl_govramp(
+    export_path: Path,
+    impact_level: str | None,
+    version: str,
+    out: Path | None,
+    allow_undeclared_licensed: bool,
+):
     """Parse your own GovRAMP controls matrix into this project's schema.
 
     GovRAMP's Terms & Conditions claim ownership of the documents published
@@ -1363,14 +1435,16 @@ def etl_govramp(export_path: Path, impact_level: str | None, version: str, out: 
     tiers are *not* impact levels: one Moderate matrix holds all three.
 
     The parser is part of the licensed-framework plugin, which is
-    distributed separately; without it, this command says so. If the
-    plugin can't read your workbook, or you don't have it, `policyforge
-    generate-parser --framework govramp` drafts a loader from a sample.
+    distributed separately: to ask for it, contact info@zardoz.io with the
+    subject "PolicyForge licensed-framework plugin". Without it, this
+    command says so. If the plugin can't read your workbook, or you don't
+    have it, `policyforge generate-parser --framework govramp` drafts a
+    loader from a sample.
     """
     _run_licensed(
         "etl-govramp",
         out=out,
-        force=force,
+        force=allow_undeclared_licensed,
         product="GovRAMP matrix",
         licence="GovRAMP",
         noun="matrix",
@@ -1711,7 +1785,9 @@ _PARSER_PACKAGE_DIR = Path("src/policyforge/ingest")
     "--promote",
     is_flag=True,
     help="Copy the candidate into src/policyforge/ingest/ once it passes the static check "
-    "and its trial run returns records. Without this it stays in output/ for review.",
+    "and its trial run returns records. Without this it stays in output/ for review. "
+    "Either way, read it before you commit it: the checks catch known-dangerous shapes, "
+    "not every one.",
 )
 def generate_parser_cmd(
     framework: str,
@@ -1815,6 +1891,14 @@ def generate_parser_cmd(
         return
 
     target = _PARSER_PACKAGE_DIR / f"{framework}_loader.py"
+    # The checks' limit, said where the decision is made (80's ruling on
+    # #179): they catch known-dangerous shapes, and a payload that fires only
+    # on some inputs passes both. The person reading the code is the control.
+    click.echo(
+        "These checks catch known-dangerous shapes, not every one: code that "
+        "misbehaves only on inputs this sample doesn't have passes both. A person "
+        "reviews it before it is committed."
+    )
     if not promote:
         click.echo(
             f"Read it before trusting it. Copy it to {target} once you have, or pass "
@@ -1826,7 +1910,8 @@ def generate_parser_cmd(
     target.parent.mkdir(parents=True, exist_ok=True)
     write_text_lf(target, source)
     click.echo(
-        f"Promoted -> {target}. Add it to your test suite and commit it like any other source file."
+        f"Promoted -> {target}. Read it before you commit it, then add it to your "
+        "test suite like any other source file."
     )
 
 
@@ -2109,10 +2194,14 @@ def etl_hipaa_privacy(date: str | None, frameworks_dir: Path, saved_dir: Path | 
     "e.g. local_content/soc2-tsc/controls.json.",
 )
 @click.option(
-    "--force",
+    "--allow-undeclared-licensed",
     is_flag=True,
     help="Write --out even though this repository has not declared "
     "`frameworks.allow_licensed_in_repo`.",
+)
+@retired_force(
+    "--allow-undeclared-licensed",
+    "to write --out without `frameworks.allow_licensed_in_repo`",
 )
 def etl_soc2_tsc(
     criteria_path: Path,
@@ -2120,7 +2209,7 @@ def etl_soc2_tsc(
     version: str,
     comparison_path: Path | None,
     out: Path,
-    force: bool,
+    allow_undeclared_licensed: bool,
 ):
     """Parse YOUR OWN copy of the AICPA Trust Services Criteria (SOC 2), and
     optionally your own copy of the AICPA's mapping to NIST SP 800-53, into a
@@ -2138,11 +2227,16 @@ def etl_soc2_tsc(
     mapping states no relationship and predates Rev 5. Each 800-53 id NIST
     marks as changed substantively since Rev 4 is flagged; one withdrawn in
     Rev 5, or not a Rev 5 id at all, is refused by name.
+
+    The parser is part of the licensed-framework plugin, which is
+    distributed separately: to ask for it, contact info@zardoz.io with the
+    subject "PolicyForge licensed-framework plugin". Without it, this
+    command says so.
     """
     _run_licensed(
         "etl-soc2-tsc",
         out=out,
-        force=force,
+        force=allow_undeclared_licensed,
         product="TSC export",
         licence="AICPA",
         noun="criteria",

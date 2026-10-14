@@ -245,9 +245,50 @@ def premises_for(claim: Claim, requirements: list[Requirement]) -> list[Requirem
     requirement may be drawn from several controls; demanding an exact
     tag-set match would miss both and report a grounded sentence as
     ungrounded — the direction that teaches people to ignore a check.
+
+    **Shared by citation, not by tag text** (#17): `generate` rewrites a
+    Standard's tags into the confirmed form, so the claim's tag no longer
+    reads as the synthesis's did. Matched as `check` matches them
+    (`content.sources.citation_keys` and `covered`), or nothing would be
+    judged, and silently.
     """
-    wanted = set(claim.tags)
-    return [r for r in requirements if wanted.intersection(r.tags)]
+    return _Matcher(requirements).premises(claim)
+
+
+class _Matcher:
+    """Each tag read into citations once (`content.sources.citation_keys`),
+    for every claim judged against one synthesis: reading the requirements'
+    tags again per claim made `judgeable` about nine times slower on a
+    150-requirement document (b5 on PR 430)."""
+
+    def __init__(self, requirements: list[Requirement]):
+        from .sources import tailorings
+        from .tags import disk_scope
+
+        self.scope = disk_scope()
+        self.tailored = tailorings(self.scope)
+        self.read: dict[str, set[tuple[str, str]]] = {}
+        self.requirements = [(r, self.keys(r.tags)) for r in requirements]
+
+    def keys(self, tags) -> set[tuple[str, str]]:
+        from .sources import citation_keys
+
+        out: set[tuple[str, str]] = set()
+        for tag in tags:
+            if tag not in self.read:
+                self.read[tag] = citation_keys(tag, self.scope)
+            out |= self.read[tag]
+        return out
+
+    def premises(self, claim: Claim) -> list[Requirement]:
+        from .sources import covered
+
+        wanted = self.keys(claim.tags)
+        return [
+            r
+            for r, keys in self.requirements
+            if any(covered(key, wanted, self.tailored) for key in keys)
+        ]
 
 
 def judgeable(body: str, synthesis: str) -> list[tuple[Claim, list[Requirement]]]:
@@ -256,12 +297,12 @@ def judgeable(body: str, synthesis: str) -> list[tuple[Claim, list[Requirement]]
     Separate from the judging so the **cost is knowable before anything is
     spent**: one model call per pair, counted without calling anything.
     """
-    requirements = parse_synthesis(synthesis)
+    matcher = _Matcher(parse_synthesis(synthesis))
     pairs = []
     for claim in claims(body):
         if not claim.anchored:
             continue
-        premises = premises_for(claim, requirements)
+        premises = matcher.premises(claim)
         if premises:
             pairs.append((claim, premises))
     return pairs

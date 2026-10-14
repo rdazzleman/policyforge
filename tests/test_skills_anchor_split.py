@@ -43,6 +43,16 @@ def test_bundle_counts_an_ai_rmf_anchor_as_the_teams(state):
     22 is its 5 anchored categories and their 17 subcategories, /coverage's
     figure. It read 5 until #318: /bundle claimed the categories and none of
     the subcategories beneath them."""
+    # The registry `init` writes for an AI builder, not the pool: the pool
+    # also holds Responsible Use of AI, which that team's owner would own
+    # unanchored (22 part 3).
+    from policyforge.topics.build import build_registry, load_pool
+    from policyforge.topics.registry import parse_topics
+    from policyforge.topics.rule import select
+    from policyforge.topics.scope_facts import ScopeFacts
+
+    built = parse_topics(build_registry(load_pool(), select(ScopeFacts(ai="builder"))))
+    state = SimpleNamespace(**{**vars(state), "topics": built})
     owner = _owner_of(state, "AI Governance")
 
     out = skills._bundle(state, owner.split())

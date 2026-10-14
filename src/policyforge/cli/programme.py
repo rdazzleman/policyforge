@@ -9,23 +9,22 @@ import click
 from policyforge.cli import cli
 from policyforge.cli._common import (
     _DEFAULT_HISTORY_DIR,
+    RegistryPath,
     _checked_slug,
     _content_dir,
+    controls_option,
     load_catalogs,
     load_config_or_empty,
+    resolve_catalogs,
 )
 
 
 @cli.command("map")
-@click.option(
-    "--controls",
-    "controls_paths",
-    multiple=True,
-    default=(Path("data/frameworks/nist-800-53-r5/controls.json"),),
-    type=click.Path(exists=True, path_type=Path),
-    help="Path to a controls.json. Repeatable, and normally repeated: a "
+@controls_option(
+    "Path to a controls.json. Repeatable, and normally repeated: a "
     "cross-framework crosswalk needs every framework loaded together, so passing "
     "only the NIST file produces a crosswalk with nothing to cross-reference.",
+    fallback="the 800-53 catalog alone",
 )
 @click.option(
     "--out",
@@ -39,6 +38,9 @@ def map_cmd(controls_paths, out: Path):
 
     from policyforge.mapping.crosswalk import build_crosswalk
 
+    controls_paths = resolve_catalogs(
+        controls_paths, default=(Path("data/frameworks/nist-800-53-r5/controls.json"),)
+    )
     controls = load_catalogs(controls_paths)
 
     crosswalk = build_crosswalk(controls)
@@ -91,17 +93,10 @@ def _topics_and_controls(topics_path: Path, controls_paths):
     "--topics",
     "topics_path",
     default=Path("config/topics.yaml"),
-    type=click.Path(exists=True, path_type=Path),
+    type=RegistryPath(exists=True, path_type=Path),
     help="Topic registry (default: config/topics.yaml).",
 )
-@click.option(
-    "--controls",
-    "controls_paths",
-    required=True,
-    multiple=True,
-    type=click.Path(exists=True, path_type=Path),
-    help="Path to a controls.json. Repeatable.",
-)
+@controls_option("Path to a controls.json. Repeatable.")
 def bundle_cmd(owner: str, topics_path: Path, controls_paths):
     """Everything one team answers for: topics, requirements, documents, cadence.
 
@@ -112,6 +107,7 @@ def bundle_cmd(owner: str, topics_path: Path, controls_paths):
     from policyforge.mapping.crosswalk import build_crosswalk
     from policyforge.topics.bundles import team_bundle
 
+    controls_paths = resolve_catalogs(controls_paths)
     topics, controls, nist, _ = _topics_and_controls(topics_path, controls_paths)
     click.echo(team_bundle(topics, nist, owner, crosswalk=build_crosswalk(controls)).render())
 
@@ -122,17 +118,12 @@ def bundle_cmd(owner: str, topics_path: Path, controls_paths):
     "--topics",
     "topics_path",
     default=Path("config/topics.yaml"),
-    type=click.Path(exists=True, path_type=Path),
+    type=RegistryPath(exists=True, path_type=Path),
     help="Topic registry (default: config/topics.yaml).",
 )
-@click.option(
-    "--controls",
-    "controls_paths",
-    required=True,
-    multiple=True,
-    type=click.Path(exists=True, path_type=Path),
-    help="Path to a controls.json. Repeatable - pass the framework the "
-    "requirement belongs to as well as the NIST catalog.",
+@controls_option(
+    "Path to a controls.json. Repeatable - pass the framework the "
+    "requirement belongs to as well as the NIST catalog."
 )
 def addresses_cmd(requirement: str, topics_path: Path, controls_paths):
     """Who answers for one requirement, and which document says so.
@@ -150,6 +141,7 @@ def addresses_cmd(requirement: str, topics_path: Path, controls_paths):
     from policyforge.mapping.crosswalk import build_crosswalk
     from policyforge.topics.bundles import requirement_view
 
+    controls_paths = resolve_catalogs(controls_paths)
     topics, controls, nist, other = _topics_and_controls(topics_path, controls_paths)
     click.echo(
         requirement_view(
@@ -162,22 +154,39 @@ def addresses_cmd(requirement: str, topics_path: Path, controls_paths):
     )
 
 
+def _scope_report(topics):
+    """The scope-facts report for `coverage` (22, part 3), or None where the
+    shipped pool it reads footprints from isn't there.
+
+    A `programme:` fact outside its vocabulary refuses, as it does in `init`.
+    """
+    from policyforge.topics.build import load_pool
+    from policyforge.topics.registry import parse_topics
+    from policyforge.topics.scope_facts import ScopeFactError, load_scope_facts
+    from policyforge.topics.scope_report import scope_report
+
+    try:
+        facts = load_scope_facts(load_config_or_empty())
+    except ScopeFactError as exc:
+        raise click.UsageError(str(exc)) from exc
+    try:
+        pool = parse_topics(load_pool())
+    except RuntimeError:
+        return None
+    return scope_report(topics, facts, pool)
+
+
 @cli.command("coverage")
 @click.option(
     "--topics",
     "topics_path",
     default=Path("config/topics.yaml"),
-    type=click.Path(exists=True, path_type=Path),
+    type=RegistryPath(exists=True, path_type=Path),
     help="Topic registry (default: config/topics.yaml). Copy config/topics.example.yaml to start.",
 )
-@click.option(
-    "--controls",
-    "controls_paths",
-    required=True,
-    multiple=True,
-    type=click.Path(exists=True, path_type=Path),
-    help="Path to a controls.json. Repeatable - pass the NIST 800-53 file plus any "
-    "other framework you want reachability reported for.",
+@controls_option(
+    "Path to a controls.json. Repeatable - pass the NIST 800-53 file plus any "
+    "other framework you want reachability reported for."
 )
 @click.option(
     "--baseline",
@@ -213,8 +222,7 @@ def coverage_cmd(
 
     Orphaned controls mean nobody is doing the work. Contested controls are
     worse: it looks covered while each owner assumes the other has it. Both
-    are pure set arithmetic over the topic registry - no LLM involved. See
-    README's "One topic, one team".
+    are pure set arithmetic over the topic registry - no LLM involved.
     """
     import dataclasses
     import json as json_mod
@@ -227,10 +235,12 @@ def coverage_cmd(
         split_by_adoption,
         unadopted_note,
     )
-    from policyforge.topics.registry import load_topics
+    from policyforge.topics.registry import load_registry
 
-    topics = load_topics(topics_path)
+    registry = load_registry(topics_path)
+    topics = registry.topics
 
+    controls_paths = resolve_catalogs(controls_paths)
     all_controls = load_catalogs(controls_paths)
 
     # In scope is what the registry anchors, not what it could anchor --
@@ -263,12 +273,16 @@ def coverage_cmd(
             )
 
     from policyforge.crosswalk.overlay import load_overlays, relationships_for
+    from policyforge.frameworks.registry import config_or_defaults
+    from policyforge.frameworks.vacated import declared_vacated
     from policyforge.topics.coverage import ScopingError
 
     try:
         report = analyze_coverage(
             topics,
             scoped,
+            vacated=declared_vacated(config_or_defaults("vacated paragraphs were read")),
+            declared_policies={p.name for p in registry.policies},
             catalog=nist_controls,
             scope=scope,
             other_controls=other_controls,
@@ -282,10 +296,19 @@ def coverage_cmd(
         # (1d on #461).
         raise click.UsageError(str(exc)) from exc
 
+    scope = _scope_report(topics)
     if as_json:
-        click.echo(json_mod.dumps(dataclasses.asdict(report), indent=2))
+        document = dataclasses.asdict(report)
+        if scope is not None:
+            document["scope_facts"] = dataclasses.asdict(scope)
+        click.echo(json_mod.dumps(document, indent=2))
     else:
         click.echo(format_report(report, show_all=show_all))
+        if scope is not None:
+            from policyforge.topics.scope_report import format_scope
+
+            for line in format_scope(scope):
+                click.echo(line)
         # Named, not silently absent. A catalog excluded from the
         # denominator because nobody anchors it is a fact the reader should
         # be able to act on, not a gap in the report.
@@ -507,6 +530,7 @@ def drift_cmd(
         ids = catalogs.setdefault(normalize_framework(control.framework), set())
         ids.add(control.control_id)
         ids.update(e.enhancement_id for e in control.enhancements)
+        ids.update(r.requirement_id for r in getattr(control, "requirements", []))
 
     report = analyze_drift(
         old_controls,
@@ -533,14 +557,7 @@ def drift_cmd(
 
 
 @cli.command("parameters")
-@click.option(
-    "--controls",
-    "controls_paths",
-    multiple=True,
-    required=True,
-    type=click.Path(exists=True, path_type=Path),
-    help="Framework controls.json to read parameters from. Repeatable.",
-)
+@controls_option("Framework controls.json to read parameters from. Repeatable.")
 @click.option(
     "--ledger",
     "ledger_path",
@@ -598,6 +615,7 @@ def parameters_cmd(
     """
     from policyforge.parameters.ledger import build_report, load_ledger, render_ledger
 
+    controls_paths = resolve_catalogs(controls_paths)
     controls = load_catalogs(controls_paths)
 
     if baseline:
@@ -605,10 +623,9 @@ def parameters_cmd(
     if topics_path is not None:
         from policyforge.topics.registry import load_topics
 
+        # In catalog spelling already (#188), so no case rule of its own.
         anchored = {
-            control_id.upper()
-            for topic in load_topics(topics_path)
-            for control_id in topic.nist_controls
+            control_id for topic in load_topics(topics_path) for control_id in topic.nist_controls
         }
         # The one rule for what a topic reaches (#377), over the catalogs
         # loaded here: an anchor claims its own catalog's children (AC-2 brings
@@ -623,9 +640,7 @@ def parameters_cmd(
 
         crosswalk = build_crosswalk(controls)
         controls = [
-            c
-            for c in controls
-            if {k.upper() for k in topic_keys(c.control_id, c.framework, crosswalk)} & anchored
+            c for c in controls if set(topic_keys(c.control_id, c.framework, crosswalk)) & anchored
         ]
 
     if not controls:
@@ -781,14 +796,9 @@ def roles_cmd(kind: str):
     help="Topic registry (default: config/topics.yaml). Read for a topic's anchors, so "
     "'anchored but cited nowhere' can be reported; the rest works without it.",
 )
-@click.option(
-    "--controls",
-    "controls_paths",
-    required=True,
-    multiple=True,
-    type=click.Path(exists=True, path_type=Path),
-    help="Path to a controls.json. Repeatable - pass the NIST catalog plus every "
-    "framework you want the documents resolved against.",
+@controls_option(
+    "Path to a controls.json. Repeatable - pass the NIST catalog plus every "
+    "framework you want the documents resolved against."
 )
 @click.option(
     "--strict",
@@ -902,6 +912,7 @@ def satisfies_cmd(
             raise click.UsageError(f"No documents found in {root}.")
 
     topics = load_topics(topics_path) if topics_path.exists() else []
+    controls_paths = resolve_catalogs(controls_paths)
     controls = load_catalogs(controls_paths)
 
     evidences = build_report(
@@ -919,6 +930,21 @@ def satisfies_cmd(
         click.echo(json_mod.dumps(as_records(evidences), indent=2))
     else:
         click.echo(format_report(evidences))
+
+    # Which loaded catalogs still count an invented part below a leaf (#441):
+    # their manifests don't say `leaf_parts: listed`. Said every run, so a
+    # green report over them isn't read as checked to the last paragraph.
+    from policyforge.topics.satisfies import catalog_scope
+
+    residual = catalog_scope(controls).leaf_residual()
+    if residual:
+        click.echo(
+            "Below a paragraph these catalogs don't subdivide, a cited part is not checked "
+            "against the regulation's text, so an invented one still counts: "
+            + ", ".join(residual)
+            + ".",
+            err=True,
+        )
 
     unknown = sum(len(e.unknown) for e in evidences)
     unreviewed = sum(len(e.unreviewed) for e in evidences)

@@ -82,7 +82,7 @@ def test_a_destination_the_boundary_would_not_read_as_licensed_is_refused(
     project, monkeypatch, etl, where
 ):
     out = project / REFUSED[where]
-    result = ETLS[etl](monkeypatch, project, "--out", str(out), "--force")
+    result = ETLS[etl](monkeypatch, project, "--out", str(out), "--allow-undeclared-licensed")
     assert result.exit_code != 0, result.output
     assert "would be read as" in result.output
     assert "your boundary settings for licensed content would not apply" in result.output
@@ -98,7 +98,7 @@ def test_a_destination_the_boundary_reads_as_licensed_is_written(project, monkey
     from policyforge.llm.boundary import LICENSED, classify_path
 
     out = project / ACCEPTED[where]
-    result = ETLS[etl](monkeypatch, project, "--out", str(out), "--force")
+    result = ETLS[etl](monkeypatch, project, "--out", str(out), "--allow-undeclared-licensed")
     assert result.exit_code == 0, result.output
     assert json.loads(out.read_text(encoding="utf-8")) is not None
     # The guard's promise, checked by the boundary itself after the write.
@@ -106,11 +106,12 @@ def test_a_destination_the_boundary_reads_as_licensed_is_written(project, monkey
 
 
 def test_force_does_not_bypass_the_boundary(project, monkeypatch):
-    """--force grants a repository permission to carry licensed content; it
-    says nothing about which models may read it."""
+    """--allow-undeclared-licensed (--force until #372) grants a repository
+    permission to carry licensed content; it says nothing about which
+    models may read it."""
     out = project / "output" / "controls.json"
     without = _hitrust(monkeypatch, project, "--out", str(out))
-    forced = _hitrust(monkeypatch, project, "--out", str(out), "--force")
+    forced = _hitrust(monkeypatch, project, "--out", str(out), "--allow-undeclared-licensed")
     assert without.exit_code != 0 and forced.exit_code != 0
     assert "would be read as" in forced.output
 

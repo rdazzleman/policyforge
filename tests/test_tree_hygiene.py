@@ -273,3 +273,43 @@ def test_this_repository_has_no_conflict_markers_or_crlf() -> None:
     """
     assert check.check_conflict_markers() is True
     assert check.check_line_endings() is True
+
+
+def test_missing_git_skips_checks_and_returns_none(monkeypatch) -> None:
+    """If git is missing, the checks should safely return None (skipped).
+
+    Asked of this repository, where both checks return True with git present
+    (`test_this_repository_has_no_conflict_markers_or_crlf` above). A non-repository returns
+    None with git present too, so it could not tell a skip from a failed git
+    (ba on #184)."""
+    monkeypatch.setenv("PATH", "")
+
+    # Verify the checks return None
+    assert check.check_line_endings() is None
+    assert check.check_conflict_markers() is None
+
+
+def test_missing_git_does_not_print_a_tree_identity_it_never_measured(monkeypatch) -> None:
+    """#61: with no git, the identity line every repository check prints said
+    "no commits, clean, 0 untracked". It now says git is unavailable."""
+    monkeypatch.setenv("PATH", "")
+
+    said = check._tree_identity()
+    assert "git unavailable" in said, said
+    assert "clean" not in said and "untracked" not in said, said
+
+
+def test_a_non_repository_is_not_identified_as_a_clean_tree(tmp_path: Path) -> None:
+    """ba on #184: with git present, a directory that is no repository printed
+    "no commits, clean, 0 untracked" (every git call exits 128)."""
+    said = check._tree_identity(tmp_path)
+    assert "not identified" in said, said
+    assert "clean" not in said and "untracked" not in said, said
+
+
+def test_a_repository_with_no_commits_is_still_identified(tmp_path: Path) -> None:
+    """The passing case: `rev-parse HEAD` fails in a fresh repository, but
+    `git status` answers, so "no commits" there is a measurement."""
+    root = _repo(tmp_path, autocrlf="false")
+    said = check._tree_identity(root)
+    assert said.startswith("tree: HEAD no commits, clean, 0 untracked"), said

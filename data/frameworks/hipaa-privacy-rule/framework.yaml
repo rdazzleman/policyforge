@@ -138,3 +138,9 @@ source_ref: '2026-09-17'
 source_url: https://www.ecfr.gov/api/renderer/v1/content/enhanced/2026-09-17/title-45?part=164&subpart=E
 content_sha256: 31fcffdc898e4b195296f7e5e5811ea10908d6d3ea4ff5728f5759561ae5c903
 fetched_at: '2026-09-26'
+# Below a leaf (an id the catalog doesn't subdivide), a cited part stands only
+# when the leaf's own text lists it as a list item (441; 80's 6235 rule 2 on
+# #438). Switched on per catalog, with what it rests on.
+leaf_parts: listed
+leaf_parts_measured: >-
+  2026-10-12 at release/1.8 937b6df5: 684 of 881 ids are leaves; the catalog carries every paragraph eCFR's renderer (tests/fixtures/ecfr_164_subparts_d_e/renderer-E.html) gives an id but definitions keyed by term and 164.504(b) [Reserved], and of the 13 first items it doesn't carry, 12 resolve through an id beneath and 164.502(b)(1), folded by eCFR into (b)'s paragraph, by the first-item rule; so a part below a leaf exists only when the leaf's text lists it (none do); the committed corpus and the user's fresh-corpus run (431 files, 2,517 distinct citations): 0 turned red

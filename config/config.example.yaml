@@ -61,6 +61,44 @@ llm:
   #   enabled: true                        # the default
   #   path: output/.model-log/calls.jsonl  # the default; under gitignored output/
 
+# Optional. The organisation's catalog set, named once. Every command whose
+# `--controls` means "the catalog set" (synthesize, ssp, map, bundle,
+# addresses, coverage, parameters, satisfies, and the crosswalk commands) uses
+# it when `--controls` isn't given, and says so in one line. `--controls` on
+# the command line replaces it entirely, with no merging. An entry is a
+# framework's name (`policyforge frameworks` lists them, bundled and under
+# local_content/) or a path to a controls.json. An unknown name is refused.
+#
+# The same block holds the organisation's scope facts: what it is, as far as
+# its topic set goes. `policyforge init` reads them and writes
+# config/topics.yaml with the topics they call for, at most 25. Unset is not
+# `none`: a fact nobody declared leaves its topics out, and `init` and
+# `coverage` say which. A value outside these refuses, naming the key.
+#   builds_software: true   # turns Secure Development on
+#   own_facilities: false   # turns Physical & Environmental on
+#   personal_data: phi      # none | pii | phi: pii adds Privacy, phi the HIPAA topics too
+#   baseline: 800-53        # none | 800-53 | fedramp | govramp: keeps Personnel
+#                           # Security and System Maintenance as topics
+#   ai: builder             # none | user | builder: three AI topics, or five and up
+#                           # to two more; `none` also leaves AI Use out of the
+#                           # Acceptable Use Policy
+# programme:
+#   catalogs:
+#     - nist-800-53-r5
+#     - hipaa-security-rule
+
+# Optional. A spend ceiling, in dollars, for one run of a command that can
+# make more than one paid request (ssp, synthesize, generate, crosswalk
+# propose, the eval runner). A run whose estimated cost is above it is
+# refused before any request is made; the figure is an upper bound, with
+# every output priced at its token limit. A run whose cost so far passes it
+# stops, and says how many requests it made of how many it planned.
+# `--max-cost USD` sets it for one run and wins over this. A hosted model the
+# model map can't price is refused under a ceiling, never counted as free; a
+# local model costs nothing. Unset, nothing is estimated and nothing stops.
+# budget:
+#   max_usd: 5.00
+
 # Optional. A second model that judges whether a cited passage actually
 # supports the claim made from it. Off unless `answering: true`, because it
 # costs one model call per cited sentence, on top of the answer itself.
@@ -144,6 +182,15 @@ org:
     # security_operations: SecOps
     # grc: Security Assurance
 
+# Optional. How `generate` writes a Standard. Under each section it adds the
+# cited requirements in each catalog's own words, in collapsible blocks.
+# A licensed catalog (one whose framework.yaml doesn't say public-domain) is
+# listed there by id and title only, unless you turn this on: quoting your
+# own licensed copy inside your own documents is your licence's question,
+# and turning this on also puts that text wherever the Standard is published.
+standards:
+  quote_licensed: false
+
 # Optional. Describes the system a System Security Plan is written about,
 # using NIST SP 800-18's plan elements. Only used by `policyforge ssp`;
 # anything left blank becomes a visible [Placeholder] in the workbook rather
@@ -168,11 +215,11 @@ system:
   interconnections: ""
   laws_and_regulations: []
 
-# Optional. Where the Zardoz conversational shell reads from
-# (`policyforge zardoz`). Only used by `zardoz sync`.
+# Optional. Where the markdown content tree lives (`generate`, `publish`,
+# `pull`, `check`, and `zardoz sync`). Defaults to `docs/` when omitted.
 zardoz:
-  # A markdown content tree — the documents as files. Needs no credentials,
-  # so this alone is enough to sync and ask questions offline. In a
+  # The markdown content tree — the documents as files. Needs no credentials,
+  # so this alone is enough to draft, check and sync offline. In a
   # repo-backed setup this is the source of truth and Confluence is the
   # published copy, so where both are configured the tree wins.
   content_dir: ""            # e.g. docs
@@ -224,7 +271,7 @@ zardoz:
 # Google's terms have historically differed between the free and paid tiers
 # on whether prompts may be used to improve their products. That is between
 # you and Google and it changes — confirm which tier your key is on before
-# sending anything you would not want used that way. See docs/subprocessors.md.
+# sending anything you would not want used that way. See https://zardoz.io/trust/subprocessors/.
 # llm:
 #   provider: gemini
 #   model: gemini-3.6-flash

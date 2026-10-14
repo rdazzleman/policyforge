@@ -138,42 +138,23 @@ def test_the_summary_names_what_did_not_run(capsys: pytest.CaptureFixture[str]) 
     assert "3 ran, 0 failed, 1 skipped" in out
 
 
-# ---- semgrep's lock in advisory mode (#82; 80's ruling 1774, condition 2) ----
-
-LABEL = "pip-audit (semgrep's lock)"
+# ---- semgrep runs from the pinned image, through Docker (#83) --------------
 
 
-def _audit_prints(monkeypatch: pytest.MonkeyPatch, stdout: str, returncode: int) -> None:
-    def run(cmd, **kwargs):
-        return check.subprocess.CompletedProcess(cmd, returncode, stdout=stdout, stderr="")
+def test_semgrep_is_skipped_with_a_note_without_docker(monkeypatch, capsys):
+    monkeypatch.setattr(check.shutil, "which", lambda name, path=None: None)
+    ran = []
+    monkeypatch.setattr(check, "run", lambda label, cmd: ran.append(cmd) or True)
 
-    monkeypatch.setattr(check.subprocess, "run", run)
-    monkeypatch.setattr(check, "NOTES", {})
-
-
-def test_a_pass_with_advisories_carries_its_count_into_the_summary(
-    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """Never a bare PASS: the summary repeats the count under the step."""
-    line = "semgrep lock: 8 advisories (advisory, not blocking; #82)"
-    _audit_prints(monkeypatch, f"  ADVISORY  pyjwt 2.13.0: CVE-1\n{line}\n", 0)
-    assert check.check_semgrep_lock(LABEL) is True
-    check.summarise({**ALL_PASS, LABEL: True}, set())
-    out = capsys.readouterr().out
-    assert f"PASS  {LABEL}\n        {line}" in out
+    assert check.check_semgrep() is None
+    assert ran == []
+    assert "SKIPPED -- docker isn't on PATH" in capsys.readouterr().out
 
 
-def test_an_audit_that_never_counted_fails_whatever_its_exit_code(
-    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """Condition 2: an audit that can't run isn't an empty report. Exit 0
-    with no count line means it never got as far as counting."""
-    _audit_prints(monkeypatch, "pip-audit over requirements/semgrep/semgrep.txt\n", 0)
-    assert check.check_semgrep_lock(LABEL) is False
-    assert check.NOTES[LABEL].startswith("semgrep lock: NOT COUNTED")
+def test_semgrep_runs_the_gate_in_the_image_when_docker_is_there(monkeypatch):
+    monkeypatch.setattr(check.shutil, "which", lambda name, path=None: f"/bin/{name}")
+    ran = []
+    monkeypatch.setattr(check, "run", lambda label, cmd: ran.append(cmd) or True)
 
-
-def test_a_blocking_finding_fails_even_with_a_count(monkeypatch: pytest.MonkeyPatch) -> None:
-    line = "semgrep lock: 0 advisories (advisory, not blocking; #82)"
-    _audit_prints(monkeypatch, f"  SHARED WITH THE PRODUCT  x\n{line}\n", 1)
-    assert check.check_semgrep_lock(LABEL) is False
+    assert check.check_semgrep() is True
+    assert ran == [[sys.executable, "scripts/semgrep_gate.py", "--image"]]

@@ -33,6 +33,7 @@ them alike is how a drift report becomes something people skim past.
 from __future__ import annotations
 
 import difflib
+import re
 import subprocess  # nosec B404
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -43,8 +44,76 @@ CHANGED = "changed"
 
 #: Fields whose change alters what the organization must *do*. Everything
 #: else is editorial: worth recording, not worth re-opening a document over.
-#: `description` is an enhancement's requirement text (#369).
-SUBSTANTIVE_FIELDS = ("control_statement", "description", "baseline", "enhancements", "parameters")
+#: `description` is an enhancement's requirement text (#369); `statement`,
+#: `level`, and `mappings` are a nested requirement's (#442).
+SUBSTANTIVE_FIELDS = (
+    "control_statement",
+    "description",
+    "statement",
+    "baseline",
+    "enhancements",
+    "parameters",
+    "level",
+    "level_kind",
+    "mappings",
+    "additional_requirements",
+)
+
+#: **Every field the catalog schema carries, at every level, and what drift
+#: does with it** (442's invariant: everything a document can cite or
+#: synthesis reads is compared, and nothing else). A field is compared under
+#: the report name given, or not compared for the reason given.
+#: `tests/test_drift_nested_requirements.py` fails on a schema field missing
+#: here, and changes each field to check the classification holds.
+COMPARED = "compared"
+NOT_COMPARED = "not compared"
+FIELDS: dict[str, dict[str, tuple[str, str]]] = {
+    "Control": {
+        "control_id": (NOT_COMPARED, "the key: a change is a removal and an addition"),
+        "title": (COMPARED, "title"),
+        "framework": (NOT_COMPARED, "the catalog's name, the same on both sides of a diff"),
+        "framework_version": (
+            NOT_COMPARED,
+            "the version the diff is between: read (documents, zardoz) but it changes on "
+            "every control at every update, and the report carries both versions",
+        ),
+        "family": (COMPARED, "family"),  # ssp/narrative.py puts it in the prompt
+        "family_abbr": (NOT_COMPARED, "a grouping label; no document cites or synthesis reads it"),
+        "baseline": (COMPARED, "baseline"),
+        "control_statement": (COMPARED, "control_statement"),
+        "discussion": (COMPARED, "discussion"),
+        "enhancements": (COMPARED, "enhancements"),
+        "related_controls": (COMPARED, "related_controls"),
+        "source_crosswalk": (COMPARED, "mappings"),
+        "source_path": (NOT_COMPARED, "where the row came from, not what it requires"),
+        "parameter_values": (COMPARED, "parameters"),
+        "additional_requirements": (COMPARED, "additional_requirements"),
+        "objective_id": (NOT_COMPARED, "nothing outside ingest reads it"),
+        "objective_title": (NOT_COMPARED, "nothing outside ingest reads it"),
+        "objective_statement": (NOT_COMPARED, "nothing outside ingest reads it"),
+        "factor_type": (NOT_COMPARED, "nothing outside ingest reads it"),
+        "requirements": (COMPARED, "each requirement under its own id"),
+    },
+    "ControlEnhancement": {
+        "enhancement_id": (NOT_COMPARED, "the key: a change is a removal and an addition"),
+        "title": (COMPARED, "title"),
+        "baseline": (COMPARED, "baseline"),
+        "description": (COMPARED, "description"),
+        "parameter_values": (COMPARED, "parameters"),
+        "additional_requirements": (COMPARED, "additional_requirements"),
+        "source_crosswalk": (COMPARED, "mappings"),
+    },
+    "Requirement": {
+        "requirement_id": (NOT_COMPARED, "the key: a change is a removal and an addition"),
+        "level": (COMPARED, "level"),
+        "statement": (COMPARED, "statement"),
+        "level_kind": (COMPARED, "level_kind"),
+        "organizational_factors": (NOT_COMPARED, "nothing outside ingest reads it"),
+        "system_factors": (NOT_COMPARED, "nothing outside ingest reads it"),
+        "regulatory_factors": (NOT_COMPARED, "nothing outside ingest reads it"),
+        "mappings": (COMPARED, "mappings"),
+    },
+}
 
 
 def _normalize(text: str) -> str:
@@ -59,6 +128,7 @@ class ControlChange:
     control_id: str
     kind: str
     title: str = ""
+    level: str = ""
     #: Which fields differ. Named rather than summarised so a reader can
     #: decide whether this one matters to them.
     fields: list[str] = field(default_factory=list)
@@ -151,6 +221,10 @@ def diff_catalogs(old_controls, new_controls) -> list[ControlChange]:
             fields.append("title")
         if sorted(old.related_controls) != sorted(new.related_controls):
             fields.append("related_controls")
+        if _normalize(old.family or "") != _normalize(new.family or ""):
+            fields.append("family")
+        mapped = _carried_changes(old, new, fields)
+        detail = f"{detail}\n{mapped}".strip() if detail and mapped else detail or mapped
 
         if fields:
             changes.append(
@@ -163,6 +237,7 @@ def diff_catalogs(old_controls, new_controls) -> list[ControlChange]:
                 )
             )
         changes.extend(_enhancement_changes(old, new))
+        changes.extend(_requirement_changes(old, new))
 
     return changes
 
@@ -182,8 +257,9 @@ def _enhancement_changes(old, new) -> list[ControlChange]:
     **Fields compared** (named so a later narrowing is visible): the
     `description` (the requirement's text) and `title`, whitespace-normalised
     as `control_statement` is; the `baseline` (HIPAA's Required/Addressable);
-    and the parameter ids. Not compared: `additional_requirements` and
-    `source_crosswalk`, as at the control level.
+    and the parameter ids. Since 442, also its mappings, additional
+    requirements and parameter values (`_carried_changes`), as at the control
+    level; every field's handling is in `FIELDS`.
     """
     old_by_id = {e.enhancement_id: e for e in getattr(old, "enhancements", [])}
     new_by_id = {e.enhancement_id: e for e in getattr(new, "enhancements", [])}
@@ -206,10 +282,145 @@ def _enhancement_changes(old, new) -> list[ControlChange]:
             fields.append("parameters")
         if _normalize(a.title) != _normalize(b.title):
             fields.append("title")
+        mapped = _carried_changes(a, b, fields)
+        detail = f"{detail}\n{mapped}".strip() if detail and mapped else detail or mapped
         if fields:
             found.append(
                 ControlChange(
                     control_id=eid, kind=CHANGED, title=b.title, fields=fields, detail=detail
+                )
+            )
+    return found
+
+
+def _normalize_mappings(mappings: dict[str, list[str]] | None) -> dict[str, tuple[str, ...]]:
+    """Normalize mappings for comparison so order and whitespace don't report."""
+    if not mappings:
+        return {}
+    normalized: dict[str, tuple[str, ...]] = {}
+    for source, ids in mappings.items():
+        clean_source = " ".join(source.split())
+        clean_ids = tuple(sorted({" ".join(i.split()) for i in ids if i and i.strip()}))
+        if clean_ids:
+            normalized[clean_source] = clean_ids
+    return normalized
+
+
+def _mappings_diff(old_m: dict[str, list[str]] | None, new_m: dict[str, list[str]] | None) -> str:
+    """A short summary of mappings added and removed."""
+    old_norm = _normalize_mappings(old_m)
+    new_norm = _normalize_mappings(new_m)
+    lines: list[str] = []
+    for source in sorted(set(old_norm) | set(new_norm)):
+        o = set(old_norm.get(source, ()))
+        n = set(new_norm.get(source, ()))
+        if o != n:
+            parts = []
+            added = sorted(n - o)
+            removed = sorted(o - n)
+            if added:
+                parts.append(f"+{', '.join(added)}")
+            if removed:
+                parts.append(f"-{', '.join(removed)}")
+            lines.append(f"    mappings: {source} ({'; '.join(parts)})")
+    return "\n".join(lines)
+
+
+def _crosswalk_ids(crosswalk: dict | None) -> dict[str, frozenset[str]]:
+    """A control's or enhancement's `source_crosswalk` ({source: "AC-2, AC-3"})
+    as {source: the set of ids}: order, spacing and the separator don't count
+    (b5 on PR 457), as they don't for a requirement's `mappings`."""
+    found: dict[str, frozenset[str]] = {}
+    for source, written in (crosswalk or {}).items():
+        ids = frozenset(" ".join(part.split()) for part in re.split(r"[,;]", str(written)))
+        ids = ids - {""}
+        if ids:
+            found[" ".join(str(source).split())] = ids
+    return found
+
+
+def _carried_changes(a, b, fields: list[str]) -> str:
+    """What a control and an enhancement both carry that drift didn't compare
+    before 442: their authoritative-source mappings, their additional
+    requirements, and their parameter values (only the parameter ids were
+    compared). Appends each changed field's report name to `fields`, and
+    returns a detail line for the mappings."""
+    detail = ""
+    old_map, new_map = _crosswalk_ids(a.source_crosswalk), _crosswalk_ids(b.source_crosswalk)
+    if old_map != new_map:
+        fields.append("mappings")
+        detail = "\n".join(
+            f"    mappings: {source}: {', '.join(sorted(old_map.get(source, ()))) or 'none'} -> "
+            f"{', '.join(sorted(new_map.get(source, ()))) or 'none'}"
+            for source in sorted(set(old_map) | set(new_map))
+            if old_map.get(source) != new_map.get(source)
+        )
+    if _normalize(a.additional_requirements or "") != _normalize(b.additional_requirements or ""):
+        fields.append("additional_requirements")
+    old_values = {k: _normalize(str(v)) for k, v in (a.parameter_values or {}).items()}
+    new_values = {k: _normalize(str(v)) for k, v in (b.parameter_values or {}).items()}
+    if old_values != new_values and "parameters" not in fields:
+        fields.append("parameters")
+    return detail
+
+
+def _requirement_changes(old, new) -> list[ControlChange]:
+    """Each requirement of a control present in both loads that arrived, left,
+    or is not what it was, under the requirement's own id (#442).
+
+    Derives levels from catalog structure (control.requirements) rather than
+    any framework special casing. Compares statement (text diff), level (level
+    moves), and authoritative-source mappings.
+    """
+    old_by_id = {r.requirement_id: r for r in getattr(old, "requirements", [])}
+    new_by_id = {r.requirement_id: r for r in getattr(new, "requirements", [])}
+    found: list[ControlChange] = []
+    for rid in sorted(set(new_by_id) - set(old_by_id)):
+        req = new_by_id[rid]
+        found.append(
+            ControlChange(
+                control_id=rid,
+                kind=ADDED,
+                title=req.level or "",
+                level=req.level or "",
+            )
+        )
+    for rid in sorted(set(old_by_id) - set(new_by_id)):
+        req = old_by_id[rid]
+        found.append(
+            ControlChange(
+                control_id=rid,
+                kind=REMOVED,
+                title=req.level or "",
+                level=req.level or "",
+            )
+        )
+    for rid in sorted(set(old_by_id) & set(new_by_id)):
+        a, b = old_by_id[rid], new_by_id[rid]
+        fields: list[str] = []
+        detail = ""
+        if _normalize(a.statement) != _normalize(b.statement):
+            fields.append("statement")
+            detail = _statement_diff(a.statement, b.statement)
+        if _normalize(a.level) != _normalize(b.level):
+            fields.append("level")
+            level_diff = f"    level: {a.level or 'none'} -> {b.level or 'none'}"
+            detail = f"{detail}\n{level_diff}".strip() if detail else level_diff
+        if (a.level_kind or "") != (b.level_kind or ""):
+            fields.append("level_kind")
+        if _normalize_mappings(a.mappings) != _normalize_mappings(b.mappings):
+            fields.append("mappings")
+            map_diff = _mappings_diff(a.mappings, b.mappings)
+            detail = f"{detail}\n{map_diff}".strip() if detail else map_diff
+        if fields:
+            found.append(
+                ControlChange(
+                    control_id=rid,
+                    kind=CHANGED,
+                    title=b.level or "",
+                    level=b.level or "",
+                    fields=fields,
+                    detail=detail,
                 )
             )
     return found
@@ -228,14 +439,29 @@ BY_SHAPE = "by id shape"
 
 
 def documents_citing(
-    controls: set[str], root: Path, *, framework: str = "", catalog_ids=(), crosswalk=None
+    controls: set[str],
+    root: Path,
+    *,
+    framework: str = "",
+    catalog_ids=(),
+    crosswalk=None,
+    catalogs=None,
+    families=None,
+    family_links=None,
 ) -> dict[str, list[str]]:
     """Control id -> the documents whose source tags cite its family.
 
     `documents_reached` without saying how; see it for the rule.
     """
     reached = documents_reached(
-        controls, root, framework=framework, catalog_ids=catalog_ids, crosswalk=crosswalk
+        controls,
+        root,
+        framework=framework,
+        catalog_ids=catalog_ids,
+        crosswalk=crosswalk,
+        catalogs=catalogs,
+        families=families,
+        family_links=family_links,
     )
     return {changed: sorted(paths) for changed, paths in reached.items()}
 
@@ -318,7 +544,12 @@ def documents_reached(
         reverse_index,
         shaped_ids,
     )
-    from policyforge.topics.satisfies import parse_citations, resolve_framework
+    from policyforge.topics.satisfies import (
+        CatalogScope,
+        named_catalogs,
+        parse_citations,
+        resolve_framework,
+    )
 
     found: dict[str, dict[str, str]] = {}
     key = normalize_framework(framework) if framework else ""
@@ -401,7 +632,7 @@ def documents_reached(
             cited = resolve_framework(name, index) or (
                 normalize_framework(name) if normalize_framework(name) in index else ""
             )
-            candidates = (
+            candidates = named_catalogs(name, index) or (
                 [cited]
                 if cited
                 else [c for c, ids in index.items() if resolve_framework(name, {c: ids}) == c]
@@ -418,9 +649,14 @@ def documents_reached(
         cited = resolve_framework(written, index)
         return [(cited, requirement_id)] if cited else []
 
+    # A range's members resolve as each would cited alone (80's 6185 on
+    # PR 437): in these ids, through the declared families.
+    scope = CatalogScope(index, frozenset(), declared, "drift")
     documents, _ = load_content_tree(root)
     for document in documents:
-        for written, requirement_id, _, _ in parse_citations(document.body, [framework], index):
+        for written, requirement_id, _, _ in parse_citations(
+            document.body, [framework], index, scope
+        ):
             readings = resolutions(written, requirement_id)
             hits = set()
             for cited, rid in readings:
@@ -467,9 +703,11 @@ def assess_impact(
     impacts = {control_id: Impact(control_id=control_id) for control_id in changed_ids}
 
     for topic in topics or ():
-        anchors = {a.upper() for a in getattr(topic, "nist_controls", [])}
+        # Anchors arrive in catalog spelling (#188), and `topic_keys` returns
+        # catalog ids, so they compare as written: one rule, not a second.
+        anchors = set(getattr(topic, "nist_controls", []))
         for control_id in changed_ids:
-            keys = {k.upper() for k in topic_keys(control_id, framework, crosswalk)}
+            keys = set(topic_keys(control_id, framework, crosswalk))
             if keys & anchors:
                 impacts[control_id].topics.append(topic.name)
 
@@ -620,12 +858,39 @@ def read_committed(path: Path, *, revision: str = "HEAD") -> str | None:
     This is what makes "run the ETL, then see what changed" work without
     anybody having to snapshot anything first: the ETL overwrites the
     catalog in place and git is still holding the version you had.
+
+    `path` is read as the rest of the command reads it: relative to the
+    working directory, or absolute. It is resolved against the root of the
+    repository holding it, because `git show REV:<path>` reads `<path>` from
+    the tree's root: an absolute path there names nothing, and a relative one
+    named the file only when run from the root (#253). A path in no
+    repository returns None.
     """
     from policyforge.child_output import strict_text
 
-    argv = ["git", "show", f"{revision}:{Path(path).as_posix()}"]
+    path_obj = Path(path).resolve()
     try:
-        result = subprocess.run(argv, capture_output=True, timeout=60, check=False)  # nosec B603 B607
+        toplevel = subprocess.run(  # nosec B603 B607 - fixed argv, git on PATH
+            ["git", "rev-parse", "--show-toplevel"],
+            cwd=str(path_obj.parent),
+            capture_output=True,
+            timeout=10,
+            check=True,
+            text=True,
+            # A path, so text; decoded by name, not by the console's code page.
+            encoding="utf-8",
+            errors="replace",
+        ).stdout.strip()
+        repo_root = Path(toplevel).resolve()
+        relative_path = path_obj.relative_to(repo_root).as_posix()
+    except (OSError, subprocess.SubprocessError, ValueError):
+        return None
+
+    argv = ["git", "show", f"{revision}:{relative_path}"]
+    try:
+        result = subprocess.run(
+            argv, cwd=str(repo_root), capture_output=True, timeout=60, check=False
+        )  # nosec B603 B607
     except (OSError, subprocess.SubprocessError):
         return None
     if result.returncode != 0:
@@ -638,7 +903,7 @@ def read_committed(path: Path, *, revision: str = "HEAD") -> str | None:
 
 
 def _controls_from_json(text: str):
-    from policyforge.ingest.schema import Control, ControlEnhancement, parse_catalog
+    from policyforge.ingest.schema import Control, ControlEnhancement, Requirement, parse_catalog
 
     # Through the one catalog rule: a committed licensed catalog is an
     # envelope since #459 (b), and `json.loads` alone raised on it here,
@@ -648,7 +913,8 @@ def _controls_from_json(text: str):
     for item in rows:
         item = dict(item)
         enhancements = [ControlEnhancement(**e) for e in item.pop("enhancements", [])]
-        controls.append(Control(enhancements=enhancements, **item))
+        requirements = [Requirement(**r) for r in item.pop("requirements", [])]
+        controls.append(Control(enhancements=enhancements, requirements=requirements, **item))
     return controls
 
 
@@ -659,10 +925,12 @@ def load_previous(path: Path, *, revision: str = "HEAD"):
 
 
 def _catalog_ids(controls) -> set[str]:
-    """Every control and enhancement id in a catalog."""
-    return {c.control_id for c in controls} | {
-        e.enhancement_id for c in controls for e in c.enhancements
-    }
+    """Every control, enhancement, and requirement id in a catalog."""
+    return (
+        {c.control_id for c in controls}
+        | {e.enhancement_id for c in controls for e in getattr(c, "enhancements", [])}
+        | {r.requirement_id for c in controls for r in getattr(c, "requirements", [])}
+    )
 
 
 def analyze_drift(
@@ -681,7 +949,7 @@ def analyze_drift(
     command passes the installation's); by default, the diffed catalog's
     own two versions, so a call with nothing else loaded reaches only
     through the mapping that catalog carries."""
-    from policyforge.mapping.crosswalk import build_crosswalk
+    from policyforge.mapping.crosswalk import build_crosswalk, normalize_framework
 
     if crosswalk is None:
         crosswalk = build_crosswalk([*(old_controls or []), *(new_controls or [])])
@@ -690,6 +958,17 @@ def analyze_drift(
         from policyforge.topics.anchoring import families_for
 
         families = families_for([*(old_controls or []), *(new_controls or [])])
+    families = {k: dict(v) for k, v in (families or {}).items()}
+    for control in [*(old_controls or []), *(new_controls or [])]:
+        if getattr(control, "requirements", None):
+            key = normalize_framework(control.framework)
+            fam_dict = families.setdefault(key, {})
+            # A level requirement is in its control's family: the family its
+            # catalog declares for the control, if it declares one, so this
+            # never overrides a declared rule (ba's carry of 442).
+            family = fam_dict.setdefault(control.control_id, control.control_id)
+            for req in control.requirements:
+                fam_dict.setdefault(req.requirement_id, family)
     if family_links is None:
         # The manifests' links to whole families (#448), as `families` above.
         from policyforge.frameworks.registry import config_or_defaults, declared_family_links

@@ -967,3 +967,192 @@ def test_history_can_read_back_the_confluence_stream_and_render_the_plan(tmp_pat
     assert "[modify] Requirements: quarterly -> monthly" in result.output
     assert "! flagged: Increases reviewer workload." in result.output
     assert "~ not done: Left the Policy alone." in result.output
+
+
+# --- issue 258, 80's ruling (C): which added headings the plan accounts for ---
+
+ORIGINAL = "# Policy\n\n## Scope\n\nAll staff.\n\n## Requirements\n\nReview access.\n"
+
+
+def _added(*headings: str) -> str:
+    return ORIGINAL + "".join(f"\n## {h}\n\nText.\n" for h in headings)
+
+
+def _step(kind: str, target: str) -> dict:
+    return {"kind": kind, "target": target, "summary": "s", "rationale": "r"}
+
+
+def test_one_named_addition_no_longer_approves_every_new_heading():
+    """The issue's case: a plan adding `Exceptions` by name, and a revision
+    adding `Exceptions` and `Waivers`, flags `Waivers` only."""
+    from policyforge.edit.apply import check_edit
+
+    check = check_edit(
+        ORIGINAL, _added("Exceptions", "Waivers"), plan=_plan(steps=[_step("add", "Exceptions")])
+    )
+
+    assert check.unplanned_headings == ["Waivers"]
+    assert check.added_headings == ["Exceptions", "Waivers"], "every addition is still listed"
+    assert not check.is_clean
+
+
+def test_an_add_step_under_an_existing_section_covers_one_new_heading():
+    """The planner's documented form ("add ... under Requirements") names an
+    existing section. One such step covers one new heading, in the
+    revision's order; the next is flagged."""
+    from policyforge.edit.apply import check_edit
+
+    plan = _plan(steps=[_step("add", "Requirements")])
+
+    assert check_edit(ORIGINAL, _added("Shared Accounts"), plan=plan).is_clean
+    two = check_edit(ORIGINAL, _added("Shared Accounts", "Exceptions"), plan=plan)
+    assert two.unplanned_headings == ["Exceptions"]
+
+
+def test_named_and_slot_steps_together():
+    """80's ruling: one step naming its new heading plus one under an existing
+    section approve two new headings, and a third is flagged."""
+    from policyforge.edit.apply import check_edit
+
+    plan = _plan(steps=[_step("add", "Exceptions"), _step("add", "Requirements")])
+
+    assert check_edit(ORIGINAL, _added("Shared Accounts", "Exceptions"), plan=plan).is_clean
+    three = check_edit(ORIGINAL, _added("Shared Accounts", "Exceptions", "Waivers"), plan=plan)
+    assert three.unplanned_headings == ["Waivers"]
+
+
+def test_a_rewrite_earns_no_slot():
+    """80's clarification (b5 on PR 287): a rewrite rewrites the section it
+    names and creates none, so a rewrite-only plan can't carry an unnamed
+    section through."""
+    from policyforge.edit.apply import check_edit
+
+    check = check_edit(
+        ORIGINAL, _added("Exceptions"), plan=_plan(steps=[_step("rewrite", "Requirements")])
+    )
+    assert check.unplanned_headings == ["Exceptions"]
+    two = check_edit(
+        ORIGINAL,
+        _added("Exceptions", "Admin Override"),
+        plan=_plan(steps=[_step("rewrite", "Scope"), _step("rewrite", "Requirements")]),
+    )
+    assert two.unplanned_headings == ["Exceptions", "Admin Override"]
+
+
+def test_a_duplicated_heading_is_reported_and_takes_no_slot():
+    """A second copy of a planned heading, or a copy of a heading the page
+    already has, duplicates a section; `_sections` reads both copies as one
+    block, so neither is approved by a step."""
+    from policyforge.edit.apply import check_edit
+
+    named = check_edit(
+        ORIGINAL, _added("Exceptions", "Exceptions"), plan=_plan(steps=[_step("add", "Exceptions")])
+    )
+    assert named.unplanned_headings == ["Exceptions"]
+
+    existing = check_edit(
+        ORIGINAL,
+        _added("Requirements", "Shared Accounts"),
+        plan=_plan(steps=[_step("add", "Requirements")]),
+    )
+    assert existing.unplanned_headings == ["Requirements"], "the slot still covers Shared Accounts"
+
+
+def test_a_document_wide_plan_still_covers_every_new_heading():
+    from policyforge.edit.apply import check_edit
+
+    check = check_edit(
+        ORIGINAL,
+        _added("Exceptions", "Exceptions", "Waivers"),
+        plan=_plan(steps=[_step("rewrite", "document")]),
+    )
+
+    assert check.unplanned_headings == []
+    assert check.is_clean
+
+
+def test_the_review_names_an_unplanned_heading_beside_a_planned_one(tmp_path, monkeypatch, capsys):
+    """The user's path: `_review_edits` printed the added-sections warning only
+    when the plan had no adding step at all, so the issue's case, one planned
+    addition plus one unplanned, printed nothing."""
+    from policyforge.cli.content import _review_edits
+    from policyforge.edit import session
+    from policyforge.edit.apply import check_edit
+    from policyforge.edit.session import EditOutcome, EditTarget
+
+    plan = _plan(steps=[_step("add", "Exceptions")])
+    revised = _added("Exceptions", "Waivers")
+    target = EditTarget(space="SEC", title="Access Control Policy", original=ORIGINAL)
+    outcome = EditOutcome(target=target, plan=plan)
+
+    def apply(outcomes, provider):
+        for each in outcomes:
+            each.revised = revised
+            each.check = check_edit(ORIGINAL, revised, plan=each.plan)
+
+    monkeypatch.setattr(session, "plan_targets", lambda targets, instruction, provider: [outcome])
+    monkeypatch.setattr(session, "apply_targets", apply)
+
+    _review_edits(
+        [target], "Add an exceptions section.", None, out_dir=tmp_path, slugs={id(target): "acp"}
+    )
+
+    out = capsys.readouterr().out
+    assert "sections added that the plan did not ask for: Waivers" in out
+    assert "Exceptions" not in out.split("did not ask for:")[1].splitlines()[0]
+
+
+def test_a_live_edit_says_how_to_bring_it_into_the_repository(tmp_path, monkeypatch):
+    """A live edit reaches the wiki and not the repository, so the next
+    publish refuses the page until it is pulled in. The success line says
+    so, with a pull command that the real `pull` accepts for this page."""
+    import shlex
+
+    result, published, _ = _run(monkeypatch, tmp_path, "--tier", "standard", "--apply", "--yes")
+
+    assert result.exit_code == 0, result.output
+    assert len(published) == 1
+    lines = [line for line in result.output.splitlines() if "policyforge pull" in line]
+    assert len(lines) == 1, result.output
+    assert "`publish` will refuse" in result.output
+    assert "Add --tier" not in result.output
+    args = shlex.split(lines[0].split("policyforge pull", 1)[1])
+
+    import policyforge.cli as cli_mod
+
+    ctx = cli_mod.cli.commands["pull"].make_context("pull", args)
+    assert ctx.params["space"] == "ENG"
+    assert ctx.params["title"] == "Access Control Standard"
+    assert ctx.params["tier"] == "standard"
+    assert ctx.params["host"] == "https://x.atlassian.net/wiki"
+    assert ctx.params["target"] == "confluence"
+    assert ctx.params["apply_"] is True
+
+
+def test_a_live_edit_without_a_tier_prints_no_tier(tmp_path, monkeypatch):
+    """`pull`'s tier decides where the page is filed, so a hint that guessed
+    one would file a live-edited Policy as a Standard. Without --tier the
+    command names none and the line after it says what to add."""
+    import shlex
+
+    import policyforge.cli as cli_mod
+
+    result, published, _ = _run(monkeypatch, tmp_path, "--apply", "--yes")
+
+    assert result.exit_code == 0, result.output
+    assert len(published) == 1
+    lines = [line for line in result.output.splitlines() if "policyforge pull" in line]
+    assert len(lines) == 1, result.output
+    args = shlex.split(lines[0].split("policyforge pull", 1)[1])
+    assert "--tier" not in args
+    ctx = cli_mod.cli.commands["pull"].make_context("pull", args)
+    assert ctx.params["title"] == "Access Control Standard"
+    assert "Add --tier policy, standard or procedure" in result.output
+
+
+def test_a_dry_run_prints_no_pull_command(tmp_path, monkeypatch):
+    result, published, _ = _run(monkeypatch, tmp_path)
+
+    assert result.exit_code == 0, result.output
+    assert published == []
+    assert "policyforge pull" not in result.output

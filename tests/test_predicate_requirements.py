@@ -140,7 +140,10 @@ def _branches(pattern) -> set[str]:
     """Every literal alternative of a `\\b(?:a|b c|...)\\b` pattern, read by
     Python's own regex parser -- not by slicing the source as the heading
     reader does, so the two can be compared."""
-    import re._parser as parser
+    try:
+        import re._parser as parser
+    except ImportError:  # Python 3.10, the floor (#340): the same module, named sre_parse
+        import sre_parse as parser
 
     def expand(items) -> list[str]:
         # The parser factors shared prefixes out of an alternation ("must

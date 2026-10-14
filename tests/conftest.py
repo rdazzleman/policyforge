@@ -89,9 +89,25 @@ os.environ["LITELLM_LOCAL_MODEL_COST_MAP"] = "True"
 #: Removed by RULE (every name starting GIT_), not from a list of known
 #: offenders, so a variable nobody has met yet is covered too. None is kept:
 #: every fixture sets its own identity through config, and every commit a
-#: test makes passes `-m`, so the suite needs none of them. At conftest
-#: import, because a test module's top-level code runs git at collection,
-#: before any fixture. Scoped to the test session; nothing in `src/` is
+#: test makes passes `-m`, so the suite needs none of them. ONE is then set,
+#: by the suite rather than inherited: `GIT_TERMINAL_PROMPT=0`, so git
+#: itself never falls back to asking at the terminal (ba on #52; #56).
+#: That's ALL it stops: a credential helper still runs, and on this machine
+#: the system gitconfig sets `credential.helper=manager`, which can open a
+#: dialog and wait (9b measured that hang on #121). This conftest doesn't
+#: touch config, `GCM_INTERACTIVE` or `GIT_CONFIG_NOSYSTEM` (b5 on #209), so
+#: a test that reached a network remote could still hang there. No test
+#: reaches an authenticating remote through THIS environment: the
+#: signed-out reads in `test_publish_public.py` hit a local HTTP server
+#: that answers 401, but through `publish_public.signed_out_env` (no system
+#: config, `GCM_INTERACTIVE=never`, an empty home), which is what keeps
+#: them from hanging (b5 on #209). At conftest import, because a test
+#: module's top-level code runs git at collection, before any fixture.
+#:
+#: NOT restored at session end, unlike `POLICYFORGE_CONFIG` in
+#: `pytest_unconfigure`: the removal lasts as long as this python process.
+#: That's harmless only because nothing runs `pytest.main` in-process (none
+#: under tests/ or scripts/ when this was written); nothing in `src/` is
 #: affected.
 #:
 #: NOT covered, by design: the developer's global and system git CONFIG
@@ -99,6 +115,7 @@ os.environ["LITELLM_LOCAL_MODEL_COST_MAP"] = "True"
 #: behaviour under the tests and is its own change.
 for _name in [name for name in os.environ if name.upper().startswith("GIT_")]:
     del os.environ[_name]
+os.environ["GIT_TERMINAL_PROMPT"] = "0"
 
 #: Every environment variable that could let a provider reach the network.
 #:
@@ -151,6 +168,16 @@ def pytest_configure(config):
         "markers",
         "own_config: the test builds and reads its own config, not the suite's empty one (#26)",
     )
+    config.addinivalue_line(
+        "markers",
+        "slow: measured at scripts/slow_tests.py's threshold or more; applied only from "
+        "tests/slow_tests.txt, never written on a test (#292)",
+    )
+    config.addinivalue_line(
+        "markers",
+        "github_config: reads .github/workflows or .github/dependabot.yml, which the public "
+        "snapshot leaves out (161); deselected in a tree that has neither",
+    )
     config._policyforge_config_before = os.environ.get("POLICYFORGE_CONFIG")
     os.environ["POLICYFORGE_CONFIG"] = str(
         Path(tempfile.mkdtemp(prefix="policyforge-tests-")) / "no-config-for-this-session.yaml"
@@ -162,6 +189,51 @@ def pytest_configure(config):
     refusal = guard.foreign_source(guard.resolved_origin(), root, invocation="pytest")
     if refusal:
         pytest.exit(refusal, returncode=2)
+
+
+def public_snapshot(root: Path) -> bool:
+    """Whether `root` is the public snapshot's shape (161): it has neither
+    GitHub's workflows nor its Dependabot config, which `publish_public.py`
+    leaves out of P. Both, not either, so a tree that lost one by accident
+    still runs every test and fails on what it lost."""
+    github = root / ".github"
+    return not any(
+        (github / name).exists() for name in ("workflows", "dependabot.yml", "dependabot.yaml")
+    )
+
+
+def pytest_collection_modifyitems(config, items):
+    """Mark `slow` exactly the tests tests/slow_tests.txt lists, each with the
+    time a serial run measured (scripts/slow_tests.py writes it).
+
+    In the public snapshot's shape, deselect the tests marked `github_config`:
+    they read files that tree doesn't have (161). Deselected, not skipped, so
+    `skip_gate.py`'s expected skips are the same in both trees, and counted
+    on the terminal so the run says what it left out."""
+    root = Path(__file__).resolve().parents[1]
+    if public_snapshot(root):
+        left_out = [item for item in items if item.get_closest_marker("github_config")]
+        if left_out:
+            config.hook.pytest_deselected(items=left_out)
+            items[:] = [item for item in items if not item.get_closest_marker("github_config")]
+    spec = importlib.util.spec_from_file_location("slow_tests", root / "scripts" / "slow_tests.py")
+    slow_tests = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(slow_tests)
+    listed = slow_tests.read()
+    for item in items:
+        if item.nodeid in listed:
+            item.add_marker(pytest.mark.slow)
+
+
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    """Say the public snapshot's deselection on the terminal. Decided from the
+    tree, not from what collection recorded: under xdist the workers collect,
+    and the controller that prints this never sees their deselection."""
+    if public_snapshot(Path(__file__).resolve().parents[1]):
+        terminalreporter.write_line(
+            "public snapshot: the tests marked github_config were deselected, since this "
+            "tree has no .github/workflows and no Dependabot config (161)"
+        )
 
 
 def pytest_unconfigure(config):
@@ -190,7 +262,14 @@ def pytest_unconfigure(config):
 _CONFIG_CACHES = (
     ("policyforge.mapping.crosswalk", "_DECLARED_KEYS"),
     ("policyforge.content.tags", "_KNOWN_NAMES"),
+    # Every requirement id on disk, read through the same config as the names (#189).
+    ("policyforge.content.tags", "_KNOWN_IDS"),
+    # Every catalog on disk as a citation scope, the fallback when a run has no set (#215).
+    ("policyforge.content.tags", "_DISK_SCOPE"),
     ("policyforge.topics.anchoring", "_RULES"),
+    # Which catalogs check a part below a leaf against its text, from the
+    # manifests config finds (#441).
+    ("policyforge.topics.anchoring", "_LEAF_CHECKS"),
 )
 
 #: Process caches filled from which PLUGINS are installed (#32), not from
@@ -198,6 +277,29 @@ _CONFIG_CACHES = (
 #: Emptied per test like the config caches, so a fake plugin one test
 #: installs can't answer for the next.
 _PLUGIN_CACHES = (("policyforge.plugins", "_cache"),)
+
+
+@pytest.fixture(autouse=True)
+def escalations_start_empty():
+    """Every test starts with no pending escalation (#315).
+
+    `llm/escalation.py` keeps announced escalations in a ContextVar until a
+    ledger row takes them. Under xdist a worker runs many tests in one
+    context, so records one test announced and never took were read by the
+    next: `test_effort_announces_its_own_2x_retry` failed a batch gate on two
+    records it never made (9b, gating PR 314). Each test now gets a fresh
+    list, and the previous value is restored after it.
+
+    Leftovers are discarded, not failed: 1d measured 32 tests that leave one
+    or two behind, every one a provider's retry path called outside a ledger
+    row, where nothing takes them, correctly. Production's own check that a
+    pending escalation is never lost is `escalation.end`, tested on its own.
+    """
+    from policyforge.llm import escalation
+
+    token = escalation._pending.set(None)
+    yield
+    escalation._pending.reset(token)
 
 
 @pytest.fixture(autouse=True)

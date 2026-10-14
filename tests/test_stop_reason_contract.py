@@ -197,7 +197,18 @@ def stubbed_sdks(monkeypatch):
     litellm.BadRequestError = type("BadRequestError", (Exception,), {})
     litellm.supports_response_schema = lambda model: False
     litellm.suppress_debug_info = False
+    # What `llm.litellm_map.load()` touches the first time it runs in a
+    # process. Without these, this file passed only when an earlier test
+    # had already run the real `load()`: alone, or first on a pytest-xdist
+    # worker, it failed 12 of 18 (#86's isolation audit; #248's shape).
+    # The guard is reset per test (monkeypatch restores it), here and not
+    # in conftest, so a later real `load()` still registers.
+    litellm.model_cost = {}
+    litellm.register_model = lambda model_cost: None
     monkeypatch.setitem(sys.modules, "litellm", litellm)
+    from policyforge.llm import litellm_map
+
+    monkeypatch.setattr(litellm_map, "_registered", None)
 
 
 def _build(name: str):

@@ -1,9 +1,10 @@
 """C-02 — credentials are read in known places, and never where prompts are built.
 
-`docs/commitments.md` states that no credential ever reaches a model: not in
-a system prompt, not in a user prompt, not in the ledger, not in version
-history. The ledger half is enforced in `test_llm_ledger.py`, which asserts
-it records a hash and never content. This is the prompt half.
+The product commitments (https://zardoz.io/trust/commitments/) state that
+no credential ever reaches a model: not in a system prompt, not in a user
+prompt, not in the ledger, not in version history. The ledger half is
+enforced in `test_llm_ledger.py`, which asserts it records a hash and never
+content. This is the prompt half.
 
 The failure being prevented is mundane rather than exotic. Nobody sets out
 to put an API key in a prompt. What happens is that a module which already
@@ -221,7 +222,7 @@ def test_every_environment_reader_is_declared():
     assert not undeclared, (
         "Module(s) read the environment without being declared in "
         "DECLARED_ENV_READERS. Credentials are read in known places on "
-        "purpose (docs/commitments.md, C-02) — add the module with what it "
+        "purpose (https://zardoz.io/trust/commitments/, C-02) — add the module with what it "
         "reads and why, or read the value somewhere that already may:\n  "
         + "\n  ".join(sorted(undeclared))
     )
@@ -252,7 +253,7 @@ def test_no_prompt_building_module_reads_the_environment():
         "Module(s) both define prompt text and read the environment. Keep "
         "them apart: read the value in a provider and pass it as an "
         "argument, never alongside a prompt constant "
-        "(docs/commitments.md, C-02):\n  " + "\n  ".join(sorted(offenders))
+        "(https://zardoz.io/trust/commitments/, C-02):\n  " + "\n  ".join(sorted(offenders))
     )
 
 
@@ -273,7 +274,7 @@ def test_no_prompt_text_mentions_a_credential_variable():
                     offenders.append(f"{_rel(path)}:{name} mentions {credential}")
 
     assert not offenders, (
-        "Prompt text names a credential variable (docs/commitments.md, "
+        "Prompt text names a credential variable (https://zardoz.io/trust/commitments/, "
         "C-02):\n  " + "\n  ".join(sorted(offenders))
     )
 

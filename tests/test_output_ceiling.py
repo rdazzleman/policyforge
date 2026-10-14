@@ -1,7 +1,7 @@
 """The long-document budget and the model's published output ceiling (#3).
 
 The first budget for a Standard or Procedure is 32,768 (measured uncensored,
-MEASUREMENTS.md epoch 25). Two conditions came with it (80 on #3, 1485):
+docs/measurements/epochs.md epoch 25). Two conditions came with it (80 on #3, 1485):
 never ask a model for more than its published ceiling, and re-derive every
 budget built on `max_tokens`. Every ceiling in these tests is WRITTEN BY
 HAND (20,000, under 32k), never read from the table the code reads, so a test

@@ -18,11 +18,11 @@ therefore supported rather than degraded: questions return the passages
 themselves, which is the same evidence an answer would be built from, and an
 API key is not the price of searching your own documents.
 
-This module never imports the Confluence publish path. Zardoz is allowed to
-*draft* an edit — it resolves the topic, works out what it would ask for and
-hands back a `policyforge edit-topic` command to run — but the write itself
-goes through that command's own gates: dry run by default, macro refusal,
-citation checks, explicit confirmation. Keeping `update_page_body` out of
+This module never imports the Confluence publish path. A change to a page
+is made with `policyforge edit-topic`, run by a person, and goes through
+that command's own gates: dry run by default, macro refusal, citation
+checks, explicit confirmation. (Zardoz drafting that command for you was
+described here and never built, #388.) Keeping `update_page_body` out of
 this module's import graph makes that a structural property rather than a
 rule someone has to remember.
 """
@@ -85,13 +85,13 @@ class ShellState:
     #: claim made from it, or None when `entail.answering` is off — which is
     #: the default, because it costs a model call per cited sentence.
     entailer: object | None = field(default=None, repr=False)
+    #: The session's one spend total under `budget.max_usd`, which every
+    #: provider here draws on: the answerer and the judge each kept their
+    #: own, so a session could spend the ceiling twice (1d, PR 408).
+    spend: dict = field(default_factory=lambda: _new_spend(), repr=False)
     #: The last answer, so `/sources` can show what it was drawn from in
     #: full rather than in the excerpts that fit beside the prose.
     last_answer: object | None = field(default=None, repr=False)
-    #: The last shadow comparison, for `/shadow`. None means no candidate
-    #: retriever is configured, which is the default and is not a failure —
-    #: see `shadow.py` for why these run at all.
-    last_shadow: object | None = field(default=None, repr=False)
     #: The turns so far, so a follow-up can be resolved against them.
     #: "who owns that?" is only answerable in the light of what was asked
     #: before it, and that context lives here rather than in the model.
@@ -357,28 +357,8 @@ def _cmd_forget(args: list[str], state: ShellState) -> str:
     return f"Forgotten {count} turn(s). The next question will be read on its own."
 
 
-def _cmd_shadow(args: list[str], state: ShellState) -> str:
-    """Show where a candidate retriever disagreed with the live one.
-
-    Nothing here has affected any answer. Dense retrieval, reranking and
-    entailment are parked on evidence nobody has, because gathering it means
-    running them — so they run beside the real retriever, their disagreement
-    is recorded, and what the user sees is unchanged. This command is where
-    that record is read.
-    """
-    from .shadow import ShadowReport
-
-    report = getattr(state, "last_shadow", None)
-    if report is None:
-        if state.last_answer is None:
-            return "No shadow comparison yet — ask a question first."
-        return ShadowReport().render()
-    return report.render()
-
-
 COMMANDS: dict[str, Command] = {
     "help": Command("Show the available commands.", _cmd_help, aliases=("?",)),
-    "shadow": Command("Show where a candidate retriever disagreed with the live one.", _cmd_shadow),
     "topics": Command("List the topic registry and who owns each topic.", _cmd_topics),
     "corpus": Command("Show which documents are synced and available.", _cmd_corpus),
     "sources": Command("Show the last answer's passages in full.", _cmd_sources),
@@ -422,6 +402,15 @@ def dispatch(line: str, state: ShellState) -> str:
     if not line:
         return ""
 
+    from policyforge.llm import ledger
+
+    # Every turn and command draws on the session's one total (`state.spend`),
+    # whichever provider it calls; the MCP server comes through here too.
+    with ledger.session_spend(state.spend):
+        return _dispatch(line, state)
+
+
+def _dispatch(line: str, state: ShellState) -> str:
     if not line.startswith("/"):
         return _answer(line, state)
 
@@ -431,6 +420,12 @@ def dispatch(line: str, state: ShellState) -> str:
     if command is None:
         return state.voice["unknown_command"].format(command=f"/{word}")
     return command.handler(rest.split() if rest else [], state)
+
+
+def _new_spend() -> dict:
+    from policyforge.llm.ledger import new_spend
+
+    return new_spend()
 
 
 def _new_session_id() -> str:
@@ -470,6 +465,48 @@ def _answer(question: str, state: ShellState) -> str:
         return _answer_turn(question, state, scope)
 
 
+def _passage_label(passage) -> str:
+    """A passage as a refusal names it: document, section and where it is."""
+    document = passage.document
+    heading = " > ".join(passage.chunk.heading_path)
+    where = f" ({document.location})" if document.location else ""
+    return f"{document.title}{' § ' + heading if heading else ''}{where}"
+
+
+def _sent_class(passages, turns) -> tuple[str | None, str]:
+    """The class of a call that sends `passages` and text drawn from the
+    earlier `turns`, and what set it (#327, 80's ruling): the most guarded
+    class of everything the call puts in front of the model. The visitor's
+    own words have no class; an earlier answer carries its passages' class.
+    """
+    from policyforge.llm.boundary import CONTENT_CLASSES
+
+    said = [(p.document.content_class, f"the passage {_passage_label(p)}") for p in passages]
+    for turn in turns:
+        said += [
+            (
+                p.document.content_class,
+                f"the earlier answer about {turn.subject!r}, from {_passage_label(p)}",
+            )
+            for p in turn.passages
+        ]
+    known = [(klass, why) for klass, why in said if klass in CONTENT_CLASSES]
+    if not known:
+        return None, ""
+    return max(known, key=lambda pair: CONTENT_CLASSES.index(pair[0]))
+
+
+def _more_guarded(a: str, b: str) -> bool:
+    from policyforge.llm.boundary import CONTENT_CLASSES
+
+    return CONTENT_CLASSES.index(a) > CONTENT_CLASSES.index(b)
+
+
+def _refusal_text(exc: Exception) -> str:
+    """A boundary refusal as an answer says it: not sent, and why (#327)."""
+    return f"Not sent to the model: {exc}"
+
+
 def _answer_turn(question: str, state: ShellState, scope) -> str:
     """Answer a question from the synced corpus.
 
@@ -484,6 +521,9 @@ def _answer_turn(question: str, state: ShellState, scope) -> str:
     your own documents. The reader draws the conclusion, from the same
     evidence an answer would have been built out of.
     """
+    from policyforge.llm import ledger
+    from policyforge.llm.boundary import BoundaryViolation
+
     from .answer import answer_question
     from .skills import NO_SKILL, route_plan, run_skill
 
@@ -491,10 +531,23 @@ def _answer_turn(question: str, state: ShellState, scope) -> str:
     # mechanism for "that", and neither has the router — rewriting the
     # question first is what turns a chain of follow-ups into a series of
     # separately answerable questions.
+    #
+    # The rewrite sends the earlier exchange, so it carries the class of what
+    # those answers were drawn from (#327, 80's ruling): a previous answer
+    # quoting a licensed passage is licensed text in this call too.
+    history_class, history_why = _sent_class([], state.conversation.recent())
+    refused_rewrite = ""
     try:
-        resolved, rewritten = resolve_question(question, state.conversation, state.provider)
+        with ledger.carrying(history_class, history_why):
+            resolved, rewritten = resolve_question(question, state.conversation, state.provider)
+    except BoundaryViolation:
+        resolved, rewritten = question, False
+        refused_rewrite = history_why
     except Exception:  # noqa: BLE001 - a failed rewrite must not lose the question
         resolved, rewritten = question, False
+    # A rewritten question is built from that exchange, so it carries its
+    # class into every call it reaches; one left as typed carries none.
+    carried_class, carried_why = (history_class, history_why) if rewritten else (None, "")
 
     # Now there is a question to name. Every call the turn makes from here on
     # is recorded against it; the rewrite above, made before there was a
@@ -502,6 +555,21 @@ def _answer_turn(question: str, state: ShellState, scope) -> str:
     scope.subject = f"zardoz/{state.session_id}/q-{question_digest(resolved)}"
 
     preamble = [f"(reading that as: {resolved})", ""] if rewritten else []
+    if refused_rewrite:
+        preamble += [
+            "(not read against the earlier exchange: the configured model may not be sent "
+            f"it, because {refused_rewrite} — the question is answered as typed)",
+            "",
+        ]
+    # A flagged page is never searched (`RetrievalIndex.excluded`, issue 288),
+    # and the answer says so in one line, so a gap in it isn't silent.
+    excluded = len(state.index.excluded) if state.index is not None else 0
+    if excluded:
+        preamble += [
+            f"({excluded} synced document(s) left out of answers: the injection scanner "
+            "flagged them. `policyforge zardoz sync` lists which.)",
+            "",
+        ]
 
     # Route before the corpus checks. "Which controls does nobody own?" is
     # answerable with nothing synced at all — it comes out of the registry
@@ -510,7 +578,10 @@ def _answer_turn(question: str, state: ShellState, scope) -> str:
     from policyforge.llm.base import TruncatedResponse
 
     try:
-        plan = route_plan(resolved, state.provider)
+        with ledger.carrying(carried_class, carried_why):
+            plan = route_plan(resolved, state.provider)
+    except BoundaryViolation as exc:
+        return "\n".join([*preamble, _refusal_text(exc)])
     except TruncatedResponse as exc:
         # Said aloud, then the documents: in the shell a person is waiting,
         # and a one-word routing reply that ran past its budget twice is a
@@ -596,7 +667,12 @@ def _answer_turn(question: str, state: ShellState, scope) -> str:
         from .paraphrase import expand_query
 
         try:
-            expansion = expand_query(resolved, state.provider)
+            with ledger.carrying(carried_class, carried_why):
+                expansion = expand_query(resolved, state.provider)
+        except BoundaryViolation:
+            # The search keeps the question's own words: the expansion was a
+            # convenience, and the answer below is decided on its own.
+            expansion = ""
         except TruncatedResponse as exc:
             expansion = ""
             preamble += [
@@ -641,8 +717,22 @@ def _answer_turn(question: str, state: ShellState, scope) -> str:
             ]
         )
 
+    # The answer sends the retrieved passages and the question, so it carries
+    # the most guarded class of those passages, and of the earlier exchange
+    # when the question was rewritten from it (#327, 80's ruling: per call).
+    answer_class, answer_why = _sent_class(passages, [])
+    if carried_class and (answer_class is None or _more_guarded(carried_class, answer_class)):
+        answer_class, answer_why = carried_class, carried_why
     try:
-        answer = answer_question(resolved, passages, state.provider, entailer=state.entailer)
+        with ledger.carrying(answer_class, answer_why):
+            answer = answer_question(resolved, passages, state.provider, entailer=state.entailer)
+    except BoundaryViolation as exc:
+        # Refused before anything left. The passages are shown, as with no
+        # model: reading them sends nothing anywhere.
+        lines = [*preamble, _refusal_text(exc)]
+        if passages:
+            lines += ["", "The passages that bear on it:", "", _render_passages(passages)]
+        return "\n".join(lines)
     except TruncatedResponse as exc:
         # The model was reached and answered; its answer ran past the
         # budget twice and is not shown, because half an answer with the
@@ -795,10 +885,15 @@ def refusal_types() -> tuple[type[BaseException], ...]:
     import click
 
     from policyforge.child_output import UndecodableOutput
+
+    # A config that can't be found or read says what to do (#254): one line
+    # in the CLI, a refusal here. Its two subclasses come with it.
+    from policyforge.config import ConfigError
     from policyforge.content.tree import ContentError
     from policyforge.crosswalk.overlay import OverlayError
     from policyforge.edit.apply import EchoedFenceError
     from policyforge.edit.tree import TreeEditError
+    from policyforge.export.confluence_importer import PageTooDeepError
     from policyforge.export.confluence_search import SearchLimitExceeded
     from policyforge.generate.playbook_repair import PlaybookRepairFailed
     from policyforge.ingest.ai_rmf import AiRmfParseError
@@ -811,22 +906,29 @@ def refusal_types() -> tuple[type[BaseException], ...]:
     from policyforge.llm._inline_thinking import ReasoningBudgetExhausted
     from policyforge.llm.base import (
         EmptyReply,
+        ProviderHttpError,
         ProviderRejected,
         SchemaReplyError,
         TruncatedResponse,
     )
     from policyforge.llm.batch import BatchError
     from policyforge.llm.boundary import BoundaryViolation
+    from policyforge.llm.spend import SpendRefused, SpendStopped
+    from policyforge.parameters.ledger import LedgerError
 
     # The licensed-framework plugin seam (#32): its five refusals, and a parser's own
     # refusal of a file. Each says what to do; none is a bug.
     from policyforge.plugins import ParseRefused, PluginError
     from policyforge.topics.coverage import ScopingError
     from policyforge.topics.registry import TopicRegistryError
+    from policyforge.topics.scope_facts import ScopeFactError
 
     return (
         click.ClickException,
         UndecodableOutput,
+        ConfigError,
+        # A page too deep to convert says which page (#273).
+        PageTooDeepError,
         ContentError,
         OverlayError,
         EchoedFenceError,
@@ -842,13 +944,20 @@ def refusal_types() -> tuple[type[BaseException], ...]:
         OncParseError,
         ReasoningBudgetExhausted,
         EmptyReply,
+        ProviderHttpError,
         ProviderRejected,
         SchemaReplyError,
         TruncatedResponse,
         BatchError,
         BoundaryViolation,
+        # A spend ceiling (#125): refused before a request, or stopped after one.
+        SpendRefused,
+        SpendStopped,
         ScopingError,
         TopicRegistryError,
+        # A `programme:` scope fact outside its vocabulary, named by key (22).
+        ScopeFactError,
+        LedgerError,
         PluginError,
         ParseRefused,
     )

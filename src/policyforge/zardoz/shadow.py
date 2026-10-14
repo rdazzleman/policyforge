@@ -26,6 +26,12 @@ Three properties, in the order they matter:
   interesting rows are where the two retrievers disagree on what the
   question was about.
 
+**Built, not wired.** Nothing in the shell calls `run_shadow` or
+`configured_shadows` yet, so no question runs a shadow, and setting
+`zardoz.shadow` changes nothing today. The `/shadow` command that would have
+shown the record could only ever say there was none, and was removed (#388).
+Wiring this in is its own piece of work.
+
 What this deliberately does not do is decide anything. There is no threshold
 here at which dense retrieval turns itself on. The output is evidence for a
 person, which is the same standard the rest of this project holds: a number

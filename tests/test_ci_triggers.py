@@ -12,7 +12,11 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import pytest
 import yaml
+
+#: Reads GitHub's config, which the public snapshot leaves out (161).
+pytestmark = pytest.mark.github_config
 
 ROOT = Path(__file__).resolve().parent.parent
 CI = ROOT / ".github" / "workflows" / "ci.yml"

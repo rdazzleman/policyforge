@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import shlex
+from contextlib import contextmanager
 from pathlib import Path
 
 import click
@@ -16,6 +17,7 @@ from policyforge.cli._common import (
     get_provider,
     load_config,
     load_config_or_empty,
+    retired_force,
 )
 from policyforge.textfile import write_text_lf
 
@@ -72,21 +74,52 @@ def history_hint(*, tier: str, name: str, previous: int | str, current: int | st
     is_flag=True,
     help="Print the converted Confluence storage format instead of publishing.",
 )
+@click.option(
+    "--allow-secret-findings",
+    is_flag=True,
+    help="Allow publishing documents that contain secret findings.",
+)
 def export_confluence_cmd(
-    doc_path: Path, space: str, title: str, host: str, parent_id: str | None, dry_run: bool
+    doc_path: Path,
+    space: str,
+    title: str,
+    host: str,
+    parent_id: str | None,
+    dry_run: bool,
+    allow_secret_findings: bool,
 ):
     """Convert a generated markdown document to Confluence storage format and publish it."""
     from policyforge.export.confluence_exporter import export_to_confluence, markdown_to_confluence
+    from policyforge.secrets import scan_text
 
     markdown_text = doc_path.read_text(encoding="utf-8")
+    findings = scan_text(markdown_text, filename=str(doc_path))
+    if findings:
+        if not allow_secret_findings:
+            detail = "\n".join(f"  {f}" for f in findings)
+            raise click.UsageError(
+                f"Refusing to export {doc_path}: secret findings detected:\n{detail}\n"
+                "Re-run with --allow-secret-findings to publish anyway."
+            )
+        click.echo(f"Allowed {len(findings)} secret finding(s).")
+
+    # Only the body goes to the page. The whole file used to, so a generated
+    # document's frontmatter (`generated_by` and the rest) showed on the page
+    # as a rule and a heading above the title (#390). Split by the reader
+    # `publish` builds its documents with, so the two commands send the same
+    # thing for the same file.
+    from policyforge.content.tree import ContentError, parse_document
+
+    try:
+        body = parse_document(markdown_text, path=doc_path, root=doc_path.parent).body
+    except ContentError as exc:
+        raise click.ClickException(f"{doc_path}: {exc}") from None
 
     if dry_run:
-        click.echo(markdown_to_confluence(markdown_text))
+        click.echo(markdown_to_confluence(body))
         return
 
-    url = export_to_confluence(
-        markdown_text, space=space, title=title, host=host, parent_id=parent_id
-    )
+    url = export_to_confluence(body, space=space, title=title, host=host, parent_id=parent_id)
     click.echo(f"Published to Confluence -> {url}")
 
 
@@ -236,14 +269,14 @@ def _review_edits(targets, instruction, provider, *, out_dir: Path, slugs: dict,
                     "  WARNING: sections changed that no plan step named: "
                     + ", ".join(check.changed_sections)
                 )
-            if check.added_headings and not check.additions_were_planned:
+            if check.unplanned_headings:
+                # Named one by one (issue 258): one planned addition no longer
+                # approves every new heading, so this can fire beside one.
                 click.echo(
                     "  WARNING: sections added that the plan did not ask for: "
-                    + ", ".join(check.added_headings)
+                    + ", ".join(check.unplanned_headings)
                 )
-            if check.changed_sections or (
-                check.added_headings and not check.additions_were_planned
-            ):
+            if check.changed_sections or check.unplanned_headings:
                 click.echo(
                     "  Text moved outside the approved plan. Read it in the diff "
                     f"before {words['before']} — this is what an instruction planted "
@@ -322,6 +355,9 @@ def _edit_run(
     provider = get_provider(config)
     model = (config.get("llm") or {}).get("model", "")
 
+    # A page too deep to convert fails the run here, before anything is
+    # written, as an unsupported macro does (80 on #273): one line, from
+    # `cli._Group`.
     fetch_targets(targets, host=host)
     for target in targets:
         click.echo(f"Fetched {target.label!r} (version {target.version}) — {target.webui_url}")
@@ -365,9 +401,29 @@ def _edit_run(
             },
         )
 
-    publishable = _review_edits(
-        targets, instruction, provider, out_dir=out_dir, slugs=slugs, words=_WIKI
-    )
+    # The pages' class, from what their local history says (#327). A page
+    # fetched from Confluence carries no stamp of its own, so a page nothing
+    # local ever classed is the organization's own; the scope still names the
+    # site and subject, and the wrapper still holds a tightened ceiling (CR-10).
+    from policyforge.content.provenance import declared_content_class
+    from policyforge.history.version_store import load_history
+
+    # Keyed by page AND version: a later version that says nothing must not
+    # overwrite an earlier one that said licensed.
+    classes = {
+        f"{target.title} (local history, version {number})": declared_content_class(
+            version.metadata
+        )
+        for target in targets
+        for number, version in enumerate(
+            load_history(history_dir, f"confluence/{slugs[id(target)]}"), start=1
+        )
+    }
+    klass, why = _most_guarded(classes)
+    with _edit_scope(f"edit/{', '.join(t.title for t in targets)}", klass, why):
+        publishable = _review_edits(
+            targets, instruction, provider, out_dir=out_dir, slugs=slugs, words=_WIKI
+        )
     if not publishable:
         return
 
@@ -413,6 +469,31 @@ def _edit_run(
         )
         published.append((target, url))
         click.echo(f"Published {target.label} version {target.version + 1} -> {url}")
+        # The edit is on the wiki only, so the next `publish` refuses this
+        # page until it is pulled in (#383). Say so where it happened. The
+        # tier decides where `pull` files the page, so it is printed only
+        # when known: guessing `standard` would file a live-edited Policy as
+        # a Standard.
+        click.echo(
+            "  The repository doesn't have this edit yet, and `publish` will refuse the "
+            "page until it does. Bring it in with:"
+        )
+        if target.tier:
+            click.echo(
+                f"    policyforge pull --target confluence --host {shlex.quote(host)} "
+                f"--space {shlex.quote(target.space)} --title {shlex.quote(target.title)} "
+                f"--tier {shlex.quote(target.tier)} --apply"
+            )
+        else:
+            click.echo(
+                f"    policyforge pull --target confluence --host {shlex.quote(host)} "
+                f"--space {shlex.quote(target.space)} --title {shlex.quote(target.title)} "
+                "--apply"
+            )
+            click.echo(
+                "  Add --tier policy, standard or procedure to that command: without "
+                "it, pull files the page as a standard."
+            )
 
     if failed:
         click.echo("")
@@ -594,7 +675,7 @@ def edit_topic_cmd(
     having an edit forced into it.
     """
     from policyforge.edit.session import EditTarget
-    from policyforge.topics.registry import load_topics
+    from policyforge.topics.registry import load_registry
 
     if bool(host) == bool(content_dir):
         raise click.UsageError(
@@ -603,13 +684,18 @@ def edit_topic_cmd(
             "pull request)."
         )
 
-    registry = load_topics(topics_path)
+    full_registry = load_registry(topics_path)
+    registry = full_registry.topics
     topic = next((t for t in registry if t.name.lower() == topic_name.lower()), None)
     if topic is None:
         raise click.UsageError(
             f"No topic named {topic_name!r} in {topics_path}. Available: "
             + ", ".join(sorted(t.name for t in registry))
         )
+    # The Policy this topic's Standard sits under (22, part 2b): its page is
+    # offered to the plan beside the topic's own, and a plan that finds
+    # nothing to change in it leaves it alone, as it does a Procedure.
+    parent = full_registry.policy(topic.policy) if topic.policy else None
 
     if content_dir is not None:
         wanted = {t.strip().lower() for t in tiers.split(",") if t.strip()} if tiers else None
@@ -623,11 +709,17 @@ def edit_topic_cmd(
             allow_reader_directed=allow_reader_directed,
             out_dir=out_dir,
             config=load_config(),
+            policy=parent,
         )
         return
 
     space = (topic.confluence or {}).get("space")
     pages = topic.confluence_pages()
+    policy_target = None
+    if parent is not None and not any(tier.lower() == "policy" for tier, _ in pages):
+        declared = parent.page("confluence")
+        if declared and declared[0]:
+            policy_target = EditTarget(space=declared[0], title=declared[1], tier="policy")
     if not space or not pages:
         raise click.UsageError(
             f"Topic {topic.name!r} has no `confluence:` block naming its space and "
@@ -647,12 +739,17 @@ def edit_topic_cmd(
                 + ", ".join(tier for tier, _ in topic.confluence_pages())
             )
 
+    wiki_targets = [EditTarget(space=space, title=title, tier=tier) for tier, title in pages]
+    if policy_target is not None and (not tiers or "policy" in wanted):
+        # In front, so the set reads Policy, Standard, Procedure.
+        wiki_targets.insert(0, policy_target)
     click.echo(
         f"Topic {topic.name!r} (owner: {topic.owner or 'unassigned'}) — "
-        f"{len(pages)} page(s) in {space}"
+        f"{len(wiki_targets)} page(s) in {space}"
+        + (f" and {policy_target.space}" if policy_target and policy_target.space != space else "")
     )
     _edit_run(
-        targets=[EditTarget(space=space, title=title, tier=tier) for tier, title in pages],
+        targets=wiki_targets,
         instruction=instruction,
         host=host,
         do_apply=do_apply,
@@ -676,6 +773,7 @@ def _edit_tree_run(
     allow_reader_directed: bool,
     out_dir: Path,
     config: dict,
+    policy=None,
 ):
     """`edit-topic --content-dir`: the same review, written to files.
 
@@ -699,7 +797,7 @@ def _edit_tree_run(
     if not content_dir.exists():
         raise click.UsageError(f"No content tree at {content_dir}.")
 
-    selection = tree.select_topic_files(content_dir, topic, tiers=tiers)
+    selection = tree.select_topic_files(content_dir, topic, tiers=tiers, policy=policy)
     if selection.ambiguous:
         detail = "\n".join(
             f"  {tier}: {', '.join(paths)}" for tier, paths in selection.ambiguous.items()
@@ -719,8 +817,13 @@ def _edit_tree_run(
 
     files_by_target: dict[int, tree.TreeFile] = {}
     targets = []
+    # What each file says it is (#327, CR-02): the frontmatter used to be
+    # dropped here, so a licensed Standard went to whatever model was set.
+    classes: dict[str, str] = {}
     for tier, tree_file in selection.files.items():
-        _frontmatter, body = tree.split_frontmatter(tree_file.path.read_text(encoding="utf-8"))
+        text = tree_file.path.read_text(encoding="utf-8")
+        classes[tree_file.relative] = _declared_class(text)
+        _frontmatter, body = tree.split_frontmatter(text)
         target = EditTarget(
             space="", title=tree_file.title or tree_file.relative, tier=tier, original=body
         )
@@ -735,11 +838,17 @@ def _edit_tree_run(
 
     _refuse_reader_directed(targets, allow_reader_directed)
 
-    provider = get_provider(config)
     slugs = {id(t): re.sub(r"[^a-z0-9]+", "-", t.title.lower()).strip("-") for t in targets}
-    publishable = _review_edits(
-        targets, instruction, provider, out_dir=out_dir, slugs=slugs, words=_TREE
-    )
+    # One scope for the run's model calls, carrying the most guarded class of
+    # the files they read: the plans of one tier are made with the others in
+    # view, so a call can carry any of them (#327). The wrapper decides every
+    # call against it, before anything is written.
+    klass, why = _most_guarded(classes)
+    with _edit_scope(f"edit/{topic.name}", klass, why):
+        provider = get_provider(config)
+        publishable = _review_edits(
+            targets, instruction, provider, out_dir=out_dir, slugs=slugs, words=_TREE
+        )
     if not publishable:
         return
 
@@ -861,6 +970,7 @@ def import_confluence_cmd(
         declared_content_class,
         import_metadata,
         read_generated_by,
+        unknown_stamp,
     )
     from policyforge.content.tree import (
         LEGACY_TIER_DIRS,
@@ -870,7 +980,7 @@ def import_confluence_cmd(
         render_document,
     )
     from policyforge.export.confluence_importer import (
-        confluence_to_markdown,
+        convert_page,
         fetch_confluence_page,
     )
     from policyforge.history.version_store import load_history, record_version
@@ -880,7 +990,8 @@ def import_confluence_cmd(
     name = _checked_slug(name)
 
     page = fetch_confluence_page(space=space, title=title, host=host)
-    markdown_text = confluence_to_markdown(page.storage_body)
+    # Too deep to convert: one line and exit 2, from `cli._Group` (#273).
+    markdown_text = convert_page(page.storage_body, title=page.title)
 
     directory = TIER_DIRECTORY[tier]  # the one table, as `generate` reads it (#411)
     out_path = out or Path("output") / directory / f"{name}.imported.md"
@@ -898,7 +1009,9 @@ def import_confluence_cmd(
     # hands its content class to the import. Missing it would drop a
     # licensed class silently, the direction #197 exists to prevent.
     legacy = [old for old, new in LEGACY_TIER_DIRS.items() if new == directory]
-    generated = [Path("output") / d / f"{name}.md" for d in (directory, *legacy)]
+    generated = [_content_dir(None) / d / f"{name}.md" for d in (directory, *legacy)] + [
+        Path("output") / d / f"{name}.md" for d in (directory, *legacy)
+    ]
     for candidate in (*generated, out_path):
         try:
             metadata = parse_document(
@@ -910,8 +1023,20 @@ def import_confluence_cmd(
         earlier_generation = earlier_generation or (
             read_generated_by(metadata) or dict(metadata.get(PREVIOUSLY_GENERATED_BY) or {})
         )
-    classes += [str(v.metadata.get("content_class") or "") for v in previous]
+    # Through the one reading (#339): a version that carried a stamp too can't
+    # diverge from what every other reader says.
+    classes += [declared_content_class(v.metadata) for v in previous]
     content_class = carried_content_class(classes)
+    # A predecessor's value that isn't a known class is carried as licensed
+    # (#336), and said once for this document, so a typo is visible.
+    unknown = sorted({u for u in (unknown_stamp(c) for c in classes) if u})
+    if unknown:
+        click.echo(
+            f"Warning: a predecessor of {slug} says content_class: "
+            f"{', '.join(repr(u) for u in unknown)}, which isn't a known class, so the "
+            "import is carried as licensed.",
+            err=True,
+        )
 
     imported_from = {
         "space": space,
@@ -988,6 +1113,14 @@ def import_confluence_cmd(
     "Skipped if the directory isn't there.",
 )
 @click.option(
+    "--topics",
+    "topics_path",
+    default=None,
+    type=click.Path(path_type=Path),
+    help="The topic registry the Policy grouping is checked against "
+    "(default: config/topics.yaml, skipped if it isn't there).",
+)
+@click.option(
     "--strict",
     is_flag=True,
     help="Treat warnings as failures too. For a repo that has finished migrating.",
@@ -999,7 +1132,13 @@ def import_confluence_cmd(
     "the synthesis requirements it cites. Costs one call per cited obligation, "
     "printed before anything runs. Reported only -- never changes the exit code.",
 )
-def check_cmd(content_dir: Path | None, synthesis_dir: Path, strict: bool, entail: bool):
+def check_cmd(
+    content_dir: Path | None,
+    synthesis_dir: Path,
+    topics_path: Path | None,
+    strict: bool,
+    entail: bool,
+):
     """Check the content tree before anything is published.
 
     Entirely offline, so it runs on a pull request from a fork with no
@@ -1024,9 +1163,30 @@ def check_cmd(content_dir: Path | None, synthesis_dir: Path, strict: bool, entai
     # tells the licensed-catalog scan where this project holds licensed
     # content (9b on #10).
     config = load_config_or_empty()
+    from policyforge.topics.registry import DEFAULT_TOPICS_PATH, TopicRegistryError, load_registry
+
+    registry = None
+    registry_error = ""
+    registry_file = topics_path or DEFAULT_TOPICS_PATH
+    if topics_path is not None and not topics_path.exists():
+        raise click.UsageError(f"--topics {topics_path} doesn't exist.")
+    if registry_file.exists():
+        try:
+            registry = load_registry(registry_file)
+        except TopicRegistryError as exc:
+            registry_error = str(exc)
     report = check_tree(
-        root, synthesis_dir=synthesis_dir, org_actors=org_actors(config), config=config
+        root,
+        synthesis_dir=synthesis_dir,
+        org_actors=org_actors(config),
+        config=config,
+        registry=registry,
+        registry_path=registry_file.as_posix(),
     )
+    if registry_error:
+        from policyforge.content.check import Finding
+
+        report.findings.append(Finding(registry_file.as_posix(), registry_error))
     click.echo(report.format_report())
 
     # Licensed catalog content committed to a repository that has not
@@ -1054,6 +1214,81 @@ def check_cmd(content_dir: Path | None, synthesis_dir: Path, strict: bool, entai
     # would promote an opinion too.
     if not report.ok or not licences.ok or (strict and report.warnings):
         raise SystemExit(1)
+
+
+@contextmanager
+def _edit_scope(subject: str, klass: str | None, why: str):
+    """The edit commands' ledger scope (#327, CR-02): rows name `site=edit`
+    and the subject, and carry the class. A refusal from the wrapper comes
+    out as the command's one-line error, before anything is written."""
+    from policyforge.llm import ledger
+    from policyforge.llm.boundary import BoundaryViolation
+
+    with ledger.about(subject, site="edit", content_class=klass) as scope:
+        scope.content_reason = why
+        try:
+            yield scope
+        except BoundaryViolation as exc:
+            raise click.ClickException(str(exc)) from exc
+
+
+def _declared_class(text: str) -> str:
+    """The content class a markdown file's frontmatter states, or "" (#327).
+    A file whose frontmatter won't parse states none."""
+
+    from policyforge.content.provenance import declared_content_class
+    from policyforge.textfile import loads_frontmatter
+
+    try:
+        return declared_content_class(dict(loads_frontmatter(text).metadata))
+    except Exception:  # noqa: BLE001 - the YAML parser raises several types
+        return ""
+
+
+def _most_guarded(said: dict[str, str]) -> tuple[str | None, str]:
+    """`(class, reason)` for a call that sends all of `said` ({what: class}):
+    the most guarded class, named by what stated it (#327). (None, "") when
+    nothing is stamped.
+
+    A value that isn't a known class reads as licensed (#336,
+    `provenance.stamped_class`), and each such document gets one warning on
+    stderr naming it and the value, so a typo is visible.
+    """
+    from policyforge.content.provenance import carried_content_class, stamped_class, unknown_stamp
+
+    for what, value in said.items():
+        if unknown := unknown_stamp(value):
+            click.echo(
+                f"Warning: {what} says content_class: {unknown!r}, which isn't a known class, "
+                "so it is read as licensed.",
+                err=True,
+            )
+    klass = carried_content_class(said.values())
+
+    def reason(what: str, value: str) -> str:
+        unknown = unknown_stamp(value)
+        if unknown:
+            return f"{what} says content_class: {unknown!r} (not a known class, read as {klass})"
+        return f"{what} says content_class: {klass}"
+
+    why = next((reason(w, v) for w, v in said.items() if stamped_class(v) == klass), "")
+    return klass, why
+
+
+def _entailment_class(doc, synthesis: str) -> tuple[str | None, str]:
+    """The class of what the judge is sent for `doc`, and what said so (#327).
+
+    The most guarded of the document's own stamp and its synthesis's: the
+    judge is sent passages from both.
+    """
+    from policyforge.content.provenance import declared_content_class
+
+    return _most_guarded(
+        {
+            doc.relative_path: declared_content_class(doc.metadata),
+            f"the synthesis for {doc.relative_path}": _declared_class(synthesis),
+        }
+    )
 
 
 def _report_entailment(root: Path, synthesis_dir: Path) -> None:
@@ -1095,13 +1330,28 @@ def _report_entailment(root: Path, synthesis_dir: Path) -> None:
     if not total:
         return
 
+    from policyforge.llm import ledger
+    from policyforge.llm.boundary import BoundaryViolation
+
     findings = 0
     for doc, synthesis, count in work:
         if not count:
             continue
-        for finding in ungrounded(doc.body, synthesis, entailer):
-            findings += 1
-            click.echo(f"  {doc.relative_path}: {finding}")
+        # Each document's judge calls under their own scope, carrying the most
+        # guarded class of what they send: the document's passages and the
+        # synthesis's requirements (#327, CR-03). The judge's wrapper decides
+        # against it; a refusal is not an opinion, so it fails the command.
+        klass, why = _entailment_class(doc, synthesis)
+        with ledger.about(doc.relative_path, site="entail", content_class=klass) as scope:
+            scope.content_reason = why
+            try:
+                for finding in ungrounded(doc.body, synthesis, entailer):
+                    findings += 1
+                    click.echo(f"  {doc.relative_path}: {finding}")
+            except BoundaryViolation as exc:
+                raise click.ClickException(
+                    f"Entailment stopped at {doc.relative_path}:\n{exc}"
+                ) from exc
     if not findings:
         click.echo("  Every cited obligation is carried by what it cites.")
     click.echo("  These are opinions, and do not affect the exit code.")
@@ -1248,10 +1498,19 @@ def _refuse_public_wiki(publisher) -> None:
     "flattens them; do not pass it to get past a skip you haven't read.",
 )
 @click.option(
-    "--force",
+    "--overwrite-wiki-changes",
     is_flag=True,
     help="Overwrite pages changed on the wiki since this tool last wrote them. That "
     "destroys the change; pull it and review instead unless you have decided otherwise.",
+)
+@click.option(
+    "--allow-secret-findings",
+    is_flag=True,
+    help="Allow publishing documents that contain secret findings.",
+)
+@retired_force(
+    "--overwrite-wiki-changes",
+    "to overwrite pages changed on the wiki since this tool last wrote them",
 )
 def publish_cmd(
     content_dir: Path | None,
@@ -1263,7 +1522,8 @@ def publish_cmd(
     only: str,
     apply_: bool,
     allow_macros: bool,
-    force: bool,
+    overwrite_wiki_changes: bool,
+    allow_secret_findings: bool = False,
 ):
     """Publish the content tree to the pages its frontmatter declares.
 
@@ -1298,6 +1558,30 @@ def publish_cmd(
     _refuse_public_wiki(publisher)
 
     documents, problems = load_content_tree(root)
+
+    from policyforge.secrets import scan_document
+
+    # Scanned: what this run would publish, the same `--only` population
+    # `publish_documents` takes, less the drafts with no destination in this
+    # store. A draft is never sent, so its finding is `check`'s warning, not
+    # a refusal of everyone else's pages (#139).
+    in_scope = [
+        doc
+        for doc in documents
+        if (not only or only in doc.relative_path) and publisher.location(doc)
+    ]
+    secret_findings = []
+    for doc in in_scope:
+        secret_findings.extend(scan_document(doc))
+    if secret_findings:
+        if not allow_secret_findings:
+            detail = "\n".join(f"  {f}" for f in secret_findings)
+            raise click.UsageError(
+                f"Refusing to publish: secret findings detected:\n{detail}\n"
+                "Re-run with --allow-secret-findings to publish anyway."
+            )
+        click.echo(f"Allowed {len(secret_findings)} secret finding(s).")
+
     report = publish_documents(
         publisher,
         documents,
@@ -1305,7 +1589,7 @@ def publish_cmd(
         dry_run=not apply_,
         allow_unsupported=allow_macros,
         only=only,
-        force=force,
+        force=overwrite_wiki_changes,
     )
     click.echo(report.format_report())
     # A moved page fails the run even when others published. Exiting 0 would
@@ -1468,8 +1752,8 @@ def pull_cmd(
     first publish.
     """
     from policyforge.export.publisher import pull_documents
-    from policyforge.export.pull import pages_from_topics, target_path
-    from policyforge.topics.registry import load_topics
+    from policyforge.export.pull import pages_from_registry, target_path
+    from policyforge.topics.registry import load_registry
 
     root = _content_dir(content_dir)
 
@@ -1492,7 +1776,7 @@ def pull_cmd(
         targets = [(space or publisher.repository, title, tier)]
     else:
         try:
-            targets = pages_from_topics(load_topics(topics_path), kind=kind)
+            targets = pages_from_registry(load_registry(topics_path), kind=kind)
         except FileNotFoundError:
             raise click.UsageError(
                 f"No topic registry at {topics_path}, and no --title given, so there is "
@@ -1501,7 +1785,7 @@ def pull_cmd(
             ) from None
         if not targets:
             raise click.UsageError(
-                f"No topic declares a `{kind}:` block, so there are no pages to pull."
+                f"No topic or Policy declares a `{kind}:` block, so there are no pages to pull."
             )
 
     click.echo(f"Pulling {len(targets)} page(s) into {root}")

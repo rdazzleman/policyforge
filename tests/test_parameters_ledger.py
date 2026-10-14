@@ -14,10 +14,13 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from policyforge.ingest.schema import Control, ControlEnhancement
 from policyforge.parameters.ledger import (
     SELECTION,
     Decision,
+    Parameter,
     apply_to_controls,
     build_report,
     extract_parameters,
@@ -372,3 +375,229 @@ def test_the_real_catalog_yields_a_workable_number_of_decisions():
 
     assert len(everything) > 500
     assert len(low) < len(everything), "a baseline is a smaller commitment than the catalog"
+
+
+# --- issue 190: a multi-line value round-trips, and a repeated key is refused ---
+
+#: Values a person writes into a rationale, by hand: (name, value).
+MULTI_LINE = [
+    ("two lines, a blank line and trailing spaces", "line one  \n\nline two"),
+    ("a whitespace-only line", "a\n   \nb"),
+    ("a first line that starts with spaces", "  indented\nsecond"),
+    ("a trailing line break", "a\nb\n"),
+    ("two trailing line breaks", "a\n\n"),
+    ("quotes, a hash and a colon", "it's #1: yes\n- dash: x"),
+    ("a tab-led line", "a\n\tb"),
+]
+
+
+def _render_one(rationale: str) -> str:
+    return render_ledger([], {"AC-2/frequency": Decision(value="q", rationale=rationale)})
+
+
+@pytest.mark.parametrize(("name", "value"), MULTI_LINE, ids=[m[0] for m in MULTI_LINE])
+def test_a_multi_line_value_is_written_as_it_reads_back(name, value):
+    """Line for line in the YAML itself, read with plain `safe_load`: the
+    fold to one line rewrote these, and `>` (folded) would too. Trailing
+    line breaks are dropped on purpose (`_scalar`)."""
+    import yaml
+
+    loaded = yaml.safe_load(_render_one(value))
+    assert loaded["parameters"]["AC-2/frequency"]["rationale"] == value.rstrip("\n")
+
+
+#: Two parameters, as `render_ledger` writes them: a blank line and a comment
+#: header before each, which is what a block's chomping can take in.
+TWO = [
+    Parameter(key="AC-2/frequency", control_id="AC-2", label="frequency"),
+    Parameter(key="AU-6/frequency", control_id="AU-6", label="frequency"),
+]
+ENDINGS = [
+    ("a trailing break", "Quarterly.\nReviewed.\n"),
+    ("two trailing breaks", "Quarterly.\nReviewed.\n\n"),
+    ("a lone break", "\n"),
+    ("a blank line inside", "Quarterly.\n\nReviewed."),
+]
+
+
+@pytest.mark.parametrize("field_name", ["value", "rationale", "source"])
+@pytest.mark.parametrize("where", ["first", "last"])
+@pytest.mark.parametrize(("name", "value"), ENDINGS, ids=[e[0] for e in ENDINGS])
+def test_a_field_reads_back_the_same_wherever_it_sits_in_the_file(field_name, where, name, value):
+    """9b's shape on PR 278: `source` on a parameter followed by another took
+    in the blank separator line when the block kept its trailing breaks."""
+    import yaml
+
+    key = TWO[0].key if where == "first" else TWO[1].key
+    other = TWO[1].key if where == "first" else TWO[0].key
+    decisions = {key: Decision(**{field_name: value}), other: Decision(value="annually")}
+
+    loaded = yaml.safe_load(render_ledger(TWO, decisions))["parameters"]
+
+    assert loaded[key][field_name] == value.rstrip("\n")
+    assert loaded[other] == {"value": "annually", "rationale": "", "source": ""}
+
+
+@pytest.mark.parametrize(("name", "value"), MULTI_LINE, ids=[m[0] for m in MULTI_LINE])
+def test_load_ledger_reads_a_multi_line_value_back(tmp_path, name, value):
+    """`load_ledger` strips the outer whitespace, as it always has; every
+    line inside is kept."""
+    path = tmp_path / "parameters.yaml"
+    path.write_text(_render_one(value), encoding="utf-8")
+    assert load_ledger(path)["AC-2/frequency"].rationale == value.strip()
+
+
+@pytest.mark.parametrize("ending", ["\r\n", "\r"], ids=["crlf", "bare-cr"])
+def test_a_carriage_return_is_a_line_break_like_any_other(tmp_path, ending):
+    path = tmp_path / "parameters.yaml"
+    path.write_text(_render_one(f"a{ending}b"), encoding="utf-8")
+    assert load_ledger(path)["AC-2/frequency"].rationale == "a\nb"
+
+
+def test_a_ledger_written_before_the_fix_reads_the_same_after_a_rewrite(tmp_path):
+    old = tmp_path / "old.yaml"
+    old.write_text(
+        "parameters:\n  AC-2/frequency:\n    value: 'quarterly'\n"
+        "    rationale: 'one line, it''s fine'\n    source: ''\n",
+        encoding="utf-8",
+    )
+    first = load_ledger(old)
+    again = tmp_path / "again.yaml"
+    again.write_text(render_ledger([], first), encoding="utf-8")
+    assert load_ledger(again) == first
+
+
+def _controls_file(tmp_path) -> Path:
+    import json
+
+    controls = tmp_path / "controls.json"
+    controls.write_text(
+        json.dumps(
+            [
+                {
+                    "control_id": "AC-2",
+                    "title": "Account Management",
+                    "framework": "NIST-800-53",
+                    "framework_version": "Rev 5",
+                    "baseline": "Low, Moderate, High",
+                    "control_statement": REVIEW,
+                    "discussion": "",
+                    "enhancements": [],
+                    "related_controls": [],
+                    "source_crosswalk": {},
+                    "source_path": None,
+                    "family": None,
+                    "family_abbr": None,
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+    return controls
+
+
+def test_init_keeps_a_multi_line_rationale_line_for_line(tmp_path):
+    """The user's path: a person writes a rationale over several lines, then
+    runs `parameters --init` again, which rewrites the file."""
+    from click.testing import CliRunner
+
+    import policyforge.cli as cli_mod
+
+    rationale = "HITRUST 01.c says quarterly.  \n\n800-53 leaves it to us."
+    ledger = tmp_path / "parameters.yaml"
+    ledger.write_text(
+        "parameters:\n  AC-2/frequency:\n    value: quarterly\n    rationale: |-\n"
+        "      HITRUST 01.c says quarterly.  \n\n      800-53 leaves it to us.\n",
+        encoding="utf-8",
+    )
+    assert load_ledger(ledger)["AC-2/frequency"].rationale == rationale, "premise"
+
+    args = ["parameters", "--controls", str(_controls_file(tmp_path)), "--ledger", str(ledger)]
+    result = CliRunner().invoke(cli_mod.cli, [*args, "--init"])
+
+    assert result.exit_code == 0, result.output
+    assert load_ledger(ledger)["AC-2/frequency"].rationale == rationale
+
+
+DUPLICATE_PARAMETER = (
+    "parameters:\n"
+    "  AC-2/frequency:\n"
+    "    value: quarterly\n"
+    "  AU-6/frequency:\n"
+    "    value: weekly\n"
+    "  AC-2/frequency:\n"
+    "    value: monthly\n"
+)
+
+
+def test_a_parameter_decided_twice_is_refused_by_key_and_both_lines(tmp_path):
+    from policyforge.parameters.ledger import LedgerError
+
+    path = tmp_path / "parameters.yaml"
+    path.write_text(DUPLICATE_PARAMETER, encoding="utf-8")
+
+    with pytest.raises(LedgerError) as raised:
+        load_ledger(path)
+
+    message = str(raised.value)
+    assert "'AC-2/frequency'" in message and "lines 2 and 6" in message
+    assert isinstance(raised.value, ValueError), "callers catching ValueError still do"
+
+
+def test_a_field_given_twice_is_refused_too(tmp_path):
+    from policyforge.parameters.ledger import LedgerError
+
+    path = tmp_path / "parameters.yaml"
+    path.write_text(
+        "parameters:\n  AC-2/frequency:\n    value: quarterly\n    value: monthly\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(LedgerError, match=r"'value'.*lines 3 and 4"):
+        load_ledger(path)
+
+
+def test_the_same_field_under_two_parameters_is_not_a_repeat(tmp_path):
+    path = tmp_path / "parameters.yaml"
+    path.write_text(
+        "parameters:\n  AC-2/frequency:\n    value: quarterly\n"
+        "  AU-6/frequency:\n    value: weekly\n",
+        encoding="utf-8",
+    )
+    assert {k: d.value for k, d in load_ledger(path).items()} == {
+        "AC-2/frequency": "quarterly",
+        "AU-6/frequency": "weekly",
+    }
+
+
+def test_a_yaml_merge_may_still_be_overridden(tmp_path):
+    """`<<: *anchor` then an explicit key is YAML's override, not a repeat."""
+    path = tmp_path / "parameters.yaml"
+    path.write_text(
+        "shared: &shared\n  rationale: one reason\n  source: policy\n"
+        "parameters:\n  AC-2/frequency:\n    <<: *shared\n"
+        "    value: quarterly\n    source: override\n",
+        encoding="utf-8",
+    )
+    decision = load_ledger(path)["AC-2/frequency"]
+    assert (decision.value, decision.rationale, decision.source) == (
+        "quarterly",
+        "one reason",
+        "override",
+    )
+
+
+def test_the_cli_says_a_repeated_key_in_one_line(tmp_path):
+    from click.testing import CliRunner
+
+    import policyforge.cli as cli_mod
+
+    ledger = tmp_path / "parameters.yaml"
+    ledger.write_text(DUPLICATE_PARAMETER, encoding="utf-8")
+    args = ["parameters", "--controls", str(_controls_file(tmp_path)), "--ledger", str(ledger)]
+
+    result = CliRunner().invoke(cli_mod.cli, args)
+
+    assert result.exit_code == 1, result.output
+    lines = result.output.strip().splitlines()
+    assert len(lines) == 1 and lines[0].startswith("Error: "), result.output
+    assert "'AC-2/frequency'" in lines[0] and "lines 2 and 6" in lines[0]

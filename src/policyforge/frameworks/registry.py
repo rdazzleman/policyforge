@@ -107,6 +107,13 @@ class Framework:
     #: one of this catalog's ids to a WHOLE family of another catalog, never
     #: to a control in it. Read by `declared_family_links` (#448).
     family_links: dict = field(default_factory=dict)
+    #: `leaf_parts:` (#441): `listed` when a part cited below one of the
+    #: catalog's leaves stands only if the leaf's text lists it; empty when
+    #: the catalog keeps the residual (any part below a leaf stands).
+    leaf_parts: str = ""
+    #: `leaf_parts_measured:` what the setting rests on: the measurement,
+    #: with where and when it was taken. A switch with none is refused.
+    leaf_parts_measured: str = ""
 
     @property
     def redistributable(self) -> bool:
@@ -154,6 +161,8 @@ def load_framework(directory: Path) -> Framework:
         crosswalk_relationship=str(data.get("crosswalk_relationship") or "").strip(),
         crosswalk_source=str(data.get("crosswalk_source") or "").strip(),
         family_links=dict(data.get("family_links") or {}),
+        leaf_parts=str(data.get("leaf_parts") or "").strip(),
+        leaf_parts_measured=" ".join(str(data.get("leaf_parts_measured") or "").split()),
     )
 
 
@@ -350,6 +359,68 @@ def known_framework_names(
     return frozenset(n for _, _, names in _catalog_names(config, roots) for n in names)
 
 
+def known_requirement_index(
+    config: dict | None = None, *, roots: list[Path] | None = None
+) -> dict[str, set[str]]:
+    """{normalized framework: every requirement id its catalogs hold}, for
+    every catalog on disk (#189).
+
+    The same walk as `known_framework_names` (`_catalog_names`), so the ids a
+    tag is resolved against come from the catalogs its names came from, and
+    the same index shape as `topics.satisfies._catalog_index`, the citation
+    checker's: control ids, enhancement ids and requirement ids, filed under
+    each row's normalized `framework`. A catalog whose rows can't be read
+    contributes no ids, so a tag naming it resolves to nothing and is
+    reported, the loud direction.
+    """
+    from policyforge.mapping.crosswalk import normalize_framework
+
+    index: dict[str, set[str]] = {}
+    for control in controls_on_disk(config, roots=roots):
+        ids = index.setdefault(normalize_framework(control.framework), set())
+        ids.add(control.control_id)
+        ids.update(e.enhancement_id for e in control.enhancements)
+        ids.update(r.requirement_id for r in control.requirements)
+    return index
+
+
+def catalogs_by_id(config: dict | None = None) -> dict[str, Framework]:
+    """{framework id: the catalog} for every catalog a citation can name: the
+    search paths, then the bundled catalogs (`_catalog_roots`), the first
+    directory with an id winning as in `discover`, except that a catalog
+    with controls.json wins over an earlier directory with NO controls.json
+    (#417): `init`'s README-only stub, or a manifest-only directory. That
+    last case differs from `discover`, which keeps a manifest-only directory
+    first. Between two directories without controls, the first still wins.
+    Where `generate` finds the catalogs its synthesis records in
+    `derived_from` (#215)."""
+    found: dict[str, Framework] = {}
+    for _, framework, _ in _catalog_names(config, None):
+        existing = found.get(framework.id)
+        if existing is None or (not existing.has_controls and framework.has_controls):
+            found[framework.id] = framework
+    return found
+
+
+def controls_on_disk(config: dict | None = None, *, roots: list[Path] | None = None) -> list:
+    """Every control of every catalog on disk, by the same walk as
+    `known_framework_names` (`_catalog_names`). What a bracket is resolved
+    against when no run's catalog set is known (#215). A catalog whose rows
+    can't be read contributes none, so a tag naming it is reported, the loud
+    direction."""
+    from policyforge.ingest.schema import load_controls
+
+    controls: list = []
+    for _, framework, _ in _catalog_names(config, roots):
+        if not framework.has_controls:
+            continue
+        try:
+            controls.extend(load_controls(framework.controls_path))
+        except (OSError, ValueError):
+            continue
+    return controls
+
+
 def _shipped_buckets() -> dict[str, str]:
     """{first word: the shipped catalog name it comes from}: `nist`, `hipaa`...
 
@@ -426,6 +497,44 @@ def declared_family_rules(
         for key in {framework.key, *(normalize_framework(n) for n in names)} - {""}:
             rules.setdefault(key, framework)
     return rules
+
+
+#: The values `leaf_parts:` takes (#441).
+LEAF_PARTS = ("listed",)
+
+
+def declared_leaf_checks(
+    config: dict | None = None, *, roots: list[Path] | None = None
+) -> dict[str, Framework]:
+    """{framework key: its manifest} for every catalog whose manifest says
+    `leaf_parts: listed` (#441): a part cited below one of its leaves stands
+    only when the leaf's text lists it (`topics.anchoring.lists_part`).
+
+    Refused, naming the manifest: a value that isn't one of `LEAF_PARTS`
+    (a misspelling would leave the residual on, the unsafe direction, while
+    reading as switched on), and a switch with no `leaf_parts_measured:`
+    (no switch without a number behind it, 441's done-when). The same walk
+    as `declared_family_rules`."""
+    from policyforge.mapping.crosswalk import normalize_framework
+
+    found: dict[str, Framework] = {}
+    for _, framework, names in _catalog_names(config, roots):
+        if not framework.leaf_parts:
+            continue
+        where = framework.path / MANIFEST_NAME
+        if framework.leaf_parts not in LEAF_PARTS:
+            raise ValueError(
+                f"{where}: leaf_parts: {framework.leaf_parts!r} is not one of "
+                f"{', '.join(LEAF_PARTS)}; leave it out to keep the residual."
+            )
+        if not framework.leaf_parts_measured:
+            raise ValueError(
+                f"{where}: leaf_parts: {framework.leaf_parts} has no leaf_parts_measured:, "
+                "the measurement it rests on."
+            )
+        for key in {framework.key, *(normalize_framework(n) for n in names)} - {""}:
+            found.setdefault(key, framework)
+    return found
 
 
 def declared_crosswalk_relationships(

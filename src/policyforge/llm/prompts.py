@@ -1,6 +1,6 @@
 """Every graded prompt, with a fingerprint that changes when its text does.
 
-MEASUREMENTS.md rests on one rule: *a number without an epoch is not
+The measurements record rests on one rule: *a number without an epoch is not
 comparable with anything, which makes it worse than no number at all.* The
 epoch is what says which prompts produced a result. Until now the epoch was
 maintained by hand — somebody changed a prompt, and somebody remembered to
@@ -57,7 +57,7 @@ from dataclasses import dataclass
 
 #: How much of the digest to show. Twelve hex characters is 48 bits, which
 #: is far past collision for a registry that will never hold more than a few
-#: dozen prompts, and short enough to sit in a table cell in MEASUREMENTS.md
+#: dozen prompts, and short enough to sit in a table cell in the epoch log
 #: without wrapping — which is the only place a human reads one.
 FINGERPRINT_CHARS = 12
 
@@ -139,7 +139,7 @@ def load_all() -> None:
     from policyforge.crosswalk import propose  # noqa: F401
     from policyforge.edit import apply, plan  # noqa: F401
     from policyforge.entail import llm_entailer  # noqa: F401
-    from policyforge.generate import policy_writer  # noqa: F401
+    from policyforge.generate import acceptable_use, policy_group, policy_writer  # noqa: F401
     from policyforge.synthesis import merge  # noqa: F401
     from policyforge.zardoz import answer, conversation, discover, paraphrase, skills  # noqa: F401
 
@@ -213,7 +213,7 @@ def compare(recorded: dict[str, str]) -> list[str]:
     Returns one line per difference, in the order a reader cares about:
     prompts that changed, then prompts that appeared, then prompts that went
     away. An empty list means this run is comparable with whatever produced
-    `recorded`, which is the only claim MEASUREMENTS.md lets a number make.
+    `recorded`, which is the only claim the epoch log lets a number make.
     Renames with unchanged text are not differences; see `renames`.
     """
     current = fingerprints()

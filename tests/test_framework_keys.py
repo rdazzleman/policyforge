@@ -227,19 +227,14 @@ def test_a_citation_naming_its_catalog_resolves_to_that_catalog(
     assert found
 
 
-def test_the_legacy_short_form_is_reported_rather_than_guessed(both_nist_catalogs):
-    """`[NIST AC-2]` is what every document generated before this fix says.
-
-    With two NIST catalogs loaded it names neither, so it resolves to
-    nothing and is reported. That is the intended outcome and the reason
-    the upgrade note has to say regeneration is the migration: the failure
-    a user meets is visible, which the merged bucket's was not.
-    """
+def test_the_short_form_names_800_53_with_both_nist_catalogs(both_nist_catalogs):
+    """`[NIST AC-2]` names 800-53 with 800-171 loaded too (6044 on #17):
+    800-53's ids appear once, under `NIST`. It never reaches 800-171:
+    `[NIST 03.01.01]` names an id 800-53 doesn't have, and is not found."""
     names, ids = both_nist_catalogs
-    key, _requirement_id, found = _resolve("NIST AC-2", names, ids)
-
-    assert key == "", "an ambiguous citation picked a catalog"
-    assert not found
+    assert _resolve("NIST AC-2", names, ids) == ("nist-800-53", "AC-2", True)
+    key, _requirement_id, found = _resolve("NIST 03.01.01", names, ids)
+    assert key == "nist-800-53" and not found
 
 
 def test_the_short_form_still_works_while_only_one_nist_catalog_is_loaded():

@@ -22,7 +22,7 @@ brew install rdazzleman/tap/policyforge
 Without Homebrew:
 
 ```bash
-pipx install git+https://github.com/rdazzleman/policyforge@v1.7.0
+pipx install git+https://github.com/rdazzleman/policyforge@v1.8.0
 ```
 
 The optional extras (`bedrock`, `vertex`, `litellm`, `mcp`) aren't in the
@@ -33,10 +33,10 @@ Homebrew formula. With pipx, add them as `policyforge[mcp] @ git+…`.
 Lay out a project, then draft one Standard:
 
 ```bash
-policyforge init my-policies && cd my-policies
-
-cp config/config.example.yaml config/config.yaml   # provider, model, and the NAME of the env var holding your key
-cp config/topics.example.yaml config/topics.yaml   # starter topics, each with an owning team
+policyforge init my-policies && cd my-policies     # also writes config/config.yaml and config/topics.yaml
+                                                   # (a local model to start; --provider anthropic chooses another)
+                                                   # (the starter topics anchor 800-53, the AI RMF and HIPAA's Security,
+                                                   # Privacy and Breach Notification Rules, so config.yaml loads all five)
 export ANTHROPIC_API_KEY=sk-...                    # whichever variable your config names
 policyforge llm-check                              # confirms the key works
 
@@ -56,7 +56,8 @@ policyforge generate --tier standard \
                      --synthesis output/synthesis/identity-lifecycle-access-review.md
 ```
 
-You get a Standard in `output/standards/`, its synthesis in
+You get a Standard in `docs/standards/` (or under `zardoz.content_dir`, the
+content tree `publish`, `pull` and `check` read), its synthesis in
 `output/synthesis/`, the version history in `output/.history/`, and a record
 of every model call in `policyforge model-log`.
 
@@ -88,12 +89,13 @@ Each catalog's own README says where it came from and how it may be cited.
 | SOC 2 Trust Services Criteria               | Licensed by the AICPA             | Never bundled: bring your own                     |
 
 The loaders for the bring-your-own frameworks are in the licensed-framework
-plugin, which is distributed separately from the public PolicyForge.
+plugin, which is distributed separately from the public PolicyForge (to ask for it, email [info@zardoz.io](mailto:info@zardoz.io?subject=PolicyForge%20licensed-framework%20plugin)).
 
 ## More
 
 - **Guides, configuration and everything else:** [zardoz.io](https://zardoz.io)
 - **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md)
 - **Reporting a vulnerability:** [SECURITY.md](SECURITY.md)
-- **How the project uses AI:** [docs/responsible-ai-use.md](docs/responsible-ai-use.md) and [docs/system-card.md](docs/system-card.md)
+- **How the project uses AI:** [responsible use](https://zardoz.io/trust/responsible-ai/) and [the system card](https://zardoz.io/trust/system-card/)
+- **Security, trust and measurements:** [zardoz.io/trust](https://zardoz.io/trust/)
 - **License:** [LICENSE](LICENSE) (Apache 2.0)

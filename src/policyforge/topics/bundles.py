@@ -200,6 +200,10 @@ class RequirementView:
     #: True when the id matched nothing in any catalog — a typo, or a
     #: framework that was never loaded. Different from "nobody owns it".
     unknown: bool = False
+    #: The catalog spellings, as "<id> (<framework>)", when the typed id
+    #: casefolds onto more than one of them (#213). None is picked: every
+    #: candidate is listed and the reader names one exactly.
+    ambiguous: list[str] = field(default_factory=list)
 
     @property
     def owned(self) -> bool:
@@ -210,6 +214,12 @@ class RequirementView:
         return len({c.topic for c in self.claims}) > 1
 
     def render(self) -> str:
+        if self.ambiguous:
+            return (
+                f"{self.requirement_id} matches more than one requirement id that differ "
+                f"only by letter case: {', '.join(self.ambiguous)}. Name one exactly as "
+                f"its catalog spells it."
+            )
         if self.unknown:
             return (
                 f"{self.requirement_id} is not in any loaded catalog. Either it is "
@@ -249,6 +259,23 @@ class RequirementView:
 
 def _requirement_ids(controls) -> list[str]:
     return list(_frameworks_of(controls))
+
+
+def _spellings_of(typed: str, controls) -> list[tuple[str, str]]:
+    """Every (catalog spelling, framework) whose id casefolds to `typed`'s, in
+    catalog order and each once (#213). Over the same ids the lookups read
+    (`_frameworks_of`: control and enhancement ids), so folding case widens
+    what matches, never which ids are looked at."""
+    folded = typed.casefold()
+    found: dict[tuple[str, str], None] = {}
+    for control in controls:
+        for requirement_id in (
+            control.control_id,
+            *(e.enhancement_id for e in control.enhancements),
+        ):
+            if requirement_id.casefold() == folded:
+                found.setdefault((requirement_id, control.framework), None)
+    return list(found)
 
 
 def _frameworks_of(controls) -> dict[str, str]:
@@ -343,8 +370,25 @@ def requirement_view(
     the registry is anchored on, and reports the topic, the owner and the
     pages — saying, for each, whether the claim is direct, inherited or
     merely crosswalked.
+
+    **The typed id is matched case-insensitively** (80's ruling on #213):
+    `ac-2`, `AC-2` and `Ac-2` all find `AC-2`, comparing `casefold()` on
+    both sides, never upper-casing either, because HIPAA ids carry lower
+    case of their own (`164.308(a)(1)(ii)(A)`). The view then reports the
+    catalog's own spelling, never the typed one. If the typed id casefolds
+    onto more than one spelling, none is picked: `ambiguous` lists them all.
+    Measured when this was written: no two of the 3,481 ids in the bundled
+    catalogs differ only by case, so only a catalog of the organization's
+    own can make that happen.
     """
-    wanted = requirement_id.strip()
+    typed = requirement_id.strip()
+    spellings = _spellings_of(typed, [*nist_controls, *(other_controls or [])])
+    if len({spelling for spelling, _ in spellings}) > 1:
+        return RequirementView(
+            requirement_id=typed,
+            ambiguous=[f"{spelling} ({framework})" for spelling, framework in spellings],
+        )
+    wanted = spellings[0][0] if spellings else typed
     view = RequirementView(requirement_id=wanted)
     catalog = _frameworks_of(nist_controls)
 

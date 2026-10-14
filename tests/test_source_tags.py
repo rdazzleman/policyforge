@@ -202,7 +202,9 @@ def test_check_reports_a_bare_arc_tag_the_document_lost(tmp_path):
 
     report = check_tree(tmp_path, synthesis_dir=synthesis)
 
-    assert any("[ARC PE-1]" in f.message for f in report.warnings)
+    # Reported as the citation it names, since #17 compares citations rather
+    # than tag text (`generate` rewrites a Standard's tags).
+    assert any("arc-ampe PE-1" in f.message for f in report.warnings)
 
 
 def test_drift_reaches_a_document_that_cites_through_a_bare_arc_tag(tmp_path):

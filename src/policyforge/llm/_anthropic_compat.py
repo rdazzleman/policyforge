@@ -1,10 +1,16 @@
 """Shared internals for AnthropicProvider and VertexProvider: both wrap the
 `anthropic` SDK's `messages.create` with the identical request shape (only
-how the client itself is constructed/authenticated differs), including the
-identical `temperature`-deprecation retry (see anthropic_provider.py's
-module docstring for why that retry exists). Not part of the public
-LLMProvider interface — provider-specific auth/client setup stays in each
-provider's own module.
+how the client itself is constructed/authenticated differs). Not part of
+the public LLMProvider interface — provider-specific auth/client setup
+stays in each provider's own module.
+
+**No `temperature` is sent (#352, 80's ruling).** anthropic 1.7.0, the
+locked SDK, removed the keyword from `messages.create`, so passing it raised
+`TypeError` before any request left, on every Anthropic and Vertex call.
+Newer models refused it anyway, which is what the old "temperature is
+deprecated" retry was for. The callers' `temperature` is still accepted, so
+one interface serves every provider, and it is not sent; the providers that
+take it (Bedrock, Gemini, LiteLLM, openai-compat) still send it.
 """
 
 from __future__ import annotations
@@ -43,7 +49,6 @@ def _message_params(request, *, model: str) -> dict:
         "max_tokens": request.max_tokens,
         "system": request.system,
         "messages": [{"role": "user", "content": request.prompt}],
-        "temperature": request.temperature,
     }
     if request.effort is not None:
         params["output_config"] = {"effort": request.effort}
@@ -131,6 +136,7 @@ def submit_batch(
             stop_reason=getattr(message, "stop_reason", None),
             cached_input_tokens=getattr(usage, "cache_read_input_tokens", None),
             request_id=getattr(message, "id", None),
+            endpoint=sent_to(client),
         )
 
     if failures:
@@ -140,6 +146,15 @@ def submit_batch(
             + ("..." if len(failures) > 5 else "")
         )
     return answers
+
+
+def sent_to(client) -> str | None:
+    """Where an Anthropic SDK client sends its requests (#328): the base URL
+    the SDK resolved when it was built, so `ANTHROPIC_BASE_URL` (or the
+    Vertex client's own override) is what's recorded, not the default."""
+    from .base import recordable_endpoint
+
+    return recordable_endpoint(getattr(client, "base_url", None))
 
 
 def call_messages_api(
@@ -246,25 +261,11 @@ def call_messages_api(
     if output_config:
         kwargs["output_config"] = output_config
 
-    send_temperature = True
-
     def _create(**overrides):
-        """One request, remembering whether this model tolerates temperature."""
-        nonlocal send_temperature
-        payload = {**kwargs, **overrides}
+        """One request. `temperature` is never sent (#352): see the module
+        docstring."""
         try:
-            if not send_temperature:
-                return client.messages.create(**payload)
-            try:
-                return client.messages.create(temperature=temperature, **payload)
-            except anthropic.BadRequestError as exc:
-                # Some newer models (e.g. claude-sonnet-5) reject `temperature`
-                # outright rather than just ignoring it, so retry without it
-                # instead of hard-failing every call on those models.
-                if "temperature" in str(exc) and "deprecated" in str(exc):
-                    send_temperature = False
-                    return client.messages.create(**payload)
-                raise
+            return client.messages.create(**{**kwargs, **overrides})
         except anthropic.BadRequestError as exc:
             # Any other 400 is the API refusing the request as sent — a
             # max_tokens above the model's cap is the usual one now that
@@ -330,4 +331,5 @@ def call_messages_api(
         cached_input_tokens=getattr(usage, "cache_read_input_tokens", None),
         request_id=getattr(response, "_request_id", None),
         citations=read_citations(response, documents) if documents else None,
+        endpoint=sent_to(client),
     )

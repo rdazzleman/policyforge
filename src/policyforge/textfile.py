@@ -43,3 +43,69 @@ def write_text_lf(path: Path, text: str) -> Path:
     with path.open("w", encoding="utf-8", newline="\n") as handle:
         handle.write(normalise_newlines(text))
     return path
+
+
+def replace_text_lf(path: Path, text: str) -> Path:
+    """`write_text_lf`, but written as a NEW file moved over `path` (#319).
+
+    Opening `path` for writing writes through whatever it is: a hard link to
+    another file, or a symlink, changes that other file too. A licensed
+    catalog written to an `--out` hard-linked into the bundled
+    `data/frameworks/` landed in the bundled file that way, with exit 0
+    (measured on Windows and Linux). Moving a new file over the name replaces
+    the directory entry only, so the other file keeps its bytes.
+    """
+    return replace_bytes(path, normalise_newlines(text).encode("utf-8"))
+
+
+def replace_bytes(path: Path, data: bytes) -> Path:
+    """Write `data` to a new file beside `path`, then move it over `path`.
+
+    The new file is created in the same directory, so `os.replace` stays on
+    one filesystem and doesn't fall back to a copy. It's opened like any
+    other new file, so the umask applies. A `path` that already exists lends
+    it its mode. If anything fails, the new file is removed and `path` is
+    left as it was.
+    """
+    import contextlib
+    import os
+    import secrets
+    import stat
+
+    temporary = path.parent / f".{path.name}.{secrets.token_hex(6)}.tmp"
+    try:
+        with temporary.open("xb") as handle:
+            handle.write(data)
+        with contextlib.suppress(OSError):
+            os.chmod(temporary, stat.S_IMODE(os.stat(path).st_mode))
+        os.replace(temporary, path)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            temporary.unlink()
+        raise
+    return path
+
+
+#: The byte-order mark some editors and Windows PowerShell 5.1 (`Out-File`,
+#: `Set-Content -Encoding utf8`) put at the start of a UTF-8 file.
+BOM = "\ufeff"
+
+
+def without_bom(text: str) -> str:
+    """`text` without one leading U+FEFF, if it has one."""
+    return text[1:] if text.startswith(BOM) else text
+
+
+def loads_frontmatter(text: str):
+    """`frontmatter.loads(text)`, with one leading BOM dropped first (#424).
+
+    A BOM hides the `---` that opens the frontmatter, so the whole block was
+    read as body: `export-confluence` published it as page text, and
+    `read_synthesis` returned no metadata, losing a licensed synthesis's
+    `content_class`. **The one frontmatter reader**: every module parses
+    frontmatter through this, and `tests/test_frontmatter_bom.py` fails on a
+    direct `frontmatter.loads` or `frontmatter.load` anywhere else. The bytes
+    on disk are left as they are (80's ruling on #424)."""
+    import frontmatter
+
+    return frontmatter.loads(without_bom(text))

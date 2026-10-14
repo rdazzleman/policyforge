@@ -15,8 +15,10 @@ your working tree. That is what CI will see, and it keeps untracked and
 ignored files (a `.env`, `local_content/`) out of the run. Uncommitted
 changes are reported and left out.
 
-Inside the container, in CI's order: the hashed install, ruff, pip-audit
-over both locks, bandit, semgrep in its own environment, mdformat, pytest.
+Inside the container, in CI's order: the hashed install, ruff, pip-audit,
+bandit, mdformat, pytest. Not semgrep: it runs from its own pinned image
+(#83), which this container can't start (it has no Docker), and the local
+gate already runs that image, on Linux, through Docker.
 Then three checks CI does not run yet:
 
 - every lock reproduces byte-for-byte from the command in its header, which
@@ -49,7 +51,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 #: Matches what regenerated the committed locks. Output formatting can change
 #: between uv releases, so a different version can report a lock as stale.
-UV_VERSION = "0.12.15"
+#: 0.12.18, not 0.12.15, which carries CVE-2026-104843 (#282). Measured before
+#: the bump: 0.12.18 regenerates all three locks from their headers with no
+#: change, as 0.12.15 does.
+UV_VERSION = "0.12.18"
 
 IMAGE_TAG = "policyforge:ci-local"
 
@@ -102,33 +107,26 @@ export PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_ROOT_USER_ACTION=ignore
 
 install() {
   pip install -q --require-hashes -r requirements/ci.txt
-  pip install -q --no-deps -e .
+  pip install -q --require-hashes --only-binary :all: -r requirements/build.txt
+  pip install -q --no-deps --no-build-isolation -e .
 }
 audit_lock() { pip-audit --disable-pip --require-hashes -r "$1"; }
 step "install (hashed lock)" install
 step "ruff (lint)" ruff check src tests scripts
 step "ruff (format)" ruff format --check src tests scripts
 step "pip-audit (project)" pip-audit
-step "pip-audit (semgrep's lock)" python scripts/semgrep_lock_audit.py
 step "pip-audit (runtime lock)" audit_lock requirements/runtime.txt
 step "bandit" bandit -q -c pyproject.toml -r src
-semgrep_scan() {
-  python -m venv /semgrep
-  /semgrep/bin/pip install -q --require-hashes -r requirements/semgrep/semgrep.txt
-  /semgrep/bin/semgrep scan --quiet --config=p/python --config=p/security-audit \
-    --config=p/owasp-top-ten --error .
-}
-step "semgrep" semgrep_scan
 mdformat_check() { git ls-files -z '*.md' | xargs -0 mdformat --check; }
 step "mdformat" mdformat_check
-step "pytest" pytest -q -p no:cacheprovider
+step "pytest" pytest -q -p no:cacheprovider -n auto
 
 step "runtime lock pins what CI tests" \
   python -m pytest -q -p no:cacheprovider tests/test_container.py -k runtime_lock
 step "MCP server answers a client" python scripts/mcp_smoke.py -- policyforge mcp
 locks_reproduce() {
   python -m venv /uv && /uv/bin/pip install -q "uv==$UV_VERSION"
-  for lock in requirements/ci.txt requirements/semgrep/semgrep.txt requirements/runtime.txt; do
+  for lock in requirements/ci.txt requirements/ci-py310.txt requirements/runtime.txt; do
     cmd=$(sed -n '2s/^#    //p' "$lock")
     echo "$cmd"
     /uv/bin/$cmd -q
@@ -194,12 +192,40 @@ def container_checks(work: Path) -> bool:
     return code == 0
 
 
-def image_checks(work: Path) -> dict[str, bool]:
-    results: dict[str, bool] = {}
+def build_context(work: Path, root: Path = REPO_ROOT) -> Path:
+    """The Docker build context: HEAD's tree with its stored line endings, plus
+    the private decoys the checks below look for.
+
+    `core.autocrlf=false` (#171, the same class as #158): `git archive` applies
+    the checkout's `core.autocrlf`, which is `true` system-wide on this
+    machine, and that wrote CRLF into 490 of 680 files of the context. The
+    image would then be built from bytes that aren't the tree's.
+
+    And `core.eol=lf` (b5 on #206): autocrlf off stops git guessing, but a path
+    `.gitattributes` marks `text` (or `text=auto`) is still converted to
+    `core.eol`, which is native: CRLF on Windows. Today only `*.md` is marked
+    (and pinned `eol=lf`), so the first setting alone was enough, but only
+    while `.gitattributes` says so. Both together keep the stored line
+    endings; a path marked `eol=crlf` is still converted, by its own explicit
+    choice. **Line endings only** (9b on #206): `ident`,
+    `working-tree-encoding`, `filter` and `export-subst` also change archived
+    bytes, and none is set in this tree's `.gitattributes` today."""
     context = work / "context"
     context.mkdir()
     archive = subprocess.run(
-        ["git", "archive", "--format=tar", "HEAD"], cwd=REPO_ROOT, capture_output=True, check=True
+        [
+            "git",
+            "-c",
+            "core.autocrlf=false",
+            "-c",
+            "core.eol=lf",
+            "archive",
+            "--format=tar",
+            "HEAD",
+        ],
+        cwd=root,
+        capture_output=True,
+        check=True,
     ).stdout
     with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
         tar.extractall(context, filter="data")
@@ -207,6 +233,12 @@ def image_checks(work: Path) -> dict[str, bool]:
         path = context / decoy
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("PRIVATE DECOY: must not reach the image\n", encoding="utf-8")
+    return context
+
+
+def image_checks(work: Path) -> dict[str, bool]:
+    results: dict[str, bool] = {}
+    context = build_context(work)
 
     # The build context as Docker itself sees it, after .dockerignore. The
     # image below only COPYs what it names, so a loosened .dockerignore would

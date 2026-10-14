@@ -7,7 +7,7 @@ notes: A US government work, so freely redistributable. Bundled with this projec
   to commit to any repository.
 source_ref: '2026-09-17'
 source_url: https://www.ecfr.gov/api/versioner/v1/full/2026-09-17/title-45.xml?part=164
-content_sha256: bd23022fe3f117588edaffb6289e262777e531103829bdb39ac04c74e3167f15
+content_sha256: f1037781db48c0ce6d4e6bd05250c8624c672663d1c3d600f579d44da867b679
 fetched_at: '2026-09-25'
 # The unit the regulation names as a requirement, for document reach (80's
 # ruling on #423): a standard. The catalog carries it as structure, each
@@ -27,3 +27,9 @@ family_overrides:
 # and its specification, so (d) is its own family.
 structure_only:
   - 164.306(d)
+# Below a leaf (an id the catalog doesn't subdivide), a cited part stands only
+# when the leaf's own text lists it as a list item (441; 80's 6235 rule 2 on
+# #438). Switched on per catalog, with what it rests on.
+leaf_parts: listed
+leaf_parts_measured: >-
+  2026-10-12 at release/1.8 937b6df5, with the loader fix that keeps a continuation paragraph's marker (441): 73 of 74 ids are leaves; in tests/fixtures/ecfr_45cfr164_subpart_c.xml, which parses to this catalog, all 26 paragraphs whose text joins a leaf keep their marker where the check reads it; the committed corpus and the user's fresh-corpus run (431 files, 2,517 distinct citations): 0 turned red

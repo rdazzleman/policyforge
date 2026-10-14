@@ -63,6 +63,17 @@ rows name a licensed framework, by the parsers' own `FRAMEWORK` constants
 (b5 on #35): a catalog written before #10 has no envelope, and a user's own
 HITRUST export dropped into `data/frameworks/` is the ordinary accident.
 
+ONE IMPLEMENTATION OF EACH CONTENT LAYER (80's ruling on #237). L2 to L4
+also run on a downloaded release archive: `release_check`'s assertion 5
+reads the artefact users get, after publishing. So the layers are a core
+over CONTENTS, never a copy beside the original: `scan_contents` is L3 and
+L4 over `(path, bytes)` pairs, and `check_blobs` is L2 over blob ids.
+`check_content` feeds the core blobs read through `git cat-file`.
+`check_files` feeds it an archive's members, computing each one's git blob
+id from its bytes, so a byte-identical copy matches whatever it is called.
+`reference` derives what the layers compare against, once for both callers,
+and refuses an empty derivation.
+
 THE FORMAT HINTS ARE NOT MARKERS. The user ruled that format knowledge
 (SSRS textbox headers, caption conventions, level-label shapes) stays
 public in `generate-parser` (#32, comment 501). Keying on it would refuse
@@ -80,6 +91,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import hashlib
 import json
 import re
 import subprocess
@@ -93,6 +105,39 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 #: from this tool's own checkout, never from the tree being checked.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from licensed_modules import LICENSED_MODULES, LICENSED_PATHS, MODULE_DIR  # noqa: E402
+
+
+def _schema():
+    """This checkout's own `ingest/schema.py`, by file path (#320): the one
+    licence rule, from the tool's checkout and never from the tree being
+    checked, as `licensed_modules` is read. It imports only the standard
+    library, so no install is needed."""
+    import importlib.util
+
+    path = Path(__file__).resolve().parent.parent / "src" / "policyforge" / "ingest" / "schema.py"
+    spec = importlib.util.spec_from_file_location("_publish_guard_schema", path)
+    module = importlib.util.module_from_spec(spec)
+    # Registered before it runs: its dataclasses look their module up there.
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+_SCHEMA = _schema()
+
+
+def _licensed_envelope(data: dict) -> bool:
+    """L4's licence test (#320). An envelope (an object with a `controls`
+    list, `parse_catalog`'s own definition) is judged by `is_licensed`, fail
+    closed: `Licensed`, `licenced` or the key `license` all count. Any other
+    object counts when its licence names a licensed spelling (`licen...`,
+    any case), not merely any value: a `package.json`'s `"license": "MIT"`
+    is not a catalog."""
+    licence = _SCHEMA.envelope_licence(data)
+    if isinstance(data.get("controls"), list):
+        return _SCHEMA.is_licensed(licence)
+    return licence.strip().casefold().startswith("licen")
+
 
 #: An import of a licensed module, in code or in a string (monkeypatch
 #: targets and generated-code templates import by dotted text too).
@@ -290,6 +335,18 @@ def check_paths(commits: list[str], root: Path) -> list[Finding]:
     ]
 
 
+def blob_id(data: bytes) -> str:
+    """The git object id of a blob holding `data`, as `git hash-object` gives
+    it in this SHA-1 repository: how L2 knows an archive member that never
+    passed through git."""
+    header = b"blob %d\0" % len(data)
+    # SHA-1 because it is git's object id in this repository, to be compared with
+    # git's own ids, not a security choice.
+    # nosemgrep: python.lang.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
+    digest = hashlib.sha1(header + data, usedforsecurity=False)  # nosec B324
+    return digest.hexdigest()
+
+
 def check_blobs(blobs: dict[str, str], forbidden: set[str]) -> list[Finding]:
     return [
         Finding("L2 blob", f"{oid[:12]} at {path}", "byte-identical to a licensed parser's blob")
@@ -385,15 +442,25 @@ def _licensed_rows(data: object, frameworks: set[str]) -> set[str]:
 def check_content(
     blobs: dict[str, str], names: set[str], root: Path, frameworks: set[str] = frozenset()
 ) -> list[Finding]:
+    """L3 and L4 over git blobs ({blob id: path}), read in one `cat-file` pass."""
+    contents = _read_blobs(list(blobs), root)
+    return scan_contents(
+        [(path, contents.get(oid, b"")) for oid, path in blobs.items()], names, frameworks
+    )
+
+
+def scan_contents(
+    files: list[tuple[str, bytes]], names: set[str], frameworks: set[str] = frozenset()
+) -> list[Finding]:
+    """L3 and L4 over `(path, bytes)` pairs: the one implementation, whoever
+    supplies the bytes."""
     definitions = (
         re.compile(rf"^\s*(?:def|class)\s+({'|'.join(map(re.escape, sorted(names)))})\b", re.M)
         if names
         else None
     )
     findings = []
-    contents = _read_blobs(list(blobs), root)
-    for oid, path in blobs.items():
-        raw = contents.get(oid, b"")
+    for path, raw in files:
         if b"\0" not in raw[:8000]:
             text = raw.decode("utf-8", errors="replace")
             if m := _IMPORT.search(text):
@@ -409,7 +476,7 @@ def check_content(
                 data = json.loads(raw)
             except ValueError:
                 continue
-            if isinstance(data, dict) and data.get("licence") == "licensed":
+            if isinstance(data, dict) and _licensed_envelope(data):
                 findings.append(Finding("L4 data", path, "a licensed catalog envelope (#10)"))
             elif named := _licensed_rows(data, frameworks):
                 # b5 on #35: a catalog written before #10 carries no envelope,
@@ -425,23 +492,25 @@ def check_content(
     return findings
 
 
-def guard(candidate: str, base: str | None, source: str, root: Path = REPO_ROOT) -> list[Finding]:
-    """Every finding for a push of `candidate` over `base`; raises NothingToCheck."""
-    commits = range_commits(candidate, base, root)
-    if not commits:
-        raise NothingToCheck(f"{base}..{candidate} holds no commit: nothing would be published")
+@dataclass(frozen=True)
+class Reference:
+    """What L2 to L4 compare against, derived from a source's history."""
+
+    blobs: frozenset[str]
+    names: frozenset[str]
+    frameworks: frozenset[str]
+
+
+def reference(source: str, root: Path = REPO_ROOT) -> Reference:
+    """The content layers' reference set from `source`'s history; raises
+    NothingToCheck when the ref is unknown or any part comes back empty: a
+    derivation that found nothing is not a pass."""
     forbidden = licensed_blobs(source, root)
     if not forbidden:
         raise NothingToCheck(
             f"source {source!r} carries none of {', '.join(LICENSED_PATHS)}: the guard would "
             "have nothing to compare against. Name the ref that still holds the parsers."
         )
-    # P's whole TREE as well as the objects the push adds (1d, reviewing #37):
-    # `rev-list P ^B` leaves out anything already reachable from B, and B is
-    # 1.6.1, which carries the HITRUST parsers. A byte-identical renamed copy
-    # of one was therefore scanned by no layer and passed as "clean", while
-    # P's tree, which becomes public main, carried the parser's code.
-    blobs = {**tree_blobs(candidate, root), **range_blobs(candidate, base, root)}
     names = licensed_only_names(source, root)
     if not names:
         # The floor under L3 (9b on #35): a derivation that found nothing is
@@ -456,10 +525,38 @@ def guard(candidate: str, base: str | None, source: str, root: Path = REPO_ROOT)
             f"no licensed framework names (FRAMEWORK constants) could be derived from "
             f"{source!r}'s history, so L4 could not recognise an unmarked catalog."
         )
+    return Reference(frozenset(forbidden), frozenset(names), frozenset(frameworks))
+
+
+def check_files(files: list[tuple[str, bytes]], ref: Reference) -> list[Finding]:
+    """L2 to L4 over `(path, bytes)` pairs that never passed through git (a
+    downloaded archive's members, #237): L2 by each one's computed blob id,
+    and L3 and L4 by `scan_contents`, the implementations `guard` uses."""
+    ids: dict[str, str] = {}
+    for path, raw in files:
+        ids.setdefault(blob_id(raw), path)
+    return [
+        *check_blobs(ids, set(ref.blobs)),
+        *scan_contents(files, set(ref.names), set(ref.frameworks)),
+    ]
+
+
+def guard(candidate: str, base: str | None, source: str, root: Path = REPO_ROOT) -> list[Finding]:
+    """Every finding for a push of `candidate` over `base`; raises NothingToCheck."""
+    commits = range_commits(candidate, base, root)
+    if not commits:
+        raise NothingToCheck(f"{base}..{candidate} holds no commit: nothing would be published")
+    ref = reference(source, root)
+    # P's whole TREE as well as the objects the push adds (1d, reviewing #37):
+    # `rev-list P ^B` leaves out anything already reachable from B, and B is
+    # 1.6.1, which carries the HITRUST parsers. A byte-identical renamed copy
+    # of one was therefore scanned by no layer and passed as "clean", while
+    # P's tree, which becomes public main, carried the parser's code.
+    blobs = {**tree_blobs(candidate, root), **range_blobs(candidate, base, root)}
     return [
         *check_paths(commits, root),
-        *check_blobs(blobs, forbidden),
-        *check_content(blobs, names, root, frameworks),
+        *check_blobs(blobs, set(ref.blobs)),
+        *check_content(blobs, set(ref.names), root, set(ref.frameworks)),
     ]
 
 

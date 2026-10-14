@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 
+from ..config import ProviderSetupError
 from .base import LLMProvider, LLMResponse
 
 
@@ -18,7 +19,7 @@ class AnthropicProvider(LLMProvider):
         self.api_key_env = api_key_env
         api_key = os.environ.get(api_key_env)
         if not api_key:
-            raise RuntimeError(
+            raise ProviderSetupError(
                 f"Environment variable {api_key_env} is not set. "
                 f"Export your Anthropic API key before running policyforge, e.g.:\n"
                 f"  export {api_key_env}=sk-ant-..."

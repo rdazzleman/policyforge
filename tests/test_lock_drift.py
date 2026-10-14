@@ -126,24 +126,6 @@ def test_a_lock_with_no_pins_is_nothing_to_compare_not_a_pass():
         lock_drift.classify(lock_drift.pins("# only comments\n"), _have(), LINUX)
 
 
-def _semgrep_says(monkeypatch, stdout):
-    def fake(cmd, **kwargs):
-        return subprocess.CompletedProcess(cmd, 0, stdout=stdout, stderr="")
-
-    monkeypatch.setattr(lock_drift.subprocess, "run", fake)
-
-
-def test_semgreps_version_is_read_under_its_update_notice(monkeypatch):
-    _semgrep_says(monkeypatch, "A new version of Semgrep is available.\n1.174.0\n")
-    assert lock_drift.semgrep_version("semgrep") == "1.174.0"
-
-
-def test_an_unreadable_semgrep_version_is_refused(monkeypatch):
-    _semgrep_says(monkeypatch, "")
-    with pytest.raises(lock_drift.NothingToCompare, match="version"):
-        lock_drift.semgrep_version("semgrep")
-
-
 # --- through main(), the path check.py takes ---------------------------------
 
 
@@ -151,10 +133,7 @@ def test_an_unreadable_semgrep_version_is_refused(monkeypatch):
 def world(tmp_path, monkeypatch):
     ci = tmp_path / "ci.txt"
     ci.write_text(LOCK, encoding="utf-8")
-    sg = tmp_path / "semgrep.txt"
-    sg.write_text("semgrep==1.177.0 \\\n    --hash=sha256:dddd\n", encoding="utf-8")
     monkeypatch.setattr(lock_drift, "CI_LOCK", ci)
-    monkeypatch.setattr(lock_drift, "SEMGREP_LOCK", sg)
     monkeypatch.setattr(lock_drift, "installed", _have)
     real_classify = lock_drift.classify
     monkeypatch.setattr(
@@ -177,17 +156,6 @@ def test_main_names_each_drift_and_exits_1(world, monkeypatch, capsys):
     out = capsys.readouterr().out
     assert "DIFFERENT  anthropic  lock 1.7.0, installed 0.125.0" in out
     assert "MISSING    pydantic-core  lock 2.46.5" in out
-
-
-def test_main_refuses_a_semgrep_other_than_the_locked_one(world, monkeypatch, capsys):
-    _semgrep_says(monkeypatch, "1.174.0\n")
-    assert lock_drift.main(["--semgrep", "semgrep"]) == 1
-    assert "semgrep: lock 1.177.0, the gate's 1.174.0: DIFFERENT" in capsys.readouterr().out
-
-
-def test_main_passes_the_locked_semgrep(world, monkeypatch, capsys):
-    _semgrep_says(monkeypatch, "1.177.0\n")
-    assert lock_drift.main(["--semgrep", "semgrep"]) == 0
 
 
 def test_main_exits_2_on_an_empty_lock(world, capsys):
@@ -280,7 +248,7 @@ def test_no_python_tool_in_the_gate_is_run_by_bare_name():
         first = cmd.elts[0] if isinstance(cmd, ast.List) and cmd.elts else None
         if isinstance(first, ast.Attribute) and ast.unparse(first) == "sys.executable":
             continue
-        if isinstance(first, ast.Name):  # a resolved path, e.g. find_semgrep()'s
+        if isinstance(first, ast.Name):  # a resolved path
             continue
         if isinstance(first, ast.Constant) and first.value in not_python:
             continue
@@ -296,50 +264,33 @@ def test_check_runs_the_drift_check_first():
     assert body[first:].startswith('"environment matches CI\'s locks"')
 
 
-def test_a_worktree_finds_semgrep_in_the_main_checkouts_tools(tmp_path, monkeypatch):
-    """#46's re-sync moves semgrep out of the shared venv into the shared
-    clone's .tools/semgrep. Every session gates in its own worktree, whose
-    REPO_ROOT has no .tools/, so without looking in the main checkout each
-    gate would skip semgrep: an unacknowledged skip, exit 1, for everyone."""
-    import os
-    import shutil
+def test_unallowed_extras_are_refused():
+    have = _have(pypdf="6.16.2")
+    report = lock_drift.classify(lock_drift.pins(LOCK), have, LINUX)
+    assert not report.ok
+    assert "pypdf" in report.unallowed
 
-    main = tmp_path / "main"
-    main.mkdir()
-    subprocess.run(["git", "init", "-q", "-b", "main", str(main)], check=True)
-    subprocess.run(
-        [
-            "git",
-            "-C",
-            str(main),
-            "-c",
-            "user.name=t",
-            "-c",
-            "user.email=t@invalid",
-            "commit",
-            "-q",
-            "--allow-empty",
-            "-m",
-            "root",
-        ],
-        check=True,
-    )
-    tree = tmp_path / "wt"
-    subprocess.run(
-        ["git", "-C", str(main), "worktree", "add", "-q", "--detach", str(tree)], check=True
-    )
-    scripts = "Scripts" if os.name == "nt" else "bin"
-    exe = main / ".tools" / "semgrep" / scripts / ("semgrep.exe" if os.name == "nt" else "semgrep")
-    exe.parent.mkdir(parents=True)
-    shutil.copy(sys.executable, exe)
 
-    check = _check_module()
-    monkeypatch.setattr(check, "REPO_ROOT", tree)
-    real_which = shutil.which  # captured BEFORE patching: the fake must not call itself
+def test_allowed_extras_are_not_refused():
+    have = _have(uv="0.12.18", policyforge="1.7.0")
+    report = lock_drift.classify(lock_drift.pins(LOCK), have, LINUX)
+    assert report.ok, report.unallowed
+    assert {"uv", "policyforge"} <= set(report.unlocked)
+    assert report.unallowed == []
 
-    def which(name, path=None):
-        return real_which(name, path=path) if path is not None else None  # nothing on PATH
 
-    monkeypatch.setattr(check.shutil, "which", which)
-    found = check.find_semgrep()
-    assert found and Path(found).resolve() == exe.resolve(), found
+def test_the_pip_gh_package_is_refused_not_allowed():
+    """`gh` from pip shadows GitHub CLI; it is an EXTRA to remove (#116)."""
+    report = lock_drift.classify(lock_drift.pins(LOCK), _have(gh="2.40.1"), LINUX)
+    assert not report.ok and report.unallowed == ["gh"]
+
+
+def test_an_extra_is_named_with_the_command_that_removes_it(world, monkeypatch, capsys):
+    """ba on #170: the printed remedy only re-installed the lock, which can't
+    remove an EXTRA. It now names `pip uninstall` with the extras, and only them."""
+    monkeypatch.setattr(lock_drift, "installed", lambda: _have(pypdf="6.16.2", uv="0.12.18"))
+    assert lock_drift.main([]) == 1
+    out = capsys.readouterr().out
+    assert "EXTRA      pypdf" in out
+    removal = out.split("pip uninstall -y ", 1)[1].splitlines()[0]
+    assert removal == "pypdf", removal

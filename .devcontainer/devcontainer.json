@@ -1,6 +1,7 @@
 {
   // Opens this repository in the environment CI uses: Linux, Python 3.12,
-  // dependencies from the hashed locks, semgrep in its own environment.
+  // dependencies from the hashed locks. semgrep runs from its pinned image
+  // (scripts/semgrep_gate.py), which needs Docker, so the gate skips it here.
   // See CONTRIBUTING.md ("Working in the dev container").
   "name": "PolicyForge (Linux, Python 3.12)",
   "build": { "dockerfile": "Dockerfile" },
@@ -8,7 +9,7 @@
 
   // Inline rather than a post-create.sh: a shell script checked out with
   // Windows line endings fails with "\r: command not found".
-  "postCreateCommand": "python -m venv /opt/venv && pip install --require-hashes -r requirements/ci.txt && pip install --no-deps -e . && python -m venv /opt/semgrep && /opt/semgrep/bin/pip install --require-hashes -r requirements/semgrep/semgrep.txt && git config --global --add safe.directory ${containerWorkspaceFolder}",
+  "postCreateCommand": "python -m venv /opt/venv && pip install --require-hashes -r requirements/ci.txt && pip install --require-hashes --only-binary :all: -r requirements/build.txt && pip install --no-deps --no-build-isolation -e . && git config --global --add safe.directory ${containerWorkspaceFolder}",
 
   "customizations": {
     "vscode": {

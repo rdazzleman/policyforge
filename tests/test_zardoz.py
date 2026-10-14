@@ -214,9 +214,9 @@ def test_ctrl_c_cancels_the_line_but_does_not_end_the_session():
 
 
 def test_zardoz_cannot_reach_the_confluence_publish_path():
-    """Zardoz is read-plus-propose: it may draft a `policyforge edit-topic`
-    command, but the write goes through that command's own gates (dry run by
-    default, macro refusal, citation checks, confirmation).
+    """Zardoz reads; a change to a page is `policyforge edit-topic`'s, run by
+    a person, through that command's own gates (dry run by default, macro
+    refusal, citation checks, confirmation).
 
     Asserted against the package source rather than trusted to review, so
     that wiring a publish call in here fails a test rather than quietly
@@ -373,3 +373,95 @@ def test_every_call_a_turn_makes_is_recorded_against_its_question(tmp_path):
 
 def test_each_session_has_its_own_id():
     assert ShellState().session_id != ShellState().session_id
+
+
+# ---- leaving the shell: Ctrl-D and piped input (#389) -----------------------
+
+
+def _shell(tmp_path, monkeypatch, *, input: str, answer: str = "Reviews are quarterly. [1]"):
+    """`policyforge zardoz` over a synced one-document corpus, a fake model,
+    and `input` as everything typed or piped in."""
+    import policyforge.cli.zardoz as zardoz_cli
+    from policyforge.cli import cli
+    from policyforge.zardoz.corpus import sync_corpus
+    from tests.test_edit import _registry
+    from tests.test_one_boundary_decision import Fake
+
+    content = tmp_path / "docs" / "standards"
+    content.mkdir(parents=True)
+    (content / "access-review-standard.md").write_text(
+        "---\ntitle: Access Review Standard\ntier: standard\nowner: IAM\n---\n\n"
+        "## 1. Reviews\n\nAccess is reviewed quarterly by the system owner.\n",
+        encoding="utf-8",
+    )
+    sync_corpus([], content_dir=tmp_path / "docs", corpus_dir=tmp_path / "corpus")
+    fake = Fake(answer=answer)
+    monkeypatch.setattr(zardoz_cli, "load_config_or_empty", lambda: {})
+    monkeypatch.setattr(zardoz_cli, "get_provider", lambda config: fake)
+    monkeypatch.chdir(tmp_path)
+    result = CliRunner().invoke(
+        cli,
+        [
+            "zardoz",
+            "--no-art",
+            "--plain",
+            "--topics",
+            str(_registry(tmp_path)),
+            "--corpus-dir",
+            str(tmp_path / "corpus"),
+        ],
+        input=input,
+    )
+    return result, fake
+
+
+def test_the_end_of_input_leaves_the_shell_cleanly(tmp_path, monkeypatch):
+    """Ctrl-D, or input that simply ends, is how a person says "done". It
+    printed "Aborted!" and exited 1, so a clean exit read as a failure."""
+    result, _ = _shell(tmp_path, monkeypatch, input="")
+
+    assert result.exit_code == 0, result.output
+    assert "Aborted!" not in result.output
+    assert "Exiting." in result.output
+
+
+def test_piped_questions_are_each_answered_then_the_shell_exits_zero(tmp_path, monkeypatch):
+    result, fake = _shell(
+        tmp_path,
+        monkeypatch,
+        input="Who reviews access?\nWho reviews access quarterly?\n",
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "Aborted!" not in result.output
+    assert result.output.count("Reviews are quarterly.") == 2
+    asked = [p for p in fake.prompts if "reviewed quarterly by the system owner" in p]
+    assert len(asked) == 2, "each question reached the model with its passage"
+    assert result.output.rstrip().endswith("Exiting.")
+
+
+def test_ctrl_c_still_abandons_the_line_and_does_not_leave(monkeypatch):
+    """The read raises Ctrl-C as itself now, not as click's Abort, so the
+    shell keeps its rule: Ctrl-C drops the line, Ctrl-D leaves."""
+    from click import termui
+
+    import policyforge.cli.zardoz as zardoz_cli
+    from policyforge.zardoz.shell import ShellState, run_shell
+
+    keys = iter([KeyboardInterrupt, "/help", EOFError])
+
+    def typed(prompt):
+        key = next(keys)
+        if isinstance(key, type):
+            raise key
+        return key
+
+    monkeypatch.setattr(termui, "visible_prompt_func", typed)
+    written: list[str] = []
+    state = ShellState(plain=True)
+
+    run_shell(state, read=zardoz_cli._read_line, write=written.append)
+
+    assert "(Use /quit to exit.)" in written
+    assert any("/topics" in w for w in written), "the line after Ctrl-C was still read"
+    assert written[-1] == "Exiting."

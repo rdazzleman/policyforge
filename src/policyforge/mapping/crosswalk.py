@@ -317,7 +317,17 @@ NIST_ANCHOR = "nist-800-53"
 #: topic can fail to own. That is a real report rather than a regression,
 #: but it must be read as one -- the report names the catalogs in scope for
 #: exactly that reason.
-TOPIC_ANCHORS: frozenset[str] = frozenset({NIST_ANCHOR, "nist-ai-rmf"})
+#:
+#: **The HIPAA Privacy and Breach Notification Rules joined on 2026-10-11**
+#: (#420; the user said they are in scope, to 80 on 2026-10-10). NIST
+#: publishes no 800-53 mapping for either, so before this a registry could
+#: not own a requirement of theirs at all: a topic anchoring `164.502` was
+#: reported as an unknown anchor, and `/coverage` reached 0 of 881 and 0 of
+#: 38. Like the AI RMF they are anchorable but optional, so a registry that
+#: anchors neither never sees them in its denominator (`adopted_frameworks`).
+TOPIC_ANCHORS: frozenset[str] = frozenset(
+    {NIST_ANCHOR, "nist-ai-rmf", "hipaa-privacy", "hipaa-breach"}
+)
 
 #: The value `ANCHOR_DECISIONS` gives a catalog that topics may anchor.
 ANCHORS = "anchors"
@@ -361,15 +371,11 @@ ANCHOR_DECISIONS: dict[str, str] = {
         "no published mapping was found (#264); reached only through a crosswalk an "
         "organisation seeds"
     ),
-    "hipaa-privacy-rule": (
-        "no published mapping to 800-53 (#409): the Privacy Rule governs uses and "
-        "disclosures, not security controls; reached only through a crosswalk an "
-        "organisation seeds (80, on #409)"
-    ),
-    "hipaa-breach-notification-rule": (
-        "no published mapping to 800-53 (#409); reached only through a crosswalk an "
-        "organisation seeds (80, on #409)"
-    ),
+    # No published mapping to 800-53 exists for either (#409), so a topic owns
+    # these by anchoring their own ids, a section at a time: every paragraph is
+    # an enhancement of its section's control (#420).
+    "hipaa-privacy-rule": ANCHORS,
+    "hipaa-breach-notification-rule": ANCHORS,
     "nist-csf-2-0": (
         "outcomes, like the AI RMF Core's, reached through NIST's own mapping to 800-53 "
         "(OLIR 186), whose links read as partial; a topic anchors the 800-53 controls "
@@ -462,6 +468,9 @@ def requirement_crosswalk(controls: list[Control]) -> dict[str, dict[str, list[s
 
 
 def build_crosswalk(controls: list[Control]) -> dict[str, dict[str, list[str]]]:
+    # Imported here: `topics.anchoring` imports this module.
+    from policyforge.topics.anchoring import canonical_anchor
+
     crosswalk: dict[str, dict[str, list[str]]] = {}
 
     for control in controls:
@@ -492,7 +501,12 @@ def build_crosswalk(controls: list[Control]) -> dict[str, dict[str, list[str]]]:
             nist_ids: dict[str, None] = {}
             for key, raw in source_crosswalk.items():
                 if _is_nist(key):
-                    nist_ids.update(dict.fromkeys(_extract_ids(raw)))
+                    # In 800-53's own spelling, the rule topic anchors are
+                    # read in by (#188): a catalog of the organization's
+                    # own that writes `ac-3` maps onto `AC-3`. Without it,
+                    # drift and parameters had reached it only by
+                    # upper-casing both sides (9b on #212).
+                    nist_ids.update(dict.fromkeys(canonical_anchor(i) for i in _extract_ids(raw)))
             for nist_id in nist_ids:
                 ids = crosswalk.setdefault(nist_id, {}).setdefault(framework, [])
                 if requirement_id not in ids:
@@ -509,7 +523,7 @@ def build_crosswalk(controls: list[Control]) -> dict[str, dict[str, list[str]]]:
         framework = normalize_framework(control.framework)
         for requirement_id, mappings in _requirement_sources(control):
             for nist_id in mappings.get(NIST_ANCHOR, []):
-                for anchor in _extract_ids(nist_id):
+                for anchor in map(canonical_anchor, _extract_ids(nist_id)):
                     ids = crosswalk.setdefault(anchor, {}).setdefault(framework, [])
                     if requirement_id not in ids:
                         ids.append(requirement_id)

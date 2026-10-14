@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "policyforge"
-version = "1.7.0"
+version = "1.8.0"
 description = "Cross-mapped compliance policy/standard/procedure generation from NIST 800-53, FedRAMP, ARC-AMPE, the HIPAA Security Rule, and (BYOC) HITRUST/GovRAMP."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -32,10 +32,14 @@ dependencies = [
 # No semgrep here. It pins its own dependencies exactly (click, jsonschema,
 # mcp, opentelemetry-*, pywin32 ...), and as a dev extra those pins became
 # this project's pins: every Dependabot bump of one of them could never
-# install. It runs from its own lock instead, requirements/semgrep/, in its
-# own environment — see CONTRIBUTING.md.
+# install. It runs from one container image pinned by digest instead
+# (scripts/semgrep_gate.py's SEMGREP_IMAGE) — see CONTRIBUTING.md.
 dev = [
     "pytest>=8.0",
+    # Runs the suite on every core (#86); the gate and CI both pass -n auto.
+    "pytest-xdist>=3.8",
+    # Selects the tests a change affects, from data the batch gate records (#291).
+    "pytest-testmon>=2.2",
     "bandit[toml]>=1.8",
     "pip-audit>=2.7",
     "pre-commit>=4.0",

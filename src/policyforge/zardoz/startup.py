@@ -124,7 +124,14 @@ def open_session(
         except (KeyError, ValueError, RuntimeError) as exc:
             entail_note = f"entailment is on but its judge could not be built ({exc})"
 
-    configured_content = (config.get("zardoz") or {}).get("content_dir") or ""
+    # A tree the config NAMES stays the configured path whether or not it
+    # exists, so a typo says "No content tree at custm" rather than being read
+    # as unset and answered from `docs/`. Only the default is asked whether
+    # it is there.
+    from .corpus import content_tree
+
+    content_named = bool((config.get("zardoz") or {}).get("content_dir"))
+    configured_content = content_tree(config)
 
     notes = [note for note in (registry_note, corpus_note) if note]
     if provider_note:
@@ -135,6 +142,14 @@ def open_session(
         notes.append("  (entailment checking on — one extra model call per cited sentence)")
     if corpus is not None and corpus.is_stale:
         notes.append(f"  (this snapshot is {corpus.age_days:.0f} days old — re-sync, then /reload)")
+    if corpus is not None and not corpus.classes_recorded:
+        # #327: a snapshot synced before content classes were kept reads every
+        # document as the organization's own, so a licensed-stamped one could
+        # reach a model its class would refuse. Said until it is re-synced.
+        notes.append(
+            "  (this snapshot predates content classes: a document stamped licensed is "
+            "read as the organization's own until you re-sync, then /reload)"
+        )
 
     state = ShellState(
         topics=topics,
@@ -143,13 +158,19 @@ def open_session(
         corpus_dir=corpus_dir,
         provider=provider,
         provider_note=provider_note,
+        # The judge built above. It was built, and the note below said
+        # "entailment checking on", but it never reached the state, so no
+        # answer was ever judged (#388, 80's ruling: make the note true). Its
+        # calls go through `entailment_provider`'s wrapper, under the same
+        # content-class scope as the answer, so the boundary decides them too.
+        entailer=entailer,
         # What the analyses read. Paths rather than loaded data: a shell
         # opened to ask one question should not pay to parse a thousand
         # controls it may never look at.
         config=config,
         parameters_path=Path("config/parameters.yaml"),
         history_dir=history_dir,
-        content_dir=Path(configured_content) if configured_content else None,
+        content_dir=configured_content if content_named or configured_content.exists() else None,
         surface=surface,
         startup_notes=list(notes),
     )

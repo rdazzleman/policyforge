@@ -12,7 +12,8 @@ provider only needs a region and a model ID.
 
 from __future__ import annotations
 
-from .base import LLMProvider, LLMResponse
+from ..config import ProviderSetupError
+from .base import LLMProvider, LLMResponse, recordable_endpoint
 
 
 def _is_rejection(exc: BaseException) -> bool:
@@ -51,7 +52,7 @@ class BedrockProvider(LLMProvider):
         try:
             import boto3
         except ImportError as exc:
-            raise RuntimeError(
+            raise ProviderSetupError(
                 "The 'boto3' package is required for the bedrock provider. "
                 'Install it with: pip install "policyforge[bedrock]"'
             ) from exc
@@ -100,6 +101,11 @@ class BedrockProvider(LLMProvider):
             stop_reason=response.get("stopReason"),
             cached_input_tokens=usage.get("cacheReadInputTokens"),
             request_id=(response.get("ResponseMetadata") or {}).get("RequestId"),
+            # The endpoint boto3 resolved for this client (#328), overrides
+            # such as AWS_ENDPOINT_URL included.
+            endpoint=recordable_endpoint(
+                getattr(getattr(self._client, "meta", None), "endpoint_url", None)
+            ),
         )
 
     def check(self) -> bool:

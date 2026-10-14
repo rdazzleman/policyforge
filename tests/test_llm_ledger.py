@@ -404,11 +404,30 @@ def test_the_ledger_is_on_unless_config_turns_it_off():
     assert not ledger.ledger_enabled({"llm": {"ledger": {"enabled": False}}})
 
 
-def test_wrapping_is_skipped_when_it_is_turned_off():
-    inner = FakeProvider()
-    config = {"llm": {"provider": "anthropic", "ledger": {"enabled": False}}}
+def test_turned_off_the_ledger_records_nothing_but_the_boundary_still_decides(
+    tmp_path, monkeypatch
+):
+    """#327. This test used to assert `wrap` returned the bare provider when
+    the ledger was off. The boundary decision now lives in the wrapper, so
+    the bare provider meant no check at all: turning off a RECORD turned off
+    a CONTROL. Off now means: decided, not written down."""
+    from policyforge.llm.boundary import BoundaryViolation
 
-    assert ledger.wrap(inner, config) is inner
+    monkeypatch.chdir(tmp_path)
+    inner = FakeProvider()
+    path = tmp_path / "calls.jsonl"
+    config = {"llm": {"provider": "anthropic", "ledger": {"enabled": False, "path": str(path)}}}
+
+    wrapped = ledger.wrap(inner, config)
+    wrapped.generate(system="S", prompt="P")
+    with (
+        ledger.about("x", content_class="licensed"),
+        pytest.raises(BoundaryViolation, match="licensed content -> third-party"),
+    ):
+        wrapped.generate(system="S", prompt="licensed text")
+
+    assert not path.exists() and not (tmp_path / "output").exists(), "nothing recorded"
+    assert len(inner.calls) == 1, "the licensed call never reached the provider"
 
 
 def test_wrapping_carries_the_provider_class_from_the_boundary(tmp_path):

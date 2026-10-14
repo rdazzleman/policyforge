@@ -39,7 +39,7 @@ beginning with a digit is not a tag at all, which is what made `45 CFR 171` and 
 
 **Do not run `etl-hitrust` on an AI export.** (`etl-hitrust` is part of the
 licensed-framework plugin, which is distributed separately from the public
-PolicyForge.) That command hardcodes
+PolicyForge (to ask for it, email [info@zardoz.io](mailto:info@zardoz.io?subject=PolicyForge%20licensed-framework%20plugin)).) That command hardcodes
 `FRAMEWORK = "HITRUST-CSF"` and stamps it on whatever it is given, so an
 AI export parsed through it arrives labelled as CSF content. Worse, a CSF
 export and an AI export both come out under one framework name, and their

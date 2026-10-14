@@ -36,7 +36,7 @@ from markdown_it import MarkdownIt
 from markdown_it.renderer import RendererHTML
 from mdit_py_plugins.gfm import gfm_plugin
 
-from ._confluence_auth import API_CONTENT_PATH, confluence_auth
+from ._confluence_auth import API_CONTENT_PATH, confluence_auth, reports_as_confluence
 
 
 class _ConfluenceRenderer(RendererHTML):
@@ -65,9 +65,60 @@ class _ConfluenceRenderer(RendererHTML):
 
 def markdown_to_confluence(markdown_text: str) -> str:
     """Convert already-generated canonical markdown to Confluence storage
-    format (XHTML-based). Does not touch the LLM or regenerate content."""
+    format (XHTML-based). Does not touch the LLM or regenerate content.
+
+    **A Standard's source blocks become the `expand` macro** (#17, part 2b;
+    80's 6048), titled with the block's summary (`Source: NIST 800-53 (2)`),
+    with the block's own markdown rendered inside it. Without this a
+    `<details>` block reached the page as raw HTML. `confluence_importer`
+    turns the macro back into a block. A block that lost its close is left
+    as it is, and `check` names it."""
     md = MarkdownIt("commonmark", renderer_cls=_ConfluenceRenderer).use(gfm_plugin)
-    return md.render(markdown_text)
+    return _render_with_expand(md, markdown_text)
+
+
+def _expand_macro(title: str, body_html: str) -> str:
+    from html import escape
+
+    return (
+        '<ac:structured-macro ac:name="expand">'
+        f'<ac:parameter ac:name="title">{escape(title, quote=False)}</ac:parameter>'
+        f"<ac:rich-text-body>{body_html}</ac:rich-text-body>"
+        "</ac:structured-macro>\n"
+    )
+
+
+def _render_with_expand(md: MarkdownIt, text: str) -> str:
+    from policyforge.content.sources import SUMMARY_RE, source_block_spans
+
+    spans = source_block_spans(text)
+    if not spans:
+        return md.render(text)
+    # A placeholder paragraph per block, swapped for its macro after the
+    # rest renders; chosen so it can't already be in the document.
+    marker = "PFSOURCEBLOCK"
+    while marker in text:
+        marker += "X"
+    lines = text.split("\n")
+    out: list[str] = []
+    macros: list[str] = []
+    previous = 0
+    for start, end in spans:
+        out += lines[previous:start]
+        summary = SUMMARY_RE.match(lines[start + 1].strip()) if start + 1 < end else None
+        title = summary.group("title") if summary else "Source"
+        inner = "\n".join(lines[(start + 2 if summary else start + 1) : end])
+        macros.append(_expand_macro(title, md.render(inner)))
+        out += ["", f"{marker}{len(macros) - 1}Z", ""]
+        previous = end + 1
+    out += lines[previous:]
+    html = md.render("\n".join(out))
+    # Each placeholder is a paragraph of its own: blank lines surround it, and
+    # `source_block_spans` takes no block from inside a fence, the one place
+    # it could be read as something else (b5 on PR 431).
+    for index, macro in enumerate(macros):
+        html = html.replace(f"<p>{marker}{index}Z</p>\n", macro)
+    return html
 
 
 #: Stamped into the version message of every page this tool writes. It is how
@@ -76,7 +127,17 @@ def markdown_to_confluence(markdown_text: str) -> str:
 #: checkout it cannot commit to, could never keep current.
 PUBLISH_MARKER = "Published by policyforge"
 
+#: Stamped by a live edit (`edit-confluence`, `edit-topic --host`), which
+#: writes the approved edit to the page and not to the repository. It is
+#: NOT the publish stamp, and must not contain it (`publish` matches that
+#: as a substring): a live edit is a change the repository hasn't seen, so
+#: `publish` refuses the page, as for a hand edit, until `pull` brings it in.
+#: It used to carry the publish stamp, and the next `publish --apply` from
+#: an unchanged tree silently reverted the edit (#383).
+LIVE_EDIT_MARKER = "Edited live by policyforge"
 
+
+@reports_as_confluence
 def export_to_confluence(
     markdown_text: str,
     *,
@@ -160,6 +221,7 @@ class ConcurrentEditError(RuntimeError):
     """The page changed between being read and being written back."""
 
 
+@reports_as_confluence
 def update_page_body(
     markdown_text: str,
     *,
@@ -217,9 +279,10 @@ def update_page_body(
         "body": {
             "storage": {"value": markdown_to_confluence(markdown_text), "representation": "storage"}
         },
-        # Stamped like a publish, so the edit a person approved here is not
-        # mistaken for a hand edit by the next `publish` from the repository.
-        "version": {"number": expected_version + 1, "message": PUBLISH_MARKER},
+        # Not the publish stamp: the repository hasn't seen this edit, so the
+        # next `publish` must refuse the page until `pull` brings it in. With
+        # the publish stamp, that publish reverted the edit (#383).
+        "version": {"number": expected_version + 1, "message": LIVE_EDIT_MARKER},
     }
     response = requests.put(
         f"{base}/{API_CONTENT_PATH}/{page_id}",

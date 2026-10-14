@@ -23,9 +23,12 @@ would miss:
 
 from __future__ import annotations
 
+import copy
+import dataclasses
 import json
 from pathlib import Path
 
+import pytest
 from click.testing import CliRunner
 
 from policyforge.cli import cli
@@ -71,6 +74,19 @@ WITHOUT_MAPPINGS = [
 ]
 
 
+@pytest.fixture(autouse=True)
+def _the_shared_fixtures_stay_as_written():
+    """The two lists above are shared by every test in the process, and
+    `etl-hipaa` writes into the rows it is handed (`_preserve_crosswalk`
+    copies mappings forward into them). A test that handed one over
+    uncopied left `WITHOUT_MAPPINGS` carrying mappings, and the tests that
+    read it after that failed or passed by xdist's order. So every test
+    here must leave both exactly as written."""
+    before = copy.deepcopy((WITH_MAPPINGS, WITHOUT_MAPPINGS))
+    yield
+    assert before == (WITH_MAPPINGS, WITHOUT_MAPPINGS), "a test changed a shared fixture"
+
+
 def _counted(catalog):
     from policyforge.cli.etl import _crosswalk_mappings
 
@@ -92,6 +108,37 @@ def test_the_count_does_not_depend_on_which_framework_is_mapped():
     assert _counted(renamed) == 4
 
 
+def _asdict_for_dict_rows(monkeypatch):
+    """The command calls `dataclasses.asdict` on whatever the parser
+    returned. These fixtures are already dicts, so a dict passes through as
+    itself -- the command's own write path is under test, not the parser's.
+
+    The patch is process-wide, and pytest serialises its own reports with
+    `dataclasses.asdict`. An identity stub turned a failing test here into
+    a crashed xdist worker and a lost report (1d on PR 346: one `-n 4` run
+    exited 0 with the failure missing), so anything that isn't a dict still
+    goes to the real function."""
+    real = dataclasses.asdict
+    monkeypatch.setattr(
+        dataclasses, "asdict", lambda row: row if isinstance(row, dict) else real(row)
+    )
+
+
+def test_the_asdict_stub_leaves_real_dataclasses_to_the_real_function(monkeypatch):
+    """pytest's report serialisation reaches the stub, so it must still
+    turn a dataclass into a dict."""
+
+    @dataclasses.dataclass
+    class Entry:
+        lines: list
+
+    _asdict_for_dict_rows(monkeypatch)
+
+    assert dataclasses.asdict(Entry(["x"])) == {"lines": ["x"]}
+    row = {"control_id": "164.308(a)(1)"}
+    assert dataclasses.asdict(row) is row
+
+
 def _run(tmp_path: Path, existing, monkeypatch, parsed=None):
     """Run `etl-hipaa` against a catalog on disk, with the network faked."""
     out = tmp_path / "controls.json"
@@ -102,14 +149,11 @@ def _run(tmp_path: Path, existing, monkeypatch, parsed=None):
     monkeypatch.setattr(hipaa_loader, "current_ecfr_date", lambda: "2026-01-01")
     monkeypatch.setattr(hipaa_loader, "fetch_ecfr_subpart_c_xml", lambda **_: "<xml/>")
 
-    import dataclasses
-
-    # The command calls `dataclasses.asdict` on whatever the parser returned.
-    # These fixtures are already dicts, so asdict is the identity here — the
-    # command's own write path is what is under test, not the parser's.
-    rows = parsed if parsed is not None else WITHOUT_MAPPINGS
+    # The stub hands the command these very rows, and the command writes into
+    # them, so each run gets its own copy, never the shared module list.
+    rows = copy.deepcopy(parsed if parsed is not None else WITHOUT_MAPPINGS)
     monkeypatch.setattr(hipaa_loader, "parse_hipaa_security_rule", lambda _xml: rows)
-    monkeypatch.setattr(dataclasses, "asdict", lambda row: row)
+    _asdict_for_dict_rows(monkeypatch)
 
     result = CliRunner().invoke(cli, ["etl-hipaa", "--out", str(out)])
     return result, out
@@ -141,6 +185,16 @@ def test_a_re_parse_of_the_same_entries_keeps_every_mapping(tmp_path, monkeypatc
     assert written[0]["source_crosswalk"] == {"nist-800-53": "RA-1"}
     assert written[0]["enhancements"][0]["source_crosswalk"] == {"nist-800-53": "RA-3"}
     assert written[1]["source_crosswalk"] == {"nist-800-53": "AC-3"}
+
+
+def test_a_re_parse_then_the_count_in_one_process(tmp_path, monkeypatch):
+    """The order that failed at the gate, run in one test so it cannot
+    depend on xdist: the re-parse first, then the count over the shared
+    list. Uncopied, the re-parse leaves `WITHOUT_MAPPINGS` with 4."""
+    result, _ = _run(tmp_path, WITH_MAPPINGS, monkeypatch)
+
+    assert result.exit_code == 0, result.output
+    assert _counted(WITHOUT_MAPPINGS) == 0
 
 
 def test_a_partial_loss_is_still_refused(tmp_path, monkeypatch):
@@ -179,11 +233,9 @@ def test_it_writes_when_the_catalog_does_not_exist_yet(tmp_path, monkeypatch):
 
     monkeypatch.setattr(hipaa_loader, "current_ecfr_date", lambda: "2026-01-01")
     monkeypatch.setattr(hipaa_loader, "fetch_ecfr_subpart_c_xml", lambda **_: "<xml/>")
-    monkeypatch.setattr(hipaa_loader, "parse_hipaa_security_rule", lambda _xml: WITHOUT_MAPPINGS)
-
-    import dataclasses
-
-    monkeypatch.setattr(dataclasses, "asdict", lambda row: row)
+    rows = copy.deepcopy(WITHOUT_MAPPINGS)
+    monkeypatch.setattr(hipaa_loader, "parse_hipaa_security_rule", lambda _xml: rows)
+    _asdict_for_dict_rows(monkeypatch)
     out = tmp_path / "new" / "controls.json"
 
     result = CliRunner().invoke(cli, ["etl-hipaa", "--out", str(out)])

@@ -1,8 +1,7 @@
 """Calls a Claude model hosted on Google Cloud's Vertex AI Model Garden, via
 Anthropic's own Vertex client. That client exposes the same request/
 response shape as the direct Anthropic API — see `_anthropic_compat.py`,
-shared with AnthropicProvider, including the same `temperature`-deprecation
-retry.
+shared with AnthropicProvider, which sends no `temperature` (#352).
 
 Auth deliberately isn't an `api_key_env` like AnthropicProvider: Vertex AI
 uses Google Cloud's Application Default Credentials (`gcloud auth
@@ -14,6 +13,7 @@ provider only needs a GCP project ID, region, and model ID.
 
 from __future__ import annotations
 
+from ..config import ProviderSetupError
 from .base import LLMProvider, LLMResponse
 
 
@@ -40,7 +40,7 @@ class VertexProvider(LLMProvider):
         try:
             from anthropic import AnthropicVertex
         except ImportError as exc:
-            raise RuntimeError(
+            raise ProviderSetupError(
                 "The 'anthropic[vertex]' extra is required for the vertex provider. "
                 'Install it with: pip install "policyforge[vertex]"'
             ) from exc

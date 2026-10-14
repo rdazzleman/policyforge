@@ -6,7 +6,7 @@ eval harness did not: `scripts/eval_zardoz.py --model` constructed a
 `LiteLLMProvider` directly and metered that. Two construction paths meant
 two request shapes, and when the ledger wrapper silently hid every
 `supports_*` flag, the harness kept sending effort while the CLI did not.
-Epochs 15 through 19 in `MEASUREMENTS.md` describe a request production
+Epochs 15 through 19 in `docs/measurements/epochs.md` describe a request production
 never made, and nothing could have said so, because nothing compared the
 two paths.
 
@@ -98,6 +98,12 @@ class Metered:
     thing driving the run can see the whole of one.
     """
 
+    def spend_meter(self):
+        """The spend ceiling's running total, or None when none is set or the
+        provider under this has no ceiling to keep (#125)."""
+        getter = getattr(self._inner, "spend_meter", None)
+        return getter() if callable(getter) else None
+
     def __init__(self, inner, provider_class: str | None = None):
         self._inner = inner
         #: The boundary class of the configured provider, so a local model's
@@ -107,14 +113,18 @@ class Metered:
         #: is one (the entailment judge in `eval_zardoz` is built that way).
         self._provider_class = provider_class or getattr(inner, "_provider_class", None)
         self.calls = 0
-        #: The known part of the run's cost: every priced reply, and the known
-        #: last attempt of a reply whose own total is unknown (#382).
+        #: The known part of the run's cost: every priced call, and the known
+        #: last attempt of a call whose own total is unknown (#382), whether
+        #: it returned or raised (#19).
         self.cost = 0.0
         #: True once any call priced itself. Distinguishes "this run was
         #: free" from "nobody reported a price", which a bare 0.0 cannot.
         self.priced = False
-        #: Calls that raised. They reached the vendor and were billed, but
-        #: no response came back to read a price off.
+        #: Calls that raised with their total cost unknown. They reached the
+        #: vendor and were billed. A raise whose exception carries the total
+        #: (`cost_usd`) is priced instead, and one that carries only its last
+        #: attempt's cost (`last_cost_usd`) adds that to `cost` and still
+        #: counts here, because the total is still unknown (#19).
         self.unpriced = 0
         #: Calls that RETURNED with no price (#446). Until #446 these were
         #: counted in `calls` and nowhere else, so the known part stood as
@@ -145,26 +155,19 @@ class Metered:
         # meter exists to make, the same way `0.0 or None` did.
         try:
             response = call(**kwargs)
-        except Exception:
-            self.unpriced += 1
+        except Exception as exc:
+            # A call that raised after billing (a failed re-send, a reply
+            # that broke the schema) carries what was billed on the
+            # exception, and the ledger reads it from there (#19).
+            self._count(
+                getattr(exc, "cost_usd", None),
+                getattr(exc, "last_cost_usd", None),
+                raised=True,
+            )
             raise
         finally:
             self.calls += 1
-        if response.cost_usd is not None:
-            self.cost += response.cost_usd
-            self.priced = True
-            self.priced_calls += 1
-            self.priced_cost += response.cost_usd
-        elif self._provider_class == LOCAL:
-            # A local model is free although its endpoint reports no price.
-            self.priced = True
-            self.priced_calls += 1
-        else:
-            self.returned_unpriced += 1
-            last = getattr(response, "last_cost_usd", None)
-            if last is not None:
-                self.cost += last
-                self.priced = True
+        self._count(response.cost_usd, getattr(response, "last_cost_usd", None), raised=False)
         self.replies.append(
             (
                 getattr(response, "stop_reason", None),
@@ -173,6 +176,33 @@ class Metered:
             )
         )
         return response
+
+    def _count(self, cost: float | None, last: float | None, *, raised: bool) -> None:
+        """Price one call by one rule, whether it returned or raised, so the
+        two paths can't drift (#19). The order is the ledger's
+        (`ledger.cost_split`): a known total first; then a local model, free
+        although unpriced; then a total that isn't known, whose last
+        attempt's cost still counts when known. The unknown bucket says
+        what happened to the call, because `summary` names both: a call
+        that raised is never reported as one that returned no price."""
+        if cost is not None:
+            self.cost += cost
+            self.priced = True
+            self.priced_calls += 1
+            self.priced_cost += cost
+            return
+        if self._provider_class == LOCAL:
+            # A local model is free although its endpoint reports no price.
+            self.priced = True
+            self.priced_calls += 1
+            return
+        if raised:
+            self.unpriced += 1
+        else:
+            self.returned_unpriced += 1
+        if last is not None:
+            self.cost += last
+            self.priced = True
 
     def generate(self, **kwargs):
         return self._metered(self._inner.generate, **kwargs)
@@ -249,7 +279,8 @@ def build_provider(config: dict) -> Metered:
     provider, ledger wrapper included, so what the harness measures is what
     a user runs.
     """
-    # The class comes from config, not from the provider: with the ledger
-    # off, the provider is unwrapped and carries none (#446).
+    # The class comes from config, not from the provider (#446): the wrapper
+    # carries it too since #327 wraps even with the ledger off, but config is
+    # the one source either way.
     klass = classify_provider(config.get("llm") or {}).klass
     return Metered(get_provider(config), provider_class=klass)

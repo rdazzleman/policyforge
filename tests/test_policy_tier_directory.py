@@ -55,17 +55,20 @@ def _generate_policy(tmp_path, monkeypatch) -> Path:
         ],
     )  # fmt: skip
     assert result.exit_code == 0, result.output
-    return tmp_path / "output"
+    # No --out, so the default: the content tree (#385), which `check` reads.
+    return tmp_path / "docs"
 
 
 def test_a_generated_policy_lands_where_check_reads_a_policy(tmp_path, monkeypatch):
-    output = _generate_policy(tmp_path, monkeypatch)
-    assert (output / "policies" / "access-review.md").is_file()
-    assert not (output / "policys").exists()
-    documents, _ = load_content_tree(output)
+    docs = _generate_policy(tmp_path, monkeypatch)
+    assert (docs / "policies" / "access-review.md").is_file()
+    assert not (docs / "policys").exists()
+    assert not (tmp_path / "output" / "policies").exists()
+    documents, _ = load_content_tree(docs)
     (policy,) = [d for d in documents if d.relative_path.endswith("access-review.md")]
     assert policy.tier == "policy"
-    report = check_tree(output, synthesis_dir=output / "synthesis")
+    synthesis_dir = tmp_path / "output" / "synthesis"
+    report = check_tree(docs, synthesis_dir=synthesis_dir)
     about = [f.message for f in report.findings if f.path == policy.relative_path]
     assert not [m for m in about if "tier" in m], about
     # A Policy drops citations by design, so none is "missing" (#411). This

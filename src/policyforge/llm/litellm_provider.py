@@ -26,6 +26,7 @@ from __future__ import annotations
 import os
 import time
 
+from ..config import ProviderSetupError
 from . import ceiling, escalation
 from ._inline_thinking import answer_and_stripped, exhausted, needs_more_room, retry_budget
 from .base import (
@@ -36,6 +37,7 @@ from .base import (
     ProviderRejected,
     SchemaReplyError,
     combined_source,
+    recordable_endpoint,
 )
 
 #: Where LiteLLM carries a cost the VENDOR reported, as opposed to one it
@@ -120,7 +122,7 @@ class LiteLLMProvider(LLMProvider):
         if api_key_env:
             self._api_key = os.environ.get(api_key_env)
             if not self._api_key:
-                raise RuntimeError(
+                raise ProviderSetupError(
                     f"Environment variable {api_key_env} is not set. Either export it, "
                     f"or drop llm.api_key_env — LiteLLM resolves most providers' "
                     f"credentials from their own environment variables without it."
@@ -152,7 +154,7 @@ class LiteLLMProvider(LLMProvider):
 
             litellm = load()
         except ImportError as exc:
-            raise RuntimeError(
+            raise ProviderSetupError(
                 "The 'litellm' package is required for the litellm provider. "
                 'Install it with: pip install "policyforge[litellm]"'
             ) from exc
@@ -402,6 +404,14 @@ class LiteLLMProvider(LLMProvider):
             ),
             request_id=getattr(response, "id", None),
             last_cost_usd=last_cost,
+            # The configured `api_base`, which LiteLLM sends to as given, or
+            # None (#328). Not LiteLLM's own `_hidden_params["api_base"]`:
+            # with OPENAI_BASE_URL set and no api_base, LiteLLM 1.103.0 sent
+            # the request to the override and reported https://api.openai.com
+            # there (b5 measured it), so that field can name a host the text
+            # never went to. With no api_base, where it went is the route's
+            # own environment's to say, and the row says nothing.
+            endpoint=recordable_endpoint(self.api_base),
         )
 
     def max_output_tokens(self) -> int | None:

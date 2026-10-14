@@ -157,6 +157,43 @@ class Control:
 #: classification no longer depends on where it is saved.
 LICENSED_MARKER = "licensed"
 
+#: The envelope values that say a catalog is public. Anything else an
+#: envelope declares, or an envelope that declares nothing, is licensed
+#: (#320, 80's ruling): fail closed, as `frameworks.registry` already reads a
+#: manifest. The registry's own public value; a test holds the two equal.
+PUBLIC_LICENCES = frozenset({"public-domain"})
+
+
+def envelope_licence(data: dict) -> str:
+    """An envelope's licence as written, under `licence` or `license`, or ""
+    when it names neither (#320: the American spelling of the key read as
+    no licence at all).
+
+    Both keys are read. If either value is licensed, that value is returned,
+    so the envelope is public only when every licence it states is public:
+    `{"licence": "public-domain", "license": "licensed"}` letting the first
+    key win read public (ba on PR 333)."""
+    values = [str(data[key]) for key in ("licence", "license") if data.get(key) is not None]
+    if not values:
+        return ""
+    return next((value for value in values if is_licensed(value)), values[0])
+
+
+def is_licensed(licence: str | None) -> bool:
+    """Whether a catalog's declared licence (`parse_catalog`'s second value)
+    makes it licensed: THE one rule, which every reader of an envelope calls,
+    `scripts/publish_guard.py`'s L4 included (#320).
+
+    None is a plain list, which declares nothing, so its path decides, as
+    before. Any envelope value but an explicit public one is licensed,
+    compared trimmed and casefolded, so `Licensed`, `LICENSED`, `licenced`,
+    `" licensed "` and an envelope with no value all count. Writing is
+    unchanged: `catalog_json` writes `LICENSED_MARKER` exactly.
+    """
+    if licence is None:
+        return False
+    return licence.strip().casefold() not in PUBLIC_LICENCES
+
 
 def parse_catalog(text: str, *, source: object = "the catalog") -> tuple[list, str | None]:
     """`read_catalog` for text already read, e.g. from `git show` (`drift`
@@ -167,8 +204,9 @@ def parse_catalog(text: str, *, source: object = "the catalog") -> tuple[list, s
     if isinstance(data, list):
         return data, None
     if isinstance(data, dict) and isinstance(data.get("controls"), list):
-        licence = data.get("licence")
-        return data["controls"], (str(licence) if licence is not None else None)
+        # "" for an envelope that names no licence, never None: None means a
+        # plain list, and `is_licensed` reads an envelope's silence as licensed.
+        return data["controls"], envelope_licence(data)
     raise ValueError(
         f"{source} is not a catalog: expected a list of controls, or an object with a "
         "'controls' list."

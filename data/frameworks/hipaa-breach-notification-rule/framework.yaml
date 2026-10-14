@@ -13,3 +13,9 @@ source_ref: '2026-09-17'
 source_url: https://www.ecfr.gov/api/renderer/v1/content/enhanced/2026-09-17/title-45?part=164&subpart=D
 content_sha256: 0dba75802be7e06efcfdde43931dcfb1c2353bed26d58e0e0d6222f15069c1d0
 fetched_at: '2026-09-26'
+# Below a leaf (an id the catalog doesn't subdivide), a cited part stands only
+# when the leaf's own text lists it as a list item (441; 80's 6235 rule 2 on
+# #438). Switched on per catalog, with what it rests on.
+leaf_parts: listed
+leaf_parts_measured: >-
+  2026-10-12 at release/1.8 937b6df5: 29 of 38 ids are leaves; the catalog carries every paragraph eCFR's renderer (renderer-D.html) gives an id but definitions keyed by term, and its 2 first items it doesn't carry resolve through an id beneath; the leaf texts list 2 parts inline (164.404(d)(1)(i) and (ii)); the committed corpus and the user's fresh-corpus run (431 files, 2,517 distinct citations): 0 turned red

@@ -156,6 +156,7 @@ def test_the_size_of_the_examined_set_is_reported() -> None:
     assert "2 file(s) examined" in message
 
 
+@pytest.mark.github_config
 def test_a_job_that_reads_the_pr_body_is_triggered_when_the_body_changes():
     """**#250.** The changelog job reads its exemption from
     `github.event.pull_request.body` -- the event PAYLOAD. With no `edited`

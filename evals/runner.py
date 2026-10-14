@@ -1361,7 +1361,7 @@ FINGERPRINT_FILE = Path(__file__).with_name("prompt-fingerprints.json")
 
 
 def recorded_epoch() -> dict:
-    """The newest MEASUREMENTS.md epoch's record: which epoch it is, the PR
+    """The newest epoch's record (`docs/measurements/epochs.md`): which epoch it is, the PR
     and commits it ran at, and each prompt's fingerprint and version (#236).
     Empty when there is no file."""
     import json
@@ -1387,7 +1387,7 @@ def recorded_versions() -> dict:
 
 
 def recorded_fingerprints() -> dict[str, str]:
-    """The fingerprints the newest MEASUREMENTS.md epoch was produced by."""
+    """The fingerprints the newest recorded epoch was produced by."""
     return {
         name: entry["fingerprint"] for name, entry in recorded_epoch().get("prompts", {}).items()
     }
@@ -1440,7 +1440,7 @@ def code_provenance() -> list[str]:
     if dirty:
         lines.append(
             "  The working tree was modified. This number measures what was on "
-            "disk, which is not any commit — say so if it goes into MEASUREMENTS.md."
+            "disk, which is not any commit — say so if it goes into docs/measurements/epochs.md."
         )
     lines.append(
         "  A long run reads modules off disk as it goes. If the tree changes "
@@ -1485,7 +1485,7 @@ def prompt_epoch_report() -> list[str]:
         lines += [
             "",
             f"  No recorded epoch to compare against. Write {FINGERPRINT_FILE.name} "
-            "when this run's numbers go into MEASUREMENTS.md, and the next run "
+            "when this run's numbers go into docs/measurements/epochs.md, and the next run "
             "will be able to say whether it is comparable with them.",
         ]
         return lines
@@ -1513,7 +1513,7 @@ def prompt_epoch_report() -> list[str]:
     lines += [
         "",
         f"  {len(differences)} prompt(s) differ from {which}. These numbers are NOT "
-        "comparable with it in MEASUREMENTS.md; open a new epoch.",
+        "comparable with it in docs/measurements/epochs.md; open a new epoch.",
     ]
     lines += [f"    {line}" for line in differences]
     return lines
@@ -1556,7 +1556,7 @@ def format_report(results: list[CaseResult], *, repeat: int, requested: Sequence
     **`requested` is required because results alone cannot show an
     absence** (#223). A suite with no results used to produce no line, so a
     report of two suites out of three read like a complete run of two, and
-    this report is what becomes an epoch in `MEASUREMENTS.md`. Every
+    this report is what becomes an epoch in `docs/measurements/epochs.md`. Every
     requested suite now gets a line, and one that contributed nothing says
     so. It has no default, so a caller that forgets it fails rather than
     quietly getting the old behaviour back.

@@ -132,6 +132,8 @@ def test_load_all_registers_every_prompt_it_claims_to():
         "entail.judge",
         "generate.standard",
         "generate.policy",
+        "generate.policy_group",
+        "generate.acceptable_use",
         "generate.procedure",
         "zardoz.cluster.lines",
         "zardoz.cluster.json",

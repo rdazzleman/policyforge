@@ -169,12 +169,15 @@ def test_a_blank_top_level_class_does_not_hide_the_stamped_one(workdir):
     assert _written()["content_class"] == "licensed"
 
 
-def test_an_unknown_class_value_is_not_carried_or_replaced(workdir):
+def test_an_unknown_class_value_is_carried_as_licensed_and_said(workdir):
+    """#336, 80's ruling: a predecessor's class that can't be read is carried
+    as licensed, never dropped. This test used to pin the drop, which left
+    the import with no class: the organization's own, to every reader."""
     _generated("secret")
     result = _import()
     assert result.exit_code == 0, result.output
-    assert "content_class" not in _written()
-    assert "Content class unknown" in result.output
+    assert _written()["content_class"] == "licensed"
+    assert "says content_class: 'secret', which isn't a known class" in result.output
 
 
 # -- the import is recorded, and models are not claimed ------------------------------
@@ -290,3 +293,30 @@ def test_a_policy_generated_into_the_old_directory_still_hands_on_its_class(work
     )  # fmt: skip
     assert result.exit_code == 0, result.output
     assert _written("output/policies/access-review.imported.md")["content_class"] == "licensed"
+
+
+@pytest.mark.parametrize(
+    ("configured", "tree"),
+    [(None, "docs"), ("team_docs", "team_docs")],
+    ids=["default", "configured"],
+)
+def test_a_licensed_draft_in_the_content_tree_gives_a_licensed_import(
+    workdir, monkeypatch, configured, tree
+):
+    """`generate` writes into the content tree now (#385), so a licensed draft's
+    class is there, at `<tree>/standards/`, and the import must read it from
+    there: reading only `output/` would drop the class and publish unclassified."""
+    import policyforge.cli as cli_mod
+
+    zardoz = {"content_dir": configured} if configured else {}
+    monkeypatch.setattr(cli_mod, "load_config", lambda: {"zardoz": zardoz})
+    path = Path(tree) / "standards" / "access-review.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    stamp = {"models": ["glm-5.3-flash"], "calls": 3, "content_class": "licensed"}
+    path.write_text(
+        frontmatter.dumps(frontmatter.Post("# Old draft\n", generated_by=stamp)), encoding="utf-8"
+    )
+    result = _import()
+    assert result.exit_code == 0, result.output
+    assert _written()["content_class"] == "licensed"
+    assert "carried from the local predecessor" in result.output

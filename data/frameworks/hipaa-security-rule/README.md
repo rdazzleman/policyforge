@@ -136,7 +136,7 @@ implementation specifications are one requirement for `drift`'s document
 reach, and a citation of a standard by its paragraph
 (`[HIPAA Security Rule 164.308(a)(1)]`, where the catalog's id is
 `164.308(a)(1)(i)`) resolves to that standard in `drift` and `/satisfies`
-alike (#423). The standards are the catalog's top-level entries, as the
+alike. The standards are the catalog's top-level entries, as the
 regulation's own structure makes them, with two exceptions the manifest
 declares:
 

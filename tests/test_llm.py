@@ -1,8 +1,8 @@
 """LLM provider layer tests: the Bedrock Converse API request/response
 shape (via an injected fake client, so no boto3 install or live AWS
 credentials are required), the Anthropic-SDK-shaped request/response
-handling shared by AnthropicProvider and VertexProvider (including the
-`temperature`-deprecation retry), and the provider factory's dispatch."""
+handling shared by AnthropicProvider and VertexProvider (which sends no
+`temperature`, #352), and the provider factory's dispatch."""
 
 from __future__ import annotations
 
@@ -42,8 +42,6 @@ class FakeAnthropicSdkClient:
 
         def create(self, **kwargs):
             self._outer.calls.append(kwargs)
-            if self._outer.fail_on_temperature and "temperature" in kwargs:
-                raise _bad_request_error("`temperature` is deprecated for this model.")
 
             class Block:
                 type = "text"
@@ -59,9 +57,8 @@ class FakeAnthropicSdkClient:
 
             return Response()
 
-    def __init__(self, reply_text="ok", fail_on_temperature=False):
+    def __init__(self, reply_text="ok"):
         self.reply_text = reply_text
-        self.fail_on_temperature = fail_on_temperature
         self.calls = []
         self.messages = self._Messages(self)
 
@@ -88,22 +85,10 @@ def test_call_messages_api_sends_expected_request_and_parses_response():
     assert call["model"] == "claude-x"
     assert call["system"] == "sys prompt"
     assert call["messages"] == [{"role": "user", "content": "hello"}]
-    assert call["temperature"] == 0.1
-
-
-def test_call_messages_api_retries_without_temperature_when_deprecated():
-    from policyforge.llm._anthropic_compat import call_messages_api
-
-    client = FakeAnthropicSdkClient(reply_text="ok", fail_on_temperature=True)
-
-    result = call_messages_api(
-        client, model="claude-sonnet-5", system="sys", prompt="hi", max_tokens=8, temperature=0.2
-    )
-
-    assert result.text == "ok"
-    assert len(client.calls) == 2
-    assert "temperature" in client.calls[0]
-    assert "temperature" not in client.calls[1]
+    # Accepted from the caller and not sent: the locked SDK refuses it
+    # (#352). tests/test_anthropic_sdk_call.py holds this against the real
+    # SDK, which this fake can't.
+    assert "temperature" not in call
 
 
 def test_call_messages_api_reraises_unrelated_bad_request_errors():
@@ -428,17 +413,19 @@ def test_a_thinking_block_is_never_mistaken_for_the_answer():
     assert response.text == "coverage"
 
 
-def test_the_temperature_retry_is_remembered_across_the_truncation_retry():
-    """A model that rejected temperature once will reject it again; paying
-    for that discovery twice in one call would double the request count."""
+def test_neither_attempt_of_a_truncation_retry_sends_temperature():
+    """The re-send after a truncation is a second request, built from the
+    same arguments, and it sends no `temperature` either (#352). This
+    client refuses the keyword as the locked SDK does."""
     from policyforge.llm._anthropic_compat import call_messages_api
 
     class Both(ThinkingSdkClient):
         class _Messages(ThinkingSdkClient._Messages):
             def create(self, **kwargs):
                 if "temperature" in kwargs:
-                    self._outer.calls.append(kwargs)
-                    raise _bad_request_error("`temperature` is deprecated for this model.")
+                    raise TypeError(
+                        "Messages.create() got an unexpected keyword argument 'temperature'"
+                    )
                 return super().create(**kwargs)
 
         def __init__(self, reply_text="coverage"):
@@ -451,8 +438,8 @@ def test_the_temperature_retry_is_remembered_across_the_truncation_retry():
     )
 
     assert response.text == "coverage"
-    with_temperature = [c for c in client.calls if "temperature" in c]
-    assert len(with_temperature) == 1, "temperature was only attempted once"
+    assert len(client.calls) == 2, "the truncation retry ran"
+    assert not [c for c in client.calls if "temperature" in c]
 
 
 def test_a_provider_that_cannot_constrain_output_says_so():

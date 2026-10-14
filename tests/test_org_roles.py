@@ -182,6 +182,42 @@ def test_ordinary_bracketed_prose_is_not_mangled():
     assert "[NIST AC-2]" in result.text
 
 
+def test_an_ignored_placeholder_is_not_reported_unfilled_and_its_brackets_are_removed():
+    result = apply_substitutions(
+        "See [Example Org Standard].", _profile(), ignore=["Example Org Standard"]
+    )
+
+    assert result.text == "See Example Org Standard."
+    assert "Example Org Standard" not in result.outstanding
+
+
+def test_a_real_placeholder_beside_an_ignored_one_is_still_reported():
+    result = apply_substitutions(
+        "See [Example Org Standard] on [Ticketing System].",
+        _profile(),
+        ignore=["Example Org Standard"],
+    )
+
+    assert result.text == "See Example Org Standard on Jira."
+    assert result.outstanding == []
+
+    result = apply_substitutions(
+        "See [Example Org Standard] on [Unknown System].",
+        _profile(),
+        ignore=["Example Org Standard"],
+    )
+    assert result.outstanding == ["Unknown System"]
+
+
+def test_a_bracketed_span_resembling_an_ignored_title_is_still_reported():
+    result = apply_substitutions(
+        "See [Example Org Standard V2].", _profile(), ignore=["Example Org Standard"]
+    )
+
+    assert "[Example Org Standard V2]" in result.text
+    assert result.outstanding == ["Example Org Standard V2"]
+
+
 # --------------------------------------------------------------------------
 # What the generator is told
 # --------------------------------------------------------------------------
@@ -224,3 +260,14 @@ def test_the_generator_falls_back_to_the_old_shape_without_one():
     rendered = _render_org(OrgContext(name="X", industry="Y", vendors=["Okta"]))
 
     assert "Okta" in rendered
+
+
+def test_an_ignored_title_that_is_a_links_text_keeps_the_link_whole():
+    """ba on PR 284: unbracketing it would turn the link into plain text."""
+    for text in (
+        "See [Example Org Standard](https://example.invalid/std).",
+        "See [Example Org Standard][std].\n\n[std]: https://example.invalid/std",
+    ):
+        result = apply_substitutions(text, _profile(), ignore=["Example Org Standard"])
+        assert result.text == text, result.text
+        assert "Example Org Standard" not in result.outstanding

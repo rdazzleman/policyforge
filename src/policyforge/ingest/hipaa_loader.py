@@ -142,6 +142,13 @@ def _parse_section(section_id: str, head: str, body: str) -> list[Control]:
             italic_match = _ITALIC_RE.match(remainder.strip())
             if not italic_match:
                 text = _strip_tags(remainder)
+                # The paragraph's own marker stays with its text when it is
+                # appended to the item open above it: `(i) Maintain ...; and
+                # (ii) If an action ...`. Dropped, the text read as one item,
+                # and a part cited below it couldn't be told from an invented
+                # one (441; `164.316(b)(1)` had lost its `(ii)`).
+                if text and leading:
+                    text = f"{leading} {text}"
                 target = current_enh or current
                 if text and target is not None:
                     field = (

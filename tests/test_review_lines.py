@@ -869,6 +869,127 @@ def test_the_report_names_counted_and_declared_readers_apart(monkeypatch, capsys
     assert "UNCOUNTED (declared stake)" in out
 
 
+def _typo(sha: str) -> str:
+    """The same SHA with its last hex digit changed: one character."""
+    return sha[:-1] + ("0" if sha[-1] != "0" else "1")
+
+
+def test_a_typo_in_the_latest_line_says_it_superseded_an_approval_at_head(
+    commits, monkeypatch, capsys
+):
+    """#55: approved at head, then a later line with a one-character SHA
+    typo. The latest line decides, so the approval stops counting, and the
+    report now says why instead of dropping the reader in silence."""
+    head = commits["head"]
+    out = _report(
+        monkeypatch,
+        capsys,
+        head,
+        [
+            _comment(head, reviewer="policyforge-ba"),
+            _comment(_typo(head), reviewer="policyforge-ba"),
+        ],
+    )
+    assert "approvals at head from counted readers: none" in out
+    assert "policyforge-ba: latest line is " in out
+    assert "superseding an approval at head" in out
+
+
+def test_no_superseding_reason_without_an_earlier_counted_approval(commits, monkeypatch, capsys):
+    """The passing cases: the new reason speaks only when an approval at head
+    was really superseded, not for a reader whose earlier line objected, and
+    not for one whose only line is at head."""
+    head = commits["head"]
+    objected = _report(
+        monkeypatch,
+        capsys,
+        head,
+        [
+            _comment(head, verdict="changes-requested", reviewer="policyforge-ba"),
+            _comment(_typo(head), reviewer="policyforge-ba"),
+        ],
+    )
+    assert "superseding an approval at head" not in objected
+    clean_run = _report(monkeypatch, capsys, head, [_comment(head, reviewer="policyforge-ba")])
+    assert "superseding" not in clean_run
+    assert "approvals at head from counted readers: policyforge-ba" in clean_run
+
+
+def test_another_readers_approval_is_not_superseded_by_this_reader(commits, monkeypatch, capsys):
+    """9b on #208: b5 approved at head, and ba's only line is off head. ba
+    superseded nothing of its own, so ba gets no superseding reason, and
+    b5's approval still counts."""
+    head = commits["head"]
+    out = _report(
+        monkeypatch,
+        capsys,
+        head,
+        [
+            _comment(head, reviewer="policyforge-b5"),
+            _comment(_typo(head), reviewer="policyforge-ba"),
+        ],
+    )
+    assert "approvals at head from counted readers: policyforge-b5" in out
+    assert "superseding an approval at head" not in out
+
+
+def test_a_declared_stake_then_a_typo_is_silent(commits, monkeypatch, capsys):
+    """b5 on #208: an approval at head signed `counted=no` never counted, so a
+    later typo superseded nothing that counted, and no reason is printed."""
+    head = commits["head"]
+    staked = {
+        "body": f"Read it.\n\nReviewed-SHA: {head} verdict=approved "
+        "reviewer=policyforge-ba counted=no"
+    }
+    out = _report(
+        monkeypatch, capsys, head, [staked, _comment(_typo(head), reviewer="policyforge-ba")]
+    )
+    assert "superseding an approval at head" not in out
+
+
+def test_an_approval_at_an_old_commit_then_a_typo_is_silent(commits, monkeypatch, capsys):
+    """80 on #208: an approval at an OLD commit (stale) never counted at this
+    head, so a later off-head line superseded nothing, and no reason is
+    printed. Dropping `earlier.counts` would name one."""
+    head = commits["head"]
+    out = _report(
+        monkeypatch,
+        capsys,
+        head,
+        [
+            _comment(commits["ancestor"], reviewer="policyforge-ba"),
+            _comment(_typo(head), reviewer="policyforge-ba"),
+        ],
+    )
+    assert "superseding an approval at head" not in out
+
+
+def test_a_line_posted_as_someone_else_cannot_supersede_or_be_superseded():
+    """The rule `latest_own_lines` already keeps: a line signed as one reader
+    and posted by another is nobody's, so it neither drops a real approval
+    nor earns a superseding reason."""
+    at_head = review_lines.Location(resolves=True, at_head=True, ancestor_of_head=True)
+    elsewhere = review_lines.Location(resolves=True, at_head=False, ancestor_of_head=False)
+    sha = "a" * 40
+
+    def line(location, poster):
+        return review_lines.Line(
+            sha=sha,
+            verdict="approved",
+            reviewer="policyforge-ba",
+            shape=review_lines.shape_of(sha, "approved", "policyforge-ba", ()),
+            location=location,
+            poster=poster,
+        )
+
+    # Latest posted by someone else: it isn't ba's latest own line.
+    lines = [line(at_head, "policyforge-ba"), line(elsewhere, "policyforge-9b")]
+    assert review_lines.uncounted_reasons(lines) == {}
+    # Earlier posted by someone else: it was never ba's counted approval.
+    lines = [line(at_head, "policyforge-9b"), line(elsewhere, "policyforge-ba")]
+    assert review_lines.uncounted_reasons(lines) == {}
+
+
 def test_an_approval_with_an_unknown_token_does_not_retire_an_objection():
     """policyforge-ba on #428: "(retracted)" is reported as a fault on the same
     screen; it must not also quietly withdraw the objection."""

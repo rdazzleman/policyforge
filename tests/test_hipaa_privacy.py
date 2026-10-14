@@ -360,6 +360,38 @@ def test_check_warns_on_vacated_citations_only(status, tmp_path):
     assert all("Purl v. HHS" in f.message and f.severity == "warning" for f in findings)
 
 
+@pytest.mark.parametrize(
+    ("tag", "flagged"),
+    [
+        (
+            "[HIPAA Privacy Rule 164.502(a)(5)(iii)(A)(1)-(3)]",
+            [f"164.502(a)(5)(iii)(A)({k})" for k in (1, 2, 3)],
+        ),
+        (
+            "[HIPAA Privacy Rule 164.502(a)(1)(vi)(A), (B), (C)]",
+            [f"164.502(a)(1)(vi)({c})" for c in "ABC"],
+        ),
+        (
+            "[HIPAA Privacy Rule 164.502(g)(5)(i)(A)(1)-(2)]",
+            [f"164.502(g)(5)(i)(A)({k})" for k in (1, 2)],
+        ),
+    ],
+)
+def test_check_warns_on_each_vacated_member_of_a_range_or_list(status, tmp_path, tag, flagged):
+    """b5 on PR 437: a range or a list of vacated paragraphs, or of ids the
+    revision added, warns for each member, as each would cited alone."""
+    from policyforge.content.check import _check_vacated_citations
+    from policyforge.content.tree import load_content_tree
+
+    (tmp_path / "standards").mkdir()
+    body = f"---\ntitle: P\ntier: standard\n---\n\n# P\n\nFollow it. {tag}\n"
+    (tmp_path / "standards" / "p.md").write_text(body, encoding="utf-8")
+    documents, _ = load_content_tree(tmp_path)
+    findings = _check_vacated_citations(documents, vacated={"hipaa-privacy": status})
+    cited = sorted(f.message.split(" (")[0].split("cites HIPAA Privacy Rule ")[1] for f in findings)
+    assert cited == sorted(flagged)
+
+
 # ---- keys, anchoring, reach --------------------------------------------------------------
 
 

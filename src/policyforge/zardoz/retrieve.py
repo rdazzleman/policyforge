@@ -668,8 +668,17 @@ class RetrievalIndex:
     def __init__(self, corpus: Corpus) -> None:
         self._entries: list[_Indexed] = []
         self._document_frequency: Counter = Counter()
+        #: Synced documents left out because the injection scanner flags them
+        #: (`reader_directed`, the call the sync report lists them by). This
+        #: index is what every answer searches, so a flagged page is never
+        #: sent to the model (80's ruling on issue 288). Sync still stores and
+        #: reports them.
+        self.excluded: list = []
 
         for document in corpus.documents:
+            if document.reader_directed():
+                self.excluded.append(document)
+                continue
             title_terms = tokenize(document.title) * TITLE_WEIGHT
             for chunk in chunk_document(document):
                 terms = Counter(

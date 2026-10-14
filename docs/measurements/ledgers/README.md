@@ -1,7 +1,8 @@
 # Surviving ledgers
 
-The primary data behind every figure in `MEASUREMENTS.md` that can still be
-re-derived. Preserved here by #207 on 2026-09-24. **Before this, each lived in
+The primary data behind every figure in [the epoch log](../epochs.md) and on
+[the Measurements page](https://zardoz.io/trust/measurements/) that can still be
+re-derived. Preserved here on 2026-09-24. **Before this, each lived in
 one session's scratch directory and nowhere else**, which is how most of the
 file's history lost its source.
 
@@ -30,10 +31,10 @@ prompt text, no generated text, no catalog content.
 | `2026-09-28-epoch25-opus-pipeline.jsonl`          | 32   | 5 topics × synthesize + three tiers, `claude-opus-5.5` via OpenRouter                                              | epoch 25                                                     |
 | `2026-09-28-epoch25-run-record.jsonl`             | 111  | one line per step with the guard's spend before and after, plus each start line (cap, commit, the user's approval) | epoch 25                                                     |
 | `2026-09-28-epoch25-sonnet-evals.jsonl`           | 257  | the 13 eval suites x1, `claude-sonnet-5`                                                                           | epoch 25                                                     |
-| `2026-09-29-epoch25-issue3-glm-standard.jsonl`    | 5    | 5 Standards at a 32,768 first budget, glm                                                                          | epoch 25, #3                                                 |
-| `2026-09-29-epoch25-issue3-opus-standard.jsonl`   | 5    | 5 Standards at a 32,768 first budget, opus-5.5                                                                     | epoch 25, #3                                                 |
-| `2026-09-29-epoch25-issue3-run-record.jsonl`      | 16   | one line per Standard with its exit code and spend                                                                 | epoch 25, #3                                                 |
-| `2026-09-29-epoch25-issue3-sonnet-standard.jsonl` | 5    | 5 Standards at a 32,768 first budget, sonnet-5                                                                     | epoch 25, #3                                                 |
+| `2026-09-29-epoch25-issue3-glm-standard.jsonl`    | 5    | 5 Standards at a 32,768 first budget, glm                                                                          | epoch 25                                                     |
+| `2026-09-29-epoch25-issue3-opus-standard.jsonl`   | 5    | 5 Standards at a 32,768 first budget, opus-5.5                                                                     | epoch 25                                                     |
+| `2026-09-29-epoch25-issue3-run-record.jsonl`      | 16   | one line per Standard with its exit code and spend                                                                 | epoch 25                                                     |
+| `2026-09-29-epoch25-issue3-sonnet-standard.jsonl` | 5    | 5 Standards at a 32,768 first budget, sonnet-5                                                                     | epoch 25                                                     |
 
 Beside them, the three epoch-21 runs' **step records** (`*-steps.json`): one
 entry per topic and step, with its seconds, whether it succeeded and any
@@ -47,8 +48,8 @@ refused it by name rather than writing an empty file.
 **Three of the files belong to no written epoch.** They are eval-harness runs
 from 2026-09-18 and 19, preserved from another session's scratch directory.
 Which work they measured is not recorded with them, so they back no figure in
-`MEASUREMENTS.md` except the per-call eval rates quoted in its opening
-section. They are kept because they are primary data, not because anything
+the epoch log except the per-call eval rates quoted at the top of
+[the Measurements page](https://zardoz.io/trust/measurements/). They are kept because they are primary data, not because anything
 depends on them.
 
 **Epoch 25 (2026-09-28/29), added with it.** The run's own ledgers, copied from

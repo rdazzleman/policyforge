@@ -183,6 +183,13 @@ NOT_REFUSALS = {
     # declared framework key disagrees with prose keying, never raised, so no
     # skill can fail with it.
     "policyforge.frameworks.registry.FrameworkKeyWarning",
+    # The shipped pool and the topic rule's table have drifted apart (22 part
+    # 3): a defect in the package no organisation's facts can fix, so it stays
+    # a traceback on purpose.
+    "policyforge.topics.build.PoolError",
+    # `library add`'s refusal (443): a CLI command over the user's private
+    # licensed library, which no skill calls, so no skill can fail with it.
+    "policyforge.library.LibraryError",
 }
 
 

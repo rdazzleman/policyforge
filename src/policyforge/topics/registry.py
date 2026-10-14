@@ -24,6 +24,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from policyforge.topics.anchoring import canonical_anchor
+
 DEFAULT_TOPICS_PATH = Path("config/topics.yaml")
 
 
@@ -57,6 +59,11 @@ class Topic:
     #: `confluence:` above is an alias for `targets.confluence`, and wins
     #: when both are given.
     targets: dict = field(default_factory=dict)
+    #: The Policy this topic's Standard belongs to, by name (22, part 2; 80's
+    #: 5919). One value, so a Standard has exactly one parent Policy by
+    #: construction. Empty keeps today's behaviour: the topic is its own
+    #: Policy, and `check` says so.
+    policy: str = ""
 
     def target(self, kind: str) -> dict:
         """Where this topic's documents live in one kind of store, or {}."""
@@ -83,6 +90,73 @@ class Topic:
     def confluence_pages(self) -> list[tuple[str, str]]:
         """(tier, page title) for each Confluence page, Policy first."""
         return self.pages("confluence")
+
+
+@dataclass
+class Policy:
+    """One Policy, covering one or more Standards (22, part 2; 80's 5919).
+
+    A topic names its parent with `policy:`; this block, `policies:` at the
+    top of the registry, holds the Policy's own metadata. **The page a Policy
+    is published to is declared here**, not on each topic: several topics
+    would otherwise claim one page, which `check` rightly refuses.
+    """
+
+    name: str
+    #: The accountable executive, often not a topic's owner.
+    owner: str = ""
+    cadence: str = ""
+    description: str = ""
+    #: As on a topic: `confluence: {space: ENG, pages: {policy: "..."}}` and
+    #: the general `targets:` form.
+    confluence: dict = field(default_factory=dict)
+    targets: dict = field(default_factory=dict)
+
+    def target(self, kind: str) -> dict:
+        """Where this Policy lives in one kind of store, or {}."""
+        if kind == "confluence" and self.confluence:
+            return self.confluence
+        block = self.targets.get(kind) if isinstance(self.targets, dict) else None
+        return block if isinstance(block, dict) else {}
+
+    def page(self, kind: str) -> tuple[str, str] | None:
+        """(container, page title) this Policy publishes to in `kind`, or None.
+
+        The container is the store's own: a Confluence space key, or a wiki
+        repository. What two Policies must not share.
+        """
+        block = self.target(kind)
+        title = str((block.get("pages") or {}).get("policy") or block.get("title") or "").strip()
+        if not title:
+            return None
+        container = str(block.get("space") or block.get("repository") or "").strip()
+        return container, title
+
+
+@dataclass
+class Registry:
+    """The topics, and the Policies they name (22, part 2)."""
+
+    topics: list[Topic] = field(default_factory=list)
+    policies: list[Policy] = field(default_factory=list)
+
+    def policy(self, name: str) -> Policy | None:
+        key = name.strip().casefold()
+        return next((p for p in self.policies if p.name.strip().casefold() == key), None)
+
+    def undeclared_policies(self) -> dict[str, list[str]]:
+        """{policy name a topic uses but `policies:` doesn't declare: topics}."""
+        declared = {p.name.strip().casefold() for p in self.policies}
+        found: dict[str, list[str]] = {}
+        for topic in self.topics:
+            if topic.policy and topic.policy.strip().casefold() not in declared:
+                found.setdefault(topic.policy, []).append(topic.name)
+        return found
+
+    def standards_of(self, policy: str) -> list[Topic]:
+        """The topics whose Standard belongs to `policy`, in registry order."""
+        key = policy.strip().casefold()
+        return [t for t in self.topics if t.policy.strip().casefold() == key]
 
 
 class TopicRegistryError(ValueError):
@@ -131,24 +205,95 @@ def parse_topics(data: dict) -> list[Topic]:
             raise TopicRegistryError(f"Duplicate topic name: {name!r}.")
         seen.add(name.lower())
 
+        for anchor in raw.get("nist_controls") or []:
+            # An unquoted `164.510` is the number 164.51 to YAML, and `164.500`
+            # is 164.5: a regulatory section is spelled like a float (#420).
+            # Refused by name, not read as an id nobody has.
+            if isinstance(anchor, (int, float)) and not isinstance(anchor, bool):
+                raise TopicRegistryError(
+                    f"Topic {name!r} anchors {anchor} as a number. YAML reads an unquoted "
+                    f'`164.510` as 164.51, so write the id in quotes ("164.510").'
+                )
         topics.append(
             Topic(
                 name=name,
                 owner=str(raw["owner"]).strip(),
-                nist_controls=[str(c).strip() for c in raw.get("nist_controls") or []],
+                # In each catalog's own spelling, so every reader compares one
+                # (#188): `ac-3` here is the catalog's `AC-3`.
+                nist_controls=[
+                    canonical_anchor(str(c).strip()) for c in raw.get("nist_controls") or []
+                ],
                 cadence=str(raw.get("cadence") or "").strip(),
                 description=str(raw.get("description") or "").strip(),
                 evidence=[str(e).strip() for e in raw.get("evidence") or []],
                 confluence=dict(raw.get("confluence") or {}),
                 targets=dict(raw.get("targets") or {}),
+                policy=str(raw.get("policy") or "").strip(),
             )
         )
 
     return topics
 
 
+_POLICY_FIELDS = {"name", "owner", "cadence", "description", "confluence", "targets"}
+
+
+def parse_registry(data: dict) -> Registry:
+    """Parse a loaded `topics.yaml`: its topics, and its optional `policies:`.
+
+    A registry with no `policies:` block is valid, and so is a topic with no
+    `policy:` (22, part 2): existing registries keep working. A name a topic
+    uses that the block doesn't declare is not refused here; it is reported
+    (`Registry.undeclared_policies`, by `coverage` and `check`), so a half
+    migrated registry can still be read and counted.
+    """
+    topics = parse_topics(data)
+    raw_policies = data.get("policies")
+    if raw_policies is None:
+        return Registry(topics=topics)
+    if not isinstance(raw_policies, list):
+        raise TopicRegistryError("`policies:` must be a list, each entry a mapping with a `name`.")
+    policies: list[Policy] = []
+    seen: set[str] = set()
+    for index, raw in enumerate(raw_policies, start=1):
+        if not isinstance(raw, dict):
+            raise TopicRegistryError(f"Policy #{index} is not a mapping.")
+        unknown = sorted(set(raw) - _POLICY_FIELDS)
+        if unknown:
+            raise TopicRegistryError(
+                f"Policy #{index} ({raw.get('name', '?')!r}) has unknown key(s): "
+                f"{', '.join(unknown)}. Supported: {', '.join(sorted(_POLICY_FIELDS))}."
+            )
+        for required in ("name", "owner"):
+            if not str(raw.get(required) or "").strip():
+                raise TopicRegistryError(
+                    f"Policy #{index} is missing `{required}`. A Policy names the executive "
+                    "accountable for it, who is often not a topic's owner."
+                )
+        name = str(raw["name"]).strip()
+        if name.casefold() in seen:
+            raise TopicRegistryError(f"Duplicate Policy name: {name!r}.")
+        seen.add(name.casefold())
+        policies.append(
+            Policy(
+                name=name,
+                owner=str(raw["owner"]).strip(),
+                cadence=str(raw.get("cadence") or "").strip(),
+                description=str(raw.get("description") or "").strip(),
+                confluence=dict(raw.get("confluence") or {}),
+                targets=dict(raw.get("targets") or {}),
+            )
+        )
+    return Registry(topics=topics, policies=policies)
+
+
 def load_topics(path: Path = DEFAULT_TOPICS_PATH) -> list[Topic]:
-    """Load the topic registry from disk."""
+    """Load the topic registry from disk: its topics only."""
+    return load_registry(path).topics
+
+
+def load_registry(path: Path = DEFAULT_TOPICS_PATH) -> Registry:
+    """Load the topic registry from disk: its topics and its Policies."""
     import yaml
 
     if not path.exists():
@@ -178,4 +323,4 @@ def load_topics(path: Path = DEFAULT_TOPICS_PATH) -> list[Topic]:
             where += f" (in what starts at {at(context_mark)})"
         problem = getattr(exc, "problem", None) or str(exc).splitlines()[0]
         raise TopicRegistryError(f"{path} is not valid YAML{where}: {problem}.") from exc
-    return parse_topics(data)
+    return parse_registry(data)

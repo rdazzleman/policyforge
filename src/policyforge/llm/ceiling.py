@@ -16,18 +16,19 @@ at import unless `LITELLM_LOCAL_MODEL_COST_MAP` was set, and the two could
 disagree: opus via OpenRouter read 128,000 downloaded and 64,000 bundled (#78).
 
 The 13 model strings the README, docs, example config and `.claude` name,
-swept on #79 with LiteLLM 1.103.0. **One reads under 32,768:** the README's
-`gemini/gemini-2.0-flash` example, at 8,192, so its first budget IS clamped,
-to 8,192. For every other named string the first budget is never clamped;
-the re-sends are. Opus via OpenRouter reads 128,000 (an override:
-OpenRouter's model list); `anthropic/claude-opus-5.5`, direct, reads the
-bundled 64,000, which no override touches.
+swept on #79 with LiteLLM 1.103.0. **One reads under 32,768:** the
+`gemini/gemini-2.0-flash` example the README carried until #154, at 8,192, so
+its first budget IS clamped, to 8,192. For every other named string the first
+budget is never clamped; the re-sends are. Opus via OpenRouter reads 128,000
+(an override: OpenRouter's model list); `anthropic/claude-opus-5.5`, direct,
+reads the bundled 64,000, which no override touches.
 
 **What it cannot see:** a model the map doesn't list (`None`, so no clamp:
 the request goes as the site wrote it, and a vendor that refuses it says so as
-a `ProviderRejected`). Named strings it doesn't list: the README's
-`openrouter/deepseek` example, and the bare `z-ai/glm-5.3-flash` that old
-ledgers record (with its `openrouter/` prefix it has an override).
+a `ProviderRejected`). Named strings it doesn't list: the
+`openrouter/deepseek` example the README carried until #154, and the bare
+`z-ai/glm-5.3-flash` that old ledgers record (with its `openrouter/` prefix it
+has an override).
 
 **Local models are never looked up** (`ollama/`, `ollama_chat/`, the vendors
 `boundary.LITELLM_LOCAL_VENDORS` names, in any case, folded as the boundary

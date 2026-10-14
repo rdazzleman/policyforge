@@ -51,7 +51,19 @@ from collections import Counter
 from dataclasses import dataclass, field
 
 from policyforge.mapping.crosswalk import NIST_ANCHOR, normalize_framework
-from policyforge.topics.anchoring import anchor_keys, families_for, regulatory_families
+from policyforge.topics.anchoring import (
+    anchor_keys,
+    carries,
+    enclosing,
+    families_for,
+    holds_member,
+    id_stem,
+    leaf_texts_for,
+    member_readings,
+    member_spelling,
+    regulatory_families,
+    stands_below,
+)
 from policyforge.topics.coverage import PARTIAL_RELATIONSHIPS
 
 _HEADING_RE = re.compile(r"^#{1,6}\s+(?P<title>.+?)\s*$")
@@ -189,8 +201,18 @@ def resolve_framework(written: str, ids=None) -> str:
     token boundary, so `NIS` is not an abbreviation of anything.
 
     The uniqueness rule is doing real work rather than being defensive:
-    load 800-53 and 800-171 together and `NIST` stops naming one catalog,
-    which is a citation an assessor genuinely cannot follow.
+    load 800-53 and 800-171 together and a prefix such as `NIST SP` stops
+    naming one catalog, which is a citation an assessor genuinely cannot
+    follow.
+
+    **`NIST` alone names 800-53** (80's citation form, 5928 on #17, with the
+    user: "800-53 ids appear once, under `NIST`"). It is the hub every
+    other catalog is crosswalked onto, and the form a Standard's tag now
+    writes: `[HITRUST 11.a | NIST IR-1, IR-8 | ARC-AMPE]`. So it resolves
+    whatever else is loaded. It never reaches another NIST catalog:
+    `[NIST 03.01.01]` names an 800-171 id under 800-53 and stays unknown
+    with 800-171 loaded, so adding a catalog still can't turn an unknown
+    into evidence.
     """
     index = ids or {}
     name = written.strip().casefold()
@@ -198,6 +220,8 @@ def resolve_framework(written: str, ids=None) -> str:
         return ""
     if name in index:
         return name
+    if name == "nist" and NIST_ANCHOR in index:
+        return NIST_ANCHOR
     # `NIST 800-53` and `HIPAA Security Rule` are declared names, which
     # `normalize_framework` maps onto the key the catalogs are filed under.
     narrowed = normalize_framework(written)
@@ -207,6 +231,30 @@ def resolve_framework(written: str, ids=None) -> str:
         k for k in index if k.startswith(name) and not k[len(name) : len(name) + 1].isalnum()
     }
     return matches.pop() if len(matches) == 1 else ""
+
+
+#: The catalogs a bare `HIPAA` names (80's ruling on #17, comment 6044, built
+#: in #420): the Security, Privacy and Breach Notification Rules are one
+#: regulation, 45 CFR Part 164, and a section number belongs to exactly one
+#: subpart, so `HIPAA 164.502(b)` can't resolve to two catalogs at once.
+#: Only the bare name widens: `HIPAA Security Rule 164.502(b)` names the
+#: Security Rule and stays unknown. `tests/test_hipaa_anchoring.py` holds the
+#: three keys to the shipped catalogs and their id ranges apart.
+HIPAA_PART_164 = ("hipaa", "hipaa-privacy", "hipaa-breach")
+
+
+def named_catalogs(written: str, ids=None) -> list[str]:
+    """Every loaded catalog `written` may name: for a bare `HIPAA` the part
+    164 catalogs that are loaded, the Security Rule first (whichever of them
+    are, so Privacy and Breach Notification alone still answer); otherwise
+    the one `resolve_framework` finds. Empty when the name resolves to
+    nothing."""
+    if written.strip().casefold() == "hipaa":
+        loaded = [key for key in HIPAA_PART_164 if key in (ids or {})]
+        if loaded:
+            return loaded
+    catalog = resolve_framework(written, ids)
+    return [catalog] if catalog else []
 
 
 def split_citation(part: str, frameworks: list[str], ids=None) -> tuple[str, str, str]:
@@ -252,7 +300,9 @@ def split_citation(part: str, frameworks: list[str], ids=None) -> tuple[str, str
         rest = rest.strip()
 
     words = rest.split()
-    known = (ids or {}).get(resolve_framework(framework, ids), ())
+    known: set[str] = set()
+    for catalog in named_catalogs(framework, ids):
+        known.update((ids or {}).get(catalog, ()))
     for count in range(len(words), 0, -1):
         candidate = " ".join(words[:count])
         if candidate in known:
@@ -260,7 +310,137 @@ def split_citation(part: str, frameworks: list[str], ids=None) -> tuple[str, str
     return framework, rest, ""
 
 
-def parse_citations(body: str, frameworks=(), ids=None) -> list[tuple[str, str, str, str]]:
+def citation_members(
+    framework: str, text: str, scope: CatalogScope
+) -> tuple[list[str], str] | None:
+    """(the ids `text` cites, its qualifier), for a range or a comma list
+    under one framework, or None (#421, 80's ruling; the comma shorthand
+    added by 80 in 6058).
+
+    - A simple range, `164.310(d)(2)(i)-(iv)` or `SI-4(1)-(3)`, is each id
+      from one endpoint to the other (`topics.anchoring.member_readings`).
+      The separator may be spaced, an en dash or `through`
+      (`topics.anchoring.member_spelling`, 80's 6185 and 6197 on PR 437).
+    - A comma list, `CP-9(1), (2), (3)`, is each item, a bare `(2)` taking
+      the stem of the id before it (`CP-9`); an item may itself be a range,
+      `SA-11(1)-(2), (8)-(9)`.
+    - **All or nothing:** it resolves only when every member resolves cited
+      alone (`scope.standing_for`) **and** the catalog carries it or an id
+      beneath it (`topics.anchoring.carries`; 80's 6189 on PR 437). So
+      `164.316(b)(2)`, carried through `(b)(2)(i)`-`(iii)`, is a member; an
+      invented `164.500(b)(1)(xx)`, which resolves alone as a statement part
+      of `164.500`, is not. One member short and it is None, so the
+      citation is reported whole.
+    - Words after the last item are the qualifier, as `split_citation`
+      reads one, unless they hold a member-shaped part (`read_citation`);
+      words after any other item mean it isn't a list.
+
+    The ONE place a citation expands into members, called by
+    `read_citation`, so `split_citation`'s contract (one id) is unchanged
+    for every caller (ag stopped on that, comment 5955 on #421)."""
+    items = [item.strip() for item in member_spelling(text).split(",")]
+    if any(not item for item in items):
+        return None
+    tokens: list[str] = []
+    qualifier = ""
+    for position, item in enumerate(items):
+        head, _, tail = item.partition(" ")
+        if tail and position != len(items) - 1:
+            return None
+        qualifier = tail.strip()
+        tokens.append(head)
+    # No more members than the named catalog has ids: each must be carried,
+    # or have an id beneath it, and two members share no id (b5 on PR 437).
+    named = named_catalogs(framework, scope.index)
+    limit = max((len(scope.index.get(catalog, ())) for catalog in named), default=0)
+    if len(tokens) == 1 and member_readings(tokens[0], limit) == [[tokens[0]]]:
+        return None  # one plain id: `split_citation`'s, not a list
+    readings: list[list[list[str]]] = []
+    stem = ""
+    for token in tokens:
+        if token.startswith("("):
+            if not stem:
+                return None
+            token = stem + token
+        options = member_readings(token, limit)
+        if not options:
+            return None
+        readings.append(options)
+        stem = id_stem(options[0][0]) or ""
+    if not _is_qualifier(framework, qualifier, scope):
+        return None  # `CP-9(1)-(3) or (5)`: no qualifier (80's 6197)
+    chosen = []
+    for options in readings:
+        fits = [o for o in options if all(_member(scope, framework, i) for i in o)]
+        if not fits:
+            return None
+        chosen.append(fits[0])
+    return [i for option in chosen for i in option], qualifier
+
+
+def _member(scope: CatalogScope, framework: str, requirement_id: str) -> bool:
+    """Whether `requirement_id` can be a range's member (80's 6189 on PR 437)."""
+    catalog, standing = scope.standing_for(framework, requirement_id)
+    return bool(standing) and carries(scope.index.get(catalog, ()), requirement_id)
+
+
+#: HHS's markers for a HIPAA implementation specification, written after it:
+#: Required and Addressable. A closed convention the source documents, so a
+#: qualifier although it looks like a member (80's 6203 on PR 437).
+_HIPAA_MARKERS = (" (R)", " (A)")
+
+
+def _is_qualifier(framework: str, text: str, scope: CatalogScope) -> bool:
+    """Whether `text`, after a citation's last member, is its qualifier: it
+    holds no member-shaped part (80's 6197), once a HIPAA citation's final
+    `(R)` or `(A)` is set aside (6203). `[HIPAA 164.312(a)(2)(iv) (A)]`
+    keeps `(A)` as written, as at base; `(B)`, or `(A)` on 800-53, doesn't."""
+    if f" {text}".endswith(_HIPAA_MARKERS) and any(
+        catalog in HIPAA_PART_164 for catalog in named_catalogs(framework, scope.index)
+    ):
+        text = text[:-3]
+    return not holds_member(text)
+
+
+def read_citation(part: str, frameworks, scope: CatalogScope) -> tuple[str, str, list[str], str]:
+    """One tag part's (framework, id as written, the ids it cites, qualifier).
+
+    `split_citation` reads one id and its qualifier; then (#421):
+
+    - a range or a comma list cites each member (`citation_members`);
+    - trailing text that holds another member-shaped part, `(3)`, is never
+      a qualifier, whatever joins it (80's 6197 on PR 437): `to (3)`,
+      `thru (3)` or an em dash make a range, `and (3)` or `& (3)` a list
+      (`topics.anchoring.member_spelling`); words after its last member
+      with no member-shaped part are its qualifier, spaced or not (80's
+      6201: `CP-9(1) - (3) Moderate` reads as `CP-9(1)-(3) Moderate`).
+      Member-shaped parts joined by anything else, `or (3)`, `see (3)`,
+      have the whole part cited as written, which resolves to nothing and
+      is reported. So it never cites `CP-9(1)` alone;
+    - any other trailing text is a qualifier, as `split_citation` reads it:
+      `AC-2(3) Moderate, High`, a dash title, `AC-2 - Account Management`
+      (6199 dropped 6187's rule that reported it), and HIPAA's final `(R)`
+      or `(A)` (6203; `_is_qualifier`).
+
+    The one reading for `parse_citations` and `content.sources`, so the
+    report, drift, the tag form and `check` agree about a range."""
+    framework, requirement_id, qualifier = split_citation(part, frameworks, scope.index)
+    qualifies = bool(qualifier) and _is_qualifier(framework, qualifier, scope)
+    if not framework or not requirement_id or qualifies:
+        return framework, requirement_id, [requirement_id], qualifier
+    written = f"{requirement_id} {qualifier}".strip()
+    members = citation_members(framework, written, scope)
+    if members:
+        ids, rest = members
+        return framework, written[: len(written) - len(rest)].strip(), ids, rest
+    if qualifier:
+        return framework, written, [written], ""
+    return framework, requirement_id, [requirement_id], ""
+
+
+def parse_citations(
+    body: str, frameworks=(), ids=None, scope: CatalogScope | None = None
+) -> list[tuple[str, str, str, str]]:
     """(framework, requirement id, qualifier, section) for each citation in `body`.
 
     A tag is `[NIST 800-53 AC-2 | HIPAA Security Rule 164.308(a)(3)(i)]` —
@@ -278,8 +458,16 @@ def parse_citations(body: str, frameworks=(), ids=None) -> list[tuple[str, str, 
     read a heading only for its title and moved on lost every citation
     carried there. Silently: the requirements were simply absent from the
     report, which is the failure this command exists to catch.
+
+    `scope` is what a range's members are resolved in (#421): pass the
+    caller's own, so a member resolves exactly when the caller would
+    resolve it cited alone. Without one, `ids` with no declared families.
     """
     from policyforge.content.tags import SOURCE_TAG_RE, known_framework_names, tag_parts
+
+    if scope is None:
+        scope = CatalogScope(dict(ids or {}), frozenset(), {}, "")
+    ids = scope.index
 
     # The catalogs loaded, plus every catalog on disk: the ONE list of names
     # the Playbook gate also reads (#340), so a part naming a framework that
@@ -298,10 +486,19 @@ def parse_citations(body: str, frameworks=(), ids=None) -> list[tuple[str, str, 
             # Playbook gate (#333): a shorthand part inherits the preceding
             # part's framework, and `split_citation` then resolves it -- or
             # returns it whole, so it is reported unresolved like any other.
-            for part in tag_parts(tag, known, lambda word: bool(resolve_framework(word, ids))):
-                framework, requirement_id, qualifier = split_citation(part.citation, known, ids)
-                if framework and requirement_id:
-                    found.append((framework, requirement_id, qualifier, section))
+            parts = tag_parts(tag, known, lambda word: bool(resolve_framework(word, ids)))
+            # A framework named alone is a baseline reference only beside a
+            # citation (80's ruling 6042 on #17). A tag of nothing else, such
+            # as `[NIST 800-53]`, is read as before: an incomplete citation,
+            # reported (3512 on #214).
+            alone = all(part.baseline for part in parts)
+            for part in parts:
+                if part.baseline and not alone:
+                    continue
+                # A range or a comma list cites each member (#421).
+                framework, written, cited, qualifier = read_citation(part.citation, known, scope)
+                if framework and written:
+                    found.extend((framework, i, qualifier, section) for i in cited)
     return found
 
 
@@ -314,6 +511,97 @@ def _catalog_index(controls) -> dict[str, set[str]]:
         ids.update(e.enhancement_id for e in control.enhancements)
         ids.update(r.requirement_id for r in control.requirements)
     return index
+
+
+@dataclass(frozen=True)
+class CatalogScope:
+    """What a citation is resolved against: one catalog set, built once.
+
+    The ONE resolver for both readers of a bracket (80's ruling on #215):
+    this report, and the placeholder reader in `content.tags`, which asks
+    whether a bracket is a citation or an unfilled role. Both build a scope
+    with `catalog_scope` and ask `standing_for`, so they can't disagree
+    about a tag; a short `[NIST SC-8]` resolves for either exactly when 800-53
+    is the only NIST catalog in the set.
+
+    `source` says which set it is, for the run to print.
+    """
+
+    index: dict[str, set[str]]
+    names: frozenset[str]
+    #: {catalog key: its declared regulatory families}, `families_for`.
+    families: dict[str, dict[str, str]]
+    source: str
+    #: {catalog key: {id: its text}} for each catalog whose manifest says
+    #: `leaf_parts: listed` (#441), `leaf_texts_for`. A family-rule catalog
+    #: not in it keeps the residual: any part below one of its leaves stands.
+    leaf_texts: dict[str, dict[str, str]] = field(default_factory=dict)
+
+    def standing_for(self, framework: str, requirement_id: str) -> tuple[str, list[str]]:
+        """(the catalog `framework` resolves to, the requirements a citation
+        of `requirement_id` stands for there); the list is empty when it
+        names nothing in this set.
+
+        Checked against the framework the citation names, not against every
+        id in every catalog: `[HIPAA AC-2]` names a real NIST control under
+        the wrong framework, and an assessor following it finds nothing. An
+        unresolvable framework name gives no catalog, and so nothing.
+        """
+        # Usually the one catalog the name resolves to; a bare `HIPAA` is
+        # the three of 45 CFR 164, each id found in exactly one (#420).
+        named = named_catalogs(framework, self.index)
+        if not named:
+            return "", []
+        catalog = named[0]
+        for candidate in named:
+            if requirement_id in self.index.get(candidate, ()):
+                return candidate, [requirement_id]
+        # A regulatory catalog's requirement cited by a paragraph the
+        # catalog does not carry: `[HIPAA Security Rule 164.308(a)(1)]`
+        # is the standard `164.308(a)(1)(i)` (80's ruling on #423, one
+        # resolution for drift and for this report). Only where the catalog
+        # leaves room for it (`stands_below`, 80's 6235 on #438): a part it
+        # doesn't list below a paragraph it subdivides is invented, and
+        # counting it as evidence is the false-green direction. Below a leaf,
+        # a catalog whose manifest says `leaf_parts: listed` has the part
+        # read against the leaf's own text (#441); the others keep the
+        # residual, an invented part counting, and `leaf_residual` names them.
+        for candidate in named:
+            texts = self.leaf_texts.get(candidate)
+            ids = self.index.get(candidate, ())
+            text = (
+                None
+                if texts is None
+                else texts.get(enclosing(requirement_id, ids.__contains__), "")
+            )
+            if not stands_below(ids, requirement_id, text):
+                continue
+            found = regulatory_families(requirement_id, self.families.get(candidate, {}))
+            if found:
+                return candidate, sorted(found)
+        return catalog, []
+
+    def leaf_residual(self) -> list[str]:
+        """The loaded catalogs that keep the leaf residual (#441): each
+        declares a family rule, so a part below a carried id can stand, but
+        its manifest doesn't say `leaf_parts: listed`, so a part below one of
+        its leaves stands whether or not it exists."""
+        return sorted(key for key in self.families if key not in self.leaf_texts)
+
+    def cites(self, framework: str, requirement_id: str) -> bool:
+        """Whether `framework requirement_id` stands for a requirement here."""
+        return bool(self.standing_for(framework, requirement_id)[1])
+
+
+def catalog_scope(controls, source: str = "the run's catalogs") -> CatalogScope:
+    """The scope loaded `controls` define: their ids, names and families."""
+    return CatalogScope(
+        _catalog_index(controls),
+        frozenset(c.framework for c in controls),
+        families_for(controls),
+        source,
+        leaf_texts_for(controls),
+    )
 
 
 def document_evidence(
@@ -352,7 +640,8 @@ def document_evidence(
         declared_relationships = _declared_relationships()
     if family_links is None:
         family_links = _declared_family_links()
-    index = _catalog_index(controls)
+    scope = catalog_scope(controls)
+    index = scope.index
     evidence = DocumentEvidence(
         path=getattr(document, "relative_path", str(getattr(document, "path", ""))),
         title=document.title,
@@ -361,25 +650,12 @@ def document_evidence(
     )
 
     cited: dict[tuple[str, str], Citation] = {}
-    names = {c.framework for c in controls}
-    declared = families_for(controls)
     for framework, requirement_id, qualifier, section in parse_citations(
-        document.body, names, index
+        document.body, scope.names, index, scope
     ):
-        catalog = resolve_framework(framework, index)
-        # Checked against the framework the citation names, not against every
-        # id in every catalog: `[HIPAA AC-2]` names a real NIST control under
-        # the wrong framework, and an assessor following it finds nothing.
-        # An unresolvable framework name gives an empty key, which no
-        # catalog holds, so it lands in `unknown` with the id as written.
-        if requirement_id in index.get(catalog, ()):
-            standing_for = [requirement_id]
-        else:
-            # A regulatory catalog's requirement cited by a paragraph the
-            # catalog does not carry: `[HIPAA Security Rule 164.308(a)(1)]`
-            # is the standard `164.308(a)(1)(i)` (80's ruling on #423, one
-            # resolution for drift and for this report).
-            standing_for = sorted(regulatory_families(requirement_id, declared.get(catalog, {})))
+        # Resolved by the scope, the same method the placeholder reader asks
+        # (#215). Nothing it stands for lands in `unknown` as written.
+        catalog, standing_for = scope.standing_for(framework, requirement_id)
         if not standing_for:
             label = f"{framework} {requirement_id}"
             evidence.unknown_occurrences += 1

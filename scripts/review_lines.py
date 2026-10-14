@@ -752,16 +752,39 @@ def counted_flips(lines: list[Line]) -> dict[str, str]:
     return {r: "; ".join(f) for r, f in flips.items()}
 
 
-def uncounted_reasons(latest: dict[str, Line]) -> dict[str, str]:
-    """{reviewer: why} for a reader whose latest line is an approval at head
-    that still doesn't count for a reason other than a declared stake, so a
-    reader isn't dropped from the summary in silence (ba on #54)."""
+def uncounted_reasons(lines: list[Line]) -> dict[str, str]:
+    """{reviewer: why} for a reader dropped from "approvals at head" for a
+    reason other than a declared stake, so nobody is dropped in silence:
+
+    - their latest line is an approval at head that still doesn't count
+      (ba on #54);
+    - their latest line isn't at head, while an earlier line of theirs WAS a
+      counted approval at head (#55). Under 80's #53 ruling the latest line
+      decides, so that approval rightly stops counting, and the commonest
+      cause is a one-character SHA typo, which says why rather than reading
+      as "never approved".
+
+    Latest and earlier lines are read by the report's own rules,
+    `latest_own_lines` and `_who`, so the two can't drift. A line posted as
+    someone else neither supersedes (it isn't anyone's latest own line) nor
+    is superseded (`Line.counts` is False for it)."""
     reasons: dict[str, str] = {}
-    for who, line in latest.items():
+    for who, line in latest_own_lines(lines).items():
         at_head_approval = line.verdict == "approved" and line.location.at_head
         if at_head_approval and line.counted and not line.counts:
-            why = list(line.shape.faults) or ["unknown token"]
+            why = list(line.shape.faults) or ["reason not recorded"]
             reasons[who] = "latest line at head does not count: " + ", ".join(why)
+        elif not line.location.at_head and any(
+            earlier is not line
+            and _who(earlier) == who
+            and earlier.verdict == "approved"
+            and earlier.counts
+            for earlier in lines
+        ):
+            reasons[who] = (
+                f"latest line is {line.location.label} ({line.sha[:12]}), "
+                "superseding an approval at head"
+            )
     return reasons
 
 
@@ -918,7 +941,7 @@ def report(number: int, repo: str, forge: str = "github") -> int:
         print(f"  approvals at head from readers who declared a stake: {', '.join(declared)}")
     for reviewer, flip in counted_flips(lines).items():
         print(f"  {reviewer}: {flip} (their latest line decides)")
-    for reviewer, why in uncounted_reasons(latest).items():
+    for reviewer, why in uncounted_reasons(lines).items():
         print(f"  {reviewer}: {why}")
 
     # Objections by state (#237). Only the objector's own later approval

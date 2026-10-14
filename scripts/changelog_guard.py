@@ -144,16 +144,9 @@ def decide(paths: list[str], body: str) -> tuple[bool, str]:
     )
 
 
-def changed_paths(base: str, root: Path | None = None) -> list[str]:
-    """Files this branch changes relative to `base`, via the merge-base.
-
-    `git diff base...HEAD` — three dots — so a branch that is merely behind
-    does not inherit everything main has done since. Diffing against the tip
-    of main instead is how a rebase artefact reads as a real change, which
-    misfired four separate times in one evening on this repository.
-    """
+def _git_lines(args: list[str], root: Path | None) -> list[str]:
     result = subprocess.run(
-        ["git", "diff", "--name-only", f"{base}...HEAD"],
+        ["git", *args],
         cwd=root,
         capture_output=True,
         text=True,
@@ -162,8 +155,76 @@ def changed_paths(base: str, root: Path | None = None) -> list[str]:
         check=False,
     )
     if result.returncode != 0:
-        raise SystemExit(f"changelog_guard: `git diff {base}...HEAD` failed:\n{result.stderr}")
+        raise SystemExit(f"changelog_guard: `git {' '.join(args)}` failed:\n{result.stderr}")
     return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+
+def changed_paths(base: str, root: Path | None = None) -> list[str]:
+    """Files this branch's OWN commits change relative to `base`.
+
+    `git diff base...HEAD` -- three dots -- so a branch that is merely behind
+    does not inherit everything main has done since. Diffing against the tip
+    of main instead is how a rebase artefact reads as a real change, which
+    misfired four separate times in one evening on this repository.
+
+    **And only paths the branch's own commits touched** (#197): the
+    first-parent, non-merge commits in `base..HEAD`. A train merged INTO the
+    branch brings other PRs' paths into `base...HEAD` whenever `base` is
+    older than that merge (a stale local ref, or an old SHA passed as
+    `--base`). Counted, a train FRAGMENT let a branch with none of its own
+    pass (9b on #197, measured), and train USER-FACING paths failed a
+    tests-only branch (ba on #197). Intersected with the net diff, so a path
+    a branch touched and then put back doesn't count either.
+
+    **The cost, stated:** a change made only in a merge commit (a conflict
+    resolution) isn't the branch's own commit, so a fragment or a
+    user-facing edit that exists only there doesn't count. And if `base` is
+    OLDER than the point the branch forked from, the first-parent walk
+    reaches the train's own commits; pass the train the branch forked from,
+    or let `check.py` derive it.
+
+    **GitHub's `pull_request` checkout** is `refs/pull/N/merge`: a merge whose
+    FIRST parent is the base tip, so a first-parent walk from it finds none
+    of the PR's commits (ba on #211, measured: a user-facing change with no
+    fragment passed). When HEAD is a merge whose first parent IS `base`, the
+    walk starts from its second parent, the PR's head, instead."""
+    net, own = net_and_own(base, root)
+    return sorted(net & own)
+
+
+def _own_head(base: str, root: Path | None) -> str:
+    """The commit whose first-parent line holds the branch's own work:
+    HEAD, or HEAD^2 when HEAD is a merge onto `base` (GitHub's merge ref)."""
+    parents = _git_lines(["rev-list", "--parents", "-n", "1", "HEAD"], root)[0].split()[1:]
+    if len(parents) == 2:
+        tip = _git_lines(["rev-parse", f"{base}^{{commit}}"], root)[0]
+        if parents[0] == tip:
+            return parents[1]
+    return "HEAD"
+
+
+def net_and_own(base: str, root: Path | None = None) -> tuple[set[str], set[str]]:
+    """(the net `base...HEAD` paths, the paths the branch's own commits touched)."""
+    net = set(_git_lines(["diff", "--name-only", f"{base}...HEAD"], root))
+    head = _own_head(base, root)
+    own = set(
+        _git_lines(
+            ["log", "--first-parent", "--no-merges", "--format=", "--name-only", f"{base}..{head}"],
+            root,
+        )
+    )
+    return net, own
+
+
+def unattributed(base: str, root: Path | None = None) -> list[str]:
+    """User-facing paths in the net diff when NO own commit was found at all.
+
+    Fail closed (ba on #211): if the own-commit walk finds nothing while the
+    net diff changes what a user sees, the walk saw the wrong line (a
+    checkout shape not met yet, a merge-only branch), and passing would be
+    a verdict about nothing. Empty when the walk found the branch's work."""
+    net, own = net_and_own(base, root)
+    return [] if own else user_facing(sorted(net))
 
 
 def base_hint(base: str) -> str:
@@ -182,6 +243,17 @@ def main(argv: list[str] | None = None) -> int:
         body = args.body_file.read_text(encoding="utf-8", errors="replace")
 
     paths = changed_paths(args.base)
+    blind = unattributed(args.base)
+    if blind:
+        listed = "\n".join(f"    {p}" for p in blind)
+        print(
+            "changelog guard: FAIL\n"
+            f"No commit of this branch's own was found against {args.base}, but the\n"
+            f"net diff changes {len(blind)} user-facing path(s):\n{listed}\n\n"
+            "The walk saw the wrong line, so this refuses rather than pass on\n"
+            "nothing. Check --base, or commit the change on the branch itself."
+        )
+        return 1
 
     # `base...HEAD` compares COMMITS. Run locally on work that is only staged
     # or only edited, it examines nothing and passes — which is a vacuous

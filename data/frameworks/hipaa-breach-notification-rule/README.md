@@ -5,7 +5,7 @@
 Each section is a control, and each paragraph is an enhancement under the
 citation **eCFR itself gives it**. Nothing is derived from the paragraph
 markers. On this subpart, the Security Rule's parser mis-cites 6 of 28
-paragraphs (this project's research, measured on #409).
+paragraphs (measured by this project's research).
 
 Nothing in this subpart was touched by the 2024 amendments that *Purl v.
 HHS* vacated. Those are in the Privacy Rule; see its README.
@@ -27,7 +27,7 @@ with the law-enforcement condition that scopes both of its paragraphs.
 ## No published mapping to 800-53
 
 As for the Privacy Rule, NIST's OLIR and CPRT catalogs map only the
-Security Rule, and HHS and third parties were not searched (#409). This
+Security Rule, and HHS and third parties were not searched. This
 catalog is **not anchored**, is not counted in `/coverage`'s 800-53 figures,
 and reads there as "no published crosswalk found". A document citing it is
 reached by `drift` through its own ids, with the section as the unit.

@@ -161,12 +161,17 @@ def test_no_command_loads_two_nist_catalogs_without_being_told_to():
 
 def test_citation_resolution_requires_the_user_to_name_the_catalogs():
     """The other half: the commands that resolve citations make it the
-    user's choice, so two NIST catalogs only meet each other deliberately."""
+    user's choice, so two NIST catalogs only meet each other deliberately.
+
+    The choice is made on the command line (`--controls`) or once in config
+    (`programme.catalogs`, #176): either way the user named them. These
+    commands have no default catalog of their own; with neither named they
+    refuse in one line (`tests/test_programme_profile.py`)."""
     from policyforge.cli import cli
 
     for name in ("satisfies", "coverage", "ssp", "addresses"):
         param = next(p for p in cli.commands[name].params if p.name == "controls_paths")
-        assert param.required, f"{name} no longer requires --controls"
+        assert param.default in (None, ()), f"{name} gained a default catalog"
 
 
 def test_addresses_answers_are_unchanged_by_installing_this_catalog():

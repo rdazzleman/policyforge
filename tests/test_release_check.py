@@ -131,21 +131,31 @@ def test_the_install_steps_are_the_corrected_ones():
     that is broken, until somebody checks which.**
 
     The 1.6.0 container run used `policyforge --version` — a flag that
-    does not exist, so click exits 2 — and ran `policyforge frameworks`
+    did not exist then (it does since #219), so click exited 2 — and ran `policyforge frameworks`
     in an empty directory, which exits 1 by design because every command
     reads `data/frameworks/` relative to where it runs. Both read as
     release defects. Neither was one.
 
     Pinned here so the sequence is not retyped from memory at each cut.
     """
-    from release_check import INSTALL_STEPS
+    from release_check import INSTALL_STEPS, install_steps
 
     names = [name for name, _ in INSTALL_STEPS]
     commands = " ; ".join(command for _, command in INSTALL_STEPS)
 
-    assert "--version" not in commands, (
-        "`policyforge --version` does not exist; click exits 2 and it reads as a broken release"
+    # `--version` exists from 1.8.0 (#219), so it is in the steps for those
+    # releases only, and requires the release version with nothing on
+    # stderr (#224; tests/test_release_check_version.py runs it in bash).
+    assert "--version" not in commands, "the version step is per release, not in INSTALL_STEPS"
+    older = " ; ".join(command for _, command in install_steps("1.7.0"))
+    assert "--version" not in older, (
+        "`policyforge --version` does not exist in 1.7.0; there click exits 2 and it "
+        "reads as a broken release"
     )
+    newer = dict(install_steps("1.8.0"))
+    assert "policyforge --version" in newer["version"]
+    assert "'policyforge 1.8.0'" in newer["version"], "the release version is required"
+    assert '[ ! -s "$e" ]' in newer["version"], "stderr is required to be empty"
     assert names.index("init") < names.index("frameworks"), (
         "`frameworks` must run after `init`: in an empty directory it exits 1 "
         "by design, which is the product working as documented"
@@ -174,7 +184,7 @@ def test_a_check_that_did_not_run_does_not_pass(monkeypatch, capsys):
     # failed with AttributeError rather than silently passing, which is
     # the good kind of wrong.
     monkeypatch.setattr(shutil, "which", lambda _: None)
-    ran, lines = release_check.run_install_check()
+    ran, lines = release_check.run_install_check("1.8.0")
 
     assert ran is False, "no docker must report DID NOT RUN, not a result"
     assert any("docker" in line for line in lines)
@@ -280,7 +290,7 @@ def test_every_did_not_run_reason_says_why_and_none_reads_as_a_failure():
     real_which = shutil.which
     shutil.which = lambda _name: None
     try:
-        reasons["no docker"] = release_check.run_install_check()
+        reasons["no docker"] = release_check.run_install_check("1.8.0")
     finally:
         shutil.which = real_which
 
@@ -291,7 +301,7 @@ def test_every_did_not_run_reason_says_why_and_none_reads_as_a_failure():
     shutil.which = lambda _name: "/usr/bin/docker"
     subprocess.run = lambda *a, **k: _Refused()
     try:
-        reasons["image refused"] = release_check.run_install_check(image="nope")
+        reasons["image refused"] = release_check.run_install_check("1.8.0", image="nope")
     finally:
         subprocess.run = real_run
         shutil.which = shutil_which
@@ -557,8 +567,16 @@ def _report(monkeypatch, capsys, formula: str) -> str:
     stated = release_check.sha256_in_formula(formula)
     monkeypatch.setattr(release_check, "fetch_formula", lambda url=None: formula)
     monkeypatch.setattr(release_check, "hash_of", lambda url: stated)
+    # Assertion 5 lists the archive the formula names. Unstubbed, each call
+    # here fetched a real GitHub archive (measured on #224: 3 per run).
+    monkeypatch.setattr(release_check, "archive_members", lambda url: [])
+    # ...and judges its files against the release tag's history (#237), which
+    # this stub has none of: the test reads nothing of this checkout's git.
+    monkeypatch.setattr(release_check, "content_findings", lambda files, tag: [])
     monkeypatch.setattr(
-        release_check, "run_install_check", lambda image=None: (False, ["docker is not on PATH"])
+        release_check,
+        "run_install_check",
+        lambda version, image=None: (False, ["docker is not on PATH"]),
     )
     tag = release_check.tag_in_formula(formula).lstrip("v")
     release_check.main(["--version", tag, "--allow-skip", "install"])

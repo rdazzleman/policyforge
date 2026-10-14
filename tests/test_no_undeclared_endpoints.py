@@ -1,10 +1,11 @@
 """C-01 — no endpoint this project contacts is undeclared.
 
-`docs/commitments.md` states that PolicyForge contacts nothing the operator
-did not configure: no telemetry, no analytics, no licence check, no update
-ping. That is the commitment an adopter is least able to verify for
-themselves and most wants verified — a compliance tool that quietly reported
-usage would be a finding in its own generated Standards.
+The product commitments (https://zardoz.io/trust/commitments/) state that
+PolicyForge contacts nothing the operator did not configure: no telemetry,
+no analytics, no licence check, no update ping. That is the commitment an
+adopter is least able to verify for themselves and most wants verified — a
+compliance tool that quietly reported usage would be a finding in its own
+generated Standards.
 
 Prose is the wrong form for it. The claim is true today because nobody has
 added a `requests.post` to a metrics endpoint, and it stays true only while
@@ -66,7 +67,8 @@ ALLOWED_HOSTS: dict[str, str] = {
     "github.com": (
         "the GitHub wiki remote (export/github_wiki.py), cloned and pushed to only when a "
         "`github_wiki` target is configured — it RECEIVES the organization's documents, so "
-        "it is a subprocessor and appears in docs/subprocessors.md; also cited as the "
+        "it is a subprocessor and appears on https://zardoz.io/trust/subprocessors/; "
+        "also cited as the "
         "provenance of OSCAL content in SSP output"
     ),
     "api.github.com": (
@@ -121,7 +123,7 @@ def test_every_endpoint_in_source_is_declared():
 
     assert not undeclared, (
         "Undeclared outbound endpoint(s). PolicyForge commits to contacting "
-        "nothing the operator did not configure (docs/commitments.md, C-01). "
+        "nothing the operator did not configure (https://zardoz.io/trust/commitments/, C-01). "
         "If this is a legitimate new endpoint, add it to ALLOWED_HOSTS with a "
         "reason and say so in the commitments doc:\n  " + "\n  ".join(undeclared)
     )

@@ -33,6 +33,31 @@ def combined_source(*sources: str | None) -> str | None:
     return COST_PROVIDER if all(s == COST_PROVIDER for s in known) else COST_ESTIMATE
 
 
+def recordable_endpoint(url) -> str | None:
+    """`url` as the ledger may keep it (#328): scheme, host, port and path.
+
+    Dropped: the user name and password before the host, the query string,
+    the fragment, and each path segment's `;parameters` (ba on PR 353), the
+    places a URL conventionally carries a credential. The path is otherwise
+    kept as given, so a secret that IS a path segment (`/k/<key>/v1`) is
+    recorded: nothing can tell it from an ordinary segment (1d and ba on
+    PR 353). None when there is no URL, or nothing with both a scheme and a
+    host to keep.
+    """
+    if not url:
+        return None
+    from urllib.parse import urlsplit
+
+    parts = urlsplit(str(url))
+    host = parts.netloc.rpartition("@")[2]
+    if not parts.scheme or not host:
+        return None
+    # `urlsplit` leaves `;params` in the path, on any segment, not only the
+    # last, so each segment is cut at its first `;`.
+    path = "/".join(segment.partition(";")[0] for segment in parts.path.split("/"))
+    return f"{parts.scheme}://{host}{path}"
+
+
 class SchemaReplyError(RuntimeError):
     """A schema-constrained call came back as something other than JSON.
 
@@ -141,6 +166,12 @@ class LLMResponse:
     #: Anthropic support asks for. Free on every response and impossible to
     #: reconstruct afterwards.
     request_id: str | None = None
+    #: Where this call went (#328): the base URL the provider resolved for
+    #: it, environment overrides such as `ANTHROPIC_BASE_URL` included,
+    #: through `recordable_endpoint`, which drops userinfo, the query, the
+    #: fragment and path parameters, and keeps the rest of the path.
+    #: None where the provider can't say (a fake client in a test).
+    endpoint: str | None = None
     #: The LAST attempt's own cost, when known: the request `request_id`
     #: names. Equal to `cost_usd` for a call sent once. After a re-send
     #: `cost_usd` is every attempt summed, or None if any attempt's cost is
@@ -249,6 +280,22 @@ class EmptyReply(RuntimeError):
             f"Nothing was written. A reasoning model may have spent the whole reply "
             f"thinking; try again, or choose a model that answers in its content."
         )
+
+
+class ProviderHttpError(RuntimeError):
+    """A hosted model endpoint answered with a status that is not about the
+    request as written (#413): 401 and 403 are the key, 429 clears by waiting,
+    a 5xx is the server. A `RuntimeError` with the message these sites always
+    raised (`<url> returned HTTP <status>: <body>`), so anything that matched
+    or caught the old one still does; it also carries the status and the
+    address, so the CLI can say which service refused and what to check
+    (`cli._http_failure`) rather than print a traceback."""
+
+    def __init__(self, message: str, *, status: int, url: str, reason: str = ""):
+        super().__init__(message)
+        self.status = status
+        self.url = url
+        self.reason = reason
 
 
 class ProviderRejected(RuntimeError):
@@ -487,6 +534,15 @@ def _build_provider(config: dict) -> LLMProvider:
     without wrapping each half in its own ledger — which would write three
     records for one call and make a cascade look like it cost triple.
     """
+    llm = config.get("llm")
+    if not isinstance(llm, dict) or not llm.get("provider"):
+        from policyforge.config import MissingLlmError
+
+        raise MissingLlmError(
+            "config/config.yaml has no `llm:` block naming a provider and model, so there is "
+            "no model to call. Run `policyforge init` for a starter config, or copy one from "
+            "config/config.example.yaml."
+        )
     provider_name = config["llm"]["provider"]
 
     if provider_name == "anthropic":

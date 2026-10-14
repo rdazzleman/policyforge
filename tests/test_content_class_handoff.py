@@ -186,6 +186,20 @@ def test_a_licensed_synthesis_is_refused_to_a_hosted_model(tmp_path, monkeypatch
     assert not out.exists()
 
 
+def test_a_bom_prefixed_licensed_synthesis_is_still_refused_to_a_hosted_model(
+    tmp_path, monkeypatch
+):
+    """#424: a UTF-8 BOM hid the frontmatter, so the synthesis's
+    `content_class: licensed` was never read and the class fell back to the
+    file's path. Saved with a BOM, it is refused exactly as without one."""
+    result, fake, out = _generate(tmp_path, monkeypatch, "﻿" + LICENSED_SYNTHESIS, llm=HOSTED)
+
+    assert result.exit_code != 0
+    assert "REFUSED" in result.output
+    assert fake.calls == [], "nothing was sent"
+    assert not out.exists()
+
+
 def test_a_licensed_synthesis_may_be_drafted_by_a_local_model(tmp_path, monkeypatch):
     result, fake, out = _generate(tmp_path, monkeypatch, LICENSED_SYNTHESIS, llm=LOCAL_LLM)
 
@@ -305,3 +319,26 @@ def test_the_most_restrictive_input_decides_the_class(tmp_path, monkeypatch):
     )
     assert metadata["content_class"] == boundary.ORG_INTERNAL
     assert metadata["derived_from"] == ["nist.json", "internal.json"]
+
+
+@pytest.mark.parametrize(
+    "front",
+    [
+        "content_class: public-domain\ngenerated_by:\n  content_class: licensed\n",
+        "content_class: organization-internal\ngenerated_by:\n  content_class: licensed\n",
+        # No top-level key at all (b5 on PR 343): the stamp alone must count as
+        # stated, or this synthesis falls to its path and reaches a hosted model.
+        "generated_by:\n  content_class: licensed\n",
+    ],
+)
+def test_a_lower_top_level_class_never_lowers_a_licensed_stamp_here(tmp_path, monkeypatch, front):
+    """#339 (b5 on PR 343): this reader took the top-level key alone, so a
+    synthesis labelled `public-domain` over a licensed stamp went to a
+    hosted model. It reads both places now; the most guarded wins."""
+    synthesis = f"---\ntopic: Access Control\n{front}---\n\n- Requirement. [HITRUST 01.a]\n"
+    result, fake, out = _generate(tmp_path, monkeypatch, synthesis, llm=HOSTED)
+
+    assert result.exit_code != 0
+    assert "REFUSED: licensed content" in result.output
+    assert fake.calls == []
+    assert not out.exists()

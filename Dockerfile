@@ -24,7 +24,9 @@ RUN python -m venv /opt/venv \
 
 # The crosswalk is a build artifact, gitignored in the repository, and three
 # commands (addresses, coverage, synthesize) read it. It is derived entirely
-# from the bundled catalogs, so it is built here rather than shipped.
+# from the bundled catalogs, so it is built here rather than shipped. It is
+# built from every public catalog the image holds (the ones .dockerignore lets
+# in); tests/test_container.py fails if this list and the manifests differ.
 WORKDIR /app
 COPY src ./src
 COPY data/frameworks ./data/frameworks
@@ -33,6 +35,15 @@ RUN PYTHONPATH=/app/src /opt/venv/bin/python -m policyforge.cli map \
       --controls data/frameworks/fedramp/controls.json \
       --controls data/frameworks/arc-ampe/controls.json \
       --controls data/frameworks/hipaa-security-rule/controls.json \
+      --controls data/frameworks/cfr-170-315-onc-certification/controls.json \
+      --controls data/frameworks/cfr-171-information-blocking/controls.json \
+      --controls data/frameworks/cfr-42-part-2-sud-records/controls.json \
+      --controls data/frameworks/hipaa-breach-notification-rule/controls.json \
+      --controls data/frameworks/hipaa-privacy-rule/controls.json \
+      --controls data/frameworks/nist-800-171-r3/controls.json \
+      --controls data/frameworks/nist-ai-rmf/controls.json \
+      --controls data/frameworks/nist-ai-rmf-playbook/controls.json \
+      --controls data/frameworks/nist-csf-2-0/controls.json \
       --out data/frameworks/crosswalk.json
 
 

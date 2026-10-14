@@ -147,7 +147,8 @@ def test_the_order_is_the_procedure():
 def test_outward_steps_are_exactly_the_ones_that_leave_this_clone():
     outward = {s.key for s in release.steps() if s.outward}
     # head-install posts its record on the tracking issue: that leaves the clone.
-    assert outward == {"release-pr", "head-install", "tag", "publish"}
+    # head-pythons posts its records there too (#242).
+    assert outward == {"release-pr", "head-install", "head-pythons", "tag", "publish"}
     assert "branch-install" not in _keys(), "the post-approval install is gone (#381)"
 
 
@@ -177,9 +178,19 @@ CUT = "c" * 40
 MOVED = "d" * 40
 
 
-def _install_ctx(records, pr_head=CUT, state="OPEN", calls=None, cut=CUT):
+def _install_ctx(records, pr_head=CUT, state="OPEN", calls=None, cut=CUT, pythons=True):
     """A tracking issue holding `records` (created_at, last line), a release PR
-    at `pr_head`, and the cut commit at CUT."""
+    at `pr_head`, and the cut commit at CUT. With `pythons`, the cut commit
+    also has a passed full-suite record on every CUT_PYTHONS version (#242),
+    so the main gate refuses or holds on the install alone, as these tests ask."""
+    if pythons:
+        records = [
+            (
+                "2026-09-25T00:00:00Z",
+                f"Release-python: {cut} release=9.9.9 python={v} result=passed",
+            )
+            for v in release.CUT_PYTHONS
+        ] + list(records)
 
     # (created_at, last line[, author]); the author defaults to the account
     # every session posts as, which is in RECORD_AUTHORS.
@@ -1385,3 +1396,174 @@ def test_a_pre_release_pin_moves_whole_and_a_full_stop_stays(tmp_path):
     assert (root / "README.md").read_text() == (
         f"a {_OWNER}@v9.9.9\nb {_OWNER}@v9.9.9\nc {_OWNER}@v9.9.9.\nd {_OWNER}@v9.9.9.\n"
     )
+
+
+def test_the_archive_proof_counts_what_it_samples():
+    """#158: the proof printed three differing paths and no count, so "3 differing"
+    was read as three files when it was 489 of 680."""
+    many = [f"src/file_{n}.py" for n in range(489)]
+    assert release._counted(many).startswith("489 ['src/file_0.py'"), release._counted(many)
+    assert release._counted([]) == "none"
+
+
+def test_clean_tree_accepts_the_minor_train_for_a_zero_patch(train):
+    """109: release/9.9 is a valid train for 9.9.0."""
+    _origin, clone = train
+    ctx = _ctx(
+        root=clone,
+        run=_fake_run(
+            {
+                "rev-parse --abbrev-ref HEAD": (0, "release/9.9"),
+                "rev-parse HEAD": (0, "c" * 40),
+                "ls-remote origin refs/heads/release/9.9.0": (0, ""),
+                "ls-remote origin refs/heads/release/9.9": (
+                    0,
+                    "c" * 40 + "\trefs/heads/release/9.9",
+                ),
+                "pr list": (0, "[]"),
+            }
+        ),
+    )
+    ctx.version = "9.9.0"
+    assert release._train_tree(ctx).ok
+
+
+def test_clean_tree_refuses_both_train_names_at_different_commits(train):
+    """109: release/9.9.0 and release/9.9 both on the server, at different commits: refuse."""
+    _origin, clone = train
+    ctx = _ctx(
+        root=clone,
+        run=_fake_run(
+            {
+                "rev-parse --abbrev-ref HEAD": (0, "release/9.9"),
+                "rev-parse HEAD": (0, "c" * 40),
+                "ls-remote origin refs/heads/release/9.9.0": (
+                    0,
+                    "a" * 40 + "\trefs/heads/release/9.9.0",
+                ),
+                "ls-remote origin refs/heads/release/9.9": (
+                    0,
+                    "b" * 40 + "\trefs/heads/release/9.9",
+                ),
+                "pr list": (0, "[]"),
+            }
+        ),
+    )
+    ctx.version = "9.9.0"
+    check = release._train_tree(ctx)
+    assert not check.ok
+    assert "ambiguous train on server" in check.measured[0]
+
+
+def test_a_patch_release_never_cuts_from_the_minor_train():
+    """109's third arm: 9.9.1 has only its own train. On release/9.9, clean and
+    at that branch's server tip, it is refused."""
+    ctx = _ctx(
+        run=_fake_run(
+            {
+                "rev-parse --abbrev-ref HEAD": (0, "release/9.9"),
+                "rev-parse HEAD": (0, "c" * 40),
+                "ls-remote origin refs/heads/release/9.9.1": (0, ""),
+                "ls-remote origin refs/heads/release/9.9": (
+                    0,
+                    "c" * 40 + "\trefs/heads/release/9.9",
+                ),
+                "pr list": (0, "[]"),
+            }
+        )
+    )
+    ctx.version = "9.9.1"
+    check = release._train_tree(ctx)
+    assert not check.ok
+    # The must-be list names only the patch's own train, not release/9.9.
+    assert check.measured[0].endswith("(must be 'release/9.9.1')"), check.measured
+
+
+def test_notes_measured_reads_the_minor_named_train():
+    """109: for 9.9.0, the measurement must name release/9.9's server tip when
+    that is the train's only name on the server."""
+    record = (
+        "2026-09-25T02:00:00Z",
+        "Re-measured.\n\nNotes-measured-SHA: "
+        + "d" * 40
+        + " release=9.9.0 reviewer=policyforge-9b",
+    )
+
+    def ctx(tip_of_minor):
+        import json as _json
+
+        return _ctx(
+            version="9.9.0",
+            tracking=99,
+            run=_fake_run(
+                {
+                    "issues/99/comments": (0, _json.dumps([record[0], record[1], "rdazzlebot"])),
+                    "ls-remote origin refs/heads/release/9.9.0": (0, ""),
+                    "ls-remote origin refs/heads/release/9.9": (
+                        0,
+                        tip_of_minor + "\trefs/heads/release/9.9",
+                    ),
+                }
+            ),
+        )
+
+    assert release._notes_measured(ctx("d" * 40)).ok, "the minor train's tip is measured"
+    stale = release._notes_measured(ctx("e" * 40))
+    assert not stale.ok and "release/9.9 " in stale.measured[0], stale.measured
+
+
+def test_a_train_name_the_server_did_not_answer_for_is_refused_not_absent():
+    """ba on #168: release/9.9.0's lookup fails (exit 128) while release/9.9 is
+    at HEAD. Folding "no answer" into "absent" passed this; it must refuse."""
+    ctx = _ctx(
+        run=_fake_run(
+            {
+                "rev-parse --abbrev-ref HEAD": (0, "release/9.9"),
+                "rev-parse HEAD": (0, "c" * 40),
+                "ls-remote origin refs/heads/release/9.9.0": (128, ""),
+                "ls-remote origin refs/heads/release/9.9": (
+                    0,
+                    "c" * 40 + "\trefs/heads/release/9.9",
+                ),
+                "pr list": (0, "[]"),
+            }
+        )
+    )
+    ctx.version = "9.9.0"
+    check = release._train_tree(ctx)
+    assert not check.ok
+    assert "didn't answer for release/9.9.0" in check.measured[0], check.measured
+
+
+def test_notes_measured_refuses_a_train_name_the_server_did_not_answer_for():
+    import json as _json
+
+    record = [
+        "2026-09-25T02:00:00Z",
+        "Re-measured.\n\nNotes-measured-SHA: "
+        + "d" * 40
+        + " release=9.9.0 reviewer=policyforge-9b",
+        "rdazzlebot",
+    ]
+    ctx = _ctx(
+        version="9.9.0",
+        tracking=99,
+        run=_fake_run(
+            {
+                "issues/99/comments": (0, _json.dumps(record)),
+                "ls-remote origin refs/heads/release/9.9.0": (128, ""),
+                "ls-remote origin refs/heads/release/9.9": (
+                    0,
+                    "d" * 40 + "\trefs/heads/release/9.9",
+                ),
+            }
+        ),
+    )
+    check = release._notes_measured(ctx)
+    assert not check.ok and "didn't answer" in check.measured[0], check.measured
+
+
+@pytest.mark.parametrize(("status", "answered"), [(404, True), (500, False), (0, False)])
+def test_forgejo_tells_an_absent_branch_from_no_answer(status, answered):
+    ctx = _ctx(forge="forgejo", forgejo=lambda method, path, data: (status, None, {}))
+    assert release._server_answer(ctx, "release/9.9.0") == (answered, "")

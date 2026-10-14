@@ -13,6 +13,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parent.parent
 CI = ROOT / ".github" / "workflows" / "ci.yml"
 GATE = ROOT / "scripts" / "check.py"
@@ -21,18 +23,10 @@ GATE = ROOT / "scripts" / "check.py"
 #:
 #: **Short on purpose** (this used to say "empty", while holding an entry).
 #: A name here is a decision that the gate may be weaker than CI in one
-#: place, and it should cost someone an argument. Both entries are the same
-#: argument: the script needs a base branch, which exists only once a pull
-#: request does.
+#: place, and it should cost someone an argument. The first needs a base
+#: branch, which exists only once a pull request does; the second needs a Mac
+#: and two network reads, which no pre-push run has.
 GATE_NEED_NOT_RUN: dict[str, str] = {
-    "changelog_guard": (
-        "needs two facts that do not exist before a pull request does: "
-        "`--base origin/<base-ref>`, the branch point, and `--body-file`, the "
-        "PR body it reads an exemption from. A local pre-push run has neither. "
-        "Found by this test rather than named in #212 -- deriving the "
-        "population from ci.yml surfaced a second instance of the same class, "
-        "and this one is a genuine exception rather than an omission."
-    ),
     "prompt_ledger_grows": (
         "needs `--base origin/<base-ref>`, the branch a pull request targets, "
         "and compares the ledger against THAT branch's; a local pre-push run "
@@ -40,6 +34,14 @@ GATE_NEED_NOT_RUN: dict[str, str] = {
         "would be a check answering an adjacent question (#424). The half "
         "that needs no base -- the ledger equals the registry -- does run in "
         "the gate, through tests/test_prompt_fingerprint_file.py."
+    ),
+    "formula_resources": (
+        "runs only in the macOS job on the private test repo (#381), against the "
+        "tap's formula and PyPI: two network reads, a built archive and a Mac's "
+        "brew, none of which a pre-push run has. Its logic -- every refusal, the "
+        "byte-stable output, the pins it keeps -- is tests/test_formula_resources.py, "
+        "which the gate runs; the job's own result is a required platform job at "
+        "the publish check."
     ),
 }
 
@@ -49,6 +51,7 @@ def _ci_scripts() -> set[str]:
     return set(re.findall(r"python scripts/(\w+)\.py", text))
 
 
+@pytest.mark.github_config
 def test_the_population_is_not_empty():
     """Guard the population: a regex that stops matching would make every
     assertion below vacuous and green."""
@@ -58,6 +61,7 @@ def test_the_population_is_not_empty():
     )
 
 
+@pytest.mark.github_config
 def test_the_gate_runs_every_script_ci_runs():
     """**#212.** `changelog_fragments.py` was required by CI and absent from
     the gate, so a fragment CI rejects passed the gate green.

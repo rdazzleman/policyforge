@@ -500,6 +500,8 @@ def test_sync_command_reports_what_it_did(tmp_path, monkeypatch):
 def test_sync_without_a_host_says_where_to_put_one(tmp_path, monkeypatch):
     import policyforge.cli as cli_mod
 
+    monkeypatch.chdir(tmp_path)  # a project with no docs/: the default tree is docs/ (#385)
+
     monkeypatch.setattr(cli_mod, "load_config", lambda: {})
 
     result = CliRunner().invoke(
